@@ -1,0 +1,45 @@
+@import "base.css";
+$resize: 75px;
+
+@function resize($n) {
+    @return $n / $resize * 1rem;
+}
+
+@function px2em($px, $base-font-size: 16px) {
+    @if (unitless($px)) {
+        @warn "Assuming #{$px} to be in pixels, attempting to convert it into pixels for you";
+        @return px2em($px + 0px);
+    } @else if (unit($px) == em) {
+        @return $px;
+    }
+    @return ($px / $base-font-size) * 1em;
+}
+
+@mixin font-dpr($font-size) {
+    font-size: $font-size;
+    [data-dpr="2"] & {
+        font-size: $font-size * 2;
+    }
+    [data-dpr="3"] & {
+        font-size: $font-size * 3;
+    }
+}
+
+@mixin border($color) {
+    border: 1px solid $color;
+}
+
+@mixin link-url($url) {
+    &:hover {
+        background: $url;
+    }
+}
+
+@mixin link-colors($normal, $hover) {
+    color: $normal;
+    &:hover {
+        color: $hover;
+    }
+}
+
+
