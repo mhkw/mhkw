@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "lib/index",
   "scripts": {
-    "start": "webpack-dev-server --inline",
+    "start": "webpack-dev-server --host 0.0.0.0 --inline",
     "build": "webpack -p --display-optimization-bailout --progress --colors"
   },
   "license": "MIT",

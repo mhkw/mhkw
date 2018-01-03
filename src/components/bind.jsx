@@ -9,8 +9,9 @@ import '../css/font/iconfont.css'
 const loginUrl = [
     require('../images/login_logo.png'),
     require('../images/login_phone.png'),
-    require('../images/login_psd.png'),
+    require('../images/login_psd.png')
 ]
+
 const AgreeItem = Checkbox.AgreeItem;
 const prompt = Modal.prompt;
 
@@ -53,27 +54,26 @@ class LoginView extends React.Component {
                     { opacity: [1, 0], translateX: [0, 150] }
                 ]}>
                 {this.state.show ? [ 
-                    <div className="loginWrap" key="1">
+                    <div className="loginWrap bindWrap" key="1">
                         <div className="loginIn">
                             <div className="loginCenter">
                                 <div className="loginLogo">
                                     <img src={loginUrl[0]} alt="" />
                                 </div>
+                                <div className="bindthree">
+                                    <h3>仅需一步，即可完成登录设置</h3>
+                                    <p>绑定手机号后，<span>QQ</span>和手机号都可直接登录哦~</p>
+                                </div>
                                 <div className="loginIpt">
                                     <List>
                                         <InputItem
                                             type="phone"
-                                            placeholder="请输入手机号"
+                                            placeholder="请输入手机号码"
                                             error={this.state.hasError}
                                             onErrorClick={this.onErrorClick}
                                             onChange={this.onChange}
                                             value={this.state.value}
                                         ><i className="phone iconfont icon-shouji"></i></InputItem>
-                                        <InputItem
-                                            {...getFieldProps('password') }
-                                            type="password"
-                                            placeholder="请输入密码"
-                                        ><i className="pwd iconfont icon-icon-test"></i></InputItem>
                                         <InputItem className="yzm"
                                             {...getFieldProps('text') }
                                             type="text"
@@ -82,40 +82,24 @@ class LoginView extends React.Component {
                                             <i className="pwd iconfont icon-shoujiyanzhengma"></i>
                                             <Button type="ghost" inline size="small" className="getCode">获取验证码</Button>
                                         </InputItem>
+                                        <InputItem
+                                            {...getFieldProps('password') }
+                                            type="password"
+                                            placeholder="请输入密码"
+                                        ><i className="pwd iconfont icon-icon-test"></i></InputItem>
+                                        
                                     </List>
                                 </div>
+                                <WhiteSpace size="lg"/>
                                 <div>
-                                    <AgreeItem data-seed="logId" onChange={e => console.log('checkbox', e)} className="registerCheckbox">
-                                        &nbsp;&nbsp;我已阅读并同意<a className="agreeRulesColor" onClick={(e) => { e.preventDefault(); console.log('ok'); }}>使用条款和隐私政策</a>
-                                    </AgreeItem>
                                     <Button type="primary" onClick={() => prompt('输入图形验证码', '证明你不是机器人', [
                                         { text: '取消' },
                                         { text: '确定', onPress: value => console.log(`输入的内容:${value}`) }
-                                    ], 'default')}>注册/登陆</Button>
-                                </div>
-                                <div className="noAccount fn-clear">
-                                    <Link className="fn-left" to='/forget'>忘记密码？</Link>
-                                    <Link className="fn-right" to='/login'>登 录</Link>
+                                    ], 'default')}>绑定并完成注册</Button>
                                 </div>
                             </div>
                         </div>
                     </div>               
-                ,
-
-                    <div className="loginThree">
-                        <div className="loginThreeLine">
-                            <span className="fn-left"></span> 其他登陆方式 <span className="fn-right"></span>
-                        </div>
-                        <div className="loginThreeBottom">
-                            <ul className="fn-clear">
-                                <li className="wx">
-                                    <Link to='/bind'><i className="iconfont icon-weixin"></i> 微信</Link>
-                                </li>
-                                <li className="qq"><i className="iconfont icon-qq"></i> QQ</li>
-                                <li className="wb"><i className="iconfont icon-weibo"></i> 微博</li>
-                            </ul>
-                        </div>
-                    </div>
                     ] : null}
             </QueueAnim>
         );

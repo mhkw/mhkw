@@ -8,6 +8,7 @@ html {
     background: #fff;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
+    font-family: 'Microsoft YaHei', Verdana, Arial, Helvetica, sans-serif;
 }
 
 /* 内外边距通常让各个浏览器样式的表现位置不同 */
@@ -203,3 +204,16 @@ body .fn-hide {
 .ui-details-red:link {
     color: #cc0000;
 }
+
+/*元素居中显示*/
+.midCenter {
+    position: absolute;
+    top: 50%;
+    height: 50%;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -ms-transform: translateX(-50%) translateY(-50%);
+    -o-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+}
+

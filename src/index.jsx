@@ -1,13 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Router, Route, hashHistory, IndexRoute, Link} from 'react-router';
+import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router';
 
 import App from './components/App';
 import Login from './components/login';
 import Register from './components/register';
+import Forget from './components/forget';
+import Bind from './components/bind';
+import Index from './components/home';
+import listViewDemo from './components/listViewDemo';
 
 import 'lib-flexible/flexible'
-import './css/index.scss';
+// import 'js/flexible.debug'
+// import 'js/flexible_css.debug'
+
 //设置路由
 // class Index extends React.Component {
 //   render() {
@@ -23,18 +29,14 @@ import './css/index.scss';
 // }
 //路由配置
 ReactDOM.render(
-  <Router history={hashHistory}>
-    <Route path="/" component={App}>
-      {/*<IndexRoute component={Index} />*/}
-      <Route path="s2" component={Register} />
-    </Route>
-    <Route path="s1" component={Login} />
-  </Router>
-, document.getElementById('container'));
-
-// ReactDOM.render(
-//     <div className="body">
-//         <App></App>
-//     </div>
-//     , document.getElementById('container')
-// );
+    <Router history={hashHistory}>
+        <Route path="/" component={App}>
+            <IndexRoute component={Index} />
+        </Route>
+        <Route path="/city" component={listViewDemo} />        
+        <Route path="/bind" component={Bind} />
+        <Route path="/forget" component={Forget} />
+        <Route path="/login" component={Login} />
+        <Route path="/register" component={Register} />
+    </Router>
+    , document.getElementById('container'));

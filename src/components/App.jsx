@@ -4,7 +4,7 @@ import {Router, Route, hashHistory, IndexRoute, Link} from 'react-router';
 import ReactDOM from 'react-dom'
 
 // import 'antd-mobile/dist/antd-mobile.css';
-import '../css/index.scss';
+import '../css/main.scss';
 
 
 export default class App extends Component {
@@ -21,8 +21,8 @@ export default class App extends Component {
         return (
             <div>
                 {this.props.children}
-                <div className="barBottom clearfix">
-                    <ul className="clearfix">
+                <div className="barBottom fn-clear">
+                    <ul className="fn-clear">
                         <li className='picSize'>
                             <Link to="/s2">
                                 <i className='picSize1'></i>
@@ -47,7 +47,7 @@ export default class App extends Component {
                             </a>
                         </li>
                         <li className='picSize'>
-                            <Link to="/s1">
+                            <Link to="/login">
                                 <i className='picSize5'></i>
                                 <span>我的</span>
                             </Link>

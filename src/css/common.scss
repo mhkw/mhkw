@@ -5,7 +5,7 @@ $resize: 75px;
     @return $n / $resize * 1rem;
 }
 
-@function px2em($px, $base-font-size: 16px) {
+@function px2em($px, $base-font-size: 16PX) {
     @if (unitless($px)) {
         @warn "Assuming #{$px} to be in pixels, attempting to convert it into pixels for you";
         @return px2em($px + 0px);
@@ -41,5 +41,7 @@ $resize: 75px;
         color: $hover;
     }
 }
+
+
 
 

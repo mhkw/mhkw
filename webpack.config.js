@@ -21,7 +21,7 @@ const postcssOpts = {
         autoprefixer({
             browsers: ['last 2 versions', 'Firefox ESR', '> 1%', 'ie >= 8', 'iOS >= 8', 'Android >= 4']
         }),
-        pxtorem({ rootValue: 75, propWhiteList: [] })
+        // pxtorem({ rootValue: 75, propBlackList: [] })
     ]
 };
 
@@ -60,6 +60,8 @@ module.exports = {
                 }
             },
             {test: /\.(jpg|png)$/, loader: "url-loader?limit=8192&name=images/[hash:8].[name].[ext]"},
+            // {test:/\.(eot|ttf|woff|woff2|svg)$/,loader:'file?name=fonts/[name].[ext]'},
+            { test: /\.(gif|woff|svg|eot|ttf)\??.*$/, loader: 'url-loader?limit=20000&name=/fonts/[name].[ext]'},
             // 注意：如下不使用 ExtractTextPlugin 的写法，不能单独 build 出 css 文件
             // { test: /\.less$/i, loaders: ['style-loader', 'css-loader', 'less-loader'] },
             // { test: /\.css$/i, loaders: ['style-loader', 'css-loader'] },
@@ -114,6 +116,6 @@ module.exports = {
     devServer:{
         historyApiFallback:true,
         inline:true,//注意：不写hot: true，否则浏览器无法自动更新；也不要写colors:true，progress:true等，webpack2.x已不支持这些
-        // port:4994 //端口你可以自定义
+        port:4994 //端口你可以自定义
     }
 }
