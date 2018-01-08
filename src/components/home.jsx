@@ -74,7 +74,7 @@ export default class LoginView extends React.Component {
                     <div className="items">
                         <div className="itemsTop">
                             <div className="itemsTopPic">
-                                <img src={} alt=""/>
+                                {/* <img src={} alt=""/> */}
                             </div>
                             <div className="itemsTopRight">
 

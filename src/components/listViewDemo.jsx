@@ -64,7 +64,7 @@ class StageSelectCity extends React.Component {
         return (
             <div className="StageSelectCity">
                 <NavBar mode="light"
-                    icon={<Icon size="md" type="left" color="#707070" />}
+                    icon={<Icon size="lg" type="left" color="#707070" />}
                     onLeftClick={() => hashHistory.goBack()}
                     leftContent={iconLeft}
                 >
@@ -155,12 +155,13 @@ export default class ListViewDemo extends React.Component {
                     renderSectionHeader={sectionData => (<div className="ih">{sectionData}</div>)}
                     renderRow={rowData => (<Item onClick={(val) => { this.onClickCity(val) }} platform="android">{rowData}</Item>)}
                     className="am-list"
+                    style={{ "overflow":"visible"}}
                     stickyHeader
                     stickyProps={{
                         stickyStyle: { zIndex: 999 },
                     }}
                     quickSearchBarStyle={{
-                        top: "1.3rem",
+                        top: "2.3rem",
                     }}
                     delayTime={10}
                     delayActivityIndicator={<div style={{ padding: 25, textAlign: 'center' }}>rendering...</div>}
