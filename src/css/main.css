@@ -1,4 +1,5 @@
-@import url(g:\m.huakewang\m.hkw.com\src\css\base.css);
+@charset "UTF-8";
+@import url(h:\罗磊\m.hkw.com\src\css\base.css);
 .barBottom {
   position: fixed;
   bottom: 0;
@@ -348,12 +349,74 @@
   z-index: 100;
 }
 
+.homeWrapTop {
+  height: 4.533333rem;
+  width: 100%;
+  background: url("../images/mainTop.png") no-repeat center center/100% 100%;
+  font-size: 16px;
+}
+
+.homeWrapTop a {
+  color: #fff;
+}
+
+.homeWrapTop .indexNav .am-navbar-light {
+  background-color: transparent;
+}
+
+.homeWrapTop .indexNav .am-navbar-light .am-navbar-right .searchAll {
+  width: .6rem;
+  height: .6rem;
+  line-height: 1;
+  text-align: center;
+  border: 2px solid #fff;
+  border-radius: 50%;
+}
+
+.homeWrapTop .indexNav .am-navbar-light .am-navbar-right .searchAll i {
+  color: #fff;
+}
+
+.homeWrapTop .hometabs {
+  height: 2.133333rem;
+  color: #fff;
+}
+
+.homeWrapTop .hometabs .am-tabs-default-bar .am-tabs-default-bar-tab {
+  line-height: 1;
+  height: auto;
+  padding: 0;
+}
+
+.homeWrapTop .hometabs .am-tabs-default-bar .am-tabs-default-bar-tab .tabsList {
+  width: 100%;
+  text-align: center;
+  float: left;
+}
+
+.homeWrapTop .hometabs .am-tabs-default-bar .am-tabs-default-bar-tab .tabsList img {
+  height: 1.2rem;
+  width: 1.2rem;
+}
+
+.homeWrapTop .hometabs .am-tabs-default-bar .am-tabs-default-bar-tab .tabsList p {
+  line-height: 14px;
+  margin-top: .133333rem;
+  font-size: 12px;
+}
+
+.homeWrapTop .hometabs .am-tabs-default-bar .am-tabs-default-bar-prevpage,
+.homeWrapTop .hometabs .am-tabs-default-bar .am-tabs-default-bar-nextpage {
+  display: none;
+}
+
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
   html:not([data-scale]) .am-list-body::before,
   html:not([data-scale]) .am-list-body::after,
   html:not([data-scale]) .am-button-ghost::before,
+  html:not([data-scale]) .am-tabs-default-bar-top .am-tabs-default-bar-tab::after,
   html:not([data-scale]) .am-list-item:not(:last-child) .am-list-line::after {
-    background-color: #ffffff !important;
+    background-color: transparent !important;
     z-index: -1;
   }
 }
