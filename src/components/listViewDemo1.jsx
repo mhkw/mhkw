@@ -1,7 +1,6 @@
 import { ListView, List, SearchBar, Flex, WhiteSpace, WingBlank, NavBar, Icon } from 'antd-mobile';
 
 import { province as provinceData } from './cityData';
-import { StickyContainer, Sticky } from 'react-sticky';
 
 import { hashHistory } from 'react-router';
 
@@ -153,33 +152,7 @@ export default class ListViewDemo extends React.Component {
                 <StageSelectCity onSearch={this.onSearch} />
                 <ListView.IndexedList
                     dataSource={this.state.dataSource}
-                    useBodyScroll
-                    renderSectionWrapper={sectionID => (
-                        <StickyContainer
-                            key={`s_${sectionID}_c`}
-                            className="sticky-container"
-                            style={{ zIndex: 4 }}
-                        />
-                    )}
-                    renderSectionHeader={sectionData => (
-                        <Sticky>
-                            {({
-                              style,
-                            }) => (
-                                <div
-                                    className="sticky"
-                                    style={{
-                                        ...style,
-                                        zIndex: 3,
-                                        backgroundColor: '#f5f5f9',
-                                        left: "0",
-                                        padding: '7px 0 7px 15px',
-                                        width: '100%'
-                                    }}
-                                >{sectionData}</div>
-                            )}
-                        </Sticky>
-                    )}
+                    renderSectionHeader={sectionData => (<div className="ih">{sectionData}</div>)}
                     renderRow={rowData => (<Item onClick={(val) => { this.onClickCity(val) }} platform="android">{rowData}</Item>)}
                     className="am-list"
                     style={{ "overflow":"visible"}}
