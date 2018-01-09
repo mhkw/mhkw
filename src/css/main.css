@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import url(h:\罗磊\m.hkw.com\src\css\base.css);
+@import url(h:\罗磊\mhuake\mhkw\src\css\base.css);
 .barBottom {
   position: fixed;
   bottom: 0;
@@ -367,7 +367,7 @@
 .homeWrapTop .indexNav .am-navbar-light .am-navbar-right .searchAll {
   width: .6rem;
   height: .6rem;
-  line-height: 1;
+  line-height: 1.2;
   text-align: center;
   border: 2px solid #fff;
   border-radius: 50%;
@@ -419,4 +419,14 @@
     background-color: transparent !important;
     z-index: -1;
   }
+}
+
+.flex-city .am-flexbox-item .am-list-line .am-list-content {
+  text-align: center;
+}
+
+.flex-city .sub-title {
+  margin-top: .26rem;
+  margin-bottom: .26rem;
+  font-size: .3rem;
 }
