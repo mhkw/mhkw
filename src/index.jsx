@@ -9,6 +9,7 @@ import Forget from './components/forget';
 import Bind from './components/bind';
 import Index from './components/home';
 import listViewDemo from './components/listViewDemo';
+import designerHome from './components/DesignerHome';
 
 import 'lib-flexible/flexible'
 // import 'js/flexible.debug'
@@ -38,5 +39,6 @@ ReactDOM.render(
         <Route path="/forget" component={Forget} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
+        <Route path="/designerHome" component={designerHome} />
     </Router>
     , document.getElementById('container'));
