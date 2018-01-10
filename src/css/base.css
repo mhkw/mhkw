@@ -34,6 +34,7 @@ audio, canvas, video {
 /* 要注意表单元素并不继承父级 font 的问题 */
 body, button, input, select, textarea {
     font: 12px/1.5 tahoma, arial, "Hiragino Sans GB", \5b8b\4f53;
+    background-color: #fff;
 }
 
 input, select, textarea {
@@ -131,11 +132,12 @@ samp {
 /* 清理浮动 */
 .fn-clear:after {
     visibility: hidden;
-    display: block;
+    display: inline-block;
     font-size: 0;
-    content: " ";
+    content: "";
     clear: both;
     height: 0;
+    line-height:0;
 }
 
 .fn-clear {

@@ -251,66 +251,108 @@
     border-bottom:1px solid #E3E3E3;
     z-index:100;
 }
-.homeWrapTop {
-    height: 4.533333rem;
-    width: 100%;
-    background: url('../images/mainTop.png') no-repeat center center / 100% 100%;
-    font-size: 16px;
-    a {
-        color: #fff;        
-    }
-    .indexNav {
-        .am-navbar-light {
-            background-color: transparent;
-            .am-navbar-right {
-                .searchAll {
-                    width: .6rem;
-                    height: .6rem;
-                    line-height: 1.2;
-                    text-align: center;
-                    border: 2px solid #fff;
-                    border-radius: 50%;
-                    i {
-                        color: #fff;
-                    }  
+.homeWrap {
+    .homeWrapTop {
+        height: 4.533333rem;
+        width: 100%;
+        background: url('../images/mainTop.png') no-repeat center center / 100% 100%;
+        font-size: 16px;
+        a {
+            color: #fff;        
+        }
+        .indexNav {
+            .am-navbar-light {
+                background-color: transparent;
+                .am-navbar-right {
+                    .searchAll {
+                        width: .6rem;
+                        height: .6rem;
+                        line-height: .6rem;
+                        text-align: center;
+                        border: 2px solid #fff;
+                        border-radius: 50%;
+                        i {
+                            color: #fff;
+                        }  
+                    }
                 }
-                           
+            }
+        }
+        .hometabs {
+            height: 2.133333rem;
+            color: #fff;
+            margin-top: .32rem;
+            .am-tabs-default-bar {
+                // background-color: !important;
+                .am-tabs-default-bar-tab{
+                    line-height: 1;
+                    height: auto;
+                    padding: 0;
+                    .tabsList {
+                        width: 100%;
+                        text-align: center;
+                        float: left;
+                        img {
+                            height: 1.2rem;
+                            width: 1.2rem;
+                        }
+                        p {
+                            line-height: 14px;
+                            margin-top: .133333rem;
+                            font-size: 12px;
+                        }
+                    }
+                }
+                .am-tabs-default-bar-prevpage,
+                .am-tabs-default-bar-nextpage {
+                    display: none;
+                }
             }
         }
     }
-    .hometabs {
-        height: 2.133333rem;
-        color: #fff;
-        .am-tabs-default-bar {
-            // background-color: !important;
-            .am-tabs-default-bar-tab{
-                line-height: 1;
-                height: auto;
-                padding: 0;
-                .tabsList {
-                    width: 100%;
-                    text-align: center;
-                    float: left;
+    .homeWrapMain {
+        padding: .266667rem;
+        .items {
+            .itemsTop {
+                padding:.2rem;
+                overflow: hidden;
+                box-sizing: border-box;
+                border-bottom: 1px dotted #dedcdc;
+                .itemsTopPic {
+                    overflow: hidden;
                     img {
-                        height: 1.2rem;
                         width: 1.2rem;
-                        // position: relative;
-                        // top: .293333rem;
+                        height: 1.2rem;
                     }
+                }
+                .itemsTopRight {
+                    margin-left: 1.6rem;
                     p {
-                        line-height: 14px;
-                        margin-top: .133333rem;
-                        font-size: 12px;
+                        overflow: hidden;
+                        line-height:.64rem;
+                    }
+                    .personalMsg {
+                        color: #CBCBD5;                        
                     }
                 }
             }
-            .am-tabs-default-bar-prevpage,
-            .am-tabs-default-bar-nextpage {
-                display: none;
+            .itemPicList {
+                ul {
+                    overflow: hidden;
+                    margin-top: .133333rem;
+                    li {
+                        width: 47.5%;
+                        height: 3.306667rem;
+                        float: left;
+                        margin: 0 .106667rem .106667rem .106667rem;
+                        overflow: hidden;
+                        img {
+                            width: 100%;
+                        }
+                    }
+                }
             }
-            
         }
-        
     }
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {

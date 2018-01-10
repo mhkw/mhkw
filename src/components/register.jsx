@@ -68,7 +68,7 @@ class LoginView extends React.Component {
                                             onErrorClick={this.onErrorClick}
                                             onChange={this.onChange}
                                             value={this.state.value}
-                                        ><i className="phone iconfont icon-shouji"></i></InputItem>
+                                        ><i className="phone iconfont icon-shouji1"></i></InputItem>
                                         <InputItem
                                             {...getFieldProps('password') }
                                             type="password"
