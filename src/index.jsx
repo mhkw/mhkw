@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router';
+import './css/font/iconfont.css'
 
 import App from './components/App';
 import Login from './components/login';
@@ -10,6 +11,8 @@ import Bind from './components/bind';
 import Index from './components/home';
 import listViewDemo from './components/listViewDemo';
 import designerHome from './components/DesignerHome';
+import WorksCollection from './components/worksCollection';
+import DesignerComment from './components/designerComment';
 
 import 'lib-flexible/flexible'
 // import 'js/flexible.debug'
@@ -39,6 +42,10 @@ ReactDOM.render(
         <Route path="/forget" component={Forget} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
-        <Route path="/designerHome" component={designerHome} />
+        <Route path="/designerHome" component={designerHome}>
+            <IndexRoute component={WorksCollection} />
+            <Route path="worksCollection" component={WorksCollection} />
+            <Route path="designerComment" component={DesignerComment} />
+        </Route>
     </Router>
     , document.getElementById('container'));
