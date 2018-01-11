@@ -193,23 +193,23 @@ export default class LoginView extends React.Component {
                             <p>{obj.title}</p>
                             <ul>
                                 <li>
-                                    <a href="#">
+                                    <a href="">
                                         <img src={obj.img} alt="" />
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a href="">
                                         <img src={obj.img} alt="" />
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a href="">
                                         <img src={obj.img} alt="" />
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
-                                        <img src={obj.img} alt="" />
+                                    <a href="" >
+                                        <img src={obj.img} alt=""/>
                                     </a>
                                 </li>
                             </ul>

@@ -3,8 +3,8 @@ import { List, InputItem, NavBar, Tabs, PullToRefresh, ListView } from 'antd-mob
 import { Link } from 'react-router';
 import { createForm } from 'rc-form';
 import QueueAnim from 'rc-queue-anim';
-
-import '../css/font/iconfont.css'
+import axios from 'axios';
+import '../css/font/iconfont.css';
 
 const loginUrl = [
     require('../images/home/lei1.png'),
@@ -66,44 +66,44 @@ export default class LoginView extends React.Component {
             res: [{
                 img: 'http://huakewang.b0.upaiyun.com/2014/11/03/20141103220756424665.jpg!540x720',
                 title: 'Meet hotel',
-                sex:"男",
+                sex: "男",
                 lng: "1.99km",
             },
             {
                 img: 'http://www.huakewang.com/uploads/2013/1031/20131031002147100933_thumb.jpg',
                 title: 'McDonald',
                 sex: "女",
-                lng:"1.68km",
+                lng: "1.68km",
             },
             {
                 img: 'http://www.huakewang.com/uploads/2013/1031/20131031002147100933_thumb.jpg',
                 title: 'McDonald',
                 sex: "女",
-                lng:"1.68km",
+                lng: "1.68km",
             },
             {
                 img: 'http://www.huakewang.com/uploads/2013/1031/20131031002147100933_thumb.jpg',
                 title: 'McDonald',
                 sex: "女",
-                lng:"1.68km",
+                lng: "1.68km",
             },
             {
                 img: 'http://www.huakewang.com/uploads/2013/1031/20131031002147100933_thumb.jpg',
                 title: 'McDonald',
                 sex: "女",
-                lng:"1.68km",
+                lng: "1.68km",
             },
             {
                 img: 'http://www.huakewang.com/uploads/2013/1031/20131031002147100933_thumb.jpg',
                 title: 'McDonald',
                 sex: "女",
-                lng:"1.68km",
+                lng: "1.68km",
             },
             {
                 img: 'http://huakewang.b0.upaiyun.com/2014/11/03/20141103220756424665.jpg!540x720',
                 title: 'McDonald',
                 sex: "女",
-                lng:"1.68km",
+                lng: "1.68km",
             }]
         };
     }
@@ -127,6 +127,31 @@ export default class LoginView extends React.Component {
                 isLoading: false,
             });
         }, 500);
+        // http://139.224.68.145:8080/
+        // https://new.huakewang.com
+        axios({
+            url:'https://www.huakewang.com/hkw_newapi/get_works_list/NULL/add_time/16/1/f', 
+            method:"post",
+            // data:{
+            //     sort: "add_time",
+            //     offices: "all",
+            //     keywords: "艺术绘画",
+            //     longitude: "0",
+            //     latitude: "0",
+            //     per_page: "9",
+            //     page: "1"
+            // },
+            dataType:"json",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
     }
 
     onRefresh = () => {   //顶部下拉刷新数据
@@ -158,7 +183,7 @@ export default class LoginView extends React.Component {
             });
         }, 1000);
     };
-    
+
     render() {
         let index = this.state.res.length - 1;
         const row = (rowData, sectionID, rowID) => {
@@ -207,8 +232,8 @@ export default class LoginView extends React.Component {
                                 </li>
                             </ul>
                         </div>
-                    </div>    
-                </div> 
+                    </div>
+                </div>
             );
         };
 
@@ -236,46 +261,6 @@ export default class LoginView extends React.Component {
                     </div>
                 </div>
                 <div className="homeWrapMain">
-                    {/* <div className="items">
-                        <div className="itemsTop">
-                            <div className="itemsTopPic fn-left">
-                                <img src={loginUrl[8]} alt="" />
-                            </div>
-                            <div className="itemsTopRight">
-                                <p>
-                                    <span className="fn-left" style={{fontSize: '16px'}}>Mia Zhang <i className="iconfont icon-xingbienv_f" style={{color: "#F46353", fontWeight: "800", fontSize: "12px"}}></i></span>
-                                    <span className="fn-right personalMsg"><i className="iconfont icon-dingwei"></i>0.76km</span>
-                                </p>
-                                <p className="personalMsg">
-                                    <span>优秀设计师</span> | <span>10年经验</span> | <span>6件作品</span> | <span>31人喜欢</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div className="itemPicList">
-                            <ul>
-                                <li>
-                                    <a href="#">
-                                        <img src={this.state.res[0].img} alt="" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src={loginUrl[9]} alt="" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src={loginUrl[9]} alt="" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src={loginUrl[9]} alt="" />
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>         */}
                     <ListView
                         key={this.state.useBodyScroll ? '0' : '1'}
                         ref={el => this.lv = el}
