@@ -92,6 +92,62 @@
   background: url("../images/tabbar_four_on@3x.png") center center/0.8rem 0.8rem no-repeat;
 }
 
+.navPlus .navPlusAnim {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background-color: #fff;
+}
+
+.navPlus .navPlusAnim .fourWrap {
+  overflow: hidden;
+  text-align: center;
+  width: 7.52rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  /* IE 9 */
+  -moz-transform: translate(-50%, -50%);
+  /* Firefox */
+  -webkit-transform: translate(-50%, -50%);
+  /* Safari 和 Chrome */
+  -o-transform: translate(-50%, -50%);
+}
+
+.navPlus .navPlusAnim .fourWrap li {
+  width: 2.506667rem;
+  float: left;
+  margin: .266667rem .613333rem;
+  font-size: 14px;
+}
+
+.navPlus .navPlusAnim .fourWrap li img {
+  width: 100%;
+}
+
+.navPlus .navPlusAnim span {
+  position: absolute;
+  bottom: .266667rem;
+  left: 50%;
+  transform: translate(-50%);
+  -ms-transform: translate(-50%);
+  /* IE 9 */
+  -moz-transform: translate(-50%);
+  /* Firefox */
+  -webkit-transform: translate(-50%);
+  /* Safari 和 Chrome */
+  -o-transform: translate(-50%);
+  bottom: .4rem;
+  font-size: 32px;
+  display: inline-block;
+  color: #F2683F;
+}
+
 .topMargin {
   margin-top: 8%;
 }
@@ -349,6 +405,34 @@
   z-index: 100;
 }
 
+.homeWrap .am-wingblank.am-wingblank-lg {
+  margin: 0;
+}
+
+.homeWrap .lanternLis li img {
+  height: 3.2rem;
+}
+
+.homeWrap .lanternLis .fourAvt {
+  border-bottom: 1px solid #cccccc;
+}
+
+.homeWrap .lanternLis .fourAvt ul {
+  overflow: hidden;
+  margin: .4rem 0;
+}
+
+.homeWrap .lanternLis .fourAvt ul li {
+  text-align: center;
+  width: 25%;
+  float: left;
+}
+
+.homeWrap .lanternLis .fourAvt ul li img {
+  width: 1.333333rem;
+  height: 1.333333rem;
+}
+
 .homeWrap .homeWrapTop {
   height: 4.533333rem;
   width: 100%;
@@ -480,4 +564,125 @@
   margin-top: .26rem;
   margin-bottom: .26rem;
   font-size: .3rem;
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ellipsis-lines {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.designer-home {
+  background-color: #fff;
+}
+
+.NewNavBar .am-navbar-left {
+  padding-left: 0px;
+}
+
+.designer-home .avatar-box {
+  width: 1.866667rem;
+  height: 1.866667rem;
+  border-radius: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.designer-home img {
+  max-width: 1.866667rem;
+  min-height: 1.866667rem;
+}
+
+.designer-home .brief-box-out {
+  text-align: center;
+  font-size: 18px;
+  margin: 0 .4rem;
+  border-bottom: 1px dashed #9e9e9e;
+  margin-bottom: .293333rem;
+}
+
+.brief-box-out .nick-name .iconfont {
+  font-size: 20px;
+  margin-left: .133333rem;
+  vertical-align: sub;
+  color: #ff6f8a;
+}
+
+.brief-more-flex.am-flexbox,
+.brief-data-flex.am-flexbox {
+  margin: 0 auto;
+}
+
+.brief-more-flex.am-flexbox .am-flexbox-item {
+  text-align: center;
+  font-size: 14px;
+}
+
+.brief-more-flex.am-flexbox .am-flexbox-item .iconfont {
+  margin-right: .066667rem;
+  font-size: 18px;
+}
+
+.brief-box-out .slogan {
+  font-size: 14px;
+  margin-top: .346667rem;
+  margin-bottom: .666667rem;
+  color: #9e9e9e;
+}
+
+.brief-data-flex.am-flexbox .am-flexbox-item {
+  text-align: center;
+}
+
+.brief-data-flex .text {
+  margin-top: .133333rem;
+  margin-bottom: .8rem;
+}
+
+.brief-box-out .brief-box-out-bottom {
+  color: #9e9e9e;
+  font-size: 18px;
+  width: 2.5rem;
+  margin: 0 auto;
+  position: relative;
+  bottom: -14px;
+  height: 28px;
+  line-height: 28px;
+  background-color: #fff;
+}
+
+.designer-home .huake-info-box {
+  margin: 0 .666667rem;
+  font-size: 16px;
+  color: #707070;
+  text-align: justify;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.designer-home .brief-comment-flex {
+  font-size: 20px;
+  color: #aaa;
+}
+
+.designer-home .brief-comment-flex .active {
+  color: #499fd8;
+}
+
+.designer-home .brief-comment-flex .active .txt {
+  color: #499fd8;
+}
+
+.designer-home .brief-comment-flex .txt {
+  color: #595959;
 }

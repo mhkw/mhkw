@@ -1,23 +1,22 @@
 import React from 'react'
-import { List, InputItem, NavBar, Tabs, PullToRefresh, ListView } from 'antd-mobile';
+import { List, InputItem, NavBar, Tabs, PullToRefresh, ListView, Carousel, WhiteSpace, WingBlank } from 'antd-mobile';
 import { Link } from 'react-router';
 import { createForm } from 'rc-form';
 import QueueAnim from 'rc-queue-anim';
 
 import '../css/font/iconfont.css'
 
-const loginUrl = [
-    require('../images/home/lei1.png'),
-    require('../images/home/lei2.png'),
-    require('../images/home/lei3.png'),
-    require('../images/home/lei4.png'),
-    require('../images/home/lei5.png'),
-    require('../images/home/lei6.png'),
-    require('../images/home/lei7.png'),
-    require('../images/home/lei8.png'),
-    require('../images/touxiang.png'),
-    require('../images/homePic.png'),
-]
+const loginUrl = {
+    "touxiang":require('../images/touxiang.png'),
+    "homePic":require('../images/homePic.png'),
+    "banner01":require('../images/banner01.jpg'),
+    "banner02":require('../images/banner02.jpg'),
+    "banner03":require('../images/banner03.jpg'),
+    "demand":require('../images/demand_draw_new.png'),
+    "work":require('../images/work_draw_new.png'),
+    "tiezi":require('../images/tiezi_draw_new.png'),
+    "essay":require('../images/essay_draw_new.png')
+}
 
 const NUM_ROWS = 7;
 let pageIndex = 0;
@@ -29,25 +28,7 @@ function genData(pIndex = 0) {
     }
     return dataArr;
 }
-const tabs = [
-    { title: <div className="fn-clear tabsList"><img src={loginUrl[0]} /><p>软件开发</p></div> },
-    { title: <div className="fn-clear tabsList"><img src={loginUrl[1]} /><p>软件开发</p></div> },
-    { title: <div className="fn-clear tabsList"><img src={loginUrl[2]} /><p>软件开发</p></div> },
-    { title: <div className="fn-clear tabsList"><img src={loginUrl[3]} /><p>软件开发</p></div> },
-    { title: <div className="fn-clear tabsList"><img src={loginUrl[4]} /><p>软件开发</p></div> },
-    { title: <div className="fn-clear tabsList"><img src={loginUrl[5]} /><p>软件开发</p></div> },
-    { title: <div className="fn-clear tabsList"><img src={loginUrl[6]} /><p>软件开发</p></div> },
-    { title: <div className="fn-clear tabsList"><img src={loginUrl[7]} /><p>软件开发</p></div> },
-];
-const separator = (sectionID, rowID) => (   //这个是每个元素之间的间距
-    <div
-        key={`${sectionID}-${rowID}`}
-        style={{
-            backgroundColor: '#fff',
-            height: 8,
-        }}
-    />
-);
+
 export default class LoginView extends React.Component {
     constructor(props) {
         super(props);
@@ -55,6 +36,9 @@ export default class LoginView extends React.Component {
             rowHasChanged: (row1, row2) => row1 !== row2,
         });
         this.state = {
+            data: [loginUrl.banner01, loginUrl.banner02, loginUrl.banner03],
+            imgHeight: 176,
+            slideIndex: 0,
             dataSource,
             refreshing: true,
             isLoading: true,
@@ -124,6 +108,12 @@ export default class LoginView extends React.Component {
                 isLoading: false,
             });
         }, 500);
+
+        // setTimeout(() => {
+        //     this.setState({
+        //         data: [loginUrl[10], loginUrl[11], loginUrl[12]],
+        //     });
+        // }, 100);
     }
 
     onRefresh = () => {   //顶部下拉刷新数据
@@ -134,7 +124,7 @@ export default class LoginView extends React.Component {
             this.setState({
                 dataSource: this.state.dataSource.cloneWithRows(this.rData),
                 refreshing: false,
-                isLoading: false,
+                isLoading: false
             });
         }, 600);
     };
@@ -155,8 +145,16 @@ export default class LoginView extends React.Component {
             });
         }, 1000);
     };
-    
     render() {
+        const separator = (sectionID, rowID) => (   //这个是每个元素之间的间距
+            <div
+                key={`${sectionID}-${rowID}`}
+                style={{
+                    backgroundColor: '#fff',
+                    height: 8,
+                }}
+            />
+        );
         let index = this.state.res.length - 1;
         const row = (rowData, sectionID, rowID) => {
             if (index < 0) {
@@ -168,7 +166,7 @@ export default class LoginView extends React.Component {
                     <div className="items">
                         <div className="itemsTop">
                             <div className="itemsTopPic fn-left">
-                                <img src={loginUrl[8]} alt="" />
+                                <img src={loginUrl.touxiang} alt="" />
                             </div>
                             <div className="itemsTopRight">
                                 <p>
@@ -211,68 +209,64 @@ export default class LoginView extends React.Component {
 
         return (
             <div className="homeWrap">
-                <div className="homeWrapTop">
-                    <div className="indexNav">
-                        <NavBar
-                            mode="light"
-                            onLeftClick={() => hashHistory.goBack()}
-                            rightContent={[
-                                <div className="searchAll">
-                                    <i className="iconfont icon-icon05"></i>
-                                </div>
-                            ]}
-                        ><Link to="/city"><i className="iconfont icon-dingwei"></i>山景路666号</Link></NavBar>
-                    </div>
-                    <div className="hometabs">
-                        <Tabs tabs={tabs}
-                            tabBarBackgroundColor="transparent"
-                            tabBarUnderlineStyle={{ display: "none" }}
-                            onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
+                <div className="lanternLis">
+                    <WingBlank>
+                        <Carousel
+                            autoplay={true}
+                            autoplayInterval={3000}
+                            infinite
+                            selectedIndex={1}
                         >
-                        </Tabs>
+                            {this.state.data.map(val => (
+                                <a
+                                    key={val}
+                                    // href="http://www.alipay.com"
+                                    style={{ display: 'inline-block' }}
+                                >
+                                    <img
+                                        src={val}
+                                        alt=""
+                                        style={{ width: '100%', verticalAlign: 'top' }}
+                                        onLoad={() => {
+                                            // fire window resize event to change height
+                                            window.dispatchEvent(new Event('resize'));
+                                            this.setState({ imgHeight: 'auto' });
+                                        }}
+                                    />
+                                </a>
+                            ))}
+                        </Carousel>
+                    </WingBlank>
+                    <div className="fourAvt">
+                        <ul>
+                            <li>
+                                <Link>
+                                    <img src={loginUrl.demand}/>
+                                    <p>项目</p>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link>
+                                    <img src={loginUrl.work}/>
+                                    <p>作品</p>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link>
+                                    <img src={loginUrl.tiezi}/>
+                                    <p>帖子</p>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link>
+                                    <img src={loginUrl.essay}/>
+                                    <p>活动</p>
+                                </Link>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div className="homeWrapMain">
-                    {/* <div className="items">
-                        <div className="itemsTop">
-                            <div className="itemsTopPic fn-left">
-                                <img src={loginUrl[8]} alt="" />
-                            </div>
-                            <div className="itemsTopRight">
-                                <p>
-                                    <span className="fn-left" style={{fontSize: '16px'}}>Mia Zhang <i className="iconfont icon-xingbienv_f" style={{color: "#F46353", fontWeight: "800", fontSize: "12px"}}></i></span>
-                                    <span className="fn-right personalMsg"><i className="iconfont icon-dingwei"></i>0.76km</span>
-                                </p>
-                                <p className="personalMsg">
-                                    <span>优秀设计师</span> | <span>10年经验</span> | <span>6件作品</span> | <span>31人喜欢</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div className="itemPicList">
-                            <ul>
-                                <li>
-                                    <a href="#">
-                                        <img src={this.state.res[0].img} alt="" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src={loginUrl[9]} alt="" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src={loginUrl[9]} alt="" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src={loginUrl[9]} alt="" />
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>         */}
                     <ListView
                         key={this.state.useBodyScroll ? '0' : '1'}
                         ref={el => this.lv = el}

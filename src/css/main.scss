@@ -59,6 +59,54 @@
         }
     }
 }
+
+.navPlus {
+    .navPlusAnim {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 100;
+        background-color: #fff;
+        .fourWrap {
+            overflow: hidden;
+            text-align: center;
+            width: 7.52rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            -ms-transform:translate(-50%,-50%); 	/* IE 9 */
+            -moz-transform:translate(-50%,-50%); 	/* Firefox */
+            -webkit-transform:translate(-50%,-50%); /* Safari 和 Chrome */
+            -o-transform:translate(-50%,-50%); 
+            li {
+                width: 2.506667rem;
+                float: left;
+                margin: .266667rem .613333rem;
+                font-size: 14px;
+                img {
+                    width: 100%;
+                }
+            }
+        }
+        span {
+            position: absolute;
+            bottom:.266667rem;
+            left: 50%;
+            transform: translate(-50%);
+            -ms-transform:translate(-50%); 	/* IE 9 */
+            -moz-transform:translate(-50%); 	/* Firefox */
+            -webkit-transform:translate(-50%); /* Safari 和 Chrome */
+            -o-transform:translate(-50%); 
+            bottom: .4rem;
+            font-size: 32px;
+            display: inline-block;
+            color: #F2683F;
+        }
+    }
+}
 .topMargin {
     margin-top: 8%;
 }
@@ -66,7 +114,6 @@
 .loginWrap {
     background-color: #fff;
     padding: 0 1rem;
-    // margin-top: 8%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -252,6 +299,32 @@
     z-index:100;
 }
 .homeWrap {
+    .am-wingblank.am-wingblank-lg {
+        margin: 0;
+    }
+    .lanternLis {
+        li {
+            img {
+                height: 3.2rem ;
+            }
+        }
+        .fourAvt {
+            border-bottom: 1px solid #cccccc;            
+            ul {
+                overflow: hidden;
+                margin: .4rem 0;
+                li {
+                    text-align: center;
+                    width: 25%;
+                    float: left;
+                    img {
+                        width: 1.333333rem;
+                        height: 1.333333rem;
+                    }
+                }
+            }
+        }
+    }
     .homeWrapTop {
         height: 4.533333rem;
         width: 100%;

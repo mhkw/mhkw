@@ -13,6 +13,7 @@ import listViewDemo from './components/listViewDemo';
 import designerHome from './components/DesignerHome';
 import WorksCollection from './components/worksCollection';
 import DesignerComment from './components/designerComment';
+import Hkcircle from './components/hkCircle';
 
 import 'lib-flexible/flexible'
 // import 'js/flexible.debug'
@@ -36,6 +37,7 @@ ReactDOM.render(
     <Router history={hashHistory}>
         <Route path="/" component={App}>
             <IndexRoute component={Index} />
+            <Route path="/circle" component={Hkcircle} />                    
         </Route>
         <Route path="/city" component={listViewDemo} />        
         <Route path="/bind" component={Bind} />
