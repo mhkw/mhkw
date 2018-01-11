@@ -48,6 +48,9 @@ const separator = (sectionID, rowID) => (   //这个是每个元素之间的间�
         }}
     />
 );
+const RendItems = () => (
+    ''
+)
 export default class LoginView extends React.Component {
     constructor(props) {
         super(props);

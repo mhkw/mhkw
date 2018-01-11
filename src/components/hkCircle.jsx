@@ -46,45 +46,52 @@ export default class LoginView extends React.Component {
             useBodyScroll: true,
             res: [{
                 img: 'http://huakewang.b0.upaiyun.com/2014/11/03/20141103220756424665.jpg!540x720',
-                title: 'Meet hotel',
+                title: '地方如果特特围绕区委',
                 sex:"男",
                 lng: "1.99km",
+                time:"1分钟前"
             },
             {
                 img: 'http://www.huakewang.com/uploads/2013/1031/20131031002147100933_thumb.jpg',
-                title: 'McDonald',
+                title: '发给他然后突然佛挡杀佛请问',
                 sex: "女",
                 lng:"1.68km",
+                time:"1分钟前"
             },
             {
                 img: 'http://www.huakewang.com/uploads/2013/1031/20131031002147100933_thumb.jpg',
-                title: 'McDonald',
+                title: '头发共同话题一月份问题还有热共同',
                 sex: "女",
                 lng:"1.68km",
+                time:"1分钟前"
             },
             {
                 img: 'http://www.huakewang.com/uploads/2013/1031/20131031002147100933_thumb.jpg',
-                title: 'McDonald',
+                title: '还能发热我发的的上传电视广告',
                 sex: "女",
                 lng:"1.68km",
+                time:"1分钟前"
             },
             {
                 img: 'http://www.huakewang.com/uploads/2013/1031/20131031002147100933_thumb.jpg',
-                title: 'McDonald',
+                title: '规划报告合伙人服务而',
                 sex: "女",
                 lng:"1.68km",
+                time:"1分钟前"
             },
             {
                 img: 'http://www.huakewang.com/uploads/2013/1031/20131031002147100933_thumb.jpg',
-                title: 'McDonald',
+                title: '个人服务而非广泛认同',
                 sex: "女",
                 lng:"1.68km",
+                time:"1分钟前"
             },
             {
                 img: 'http://huakewang.b0.upaiyun.com/2014/11/03/20141103220756424665.jpg!540x720',
-                title: 'McDonald',
+                title: '更方便是放到更惹人访问的房产大时代大范甘迪',
                 sex: "女",
                 lng:"1.68km",
+                time:"1分钟前"
             }]
         };
     }
@@ -170,15 +177,20 @@ export default class LoginView extends React.Component {
                             </div>
                             <div className="itemsTopRight">
                                 <p>
-                                    <span className="fn-left" style={{ fontSize: '16px' }}>Mia Zhang <i className="iconfont icon-xingbienv_f" style={{ color: "#F46353", fontWeight: "800", fontSize: "12px" }}></i></span>
-                                    <span className="fn-right personalMsg"><i className="iconfont icon-dingwei"></i>0.76km</span>
+                                    <span className="fn-left" style={{ fontSize: '16px' }}>Bing Yuan <i className="iconfont icon-xingbienv_f" style={{
+                                        color: "#F46353", 
+                                        fontWeight: "800", 
+                                        fontSize: "12px" 
+                                        }}></i></span>
+                                    <span className="fn-right personalMsg">发布了帖子</span>
                                 </p>
                                 <p className="personalMsg">
-                                    <span>优秀设计师</span> | <span>10年经验</span> | <span>6件作品</span> | <span>31人喜欢</span>
+                                    <span>前端开发</span> | <span>技术改变生活，能力提升品质</span>
                                 </p>
                             </div>
                         </div>
                         <div className="itemPicList">
+                            <p>{obj.title}</p>
                             <ul>
                                 <li>
                                     <a href="#">
@@ -201,6 +213,13 @@ export default class LoginView extends React.Component {
                                     </a>
                                 </li>
                             </ul>
+                            <div className="fn-clear" style={{color:"#949494"}}>
+                                <div style={{float:"left"}}>{obj.time}</div> 
+                                <div style={{ float: "right" }}>
+                                    <i className="iconfont icon-Pingjia" style={{ fontSize: "14px", verticalAlign: "middle" }}></i><span> 5</span>&nbsp;&nbsp;&nbsp;
+                                    <i className="iconfont icon-liuyan" style={{ fontSize: "14px", verticalAlign: "middle" }}></i><span>12</span>
+                                </div>
+                            </div>
                         </div>
                     </div>    
                 </div> 
@@ -266,7 +285,7 @@ export default class LoginView extends React.Component {
                         </ul>
                     </div>
                 </div>
-                <div className="homeWrapMain">
+                <div className="homeWrapMain" id="hkCircle">
                     <ListView
                         key={this.state.useBodyScroll ? '0' : '1'}
                         ref={el => this.lv = el}
