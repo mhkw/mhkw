@@ -49,5 +49,6 @@ ReactDOM.render(
             <Route path="worksCollection" component={WorksCollection} />
             <Route path="designerComment" component={DesignerComment} />
         </Route>
+        <Route path="/designerComment" component={DesignerComment} />
     </Router>
     , document.getElementById('container'));

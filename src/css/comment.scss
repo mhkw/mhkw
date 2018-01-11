@@ -1,0 +1,30 @@
+.info .icon-wujiaoxing{
+    color: #ccc;
+}
+.info .icon-wujiaoxing.light{
+    color: #409ad6;
+}
+.comment-item{
+    // display: -webkit-box;
+    padding: 10px 15px 0;
+}
+.comment-item .user-pic{
+    // position: relative;
+    float: left;
+    width: 1rem;
+    margin-right: 15px;
+}
+.comment-item .user-img{
+    width: 1rem;
+    height: 1rem;
+    border-radius: 100%;
+}
+.comment-item .comment-top{
+    margin-left: 1.2rem;
+}
+.comment-item .context .text{
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
