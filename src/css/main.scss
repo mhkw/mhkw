@@ -309,14 +309,15 @@
             }
         }
         .fourAvt {
-            border-bottom: 1px solid #cccccc;            
+            border-bottom: 1px solid #cccccc;     
+            padding: .266667rem;       
             ul {
                 overflow: hidden;
-                margin: .4rem 0;
                 li {
                     text-align: center;
                     width: 25%;
                     float: left;
+                    color:#949494;
                     img {
                         width: 1.333333rem;
                         height: 1.333333rem;
@@ -383,9 +384,27 @@
             }
         }
     }
-    .homeWrapMain {
-        padding: .266667rem;
+    #hkCircle {
         .items {
+            border-bottom: 1px solid #cccccc;
+        }
+        .itemPicList {
+            // padding-bottom: .266667rem;
+            // border-bottom: 1px dotted #dedcdc;
+            p {
+                line-height: .746667rem;
+            }
+            ul {
+                li {
+                    width: 31%;
+                    height: 2.4rem;
+                }
+            }
+        }
+    }
+    .homeWrapMain {
+        .items {
+            padding: .266667rem;
             .itemsTop {
                 padding:.2rem;
                 overflow: hidden;
@@ -405,7 +424,7 @@
                         line-height:.64rem;
                     }
                     .personalMsg {
-                        color: #CBCBD5;                        
+                        color: #949494;                        
                     }
                 }
             }

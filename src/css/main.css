@@ -415,17 +415,18 @@
 
 .homeWrap .lanternLis .fourAvt {
   border-bottom: 1px solid #cccccc;
+  padding: .266667rem;
 }
 
 .homeWrap .lanternLis .fourAvt ul {
   overflow: hidden;
-  margin: .4rem 0;
 }
 
 .homeWrap .lanternLis .fourAvt ul li {
   text-align: center;
   width: 25%;
   float: left;
+  color: #949494;
 }
 
 .homeWrap .lanternLis .fourAvt ul li img {
@@ -495,7 +496,20 @@
   display: none;
 }
 
-.homeWrap .homeWrapMain {
+.homeWrap #hkCircle .items {
+  border-bottom: 1px solid #cccccc;
+}
+
+.homeWrap #hkCircle .itemPicList p {
+  line-height: .746667rem;
+}
+
+.homeWrap #hkCircle .itemPicList ul li {
+  width: 31%;
+  height: 2.4rem;
+}
+
+.homeWrap .homeWrapMain .items {
   padding: .266667rem;
 }
 
@@ -525,7 +539,7 @@
 }
 
 .homeWrap .homeWrapMain .items .itemsTop .itemsTopRight .personalMsg {
-  color: #CBCBD5;
+  color: #949494;
 }
 
 .homeWrap .homeWrapMain .items .itemPicList ul {
@@ -685,4 +699,47 @@
 
 .designer-home .brief-comment-flex .txt {
   color: #595959;
+}
+
+.flex-city .am-list-item {
+  background-color: #f5f5f9;
+}
+
+.flex-city .am-list-item.am-list-item-active {
+  background-color: #ccc;
+}
+
+.info .icon-wujiaoxing {
+  color: #ccc;
+}
+
+.info .icon-wujiaoxing.light {
+  color: #409ad6;
+}
+
+.comment-item {
+  padding: 10px 15px 0;
+}
+
+.comment-item .user-pic {
+  float: left;
+  width: 1rem;
+  margin-right: 15px;
+}
+
+.comment-item .user-img {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 100%;
+}
+
+.comment-item .comment-top {
+  margin-left: 1.2rem;
+}
+
+.comment-item .context .text {
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
