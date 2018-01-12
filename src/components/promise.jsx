@@ -18,6 +18,10 @@ const ajaxURLList = {
     get_blance: "payapi/get_blance", //支付-获取现金余额
 }
 
+function get_user_list_ex(params) {
+    
+}
+
 //定义一个基于Promise的异步任务执行器
 function run(taskDef) {
     //创建迭代器

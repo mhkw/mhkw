@@ -3,7 +3,7 @@ import { List, InputItem, NavBar, Tabs, PullToRefresh, ListView, Carousel, White
 import { Link } from 'react-router';
 import { createForm } from 'rc-form';
 import QueueAnim from 'rc-queue-anim';
-
+import Promise,{} from 'promise'
 import '../css/font/iconfont.css'
 
 const loginUrl = {

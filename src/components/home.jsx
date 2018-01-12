@@ -132,15 +132,20 @@ export default class LoginView extends React.Component {
         axios({
             url:'https://www.huakewang.com/hkw_newapi/get_works_list/NULL/add_time/16/1/f', 
             method:"post",
-            // data:{
-            //     sort: "add_time",
-            //     offices: "all",
-            //     keywords: "艺术绘画",
-            //     longitude: "0",
-            //     latitude: "0",
-            //     per_page: "9",
-            //     page: "1"
-            // },
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+        axios({
+            url:'https://www.huakewang.com/hkw_newapi/get_user_list', 
+            method:"post",
+            data:"sort=add_time&offices=all&keywords=艺术绘画&longitude=0&latitude=0&per_page=9&page=1",
             dataType:"json",
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'

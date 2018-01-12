@@ -15,7 +15,6 @@
             text-align: center;
             a {
                 color: #333;
-                text-decoration: none;
                 @include link-colors(#333, #3ebbf3);
                 i {
                     width: .8rem;
