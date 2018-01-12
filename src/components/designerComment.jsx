@@ -3,6 +3,7 @@ import React from 'react';
 import { hashHistory, Link } from 'react-router';
 import { Toast, NavBar, Icon, Flex, TextareaItem } from 'antd-mobile';
 import QueueAnim from 'rc-queue-anim';
+import axios from 'axios';
 
 const imgUrl = {
     userImg: require("../images/avatar.png"),
@@ -91,11 +92,20 @@ export default class DesignerComment extends React.Component {
             showReplyInput: false,
             sendBtnStatus: false , //判断发送按钮是否可点击，以及按钮上的样式变化
         }
+        this.handleSend = (req) => {
+            if (req.success) {
+                console.log(req);
+            } else {
+                Toast.fail(req.message, 2);
+            }
+        }
     }
+    //组件更新
     componentDidUpdate() {
         console.log("componentDidUpdate")
         this.refs.commentInput.focus(); //焦点聚集到输入框
     }
+    //点击回复
     onTouchReply = (index, e) => {
         console.log(index);
         // e.target.scrollIntoView(true);
@@ -105,14 +115,35 @@ export default class DesignerComment extends React.Component {
         // e.target.offsetTop = top - e.target.clientHeight + "px";
         this.setState({ showReplyInput: true });
     }
+    //回复输入框里的内容变化
     onChangeReplyInput = (val) => {
         this.setState({ replyText: val });
         this.setState({
             sendBtnStatus: !!val.length 
         });
     }
+    //回复输入框失去焦点
     onBlurReplyInput = (e) => {
         // this.setState({ showReplyInput: false }); 
+    }
+    //点击发送按钮
+    onTouchSend= () => {
+        if (this.state.sendBtnStatus) {
+            //设计师页
+            var sort = "add_time", kind = "all", keywords = "all", lng = 0, lat = 0, num = 9, n = 1, totalPage, flag = true;
+            //发送ajax,测试，搜索
+            runPromise("search", {
+                keycode: "1",
+                longitude: "0",
+                latitude: "0",
+            }, this.handleSend);   
+            //发送ajax,测试，获取金额
+            runPromise("get_blance", {
+                keycode: "1",
+                longitude: "0",
+                latitude: true,
+            }, this.handleSend, false, "get");       
+        }
     }
     render() {
         return (
@@ -157,6 +188,7 @@ export default class DesignerComment extends React.Component {
                             "background-color": "#409ad6",
                             "color": "#fff",
                         } : {}}
+                        onTouchStart={this.onTouchSend}
                     >发送</span>
                 </div>
             </div>

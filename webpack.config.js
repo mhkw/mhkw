@@ -102,6 +102,9 @@ module.exports = {
         "react-dom": "ReactDOM"
     },
     plugins: [
+        new webpack.ProvidePlugin({
+            runPromise: ['../components/promise.jsx', 'default'],
+        }),
         new webpack.optimize.ModuleConcatenationPlugin(),
         // new webpack.optimize.CommonsChunkPlugin('shared.js'),
         new webpack.optimize.CommonsChunkPlugin({
