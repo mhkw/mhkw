@@ -48,9 +48,6 @@ const separator = (sectionID, rowID) => (   //这个是每个元素之间的间�
         }}
     />
 );
-const RendItems = () => (
-    ''
-)
 export default class LoginView extends React.Component {
     constructor(props) {
         super(props);
@@ -108,13 +105,13 @@ export default class LoginView extends React.Component {
         };
     }
 
-    componentDidUpdate() {
-        if (this.state.useBodyScroll) {
-            document.body.style.overflow = 'auto';
-        } else {
-            document.body.style.overflow = 'hidden';
-        }
-    }
+    // componentDidUpdate() {
+    //     if (this.state.useBodyScroll) {
+    //         document.body.style.overflow = 'auto';
+    //     } else {
+    //         document.body.style.overflow = 'hidden';
+    //     }
+    // }
 
     componentDidMount() {
         const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
@@ -129,34 +126,34 @@ export default class LoginView extends React.Component {
         }, 500);
         // http://139.224.68.145:8080/
         // https://new.huakewang.com
-        axios({
-            url:'https://www.huakewang.com/hkw_newapi/get_works_list/NULL/add_time/16/1/f', 
-            method:"post",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        })
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-        axios({
-            url:'https://www.huakewang.com/hkw_newapi/get_user_list', 
-            method:"post",
-            data:"sort=add_time&offices=all&keywords=艺术绘画&longitude=0&latitude=0&per_page=9&page=1",
-            dataType:"json",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        })
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+        // axios({
+        //     url:'https://www.huakewang.com/hkw_newapi/get_works_list/NULL/add_time/16/1/f', 
+        //     method:"post",
+        //     headers: {
+        //         'Content-Type': 'application/x-www-form-urlencoded'
+        //     }
+        // })
+        // .then(function (response) {
+        //     console.log(response);
+        // })
+        // .catch(function (error) {
+        //     console.log(error);
+        // });
+        // axios({
+        //     url:'https://www.huakewang.com/hkw_newapi/get_user_list', 
+        //     method:"post",
+        //     data:"sort=add_time&offices=all&keywords=艺术绘画&longitude=0&latitude=0&per_page=9&page=1",
+        //     dataType:"json",
+        //     headers: {
+        //         'Content-Type': 'application/x-www-form-urlencoded'
+        //     }
+        // })
+        // .then(function (response) {
+        //     console.log(response);
+        // })
+        // .catch(function (error) {
+        //     console.log(error);
+        // });
     }
 
     onRefresh = () => {   //顶部下拉刷新数据
@@ -178,7 +175,7 @@ export default class LoginView extends React.Component {
         if (this.state.isLoading && !this.state.hasMore) {
             return;
         }
-        console.log('reach end', event);
+        console.log('数据加载完成');
         this.setState({ isLoading: true });
         setTimeout(() => {
             this.rData = [...this.rData, ...genData(++pageIndex)];
@@ -248,7 +245,7 @@ export default class LoginView extends React.Component {
                     <div className="indexNav">
                         <NavBar
                             mode="light"
-                            onLeftClick={() => hashHistory.goBack()}
+                            onLeftClick={() => hashHistory.go(-1)}
                             rightContent={[
                                 <div className="searchAll">
                                     <i className="iconfont icon-icon05"></i>

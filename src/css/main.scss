@@ -4,58 +4,10 @@
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 1.333333rem;
-    border-top: 1PX solid #E3E3E4;
+    height: 1.4rem;
     background-color: #f5f5f5;
-    ul {
-        margin-top: 0;
-        li {
-            width: 20%;
-            float: left;
-            text-align: center;
-            a {
-                color: #333;
-                @include link-colors(#333, #3ebbf3);
-                i {
-                    width: .8rem;
-                    height: .8rem;
-                    display: block;
-                    margin: .053333rem auto .026667rem auto;
-                }
-                span {
-                    @include font-dpr(12PX);
-                }
-                .picSize1 {
-                    background: url("../images/tabbar_one_close@3x.png") center center / .8rem .8rem no-repeat;
-                    @include link-url(url("../images/tabbar_one_on@3x.png") center center / .8rem .8rem no-repeat);
-                }
-                .picSize2 {
-                    background: url("../images/tabbar_two_close@3x.png") center center / .8rem .8rem no-repeat;
-                    @include link-url(url("../images/tabbar_two_on@3x.png") center center / .8rem .8rem no-repeat)
-                }
-                .picSize3 {
-                    width: 1.12rem;
-                    height: 1.12rem;
-                    //border: resize(.026667rem) solid #E5E5E5;
-                    -webkit-box-shadow: inset 0 0 0 .08rem #e5e5e5;
-                    -moz-box-shadow: inset 0 0 0 .08rem #e5e5e5;
-                    box-shadow: inset 0 0 0 .08rem #e5e5e5;
-                    -webkit-border-radius: 50%;
-                    -moz-border-radius: 50%;
-                    border-radius: 50%;
-                    //margin: 0 auto;
-                    background: url("../images/add.png") center center / 1.12rem 1.12rem no-repeat;
-                }
-                .picSize4 {
-                    background: url("../images/tabbar_three_close@3x.png") center center / .8rem .8rem no-repeat;
-                    @include link-url(url("../images/tabbar_three_close@3x.png") center center / .8rem .8rem no-repeat)
-                }
-                .picSize5 {
-                    background: url("../images/tabbar_four_close@3x.png") center center / .8rem .8rem no-repeat;
-                    @include link-url(url("../images/tabbar_four_on@3x.png") center center / .8rem .8rem no-repeat)
-                }
-            }
-        }
+    .am-tab-bar-bar {
+        height: 1.4rem;
     }
 }
 

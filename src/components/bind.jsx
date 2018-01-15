@@ -1,6 +1,6 @@
 import React from 'react'
 import { List, InputItem, Toast, Button, WhiteSpace, Checkbox, Modal } from 'antd-mobile';
-import {Link} from 'react-router';
+import { Link } from 'react-router';
 import { createForm } from 'rc-form';
 import QueueAnim from 'rc-queue-anim';
 

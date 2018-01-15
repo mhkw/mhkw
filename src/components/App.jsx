@@ -1,80 +1,203 @@
-import React, {Component} from 'react'
-import {Router, Route, hashHistory, IndexRoute, Link} from 'react-router';
+import React, { Component } from 'react'
+import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router';
 import QueueAnim from 'rc-queue-anim';
+import { TabBar } from 'antd-mobile';
 
 // import 'antd-mobile/dist/antd-mobile.css';
 import '../css/main.scss';
 
 const appUrl = {
-    'upNeed':require('../images/upNeed.png'),
-    'upWorks':require('../images/upWorks.png'),
-    'upQuote':require('../images/upQuote.png'),
-    'upTalk':require('../images/upTalk.png'),
+    'upNeed': require('../images/upNeed.png'),
+    'upWorks': require('../images/upWorks.png'),
+    'upQuote': require('../images/upQuote.png'),
+    'upTalk': require('../images/upTalk.png'),
+    'add': require('../images/add.png'),
     'tabbar_one_on': require('../images/tabbar_one_on@3x.png'),
-    'tabbar_one_on': require('../images/tabbar_two_on@3x.png'),
-    'tabbar_one_on': require('../images/tabbar_three_on@3x.png'),
-    'tabbar_one_on': require('../images/tabbar_four_on@3x.png'),
+    'tabbar_two_on': require('../images/tabbar_two_on@3x.png'),
+    'tabbar_three_on': require('../images/tabbar_three_on@3x.png'),
+    'tabbar_four_on': require('../images/tabbar_four_on@3x.png'),
+    'tabbar_one_close': require('../images/tabbar_one_close@3x.png'),
+    'tabbar_two_close': require('../images/tabbar_two_close@3x.png'),
+    'tabbar_three_close': require('../images/tabbar_three_close@3x.png'),
+    'tabbar_four_close': require('../images/tabbar_four_close@3x.png'),
 }
 export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            show:false,
-            src:""
+            show: false,
+            src: [appUrl.tabbar_one_close, appUrl.tabbar_two_close, appUrl.tabbar_three_close, appUrl.tabbar_four_close],
+            activeSrc: [appUrl.tabbar_one_on, appUrl.tabbar_two_on, appUrl.tabbar_three_on, appUrl.tabbar_four_on],
+            selectedTab: '',
+            hidden: false,
+            fullScreen: false,
         };
     }
+    
     showWhatDo = () => {
         this.setState({
             show: !this.state.show,
         });
     }
-    changeBgPic = (src) => {
+    componentDidMount = ()=>{
         this.setState({
-            src: this.src
-        })
+            selectedTab: window.location.href.split("#")[1]
+        });
     }
+    // changeBgPic = (src) => {
+    //     this.setState({
+    //         src: this.src
+    //     })
+    // }
 
-getAttribute = (e) =>{
-    const a = e.currentTarget.getAttribute("data-src");
-    console.log(e.currentTarget)
-}
+    changeBgPic = (e) => {
+        let num = e.currentTarget.getAttribute("data-key");
+        e.currentTarget.getElementsByTagName("i")[0].style.backgroundImage = "url(" + this.state.src[num] + ")";
+        e.currentTarget.getElementsByTagName("span")[0].style.color = "#3ebbf3";
+    }
     render() {
         return (
             <div>
                 {this.props.children}
                 <div className="barBottom fn-clear">
-                    <ul className="fn-clear">
-                        <li className='picSize'>
-                            <Link to="/" data-src={appUrl.tabbar_one_on} onClick={this.getAttribute}>
-                                <i className='picSize1'></i>
-                                <span>首页</span>
-                            </Link>
-                        </li>
-                        <li className='picSize'>
-                            <Link to="/circle" >
-                                <i className='picSize2'></i>
-                                <span>画客圈</span>
-                            </Link>
-                        </li>
-                        <li className='picSize'>
-                            <a href="javascript:void(0);" onClick={this.showWhatDo}>
-                                <i className='picSize3'></i>
-                            </a>
-                        </li>
-                        <li className='picSize'>
-                            <a href="javascript:void(0);">
-                                <i className='picSize4'></i>
-                                <span>消息</span>
-                            </a>
-                        </li>
-                        <li className='picSize'>
-                            <Link to="/login">
-                                <i className='picSize5'></i>
-                                <span>我的</span>
-                            </Link>
-                        </li>
-                    </ul>
+                    <TabBar className="tabBarUl"
+                        unselectedTintColor="#949494"
+                        tintColor="#33A3F4"
+                        barTintColor="white"
+                        hidden={this.state.hidden}
+                    >
+                        <TabBar.Item
+                            title="首 页"
+                            key="home"
+                            icon={<div style={{
+                                width: '0.8rem',
+                                height: '0.8rem',
+                                background: 'url('+this.state.src[0]+') center center /  0.8rem 0.8rem no-repeat'
+                            }}
+                            />
+                            }
+                            selectedIcon={<div style={{
+                                width: '0.8rem',
+                                height: '0.8rem',
+                                background: 'url(' + this.state.activeSrc[0] +') center center /  0.8rem 0.8rem no-repeat'
+                            }}
+                            />
+                            }
+                            selected={this.state.selectedTab === '/'}
+                            // badge={1}
+                            onPress={() => {
+                                this.setState({
+                                    selectedTab: '/',
+                                });
+                                this.context.router.push("/");
+                            }}
+                            data-seed="logId"
+                        >
+                        </TabBar.Item>
+                        <TabBar.Item
+                            icon={
+                                <div style={{
+                                    width: '0.8rem',
+                                    height: '0.8rem',
+                                    background: 'url(' + this.state.src[1] +') center center /  0.8rem 0.8rem no-repeat'
+                                }}
+                                />
+                            }
+                            selectedIcon={
+                                <div style={{
+                                    width: '0.8rem',
+                                    height: '0.8rem',
+                                    background: 'url(' + this.state.activeSrc[1] +') center center /  0.8rem 0.8rem no-repeat'
+                                }}
+                                />
+                            }
+                            title="画客圈"
+                            key="hkq"
+                            selected={this.state.selectedTab === '/circle'}
+                            onPress={() => {
+                                this.setState({
+                                    selectedTab: '/circle',
+                                });
+                                this.context.router.push("/circle");                                
+                            }}
+                            data-seed="logId1"
+                        >
+                        </TabBar.Item>
+                        <TabBar.Item
+                            icon={
+                                <div style={{
+                                    width: '1.12rem',
+                                    height: '1.12rem',
+                                    background: 'url(' + appUrl.add +') center center /  1.12rem 1.12rem no-repeat'
+                                }}
+                                />
+                            }
+                            onPress={() => {
+                                this.setState({
+                                    show: !this.state.show
+                                });
+                            }}
+                            data-seed="logId2"
+                        >
+                        </TabBar.Item>
+                        <TabBar.Item
+                            icon={
+                                <div style={{
+                                    width: '0.8rem',
+                                    height: '0.8rem',
+                                    background: 'url(' + this.state.src[2] +') center center /  0.8rem 0.8rem no-repeat'
+                                }}
+                                />
+                            }
+                            selectedIcon={
+                                <div style={{
+                                    width: '0.8rem',
+                                    height: '0.8rem',
+                                    background: 'url(' + this.state.activeSrc[2] +') center center /  0.8rem 0.8rem no-repeat'
+                                }}
+                                />
+                            }
+                            title="联系人"
+                            key="Friend"
+                            selected={this.state.selectedTab === 'greenTab'}
+                            onPress={() => {
+                                this.setState({
+                                    selectedTab: 'greenTab',
+                                });
+                            }}
+                        >
+                        </TabBar.Item>
+                        <TabBar.Item
+                            icon={
+                                <div style={{
+                                    width: '0.8rem',
+                                    height: '0.8rem',
+                                    background: 'url(' + this.state.src[3] + ') center center /  0.8rem 0.8rem no-repeat'
+                                }}
+                                />
+                            }
+                            selectedIcon={
+                                <div style={{
+                                    width: '0.8rem',
+                                    height: '0.8rem',
+                                    background: 'url(' + this.state.activeSrc[3] + ') center center /  0.8rem 0.8rem no-repeat'
+                                }}
+                                />
+                            }
+                            title="我 的"
+                            key="Friend"
+                            selected={this.state.selectedTab === 'yellowTab'}
+                            onPress={() => {
+                                this.setState({
+                                    selectedTab: 'yellowTab',
+                                });
+                                this.context.router.push("/login");                                
+                            }}
+                        >
+                        </TabBar.Item>
+                    </TabBar>
                 </div>
+
                 <div className="navPlus">
                     <QueueAnim className="demo-content"
                         animConfig={[
@@ -85,11 +208,11 @@ getAttribute = (e) =>{
                             <div className="demo-thead navPlusAnim" key="a">
                                 <ul className="fourWrap">
                                     <li className="upNeed">
-                                        <img src={appUrl.upNeed} alt=""/>
+                                        <img src={appUrl.upNeed} alt="" />
                                         发布需求
                                     </li>
                                     <li className="upWorks">
-                                        <img src={appUrl.upWorks} alt="" />                                    
+                                        <img src={appUrl.upWorks} alt="" />
                                         发布作品
                                     </li>
                                     <li className="upQuote">
@@ -97,7 +220,7 @@ getAttribute = (e) =>{
                                         发送报价
                                     </li>
                                     <li className="upTalk">
-                                        <img src={appUrl.upTalk} alt="" />                                    
+                                        <img src={appUrl.upTalk} alt="" />
                                         发送帖子
                                     </li>
                                 </ul>
@@ -111,3 +234,6 @@ getAttribute = (e) =>{
     }
 }
 
+App.contextTypes = {
+    router: React.PropTypes.object
+};
