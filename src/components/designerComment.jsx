@@ -29,8 +29,6 @@ const imgUrl = {
     dishPic: [require("../images/banner01.jpg"), require("../images/banner02.jpg"), require("../images/banner03.jpg"), require("../images/avatar.png"), require("../images/homePic.png")]
 }
 
-
-
 export default class DesignerComment extends React.Component {
     constructor(props) {
         super(props)
@@ -51,7 +49,7 @@ export default class DesignerComment extends React.Component {
     }
     //组件更新
     componentDidUpdate() {
-        console.log("componentDidUpdate")
+        console.log("componentDidUpdate");
         this.refs.commentInput.focus(); //焦点聚集到输入框
     }
     //点击回复

@@ -12,8 +12,8 @@ let Ajax = axios.create({
 });
 
 const ajaxURLList = {
-    get_user_list_ex: "hkw_newapi/get_user_list_ex", //获取设计师列表
-    search: "hkw_newapi/search", //获取设计师列表
+    get_user_list_ex: "hkw_newapi/get_user_list_ex", //获取设计师列表 
+    search: "hkw_newapi/search", //获取搜索设计师列表
     get_works_list: "hkw_newapi/get_works_list/NULL/add_time/16/1/f", //临时测试
     get_blance: "payapi/get_blance", //支付-获取现金余额
 }

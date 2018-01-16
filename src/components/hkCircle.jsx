@@ -40,7 +40,7 @@ export default class LoginView extends React.Component {
             imgHeight: 176,
             slideIndex: 0,
             dataSource,
-            refreshing: true,
+            refreshing: false,
             isLoading: true,
             height: document.documentElement.clientHeight,
             useBodyScroll: true,
@@ -294,7 +294,7 @@ export default class LoginView extends React.Component {
                         dataSource={this.state.dataSource}
                         // renderHeader={() => <span>Pull to refresh</span>}
                         renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
-                            {this.state.isLoading ? 'Loading...' : 'Loaded'}
+                            {/* {this.state.isLoading ? 'Loading...' : 'Loaded'} */}
                         </div>)}
                         renderRow={row}
                         renderSeparator={separator}
