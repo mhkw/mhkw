@@ -72,8 +72,8 @@ export default class LoginView extends React.Component {
         });
         this.state = {
             dataSource: dataSource.cloneWithRows({}),
-            refreshing: false,
-            isLoading: false,
+            refreshing: true,
+            isLoading: true,
             height: document.documentElement.clientHeight,
             useBodyScroll: true,
             res: [{
@@ -118,13 +118,15 @@ export default class LoginView extends React.Component {
                 // this.setState({
                 //     res: res.data.item_list
                 // })
+                realData = res.data.item_list;
                 index = realData.length - 1;
-                realDataLength = res.data.total_pages;
+                realDataLength = res.data.item_list.length;
                 NUM_ROWS = realDataLength;
                 this.rData = {...this.rData, ...this.genData(pageIndex++, realDataLength, res.data.item_list) };
+                const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(this.rData),
-                    // height: hei,
+                    height: hei,
                     refreshing: false,
                     isLoading: false,
                 });
@@ -142,9 +144,9 @@ export default class LoginView extends React.Component {
     //     }
     // }
 
-    shouldComponentUpdate(){
-        // return (this.props.router.location.action === 'PUSH')
-    }
+    // shouldComponentUpdate(){
+    //     return (this.props.router.location.action === 'POP')
+    // }
 
     componentDidMount() {
         runPromise("get_user_list_ex", {
@@ -201,11 +203,12 @@ export default class LoginView extends React.Component {
     render() {
         // let index = this.state.res.length - 1;
         const row = (rowData, sectionID, rowID) => {
-            console.log(rowData)
             if (index < 0) {
                 index = this.state.res.length - 1;
             }
-            const obj = this.state.res[index--];
+            // const obj = this.state.res[index--];
+            const obj = rowData;
+            console.log(obj)
             return (
                 <div key={rowID}>
                     <div className="items">
