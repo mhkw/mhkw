@@ -13,6 +13,7 @@ import listViewDemo from './components/listViewDemo';
 import designerHome from './components/DesignerHome';
 import WorksCollection from './components/worksCollection';
 import DesignerComment from './components/designerComment';
+import WriterComment from './components/WriterComment';
 import Hkcircle from './components/hkCircle';
 import Search from './components/Search';
 
@@ -51,6 +52,8 @@ ReactDOM.render(
             <Route path="worksCollection" component={WorksCollection} />
             <Route path="designerComment" component={DesignerComment} />
         </Route>
+        {/* 测试,评论页不是单独一页 */}
         <Route path="/designerComment" component={DesignerComment} />
+        <Route path="/writerComment" component={WriterComment} />
     </Router>
     , document.getElementById('container'));
