@@ -4,6 +4,7 @@ import { province as provinceData } from './cityData';
 import { StickyContainer, Sticky } from 'react-sticky';
 
 import { hashHistory } from 'react-router';
+import QueueAnim from 'rc-queue-anim';
 
 const { Item } = List;
 
@@ -46,7 +47,8 @@ class StageSelectCity extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showHotCity: true
+            showHotCity: true,
+            show: true,
         }
     }
     getCity = (city) => {
@@ -149,8 +151,14 @@ export default class ListViewDemo extends React.Component {
     }
     render() {
         return (
-            <div style={{ paddingTop: '0', position: 'relative' }}>
-                <StageSelectCity onSearch={this.onSearch} />
+            <div style={{ paddingTop: '0', position: 'relative' }} >
+
+                {/* <QueueAnim animConfig={[ */}
+                    {/* { opacity: [1, 0], translateX: [0, 50] }, */}
+                {/* ]}> */}
+                    <StageSelectCity onSearch={this.onSearch} key="1" />
+                {/* </QueueAnim > */}
+                
                 <ListView.IndexedList
                     dataSource={this.state.dataSource}
                     useBodyScroll

@@ -3,7 +3,8 @@ import { List, InputItem, NavBar, Tabs, PullToRefresh, ListView, Carousel, White
 import { Link } from 'react-router';
 import { createForm } from 'rc-form';
 import QueueAnim from 'rc-queue-anim';
-import Promise, { } from 'promise'
+import axios from 'axios';
+
 import '../css/font/iconfont.css'
 
 const loginUrl = {
@@ -74,21 +75,7 @@ export default class LoginView extends React.Component {
             },
             {
                 img: 'http://www.huakewang.com/uploads/2013/1031/20131031002147100933_thumb.jpg',
-                title: '规划报告合伙人服务而',
-                sex: "女",
-                lng: "1.68km",
-                time: "1分钟前"
-            },
-            {
-                img: 'http://www.huakewang.com/uploads/2013/1031/20131031002147100933_thumb.jpg',
                 title: '个人服务而非广泛认同',
-                sex: "女",
-                lng: "1.68km",
-                time: "1分钟前"
-            },
-            {
-                img: 'http://huakewang.b0.upaiyun.com/2014/11/03/20141103220756424665.jpg!540x720',
-                title: '更方便是放到更惹人访问的房产大时代大范甘迪',
                 sex: "女",
                 lng: "1.68km",
                 time: "1分钟前"
@@ -105,6 +92,15 @@ export default class LoginView extends React.Component {
     }
 
     componentDidMount() {
+        // runPromise("get_user_list_ex", {
+        //     sort: "add_time",
+        //     offices: "all",
+        //     keywords: this.state.keywords,
+        //     longitude: "0",
+        //     latitude: "0",
+        //     per_page: "8",
+        //     page: "1"
+        // }, this.handleSend, false, "post", "a");
         const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
         setTimeout(() => {
             this.rData = genData();
