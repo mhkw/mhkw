@@ -20,7 +20,7 @@ export default class DesignerHome extends React.Component {
             huake_info: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis dicta voluptatibus voluptatum fuga amet eius modi! Repellat, labore fuga. In, atque dolores! Unde, placeat incidunt quaerat dolorem, asperiores praesentium ipsa dolor nulla ab alias delectus amet doloremque aperiam molestias quibusdam tenetur vero corporis id aliquam quae expedita tempora impedit non.",
             works_collect: "8",
             comment: "10",
-            tab_index: 1, //设计师主页展示作品集还是评论，就看这个状态
+            tab_index: 0, //设计师主页展示作品集还是评论，就看这个状态
         }
     }
     handleGo(index) {
@@ -36,10 +36,10 @@ export default class DesignerHome extends React.Component {
     }
     render() {
         return (
-            // <QueueAnim className="designer-home-anim"
-            //     animConfig={[
-            //         { opacity: [1, 0], translateX: [0, 150] }
-            //     ]}>
+            <QueueAnim className="designer-home-anim"
+                animConfig={[
+                    { opacity: [1, 0], translateX: [0, 150] }
+                ]}>
                 <div className="designer-home" key="1">
                     <NavBar
                         className="NewNavBar"
@@ -95,7 +95,7 @@ export default class DesignerHome extends React.Component {
                     </Flex>
                     {this.props.children}
                 </div>
-            // </QueueAnim>
+            </QueueAnim>
         )
     }
 }
