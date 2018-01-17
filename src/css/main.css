@@ -403,6 +403,7 @@
 .homeWrap .homeWrapTop .hometabs .am-tabs-default-bar .am-tabs-default-bar-tab .tabsList img {
   height: 1.2rem;
   width: 1.2rem;
+  border-radius: 50%;
 }
 
 .homeWrap .homeWrapTop .hometabs .am-tabs-default-bar .am-tabs-default-bar-tab .tabsList p {
@@ -478,6 +479,54 @@
 
 .homeWrap .homeWrapMain .items .itemPicList ul li img {
   width: 100%;
+}
+
+.searchIpt .am-search-cancel {
+  font-size: 14px;
+}
+
+.searchIpt .searchPD {
+  padding-left: .266667rem;
+  background-color: #efeff4;
+}
+
+.searchIpt .searchPD > span {
+  float: left;
+  margin-top: .266667rem;
+}
+
+.searchIpt .search {
+  margin-top: 1rem;
+  text-align: center;
+  padding: 0 .8rem;
+  font-size: 16px;
+}
+
+.searchIpt .search h3 {
+  color: #919191;
+  margin-bottom: .533333rem;
+}
+
+.searchIpt .search ul {
+  overflow: hidden;
+}
+
+.searchIpt .search ul li {
+  float: left;
+  padding: 0 .48rem;
+  color: #1B91D4;
+}
+
+.searchIpt .search ul span {
+  float: left;
+  color: #DCDCDC;
+}
+
+.searchIpt .searchHistory {
+  padding: 0 .4rem;
+  margin-top: .533333rem;
+  font-size: 14px;
+  color: #333333;
 }
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
