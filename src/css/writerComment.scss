@@ -1,0 +1,23 @@
+.NewNavBar{
+    height: .933333rem;
+    border-bottom: 1px solid #e3e3e3;
+}
+.NewNavBar.am-navbar-light .am-navbar-title {
+    color: #212121;
+}
+.am-button.publishButton{
+    width: 1.466667rem;
+    height: .693333rem;
+    line-height: .693333rem;
+    color: #fff;
+    background-color: #33a3ff;
+}
+.am-button.publishButton.am-button-active{
+    background-color: #ddd;
+}
+.writer-comment{
+    background-color: #f0f0f0;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
