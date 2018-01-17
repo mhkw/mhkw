@@ -14,6 +14,7 @@ import designerHome from './components/DesignerHome';
 import WorksCollection from './components/worksCollection';
 import DesignerComment from './components/designerComment';
 import WriterComment from './components/WriterComment';
+import PlaceOrder from './components/PlaceOrder';
 import Hkcircle from './components/hkCircle';
 
 import 'lib-flexible/flexible'
@@ -53,5 +54,6 @@ ReactDOM.render(
         {/* 测试,评论页不是单独一页 */}
         <Route path="/designerComment" component={DesignerComment} />
         <Route path="/writerComment" component={WriterComment} />
+        <Route path="/placeOrder" component={PlaceOrder} />
     </Router>
     , document.getElementById('container'));
