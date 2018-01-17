@@ -13,11 +13,8 @@ import listViewDemo from './components/listViewDemo';
 import designerHome from './components/DesignerHome';
 import WorksCollection from './components/worksCollection';
 import DesignerComment from './components/designerComment';
-<<<<<<< HEAD
 import WriterComment from './components/WriterComment';
 import PlaceOrder from './components/PlaceOrder';
-=======
->>>>>>> f5fdd96cc39451e5aae049b36e96b49870f1d164
 import Hkcircle from './components/hkCircle';
 import Search from './components/Search';
 
@@ -57,10 +54,7 @@ ReactDOM.render(
             <Route path="designerComment" component={DesignerComment} />
         </Route>
         <Route path="/designerComment" component={DesignerComment} />
-<<<<<<< HEAD
         <Route path="/writerComment" component={WriterComment} />
         <Route path="/placeOrder" component={PlaceOrder} />
-=======
->>>>>>> f5fdd96cc39451e5aae049b36e96b49870f1d164
     </Router>
     , document.getElementById('container'));
