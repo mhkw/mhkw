@@ -25,4 +25,5 @@ dist
 /src/css/common.css.map
 /src/css/index.css
 /src/css/index.css.map
-/src/css/font/
+src/css/font/*
+src/css/font/iconfont.css

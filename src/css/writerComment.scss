@@ -89,3 +89,34 @@
 .writer-comment .cost span.icon{
     color: #767676;
 }
+// PlaceOrder start
+.place-order{
+    background-color: #f0f0f0;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+.place-order .address-p{
+    text-align: center;
+    color: #555;
+    margin: .32rem auto .32rem;
+    font-size: 14px;
+}
+.order-price-box{
+    height: 1.68rem;
+    line-height: 1.68rem;
+    background-color: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: .16rem;
+    padding: 0 .32rem;
+    font-size: 18px;
+    color: #0a0a0a;
+    margin-bottom: .8rem;
+}
+.place-order .order-price-box .right{
+    float: right;
+    font-size: 36px;
+}
+.place-order .remarks-input{
+    background-color: transparent;
+}
