@@ -22,7 +22,6 @@ npm-debug.log
 .*.sw*
 dist
 /src/css/common.css
-
 /src/css/common.css.map
 /src/css/index.css
 /src/css/index.css.map
