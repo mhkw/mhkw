@@ -50,6 +50,10 @@
   width: 100%;
 }
 
+.navPlus .navPlusAnim .fourWrap li a {
+  color: #333;
+}
+
 .navPlus .navPlusAnim span {
   position: absolute;
   bottom: .266667rem;
@@ -533,6 +537,74 @@
   overflow: hidden;
 }
 
+.searchIpt .searchHistory ul li, .searchIpt .searchHot ul li {
+  float: left;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  color: #333;
+  padding: 0 10px;
+  margin: 6px;
+  background-color: #F2F2F2;
+  border-radius: 18px;
+}
+
+.createServer .am-navbar-left-icon {
+  margin-right: 0;
+}
+
+.createServer .am-navbar-title {
+  font-size: 16px;
+}
+
+.createServer .serverStep {
+  height: 1.093333rem;
+  line-height: 1.093333rem;
+  background-color: #C1DBE3;
+}
+
+.createServer .serverStep ul {
+  overflow: hidden;
+}
+
+.createServer .serverStep ul li {
+  float: left;
+  width: 33.33%;
+  text-align: center;
+}
+
+.createServer .serverContent {
+  text-align: center;
+  padding: .8rem 1.2rem;
+}
+
+.createServer .serverContent h3 {
+  font-size: 22px;
+  margin-bottom: .4rem;
+}
+
+.createServer .serverContent p {
+  line-height: 18px;
+}
+
+.example-enter {
+  opacity: 0.01;
+}
+
+.example-enter.example-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.example-leave {
+  opacity: 1;
+}
+
+.example-leave.example-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
   html:not([data-scale]) .am-list-body::before,
   html:not([data-scale]) .am-list-body::after,
@@ -991,4 +1063,39 @@
 
 .writer-comment .cost span.icon {
   color: #767676;
+}
+
+.place-order {
+  background-color: #f0f0f0;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.place-order .address-p {
+  text-align: center;
+  color: #555;
+  margin: .32rem auto .32rem;
+  font-size: 14px;
+}
+
+.order-price-box {
+  height: 1.68rem;
+  line-height: 1.68rem;
+  background-color: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: .16rem;
+  padding: 0 .32rem;
+  font-size: 18px;
+  color: #0a0a0a;
+  margin-bottom: .8rem;
+}
+
+.place-order .order-price-box .right {
+  float: right;
+  font-size: 36px;
+}
+
+.place-order .remarks-input {
+  background-color: transparent;
 }

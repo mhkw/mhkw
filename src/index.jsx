@@ -17,6 +17,7 @@ import WriterComment from './components/WriterComment';
 import PlaceOrder from './components/PlaceOrder';
 import Hkcircle from './components/hkCircle';
 import Search from './components/Search';
+import creatServer from './components/serviceCreate';
 
 import 'lib-flexible/flexible'
 // import 'js/flexible.debug'
@@ -48,6 +49,7 @@ ReactDOM.render(
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/search" component={Search} />
+        <Route path="/creatServer" component={creatServer} />
         <Route path="/designerHome" component={designerHome}>
             <IndexRoute component={WorksCollection} />
             <Route path="worksCollection" component={WorksCollection} />

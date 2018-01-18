@@ -1,4 +1,5 @@
-@import "./common";
+@import "./common.scss";
+@import "./base.css";
 
 .barBottom {
     position: fixed;
@@ -39,6 +40,9 @@
                 font-size: 14px;
                 img {
                     width: 100%;
+                }
+                a {
+                    color: #333;
                 }
             }
         }
@@ -442,9 +446,85 @@
         color: #333333;
         ul {
             overflow: hidden;
+            li {
+                float: left;
+                height: 30px;
+                line-height: 30px;
+                text-align: center;
+                color: #333;
+                padding: 0 10px;
+                margin: 6px;
+                background-color:#F2F2F2;
+                border-radius:18px;
+            }
         }
     }
 }
+// 报价
+.createServer {
+    .am-navbar-left-icon {
+        margin-right: 0;
+    }
+    .am-navbar-title {
+        font-size: 16px;
+    }
+    .serverStep {
+        height: 1.093333rem;
+        line-height: 1.093333rem;
+        // color:#fff;
+        background-color: #C1DBE3;
+        ul {
+            overflow: hidden;
+            li {
+                float: left;
+                width: 33.33%;
+                text-align: center;
+            }
+            // .serverStep1 {
+            //     background: url(../images/serverStep.png) no-repeat right;
+            // }
+            // .serverStep2 {
+            //     position: relative;
+            //     left: -20px;
+            //     background: url(../images/serverStep.png) no-repeat right;
+            // }
+            // .serverStep3 {
+            //     position: relative;
+            //     left: -20px;
+            //     background: url(../images/serverStep.png) no-repeat right;
+            // }
+        }
+    }
+    .serverContent {
+        text-align: center;
+        padding: .8rem 1.2rem;
+        h3 {
+            font-size: 22px;
+            margin-bottom: .4rem;
+        }
+        p {
+            line-height: 18px;
+        }
+    }
+}
+.example-enter {
+    opacity: 0.01;
+}
+
+.example-enter.example-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+}
+
+.example-leave {
+    opacity: 1;
+}
+
+.example-leave.example-leave-active {
+    opacity: 0.01;
+    transition: opacity 300ms ease-in;
+}
+
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
     html:not([data-scale]) .am-list-body::before,
     html:not([data-scale]) .am-list-body::after,
@@ -457,7 +537,7 @@
 }
 
 .flex-city .am-flexbox-item .am-list-line .am-list-content{
-  text-align: center;
+    text-align: center;
 }
 .flex-city .sub-title {
     margin-top: .26rem;

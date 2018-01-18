@@ -216,8 +216,10 @@ export default class App extends Component {
                                         发布作品
                                     </li>
                                     <li className="upQuote">
-                                        <img src={appUrl.upQuote} alt="" />
-                                        发送报价
+                                        <Link to="/creatServer">
+                                            <img src={appUrl.upQuote} alt="" />
+                                            发送报价
+                                        </Link>
                                     </li>
                                     <li className="upTalk">
                                         <img src={appUrl.upTalk} alt="" />
