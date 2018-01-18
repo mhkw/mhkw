@@ -53,6 +53,7 @@ ReactDOM.render(
             <Route path="worksCollection" component={WorksCollection} />
             <Route path="designerComment" component={DesignerComment} />
         </Route>
+        {/* 测试,评论页不是单独一页 */}
         <Route path="/designerComment" component={DesignerComment} />
         <Route path="/writerComment" component={WriterComment} />
         <Route path="/placeOrder" component={PlaceOrder} />
