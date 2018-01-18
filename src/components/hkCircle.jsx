@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { createForm } from 'rc-form';
 import QueueAnim from 'rc-queue-anim';
 import axios from 'axios';
-
+import { ItemPicLists, PersonalMsg } from './templateHomeCircle';
 import '../css/font/iconfont.css'
 
 const loginUrl = {
@@ -101,6 +101,7 @@ export default class LoginView extends React.Component {
         //     per_page: "8",
         //     page: "1"
         // }, this.handleSend, false, "post", "a");
+        console.log(ItemPicLists)
         const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
         setTimeout(() => {
             this.rData = genData();

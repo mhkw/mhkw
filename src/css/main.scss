@@ -435,11 +435,14 @@
             }
         }
     }
-    .searchHistory {
+    .searchHistory,.searchHot {
         padding: 0 .4rem;
         margin-top: .533333rem;
         font-size: 14px;
         color: #333333;
+        ul {
+            overflow: hidden;
+        }
     }
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {

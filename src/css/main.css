@@ -522,11 +522,15 @@
   color: #DCDCDC;
 }
 
-.searchIpt .searchHistory {
+.searchIpt .searchHistory, .searchIpt .searchHot {
   padding: 0 .4rem;
   margin-top: .533333rem;
   font-size: 14px;
   color: #333333;
+}
+
+.searchIpt .searchHistory ul, .searchIpt .searchHot ul {
+  overflow: hidden;
 }
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
@@ -579,7 +583,7 @@
   overflow: hidden;
 }
 
-.designer-home img {
+.designer-home .avatar-box img {
   max-width: 1.866667rem;
   min-height: 1.866667rem;
 }
@@ -883,4 +887,108 @@
   border: 1px solid #999;
   background-color: #ccc;
   color: #999;
+}
+
+.NewNavBar {
+  border-bottom: 1px solid #e3e3e3;
+}
+
+.NewNavBar.am-navbar-light .am-navbar-title {
+  color: #212121;
+}
+
+.am-button.publishButton {
+  width: 1.466667rem;
+  height: .8rem;
+  line-height: .8rem;
+  color: #fff;
+  background-color: #33a3ff;
+}
+
+.am-button.publishButton.am-button-active {
+  background-color: #ddd;
+}
+
+.writer-comment {
+  background-color: #f0f0f0;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.writer-comment .textarea-box {
+  background-color: #fff;
+}
+
+.writer-comment .score-box {
+  height: 1.6rem;
+  line-height: 1.6rem;
+  font-size: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.writer-comment .score-box span {
+  vertical-align: super;
+  margin-right: .16rem;
+  margin-left: .24rem;
+  color: #161616;
+}
+
+.writer-comment .score-box .iconfont {
+  font-size: 32px;
+  margin-left: .16rem;
+  color: #ddd;
+}
+
+.writer-comment .score-box .iconfont.active {
+  color: #00aaef;
+}
+
+.writer-comment .textarea-count-box {
+  float: right;
+  padding-bottom: .4rem;
+  margin-right: .48rem;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.imagePicker-box {
+  padding: .266667rem;
+  background-color: #fff;
+  margin-top: .266667rem;
+}
+
+.imagePicker-box .am-image-picker-list .am-image-picker-upload-btn {
+  border: 2px dashed #ddd;
+}
+
+.imagePicker-box .am-image-picker-list .am-image-picker-upload-btn:after {
+  height: 4PX;
+}
+
+.am-image-picker-list .am-image-picker-upload-btn:before {
+  width: 4px;
+}
+
+.am-image-picker-list .am-image-picker-upload-btn span {
+  position: absolute;
+  width: 100%;
+  bottom: .16rem;
+  text-align: center;
+  font-size: 12px;
+  color: #757575;
+}
+
+.writer-comment .cost {
+  margin-top: .24rem;
+  height: 1rem;
+}
+
+.writer-comment .cost span.text {
+  color: #333333;
+  margin-right: .8rem;
+}
+
+.writer-comment .cost span.icon {
+  color: #767676;
 }

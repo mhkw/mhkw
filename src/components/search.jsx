@@ -1,7 +1,8 @@
 import React from 'react';
-import { SearchBar, Flex, WhiteSpace } from 'antd-mobile';
+import { SearchBar, Flex, WhiteSpace, Button, Toast, Modal } from 'antd-mobile';
+import { hashHistory, Link } from 'react-router';
 
-
+const alert = Modal.alert;
 const PlaceHolder = (props) => (
     <ul>
         {
@@ -17,9 +18,13 @@ const PlaceHolder = (props) => (
 export default class Search extends React.Component {
     state = {
         value: '',
-        block:[
-            "十多万群", "大武当", "加热垫甲方就","十多万群", "大武当", "加热垫甲方就"
-        ]
+        history:[
+            "十多万群", "大武当", "大武当", "加热垫甲方就", "加热垫甲方就","十多万群"
+        ],
+        hots:[
+            "十多万群", "大武当", "加热垫甲方就", "加热垫甲方就","人分为二分","十多万群", "大武当"
+        ],
+        show:true
     };
     componentDidMount() {
         this.autoFocusInst.focus();
@@ -33,14 +38,19 @@ export default class Search extends React.Component {
     handleClick = () => {
         this.manualFocusInst.focus();
     }
+    deleteHistory = ()=>{
+        this.setState({
+            show:!this.state.show
+        })
+    }
     render() {
         return (<div className="searchIpt">
             <div className="searchPD">
-                <span className="iconfont icon-jiantou" ></span>
+                <span className="iconfont icon-jiantou" onClick={() => { hashHistory.goBack()}}></span>
                 <SearchBar
                     ref={ref => this.autoFocusInst = ref}
                     value={this.state.value}
-                    placeholder="Search"
+                    placeholder="搜索设计师"
                     onSubmit={value => console.log(value, 'onSubmit')}
                     onClear={value => console.log(value, 'onClear')}
                     onFocus={() => console.log('onFocus')}
@@ -62,10 +72,30 @@ export default class Search extends React.Component {
             </div>
 
             <div className="searchHistory">
-                <p><span>历史搜索</span> <i className="iconfont icon-shanchu fn-right"></i></p>
+                <p>
+                    <span>历史搜索</span> 
+                    <i className="iconfont icon-shanchu fn-right" onClick={() => alert('Delete', '确认删除搜索记录吗?', [
+                        { text: '取消', onPress: () => console.log('cancel') },
+                        {
+                            text: '确定',
+                            onPress: () => new Promise((resolve) => {
+                                Toast.info('onPress Promise', 1);
+                                setTimeout(resolve, 1000);
+                            }),
+                        },
+                    ])}></i>
+                </p>
+                
                 <WhiteSpace size="md" /> 
                 <div className="">
-                    <PlaceHolder block={this.state.block}/>
+                    <PlaceHolder block={this.state.history}/>
+                </div> 
+            </div>
+            <div className="searchHot">
+                <p><span>热门搜索</span> </p>
+                <WhiteSpace size="md" /> 
+                <div className="">
+                    <PlaceHolder block={this.state.hots}/>
                 </div> 
             </div>
         </div>);

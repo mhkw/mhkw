@@ -1,7 +1,10 @@
+import { Link } from 'react-router';
+
 /**
  * 设计师作品展示4张
  * @param {*} props 
  */
+
 const ItemPicLists = (props) => (
     <ul>
         {
@@ -39,3 +42,5 @@ const PersonalMsg = (props) => (
         </div>
     </div>
 )
+
+export { ItemPicLists, PersonalMsg };
