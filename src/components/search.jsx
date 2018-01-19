@@ -1,6 +1,6 @@
 import React from 'react';
 import { SearchBar, Flex, WhiteSpace, Button, Toast, Modal } from 'antd-mobile';
-import { hashHistory, Link } from 'react-router';
+import { hashHistory } from 'react-router';
 import QueueAnim from 'rc-queue-anim';
 
 import "../css/easy-animation.scss";
@@ -31,7 +31,8 @@ export default class Search extends React.Component {
             ],
             show: true,
             placeholder: ["搜索设计师", "搜索作品", "搜索服务", "搜索需求"],
-            valplaceholder: "搜索设计师"
+            valplaceholder: "搜索设计师",
+            classNameAnimate:"AnimateX"
         };
     }
     
@@ -57,12 +58,20 @@ export default class Search extends React.Component {
             valplaceholder:this.state.placeholder[idx]
         })
     }
+    changeClassNameAnimate =()=>{
+        // this.setState({
+        //     classNameAnimate: "AnimateXB"
+        // })
+        // setTimeout(() => {
+        //     hashHistory.goBack()
+        // }, 100);
+    }
     render() {
         return (
-            // <QueueAnim>
-            <div className="searchIpt AnimateX">
+            <QueueAnim>
+                <div className={"searchIpt"}>
                     <div className="searchPD">
-                        <span className="iconfont icon-jiantou" onClick={() => { hashHistory.goBack()}}></span>
+                        <span className="iconfont icon-jiantou" onClick={() => { hashHistory.goBack()} }></span>
                         <SearchBar
                             ref={ref => this.autoFocusInst = ref}
                             value={this.state.value}
@@ -71,8 +80,10 @@ export default class Search extends React.Component {
                             onClear={value => console.log(value, 'onClear')}
                             onFocus={() => console.log('onFocus')}
                             onBlur={() => console.log('onBlur')}
-                            onCancel={() => console.log('onCancel')}
+                            onCancel={() => console.log('search')}
                             onChange={this.onChange}
+                            cancelText="搜索"
+                            showCancelButton
                         />
                     </div>
                     
@@ -116,7 +127,7 @@ export default class Search extends React.Component {
                         </div> 
                     </div>
                 </div>
-            // </QueueAnim>
+            </QueueAnim>
         );
     }
 }

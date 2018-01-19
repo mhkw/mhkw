@@ -1,0 +1,70 @@
+
+.mineWrap {
+    .mineWrapTop {
+        font-size: 18px;
+        p {
+            text-align: center;
+            height: 1rem;
+            line-height: 1rem;
+            position: relative;
+            a {
+                position: relative;
+                color: #333333;
+               i {
+                    position: absolute;
+                    right: -16px;
+                } 
+            }
+            
+            span {
+                right: .4rem;
+                font-size: 22px;
+                position: absolute;
+            }
+        }
+    }
+    .minePic {
+        margin-top: .2rem;
+        margin-bottom: .4rem;
+        .minePicTou {
+            width: 2.08rem;
+            height: 2.08rem;
+            margin: 0 auto;
+            position: relative;
+            img {
+                width: 100%;
+                border-radius: 50%;
+            }
+            .minePicStages {
+                width: 1.84rem;
+                height: .693333rem;
+                line-height: .693333rem;
+                text-align: center;
+                color: #fff;
+                background: url(../images/personStage.png) no-repeat center center / 1.84rem .693333rem;
+                position: absolute;
+                top: 50%;
+                left: 100%;
+                transform: translateY(-50%);
+                margin-left: -.22rem;
+                span {
+                    margin-left: .6rem;
+                }
+            }
+        }
+    }
+    .mineThingsTodo {
+        li {
+            float: left;
+            width: 33.33%;
+            text-align: center;
+            font-size: 14px;
+            p {
+                line-height: 28px;
+            }
+            .num {
+                font-size: 18px;
+            }
+        }
+    }
+}

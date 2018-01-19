@@ -188,6 +188,19 @@ $ea-prefix-for-spec:         true !default; // required for keyframe mixin
     @include ea-transform(translate(0, 0));
   }
 }
+.AnimateXB {
+  @include ea-animation(AnimateXB, 0.2s, linear);
+}
+@include ea-keyframes(AnimateXB) {
+  0% {
+    opacity: 1;
+    @include ea-transform(translate(0, 0));
+  }
+  100% {
+    opacity: 0.3;
+    @include ea-transform(translate(400px, 0));
+  }
+}
 // 自定义动画Y方向
 .AnimateY {
   @include ea-animation(AnimateY, 0.1s, linear);
