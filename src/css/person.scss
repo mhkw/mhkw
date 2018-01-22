@@ -1,7 +1,12 @@
-
 .mineWrap {
+    a { color:#333; }
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    background-color: #F7F7F7;
     .mineWrapTop {
         font-size: 18px;
+        background-color: #fff;
         p {
             text-align: center;
             height: 1rem;
@@ -24,8 +29,9 @@
         }
     }
     .minePic {
-        margin-top: .2rem;
-        margin-bottom: .4rem;
+        background-color: #fff;
+        padding-top: .2rem;
+        padding-bottom: .4rem;
         .minePicTou {
             width: 2.08rem;
             height: 2.08rem;
@@ -54,6 +60,8 @@
         }
     }
     .mineThingsTodo {
+        background-color: #fff;
+        overflow: hidden;
         li {
             float: left;
             width: 33.33%;
@@ -67,4 +75,114 @@
             }
         }
     }
+    
+    .showAllList {
+        .jianGe {
+            background-color: #F7F7F7;
+            height: .24rem;
+        }
+        .ListItemBorder {
+            border-bottom: 1px solid #EDEDED;
+        }
+        .ListItemLarge {
+            height: 1.6rem;
+        }
+        .iconfont.desingerIcon {
+            color: #9AD5ED;
+            font-size: 30px;
+        }
+        .amlistitem {
+            height: 1.3rem;
+        }
+
+        .iconfont {
+            font-size: 24px;
+        }
+        .am-list-item .am-list-line .am-list-content {
+            font-size: 14px;
+        }
+    }
+    .personalMsgList {
+        font-size: 12px !important;
+        padding: 12px;
+        .am-list-item {
+            min-height: .746667rem;
+            padding-left: .693333rem;
+            .am-list-line {
+                padding-right: .693333rem;                
+               .am-list-extra {
+                    font-size: 14px;
+                    flex-basis: 55%;
+                    color: #5E5E5E;
+               }
+               .am-list-content {
+                    font-size: 14px;
+                    color: #5E5E5E;                    
+               }
+            } 
+        }
+    }
+}
+.accountWrap {
+    .accountWrapTop {
+        height: 1.333333rem;
+        line-height: 1.333333rem;
+        background-color: #DEF3FA;
+        p {
+            text-align: center;
+            font-size: 18px;
+        }
+    }
+    .accountWrapMid {
+        height: 2.666667rem;
+        line-height: 2.5rem;
+        text-align: center;
+        font-size: 28px;
+        i {
+            font-size: 22px;
+            display: inline-block;
+            height: 1.733333rem;
+            line-height: 1.733333rem;
+            width: 1.733333rem;
+            background-color: #17A9DE;
+            border-radius: 50%;
+            text-align: center;
+            color: #fff;
+        }
+    }
+    .getPayTitle {
+        line-height: 20px;
+        text-align: center;
+        margin-top: .133333rem;
+        font-size: 16px;
+        span {
+            height: 1px;
+            background-color: #E7E7E7;
+            width: 3.733333rem;
+            margin-top: .24rem;
+            display: inline-block;
+        }
+    }
+    .accountListDetails {
+        ul {
+            li {
+                border-bottom: 1px solid #ECECEC;
+                overflow: hidden;
+                padding: .4rem .533333rem;
+                height: 1.84rem;
+                box-sizing: border-box;
+                p {
+                    line-height: 20px;
+                }
+            }
+            .accountListDetailsRight {
+                text-align: right;
+            }
+        }
+    }
+}
+.line {
+    height: 1px;
+    width: 100%;
+    background: #EDEDED;
 }

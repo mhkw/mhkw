@@ -18,6 +18,7 @@ import Hkcircle from './components/hkCircle';
 import Search from './components/Search';
 import creatServer from './components/serviceCreate';
 import Mine from './components/mine';
+import Account from './components/account';
 
 import './css/font/iconfont.css'
 
@@ -43,7 +44,8 @@ ReactDOM.render(
     <Router history={hashHistory}>
         <Route path="/" component={App}>
             <IndexRoute component={Index} />
-            <Route path="/circle" component={Hkcircle} />    
+            <Route path="/circle" component={Hkcircle} />   
+            <Route path="/mine" component={Mine} />             
         </Route>
         <Route path="/city" component={listViewDemo} />        
         <Route path="/bind" component={Bind} />
@@ -52,7 +54,7 @@ ReactDOM.render(
         <Route path="/register" component={Register} />
         <Route path="/search" component={Search} />
         <Route path="/creatServer" component={creatServer} />
-        <Route path="/mine" component={Mine} />
+        <Route path="/account" component={Account} />
         <Route path="/designerHome" component={designerHome}>
             <IndexRoute component={WorksCollection} />
             <Route path="worksCollection" component={WorksCollection} />

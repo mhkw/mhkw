@@ -43,4 +43,35 @@ const PersonalMsg = (props) => (
     </div>
 )
 
-export { ItemPicLists, PersonalMsg };
+const Jiange = (props) => (
+    <div className={props.name}>
+
+    </div>
+)
+
+const Line = (props) => (
+    <div className={props.border}>
+
+    </div>
+)
+
+const AccountListDetails = (props) => (
+    <ul>
+        {
+            props.account.map(function (value, idx) {
+                return <li>
+                    <div className="fn-left">
+                        <p style={{ fontSize: "16px" }}>{value.type}</p>
+                        <p>余额: {value.numLeave}</p>
+                    </div>
+                    <div className="fn-right accountListDetailsRight">
+                        <p style={{ color: "#888888" }}>{value.time}</p>
+                        <p style={{ fontWeight: "800", fontSize: "16px" }}>{value.showMoney}</p>
+                    </div>
+                </li>
+            })
+        }
+    </ul>
+)
+
+export { ItemPicLists, PersonalMsg, Jiange, Line, AccountListDetails};

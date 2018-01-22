@@ -26,6 +26,7 @@ export default class App extends Component {
         super(props);
         this.state = {
             show: false,
+            display:"none",
             src: [appUrl.tabbar_one_close, appUrl.tabbar_two_close, appUrl.tabbar_three_close, appUrl.tabbar_four_close],
             activeSrc: [appUrl.tabbar_one_on, appUrl.tabbar_two_on, appUrl.tabbar_three_on, appUrl.tabbar_four_on],
             selectedTab: '',
@@ -59,7 +60,7 @@ export default class App extends Component {
         return (
             <div>
                 {this.props.children}
-                <div className="barBottom fn-clear">
+                <div className="barBottom fn-clear" style={{display:this.state.display}}>
                     <TabBar className="tabBarUl"
                         unselectedTintColor="#949494"
                         tintColor="#33A3F4"
