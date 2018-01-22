@@ -102,7 +102,7 @@
     margin: .32rem auto .32rem;
     font-size: 14px;
 }
-.order-price-box{
+.am-list-item.am-input-item.order-price-box{
     height: 1.68rem;
     line-height: 1.68rem;
     background-color: #fff;
@@ -113,10 +113,105 @@
     color: #0a0a0a;
     margin-bottom: .8rem;
 }
-.place-order .order-price-box .right{
-    float: right;
-    font-size: 36px;
-}
+// .place-order .order-price-box .right{
+//     float: right;
+//     font-size: 36px;
+// }
 .place-order .remarks-input{
     background-color: transparent;
+    border-bottom: 1px solid #ddd;
+}
+.remarks-input.am-list-item .am-input-label.am-input-label-5{
+    width: 22px;
+}
+.place-order .remarks-input .iconfont{
+    color: #00aaef;
+    font-size: 20px;
+}
+.place-order .payment-box{
+    height: 1.68rem;
+    line-height: 1.68rem;
+    padding: 0 .32rem;
+    font-size: 18px;
+    color: #0a0a0a;
+    margin-bottom: .8rem;
+}
+.place-order .payment-box .right{
+    float: right;
+    font-size: 36px;
+    color: #f96268;
+    max-width: 5rem;
+    overflow: hidden;
+}
+.place-order .payment-bottom{
+    background-color: #f96268;
+    color: #fff;
+    font-size: 20px;
+    border-radius: 10px;
+}
+.place-order .payment-bottom.payment-bottom-active{
+    background-color: #c24246;
+}
+.order-price-box.am-list-item .am-input-label.am-input-label-5{
+    width: 3.2rem;
+}
+.order-price-box.am-list-item .am-input-control .fake-input-container .fake-input{
+    font-size: 36px;
+}
+.order-price-box.am-list-item .am-list-line{
+    padding-right:0;
+}
+.pay-modal-div,.pay-method-div{
+    height: 6rem;
+    position: relative;
+}
+.pay-modal-div .am-navbar-left .iconfont{
+    margin-left: .24rem;
+    color: #ccc;
+}
+.pay-modal-div .pay-list .am-list-extra{
+    color: #2a2a2a;
+}
+.pay-modal-div .pay-list .icon-jiantou1{
+    color: #33a3ff;
+    font-size: 18px;
+    vertical-align: middle;
+}
+.pay-modal-div .pay-list .one .am-list-content{
+    color: #adadad;
+}
+.pay-modal-div .pay-list .two .am-list-extra{
+    color: #000;
+    font-size: 22px;
+}
+.pay-modal-div .pay-button{
+    position: absolute!important;
+    width: 90%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    bottom: 10px;
+    font-size: 20px;
+    color: #fff;
+    background-color: #fd4d65;
+}
+.pay-modal-div .pay-button.pay-button-active{
+    background-color: #de2a42;
+}
+.pay-method-div .pay-method-list .am-list-item{
+    border-bottom: 1px solid #ddd;
+    height: 1rem;
+}
+.pay-method-div .pay-method-list .iconfont{
+    font-size: 18px;
+    margin-right: 10px;
+}
+.pay-method-div .pay-method-list .iconfont.icon-yinhangqia{
+    color: #00bcd4;
+}
+.pay-method-div .pay-method-list .iconfont.icon-zhifubao{
+    color: #1296db;
+}
+.pay-method-div .pay-method-list .iconfont.icon-wxpay{
+    color: #41b035;
 }
