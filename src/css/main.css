@@ -44,10 +44,24 @@
   float: left;
   margin: .266667rem .613333rem;
   font-size: 14px;
+  position: relative;
 }
 
 .navPlus .navPlusAnim .fourWrap li img {
   width: 100%;
+}
+
+.navPlus .navPlusAnim .fourWrap li a {
+  color: #333;
+}
+
+.navPlus .navPlusAnim .fourWrap .upQuote i {
+  position: absolute;
+  width: 1rem;
+  height: .4rem;
+  right: -.186667rem;
+  top: .16rem;
+  background: url(../images/noticeNew.png) no-repeat center center/1rem 0.4rem;
 }
 
 .navPlus .navPlusAnim span {
@@ -492,7 +506,7 @@
 
 .searchIpt .searchPD > span {
   float: left;
-  margin-top: .266667rem;
+  margin-top: .35rem;
 }
 
 .searchIpt .search {
@@ -522,11 +536,91 @@
   color: #DCDCDC;
 }
 
-.searchIpt .searchHistory {
+.searchIpt .searchHistory, .searchIpt .searchHot {
   padding: 0 .4rem;
   margin-top: .533333rem;
   font-size: 14px;
   color: #333333;
+}
+
+.searchIpt .searchHistory ul, .searchIpt .searchHot ul {
+  overflow: hidden;
+}
+
+.searchIpt .searchHistory ul li, .searchIpt .searchHot ul li {
+  float: left;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  color: #333;
+  padding: 0 10px;
+  margin: 6px;
+  background-color: #F2F2F2;
+  border-radius: 18px;
+}
+
+.createServer .am-navbar-left-icon {
+  margin-right: 0;
+}
+
+.createServer .am-navbar-title {
+  font-size: 16px;
+}
+
+.createServer .serverStep {
+  height: 1.093333rem;
+  line-height: 1.093333rem;
+  background-color: #C1DBE3;
+}
+
+.createServer .serverStep ul {
+  overflow: hidden;
+}
+
+.createServer .serverStep ul li {
+  float: left;
+  width: 33.33%;
+  text-align: center;
+}
+
+.createServer .serverContent {
+  text-align: center;
+  padding: .8rem 1.2rem;
+}
+
+.createServer .serverContent h3 {
+  font-size: 22px;
+  margin-bottom: .4rem;
+}
+
+.createServer .serverContent p {
+  line-height: 18px;
+}
+
+.example-enter {
+  opacity: 0.01;
+}
+
+.example-enter.example-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.example-exit {
+  opacity: 1;
+}
+
+.example-exit.example-exit-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+.route-wrapper {
+  position: relative;
+}
+
+.route-wrapper > div {
+  position: absolute;
 }
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
@@ -579,7 +673,7 @@
   overflow: hidden;
 }
 
-.designer-home img {
+.designer-home .avatar-box img {
   max-width: 1.866667rem;
   min-height: 1.866667rem;
 }
@@ -883,4 +977,143 @@
   border: 1px solid #999;
   background-color: #ccc;
   color: #999;
+}
+
+.NewNavBar {
+  border-bottom: 1px solid #e3e3e3;
+}
+
+.NewNavBar.am-navbar-light .am-navbar-title {
+  color: #212121;
+}
+
+.am-button.publishButton {
+  width: 1.466667rem;
+  height: .8rem;
+  line-height: .8rem;
+  color: #fff;
+  background-color: #33a3ff;
+}
+
+.am-button.publishButton.am-button-active {
+  background-color: #ddd;
+}
+
+.writer-comment {
+  background-color: #f0f0f0;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.writer-comment .textarea-box {
+  background-color: #fff;
+}
+
+.writer-comment .score-box {
+  height: 1.6rem;
+  line-height: 1.6rem;
+  font-size: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.writer-comment .score-box span {
+  vertical-align: super;
+  margin-right: .16rem;
+  margin-left: .24rem;
+  color: #161616;
+}
+
+.writer-comment .score-box .iconfont {
+  font-size: 32px;
+  margin-left: .16rem;
+  color: #ddd;
+}
+
+.writer-comment .score-box .iconfont.active {
+  color: #00aaef;
+}
+
+.writer-comment .textarea-count-box {
+  float: right;
+  padding-bottom: .4rem;
+  margin-right: .48rem;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.imagePicker-box {
+  padding: .266667rem;
+  background-color: #fff;
+  margin-top: .266667rem;
+}
+
+.imagePicker-box .am-image-picker-list .am-image-picker-upload-btn {
+  border: 2px dashed #ddd;
+}
+
+.imagePicker-box .am-image-picker-list .am-image-picker-upload-btn:after {
+  height: 4PX;
+}
+
+.am-image-picker-list .am-image-picker-upload-btn:before {
+  width: 4px;
+}
+
+.am-image-picker-list .am-image-picker-upload-btn span {
+  position: absolute;
+  width: 100%;
+  bottom: .16rem;
+  text-align: center;
+  font-size: 12px;
+  color: #757575;
+}
+
+.writer-comment .cost {
+  margin-top: .24rem;
+  height: 1rem;
+}
+
+.writer-comment .cost span.text {
+  color: #333333;
+  margin-right: .8rem;
+}
+
+.writer-comment .cost span.icon {
+  color: #767676;
+}
+
+.place-order {
+  background-color: #f0f0f0;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.place-order .address-p {
+  text-align: center;
+  color: #555;
+  margin: .32rem auto .32rem;
+  font-size: 14px;
+}
+
+.order-price-box {
+  height: 1.68rem;
+  line-height: 1.68rem;
+  background-color: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: .16rem;
+  padding: 0 .32rem;
+  font-size: 18px;
+  color: #0a0a0a;
+  margin-bottom: .8rem;
+}
+
+.place-order .order-price-box .right {
+  float: right;
+  font-size: 36px;
+}
+
+.place-order .remarks-input {
+  background-color: transparent;
 }

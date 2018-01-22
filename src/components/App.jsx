@@ -164,6 +164,7 @@ export default class App extends Component {
                                 this.setState({
                                     selectedTab: 'greenTab',
                                 });
+                                this.context.router.push("/login");                                                                
                             }}
                         >
                         </TabBar.Item>
@@ -191,7 +192,7 @@ export default class App extends Component {
                                 this.setState({
                                     selectedTab: 'yellowTab',
                                 });
-                                this.context.router.push("/login");                                
+                                this.context.router.push("/mine");                                                                
                             }}
                         >
                         </TabBar.Item>
@@ -216,8 +217,11 @@ export default class App extends Component {
                                         发布作品
                                     </li>
                                     <li className="upQuote">
-                                        <img src={appUrl.upQuote} alt="" />
-                                        发送报价
+                                        <Link to="/creatServer">
+                                            <img src={appUrl.upQuote} alt="" />
+                                            <i></i>
+                                            发送报价
+                                        </Link>
                                     </li>
                                     <li className="upTalk">
                                         <img src={appUrl.upTalk} alt="" />
