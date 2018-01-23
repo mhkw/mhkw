@@ -194,7 +194,7 @@ export default class LoginView extends React.Component {
                     <div className="indexNav">
                         <NavBar
                             mode="light"
-                            onLeftClick={() => hashHistory.go(-1)}
+                            onLeftClick={() => hashHistory.goBack()}
                             rightContent={[
                                 <Link to="/search">
                                     <div className="searchAll">
