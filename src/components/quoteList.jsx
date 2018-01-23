@@ -42,19 +42,7 @@ export default class Account extends React.Component {
                         icon={<Icon type="left" size="lg" color="#333" />}
                         onLeftClick={() => hashHistory.goBack()}
                     >收支明细</NavBar>
-                    <Line border={this.state.border}></Line>
-                    <div className="accountWrapTop">
-                        <p>余额: 5000.00元 待解冻: 100.00元</p>
-                    </div>
-                    <div className="accountWrapMid">
-                        <span>4900.00</span> <i>提现</i>
-                    </div>
-                    <p className="getPayTitle">
-                        <span className="fn-left" ></span> 收支明细 <span className="fn-right"></span>
-                    </p>
-                    <div className="accountListDetails">
-                        <AccountListDetails account={this.state.account}></AccountListDetails>
-                    </div>
+                    
                 </div>
                 ] : null}
             </QueueAnim>

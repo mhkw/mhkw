@@ -26,7 +26,7 @@ export default class App extends Component {
         super(props);
         this.state = {
             show: false,
-            display:"none",
+            display:"block",
             src: [appUrl.tabbar_one_close, appUrl.tabbar_two_close, appUrl.tabbar_three_close, appUrl.tabbar_four_close],
             activeSrc: [appUrl.tabbar_one_on, appUrl.tabbar_two_on, appUrl.tabbar_three_on, appUrl.tabbar_four_on],
             selectedTab: '',
@@ -59,7 +59,7 @@ export default class App extends Component {
     render() {
         return (
             <div>
-                {this.props.children}
+                {this.props.children && React.cloneElement(this.props.children, { state: this.state, props: this.props, setState: this.setState.bind(this)})}
                 <div className="barBottom fn-clear" style={{display:this.state.display}}>
                     <TabBar className="tabBarUl"
                         unselectedTintColor="#949494"

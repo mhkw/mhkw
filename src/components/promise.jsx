@@ -22,6 +22,7 @@ const ajaxURLList = {
     get_blance: "payapi/get_blance", //支付-获取现金余额
     get_designer_tree:"hkw_newapi/get_designer_tree",
     book_service_simple: "quoteApi/book_service_simple", //创建订单-给设计师下单
+    get_main_project_list:"quoteApi/get_main_project_list" //获取服务订单和约见订单
 }
 
 function get_user_list_ex(params) {

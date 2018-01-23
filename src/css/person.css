@@ -93,11 +93,6 @@
   font-size: 18px;
 }
 
-.mineWrap .showAllList .jianGe {
-  background-color: #F7F7F7;
-  height: .24rem;
-}
-
 .mineWrap .showAllList .ListItemBorder {
   border-bottom: 1px solid #EDEDED;
 }
@@ -209,8 +204,121 @@
   text-align: right;
 }
 
+.orderListWrap .orderIng {
+  height: 1rem;
+  line-height: 1rem;
+  padding-left: .266667rem;
+  background-color: #F0F0F0;
+  color: #B3B3B3;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li {
+  padding: 0 .266667rem;
+  border-top: 1px solid #C8C8C8;
+  border-bottom: 1px solid #C8C8C8;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li h3 {
+  height: 1.253333rem;
+  line-height: 1.253333rem;
+  font-size: 16px;
+  border-bottom: 1px solid #D7DBE3;
+  box-sizing: border-box;
+  margin-bottom: .266667rem;
+  font-weight: 800;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li h3 span {
+  color: #17A9DE;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li .spelis {
+  height: 1.173333rem;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li .paysteps {
+  line-height: 1.173333rem;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li .orderItemLisWrap {
+  background-color: #F7F7F7;
+  padding: .106667rem;
+  margin-bottom: .1rem;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li .orderItemLisWrap img {
+  width: 1.893333rem;
+  height: 1.893333rem;
+  border-radius: 50%;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li .orderItemLisWrap .personMsg {
+  width: 6.933333rem;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li .orderItemLisWrap .personMsg .iconfont {
+  color: #C5C5C5;
+  margin-right: 2px;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li .orderItemLisWrap .personMsg p {
+  display: inline-block;
+  width: 6.4rem;
+  color: #727272;
+  line-height: 24px;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li .orderItemLisWrap h4 {
+  margin-bottom: .28rem;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li .orderItemLisWrap .floatWrap {
+  width: 6.933333rem;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li .orderItemLisWrap .floatWrap .order {
+  display: inline-block;
+  width: .6rem;
+  font-size: 14px;
+  height: 1.173333rem;
+  text-align: center;
+  font-weight: 800;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li .orderItemLisWrap .floatWrap h4 {
+  width: 6rem;
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: .266667rem;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li .btnWrap {
+  height: 1.253333rem;
+  line-height: 1.253333rem;
+  border-top: 1px solid #D7DBE3;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li .btnWrap button {
+  height: .746667rem;
+  width: 2.24rem;
+  border: 1px solid #cccccc;
+  margin: 0 .08rem;
+  border-radius: 5px;
+}
+
 .line {
   height: 1px;
   width: 100%;
   background: #EDEDED;
+}
+
+.jianGe {
+  background-color: #F7F7F7;
+  height: .24rem;
+}
+
+.border {
+  height: 1px;
+  width: 100%;
+  background: #c9c9c9;
 }

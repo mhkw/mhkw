@@ -9,7 +9,7 @@ import axios from 'axios';
 import '../css/font/iconfont.css';
 
 const loginUrl = [
-    require('../images/home/lei1.png'),
+    require('../images/home/locs.png'),
     require('../images/home/lei2.png'),
     require('../images/home/lei3.png'),
     require('../images/home/lei4.png'),
@@ -23,7 +23,7 @@ const loginUrl = [
 let realData = [];
 
 let tabs = [
-    { title: <div className="fn-clear tabsList"><img src={loginUrl[0]} /><p>附近</p></div> }
+    
 ];
 let index = realData.length - 1;
 let realDataLength = realData.length;
@@ -40,7 +40,7 @@ const separator = (sectionID, rowID) => (   //每个元素之间的间距
     />
 );
 
-export default class LoginView extends React.Component {
+export default class HomeView extends React.Component {
     constructor(props) {
         super(props);
         const dataSource = new ListView.DataSource({
@@ -56,12 +56,11 @@ export default class LoginView extends React.Component {
             res: [],
             tabsData:[],
             page:1,
-            hasMore:true
+            hasMore:true,
+            keyArray:["附近","艺术绘画","品牌建设","互联网设计","产品设计","空间设计","虚拟现实","多媒体","程序开发","其他设计"]
         };
         
         this.genData = (pIndex = 0, NUM_ROWS, data) => {
-            // console.log("输出pIndex,NUM_ROWS:::");
-            // console.log(pIndex,NUM_ROWS);
             const dataBlob = {};
             for (let i = 0; i < NUM_ROWS; i++) {
                 const ii = (pIndex * NUM_ROWS) + i;
@@ -71,7 +70,6 @@ export default class LoginView extends React.Component {
         };
         this.changeTabBgPic = (index,tab) => {
             let lis = document.querySelectorAll(".tabsList");
-            // lis[index].querySelector("img").setAttribute("src", this.state.tabsData[index-1].path1);
         }
         this.handleSend = (res,fg) => {
             if (res.success) {
@@ -95,6 +93,7 @@ export default class LoginView extends React.Component {
                     this.setState({
                         tabsData:res.data
                     })
+                    tabs = [{ title: <div className="fn-clear tabsList"><img src={loginUrl[0]} /><p>附近</p></div> }];
                     for (let i = 0; i < this.state.tabsData.length;i++) {
                         tabs.push({ 
                             title: <div className="fn-clear tabsList" data-src={this.state.tabsData[i].path1}><img src={this.state.tabsData[i].path} /><p>{this.state.tabsData[i].category_name}</p></div> 
@@ -107,14 +106,18 @@ export default class LoginView extends React.Component {
         }
     }
 
-    // componentDidUpdate() {
-    //     if (this.state.useBodyScroll) {
-    //         document.body.style.overflow = 'auto';
-    //     } else {
-    //         document.body.style.overflow = 'hidden';
-    //     }
-    // }
-
+    componentDidUpdate() {
+        if (this.state.useBodyScroll) {
+            document.body.style.overflow = 'auto';
+        } else {
+            document.body.style.overflow = 'hidden';
+        }
+    }
+    componentWillReceiveProps(nextProps) {
+        // changeKeyWord =(idx)=>{
+        //     keywords: this.state.keyArray[index]
+        // }
+    }
     shouldComponentUpdate(){
         return (this.props.router.location.action === 'POP')
     }
@@ -133,7 +136,15 @@ export default class LoginView extends React.Component {
     }
 
     onRefresh = () => {   //顶部下拉刷新数据
-        
+        runPromise("get_user_list_ex", {
+            sort: "add_time",
+            offices: "all",
+            keywords: this.state.keywords,
+            longitude: "0",
+            latitude: "0",
+            per_page: "8",
+            page: "1"
+        }, this.handleSend, false, "post", "a");
     };
 
     onEndReached = (event) => {
@@ -154,8 +165,19 @@ export default class LoginView extends React.Component {
             page: this.state.page
         }, this.handleSend, false, "post", "a");
     };
-    changeUserList = () =>{
-
+    changeUserList  (index) {
+        this.setState({ keywords: this.state.keyArray[index] });
+        setTimeout(() => {
+            runPromise("get_user_list_ex", {
+                sort: "add_time",
+                offices: "all",
+                keywords: this.state.keywords,
+                longitude: "0",
+                latitude: "0",
+                per_page: "8",
+                page: "1"
+            }, this.handleSend, false, "post", "a");
+        }, 200);
     }
     render() {
         // let index = this.state.res.length - 1;
@@ -215,7 +237,8 @@ export default class LoginView extends React.Component {
                             //     console.log(tab)
                             // }}
                             onTabClick={(tab, index) => { 
-                                this.changeTabBgPic(index,tab) 
+                                // this.setState({keywords:this.state.keyArray[index]}); 
+                                this.changeUserList(index);
                             }}
                         >
                         </Tabs>

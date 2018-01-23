@@ -13,7 +13,7 @@ export default class Mine extends React.Component {
         this.state = {
             bgStyle: "jianGe",
             border: "line",
-            show: false
+            hide: false
         }
     }
     componentDidMount(){
@@ -21,7 +21,7 @@ export default class Mine extends React.Component {
     }
     showPersonalMsg=()=>{
         this.setState({
-            show:!this.state.show
+            hide:!this.state.hide
         })
     }
     render () {
@@ -29,7 +29,7 @@ export default class Mine extends React.Component {
             <div className="mineWrap">
                 <div className="mineWrapTop">
                     <p>
-                        <a href="javascript:;" onClick={(e) => { this.showPersonalMsg;}}>用户名称<i className="iconfont icon-tubiao-"></i></a>
+                        <a href="javascript:;" onClick={()=>{this.showPersonalMsg();this.props.setState({display:"none"})}}>用户名称<i className="iconfont icon-tubiao-"></i></a>
                         <span className="iconfont icon-shezhi" style={{ color:"#2a2a34",float:'right' }}></span>                    
                     </p>
                 </div>
@@ -49,12 +49,16 @@ export default class Mine extends React.Component {
                         </Link>
                     </li>
                     <li>
-                        <p className="num"><i style={{color:"red"}}>1</i>/12</p>
-                        <p>报价</p>
+                        <Link to="/quoteList">
+                            <p className="num"><i style={{ color: "red" }}>1</i>/12</p>
+                            <p>报价</p>
+                        </Link>
                     </li>
                     <li>
-                        <p className="num"><i style={{ color: "red" }}>1</i>/12</p>
-                        <p>订单</p>
+                        <Link to="/orderList">
+                            <p className="num"><i style={{ color: "red" }}>1</i>/12</p>
+                            <p>订单</p>
+                        </Link>
                     </li>
                 </ul>
                 <div className="showAllList">
@@ -114,7 +118,7 @@ export default class Mine extends React.Component {
                             { opacity: [1, 0], translateY: [0, -800] },
                             { opacity: [1, 0], translateY: [0, -80] }
                         ]}>
-                        {this.state.show ? [
+                        {this.state.hide ? [
                             <div className="demo-thead navPlusAnim" key="a">
                                 <div className="mineWrapTop">
                                     <p>
@@ -153,7 +157,7 @@ export default class Mine extends React.Component {
                                             <p>所在地</p>
                                         </List.Item>
                                     </List>
-                                    <span className="iconfont icon-chuyidong1-copy" onClick={this.showPersonalMsg}></span>
+                                    <span className="iconfont icon-chuyidong1-copy" onClick={()=>{this.showPersonalMsg();this.props.setState({display:"block"})}}></span>
                                 </div>
                             </div>
                         ] : null}

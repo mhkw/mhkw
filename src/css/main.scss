@@ -74,7 +74,11 @@
     }
 }
 .topMargin {
-    margin-top: 8%;
+    padding-top: 8%;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
 }
 //login
 .loginWrap {
@@ -83,6 +87,9 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    position: relative;
+    height: 90%;
+    width: 100%;
     .loginIn {
         .loginCenter {
             .loginLogo {
@@ -207,15 +214,12 @@
     transform: translateY(-50%);
 }
 .loginThree {
-    position: absolute;
-    bottom: .133333rem;
-    left: 0;            
-    width: 100%;
     padding: 0 .933333rem;
     text-align: center;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    z-index: 100;
     .loginThreeLine {
         color: #C4C4C4;
         margin-bottom: .4rem;
@@ -228,13 +232,13 @@
         }
     }
     .loginThreeBottom {
-        @include  font-dpr(14PX);
+        font-size: 14px;
         ul {
             li {
                 float: left;
                 width: 33.3333%;
                 i {
-                    @include  font-dpr(18PX);
+                    font-size: 18px;
                     vertical-align: middle;
                 }
             }
