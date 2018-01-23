@@ -1,0 +1,133 @@
+.add-server{
+    background-color: #f0f0f0;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+.add-server-nav-bar{
+    border-bottom: 1px solid #ddd;
+}
+.add-server-nav-bar .am-navbar-left-icon{
+    margin-right: 0;
+}
+.add-server .server-name{
+    height: 1.6rem;
+    border-bottom: 1px solid #ddd;
+}
+.unit-price-flex{
+    height: 1.6rem;
+    background-color: #fff;
+}
+.unit-price-flex .am-list-item .am-input-label.am-input-label-5 {
+    width: 35px;
+}
+.am-flexbox-item.flex3{
+    -webkit-box-flex: 3;
+    -webkit-flex: 3;
+    -ms-flex: 3;
+    flex: 3;
+}
+.am-flexbox-item.flex2{
+    -webkit-box-flex: 2;
+    -webkit-flex: 2;
+    -ms-flex: 2;
+    flex: 2;
+}
+.am-flexbox-item.flex1{
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+.unit-price-flex .am-list-item.am-input-item{
+    height: 1.6rem;
+}
+.unit-price-flex{
+    border-bottom: 1px solid #ddd;
+}
+.add-server .am-list-item .am-input-label{
+    color: #737373;
+}
+
+.unit-price-flex .iconfont.icon-tubiao-{
+    font-size: 30px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    color: #838383;
+}
+.drop-down-list-unit{
+    width: 1.6rem;
+}
+.drop-down-list-unit .am-popover-inner-wrapper .am-popover-item-container{
+    display: block;
+    line-height: 39px;
+    text-align: center;
+    font-size: 18px;
+    color: #838383;
+}
+.unit-price-flex .am-list-item .am-list-line{
+    padding-right: 0;
+}
+.createServer{
+    background-color: #f0f0f0;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+.createServer .server-item{
+    background-color: #fff;
+    margin: .16rem .32rem;
+    padding: .16rem .48rem;
+    border: 1px solid #dfdfdf;
+    border-radius: 5px;
+}
+.server-item .am-checkbox-item{
+    border-bottom: 1px solid #eee;
+    margin-bottom: .16rem;
+}
+.server-item .am-list-content h2{
+    display: inline-block;
+    width: 80%;
+}
+.server-item .am-list-content a{
+    float: right;
+    color: #bbb;
+}
+.createServer .server-item .describe{
+    font-size: 14px;
+    color: #969696;
+    line-height: .48rem;
+}
+.createServer .server-item .unit-box{
+    display: inline-block;
+    font-size: 20px;
+    color: #ff0c0c;
+    height: 38px;
+    line-height: 38px;
+}
+.createServer .server-item .my-stepper{
+    float: right;
+    width: 110px;
+    padding: 0;
+    border: 1px solid #cfcfcf;
+    border-radius: 5px;
+}
+.server-item .my-stepper .am-stepper-handler{
+    border: none;
+    border-radius: 0;
+    width: 35px;
+    height: 35px;
+    line-height: 32px;
+}
+.server-item .my-stepper .am-stepper-handler .am-icon-xxs{
+    fill: #ff6633;
+}
+.server-item .my-stepper .am-stepper-handler.am-stepper-handler-down{
+    border-right: 1px solid #cfcfcf;
+}
+.server-item .my-stepper .am-stepper-handler.am-stepper-handler-up{
+    border-left: 1px solid #cfcfcf;
+}
+.my-stepper .am-stepper-input-wrap input{
+    width: 40px;
+}
