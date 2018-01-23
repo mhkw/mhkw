@@ -480,8 +480,8 @@
         font-size: 16px;
     }
     .serverStep {
-        height: 1.093333rem;
-        line-height: 1.093333rem;
+        height: 1rem;
+        line-height: 1rem;
         // color:#fff;
         background-color: #C1DBE3;
         ul {
@@ -490,6 +490,9 @@
                 float: left;
                 width: 33.33%;
                 text-align: center;
+                position: relative;
+                padding-left: 0.1rem;
+                box-sizing: border-box;
             }
             // .serverStep1 {
             //     background: url(../images/serverStep.png) no-repeat right;
@@ -562,6 +565,32 @@
     font-size: .3rem;
 }
 
+// update by zhengguoqing
+.create-server-nav-bar .am-navbar-title{
+    font-size: 18px;
+}
+.createServer .serverStep{
+    color: #fff;
+    font-size: 14px;
+}
+.createServer .serverStep .triangle-right{
+    width: 0;
+    height: 0;
+    border-top: 0.5rem solid transparent;
+    border-bottom: 0.5rem solid transparent;
+    border-left: 0.35rem solid #C1DBE3;
+    position: absolute;
+    top: 0;
+    right: -0.35rem;
+}
+.createServer .serverStep .finish{
+    background-color: #199bd8;
+}
+.createServer .serverStep .finish .triangle-right{
+    border-left-color: #199bd8;
+}
+
 @import './designerHome.scss';
 @import './comment.scss';
 @import './writerComment.scss';
+@import './service.scss';

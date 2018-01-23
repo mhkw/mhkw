@@ -17,7 +17,8 @@ import PlaceOrder from './components/PlaceOrder';
 import { OrderPopup, PayMethod, PayModal} from './components/OrderPopup';
 import Hkcircle from './components/hkCircle';
 import Search from './components/Search';
-import creatServer from './components/serviceCreate';
+import CreatServer from './components/serviceCreate';
+import AddServer from './components/AddServer';
 import Mine from './components/mine';
 
 import './css/font/iconfont.css'
@@ -52,7 +53,6 @@ ReactDOM.render(
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/search" component={Search} />
-        <Route path="/creatServer" component={creatServer} />
         <Route path="/mine" component={Mine} />
         <Route path="/designerHome" component={designerHome}>
             <IndexRoute component={WorksCollection} />
@@ -69,5 +69,7 @@ ReactDOM.render(
                 <Route path="/payMethod" component={PayMethod} />
             </Route>
         </Route>
+        <Route path="/creatServer" component={CreatServer} />
+        <Route path="/addServer" component={AddServer} />
     </Router>
     , document.getElementById('container'));
