@@ -1,54 +1,74 @@
 import React from 'react'
 import { List, InputItem, Toast, Button, Modal } from 'antd-mobile';
 import { Link } from 'react-router';
-import { createForm } from 'rc-form';
 import QueueAnim from 'rc-queue-anim';
+import { CheckPhone,CheckKeywords } from './validate';
 
 import '../css/font/iconfont.css'
 
 const loginUrl = [
     require('../images/login_logo.png'),
     require('../images/login_phone.png'),
-    require('../images/login_psd.png'),
-
+    require('../images/login_psd.png')
 ]
+
 const prompt = Modal.prompt;
 
-class LoginView extends React.Component {
+
+export default class LoginView extends React.Component {
+    constructor (props) {
+        super(props);
+        this.state = {
+            show: true,
+            type: 'money',
+            hasError: false,
+            error: false,
+            value: '',
+            keywords:'',
+            loginData:{
+                username:"",
+                password:"",
+                code:""
+            }
+        };
+        this.handleSend = () => {
+            
+        }
+    }
+    
     componentDidMount() {
 
     }
-    state = {
-        show: true,
-        type: 'money',
-        hasError: false,
-        value: '',
-    };
-    onErrorClick = () => {
+
+    onErrorClick = (val) => {
         if (this.state.hasError) {
-            Toast.info('请输入11位手机号！');
+            Toast.info(val,1,null,false);
+        } else if (this.state.error) {
+            Toast.info(val, 1, null, false);
         }
     }
+    
     onChange = (value) => {
-        if (value.replace(/\s/g, '').length < 11) {
-            this.setState({
-                hasError: true,
-            });
-        } else {
-            this.setState({
-                hasError: false,
-            });
-        }
         this.setState({
-            value,
+            hasError: CheckPhone(value).hasError,
         });
     }
+    onChangeKeyword = (value) => {
+        this.setState({
+            error: CheckKeywords(value).hasError,
+        })
+    }
+    onLogin = (loginData) => {
+        runPromise("login", {
+            username: loginData.username,
+            password: loginData.password,
+            code: loginData.code
+        }, this.handleSend, false, "post", "a");
+    }
     render() {
-        const { getFieldProps } = this.props.form;
-        const { type } = this.state;
         return (
             <QueueAnim className="topMargin" animConfig={[
-                { opacity: [1, 0], translateX: [0, 50] },
+                { opacity: [1, 0], translateX: [0, 50] }
             ]}>
                 {this.state.show ? [
                     <div className="loginWrap" key="1">
@@ -58,25 +78,57 @@ class LoginView extends React.Component {
                                     <img src={loginUrl[0]} alt="" />
                                 </div>
                                 <div className="loginIpt">
-                                    <List>
+                                    {/* <List> */}
                                         <InputItem
-                                            type="phone"
+                                            type="number"
                                             placeholder="请输入手机号"
                                             error={this.state.hasError}
-                                            onErrorClick={this.onErrorClick}
+                                            maxLength={11}
+                                            onErrorClick={()=>{
+                                                this.onErrorClick(CheckPhone(this.state.value).errorMessage);
+                                            }}
                                             onChange={this.onChange}
-                                            value={this.state.value}
                                         ><i className="phone iconfont icon-shouji1"></i></InputItem>
+
                                         <InputItem
-                                            {...getFieldProps('password') }
                                             type="password"
                                             placeholder="请输入密码"
+                                            error={this.state.error}                                            
+                                            maxLength={18}    
+                                            onErrorClick={() => {
+                                                this.onErrorClick(CheckKeywords(this.state.value).errorMessage);
+                                            }}
+                                            onChange={this.onChangeKeyword}                                        
                                         ><i className="pwd iconfont icon-icon-test"></i></InputItem>
-                                    </List>
+                                    {/* </List> */}
                                 </div>
                                 <div>
-                                    <Button type="primary"
-                                        className="loginBtn"
+                                    <Button 
+                                        type="primary"
+                                        className="loginBtn" 
+                                        onClick={() => prompt('输入图形验证码', <img src="https://www.huakewang.com/index.php/verifycode/index/11" />,
+                                            [
+                                                {
+                                                    text: 'Close',
+                                                    onPress: value => new Promise((resolve) => {
+                                                        Toast.info('onPress promise resolve', 1);
+                                                        setTimeout(() => {
+                                                            resolve();
+                                                            console.log(`value:${value}`);
+                                                        }, 1000);
+                                                    }),
+                                                },
+                                                {
+                                                    text: 'Hold on',
+                                                    onPress: value => new Promise((resolve, reject) => {
+                                                        Toast.info('onPress promise reject', 1);
+                                                        setTimeout(() => {
+                                                            reject();
+                                                            console.log(`value:${value}`);
+                                                        }, 1000);
+                                                    }),
+                                                },
+                                            ], 'default', null, ['input your name'])}
                                     >登 陆</Button>
                                 </div>
                                 <div className="noAccount fn-clear">
@@ -103,8 +155,6 @@ class LoginView extends React.Component {
         );
     }
 }
-const H5NumberInputExampleWrapper = createForm()(LoginView);
-export default H5NumberInputExampleWrapper;
 
 
 

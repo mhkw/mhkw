@@ -57,7 +57,6 @@ ReactDOM.render(
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/search" component={Search} />
-        <Route path="/creatServer" component={creatServer} />
         <Route path="/account" component={Account} />
         <Route path="/orderList" component={OrderList} />
         <Route path="/quoteList" component={QuoteList} />
