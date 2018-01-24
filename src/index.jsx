@@ -21,6 +21,8 @@ import CreatServer from './components/serviceCreate';
 import AddServer from './components/AddServer';
 import Mine from './components/mine';
 import Account from './components/account';
+import OrderList from './components/orderList';
+import QuoteList from './components/quoteList';
 
 import './css/font/iconfont.css'
 
@@ -57,6 +59,8 @@ ReactDOM.render(
         <Route path="/search" component={Search} />
         {/* <Route path="/creatServer" component={creatServer} /> */}
         <Route path="/account" component={Account} />
+        <Route path="/orderList" component={OrderList} />
+        <Route path="/quoteList" component={QuoteList} />
         <Route path="/designerHome" component={designerHome}>
             <IndexRoute component={WorksCollection} />
             <Route path="worksCollection" component={WorksCollection} />
