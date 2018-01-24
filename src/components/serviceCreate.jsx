@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavBar, Icon, Button, WingBlank, Checkbox, Stepper } from 'antd-mobile';
+import { NavBar, Icon, Button, WingBlank, Checkbox, Stepper, Modal } from 'antd-mobile';
 import { hashHistory, Link } from 'react-router';
 
 import update from 'immutability-helper';
@@ -33,6 +33,10 @@ export default class ServerCreate extends React.Component {
         super(props);
         this.state = {
             progress: 2, //添加服务输入信息的进度：0,1,2,3
+            showModal: false, //显示弹窗
+            checkNum: 0, //用户已经选中了几个服务模板
+            checkPrice: 0, //用户已经选中了几个服务模板的价格总计
+            checkedServerList: [],
             serverList: [{
                 id: "1",
                 server_name: "PS简单处理图片",
@@ -55,28 +59,60 @@ export default class ServerCreate extends React.Component {
     }
 
     componentDidMount(){
-
+        
+    }
+    componentDidUpdate() {
+        const maskDOM = document.getElementsByClassName("am-modal-mask")[0];
+        if (maskDOM) {
+            maskDOM.style.display = "none";
+        }
+    }
+    //计算已经选中的数量和价格
+    countNumberAndPrice() {
+        let sumNumber = 0;
+        let sumPrice = 0;
+        let checkedServerList = [];
+        this.state.serverList.map((value, index) => {
+            if (value.isChecked) {
+                sumNumber++;
+                sumPrice += parseFloat(value.unit_price) * parseInt(value.number);
+                checkedServerList.push(value);
+            }
+        })
+        this.setState({
+            checkNum: sumNumber,
+            checkPrice: sumPrice,
+            checkedServerList: checkedServerList,
+            showModal: !!sumNumber
+        })
     }
     onChangeisChecked = (index) => {
         const isChecked = this.state.serverList[index].isChecked;
+        
         const newServerList = update(this.state.serverList, { [index]: { isChecked: { $set: !isChecked }} });
         this.setState({
             serverList: newServerList
-        })
+        }, this.countNumberAndPrice)
+        // console.log(isChecked);
+        
     }
     onChangeThisNumber = (val, index) => {
         let value = (isNaN(val) || val == "" ) ? "" : parseInt(val);
         const newServerList = update(this.state.serverList, { [index]: { number: { $set: value } } });
         this.setState({
             serverList: newServerList
-        })
+        }, this.countNumberAndPrice)
     }
     // handleToggle() {
     //     this.setState(({ show }) => ({
     //         show: !show
     //     }))
     // }
+    onClickCreateServer = () => {
+
+    }
     render () {
+        // this.countNumberAndPrice();
         return (
             <div className="createServer" key="1">
                 <NavBar
@@ -130,6 +166,27 @@ export default class ServerCreate extends React.Component {
                         添加服务内容
                     </Button>
                 </div>
+                <Modal
+                    wrapClassName="server-button-modal"
+                    popup
+                    visible={this.state.showModal}
+                    onClose={() => { this.setState({ showModal: false}) }}
+                    animationType="slide-up"
+                    maskClosable={false}
+                    transparent={true}
+                >
+                <div className="create-server-popup">
+                    <div className="txt-div">
+                            <span className="left">共<span className="num">{this.state.checkNum}</span>项服务</span>
+                            <span className="right">合计:<span className="price">{this.state.checkPrice}</span></span>
+                    </div>
+                    <Button
+                        onClick={this.onClickCreateServer}
+                        className="create-server-button"
+                        activeClassName="create-server-button-active"
+                    >创建报价</Button>
+                </div>
+                </Modal>
             </div>
         )
     }

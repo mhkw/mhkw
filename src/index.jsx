@@ -55,7 +55,7 @@ ReactDOM.render(
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/search" component={Search} />
-        <Route path="/creatServer" component={creatServer} />
+        {/* <Route path="/creatServer" component={creatServer} /> */}
         <Route path="/account" component={Account} />
         <Route path="/designerHome" component={designerHome}>
             <IndexRoute component={WorksCollection} />
