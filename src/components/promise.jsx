@@ -8,7 +8,8 @@ let Ajax = axios.create({
     // baseURL: 'https://bird.ioliu.cn/v2?Content-Type=application/x-www-form-urlencoded&url=https://www.huakewang.com/',
     baseURL: 'https://www.huakewang.com/',
     timeout: 2000,
-    // withCredentials: true,
+    withCredentials: true,
+    crossDomain: true
     // headers: {
     //     Cookie: "ci_session=jQLusrFoBaPLWfwJG4zt%2FP265m3d7qCxNYFy19G8eTv0YCDjnFVsFZhjxA5xI7Bsh%2BMEty2KWJXUY67MnSHKG5kezbqmEVfKsGHwD7mbYIY1ZlNbCP1dPaB3pIWl8gViyWhubKeqVETam2mjibFS053uf4YVl1SKf6PnwueUnstjRakBKg7KNeStEo%2BlHV1hBcTvbxLeLyDv6m1Ju2p2J3bELZxyJyfn2co6x9n3J7Vker20Z9Cjn6%2BjIUf9R6BZysoEjiGDp%2FUctRSrQo6O9dGXCXTMAyQ7h1Ynsj3arIua5%2BcWeVFE8p6GmOIjQr63Ro%2BVYkkdeWDEdd%2FQ5Qi2NxvmSRzbVGSggmVrlTBIssc0UcLlC1WPHYZF%2FOdOKFDZfXa4A51Op3k5DrLNsAkZ8R1RlezGIDpJutuRTPx%2Boc%2F9O9NellglJMT6C4xFZgF65ReWiFInPWYZnU9pp9kPYX1MpeAPGAtkiJVZSCi96FghOot8tjvKhzKbf%2FzbpF%2FE;"
     // }
@@ -23,7 +24,8 @@ const ajaxURLList = {
     get_designer_tree:"hkw_newapi/get_designer_tree",
     book_service_simple: "quoteApi/book_service_simple", //创建订单-给设计师下单
     get_main_project_list:"quoteApi/get_main_project_list", //获取服务订单和约见订单
-    login:"hkw_newapi/login"   //登陆
+    login:"hkw_newapi/login",   //登陆
+    reg:"hkw_newapi/reg"
 }
 
 function get_user_list_ex(params) {
@@ -70,6 +72,7 @@ function run(taskDef) {
  */
 export default function runPromise(ajaxName, param, handle, mustLogin = false, method="post", handleParam) {
     let cookie_user_id = getCookie('user_id');
+    console.log(cookie_user_id)
     if (mustLogin && !cookie_user_id) {
         //如果没登录，跳转到登录页
         hashHistory.push({

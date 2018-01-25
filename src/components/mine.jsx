@@ -15,9 +15,12 @@ export default class Mine extends React.Component {
             border: "line",
             hide: false
         }
+        this.handleSend=(res)=>{
+            console.log(res)
+        }
     }
     componentDidMount(){
-
+        runPromise("login", null, this.handleSend, true, "post");
     }
     showPersonalMsg=()=>{
         this.setState({

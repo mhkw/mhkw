@@ -1,3 +1,4 @@
+// 验证手机号
 const CheckPhone = (value) => {
     if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(value)) {
         return {
@@ -9,16 +10,18 @@ const CheckPhone = (value) => {
         hasError: false
     }
 }
+//验证密码长度
 const CheckKeywords = (value) => {
-    if(value.length > 18 || value.length < 6) {
+    if(value.length < 6) {
         return {
             hasError: true,
-            errorMessage: '请输入6-18位密码'
+            errorMessage: '密码长度不能低于6位'
         }
     }
     return {
-        hasError: false,
+        hasError: false
     }
 }
+//短信验证码
 
 export { CheckPhone, CheckKeywords };

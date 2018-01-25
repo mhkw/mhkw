@@ -1,52 +1,105 @@
 import React from 'react'
 import { List, InputItem, Toast, Button, WhiteSpace, Checkbox, Modal } from 'antd-mobile';
 import {Link} from 'react-router';
-import { createForm } from 'rc-form';
 import QueueAnim from 'rc-queue-anim';
+import { CheckPhone, CheckKeywords } from './validate';
 
 import '../css/font/iconfont.css'
 
 const loginUrl = [
     require('../images/login_logo.png'),
-    require('../images/login_phone.png'),
-    require('../images/login_psd.png'),
+    require('../images/loading.gif'),
 ]
-const AgreeItem = Checkbox.AgreeItem;
-const prompt = Modal.prompt;
 
-class LoginView extends React.Component {
+export default class RegisterView extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            show: true,
+            hasError: false,
+            error:false,
+            checked:true,
+            value: '15657185156',
+            keywords: 'luolei1992',
+            message:"1234",
+            code: "",
+            maskClosable: true,
+            modal: false,
+            codeNum:2
+        };
+    }
     componentDidMount (){
     
     }
-    state = {
-        show: true,
-        type: 'money',
-        hasError: false,
-        value: '',
-        maskClosable: true
-    };
-    onErrorClick = () => {
-        if (this.state.hasError) {
-            Toast.info('请输入11位手机号！');
+    onRegister() {   //确认登陆
+        runPromise("reg", {
+            username: this.state.value,
+            password: this.state.keywords,
+            code: this.state.message
+        }, this.handleSend, false, "post");
+    }
+    showModal = key => (e) => {  //弹窗提示输入验证码
+        e.preventDefault(); // 修复 Android 上点击穿透
+        if (this.state.value.replace(/(^\s*)|(\s*$)/g, '') === "" || this.state.keywords.replace(/(^\s*)|(\s*$)/g, '') === "" ) {
+            Toast.info('用户名或者密码不能为空', 2,null,false);
+        }else if(this.state.hasError === true || this.state.error === true) {
+            Toast.info('请输入正确格式的用户名和密码', 2,null,false);
+        }else if(this.state.message.length !== 4){
+            Toast.info('请输入四位验证码', 2, null, false);
+        }else if(this.state.checked === false){
+            Toast.info('请先同意画客网隐私政策和使用条款', 2, null, false);            
+        }else{
+            this.setState({
+                [key]: true,
+            });
         }
     }
-    onChange = (value) => {
-        if (value.replace(/\s/g, '').length < 11) {
-            this.setState({
-                hasError: true,
-            });
-        } else {
-            this.setState({
-                hasError: false,
-            });
-        }
+    onClose = key => () => {    //关闭图形验证码弹窗
         this.setState({
-            value,
+            [key]: false,
+            code: ""
         });
     }
+    
+    
+    numPlus(e) {     //图形验证码刷新
+        e.currentTarget.setAttribute("src", loginUrl[1]);
+        setTimeout(() => {
+            this.setState({
+                codeNum: ++this.state.codeNum
+            })
+        }, 200)
+    }
+    onErrorClick = (val) => {     //验证错误回调
+        if (this.state.hasError) {
+            Toast.info(val, 1, null, false);
+        } else if (this.state.error) {
+            Toast.info(val, 1, null, false);
+        }
+    }
+    onChange = (value) => {    //用户名输入
+        this.setState({
+            hasError: CheckPhone(value).hasError,
+            value: value
+        });
+    }
+    onChangeKeyword = (value) => {   //密码输入
+        this.setState({
+            error: CheckKeywords(value).hasError,
+            keywords: value
+        })
+    }
+    onChangeYzm = (value) => {      //图形验证码输入
+        this.setState({
+            code: value
+        })
+    }
+    onchangeMessage = (value) => {
+        this.setState({
+            message:value
+        })
+    }
     render() {
-        const { getFieldProps } = this.props.form;
-        const { type } = this.state;
         return (
             <QueueAnim className="topMargin"
                 animConfig={[
@@ -62,36 +115,80 @@ class LoginView extends React.Component {
                                 <div className="loginIpt">
                                     <List>
                                         <InputItem
-                                            type="phone"
+                                            type="text"
                                             placeholder="请输入手机号"
+                                            maxLength={11}
                                             error={this.state.hasError}
-                                            onErrorClick={this.onErrorClick}
-                                            onChange={this.onChange}
                                             value={this.state.value}
+                                            onErrorClick={()=>{
+                                                this.onErrorClick(CheckPhone(this.state.value).errorMessage);
+                                            }}
+                                            onChange={this.onChange}
                                         ><i className="phone iconfont icon-shouji1"></i></InputItem>
                                         <InputItem
-                                            {...getFieldProps('password') }
                                             type="password"
                                             placeholder="请输入密码"
+                                            error={this.state.error}
+                                            maxLength={18}
+                                            value={this.state.keywords}                                            
+                                            onErrorClick={() => {
+                                                this.onErrorClick(CheckKeywords(this.state.keywords).errorMessage);
+                                            }}
+                                            onChange={this.onChangeKeyword}
                                         ><i className="pwd iconfont icon-icon-test"></i></InputItem>
                                         <InputItem className="yzm"
-                                            {...getFieldProps('text') }
-                                            type="text"
-                                            placeholder="验证码"
-                                        >
-                                            <i className="pwd iconfont icon-shoujiyanzhengma"></i>
+                                            type="number"
+                                            maxLength={4}
+                                            onChange={this.onchangeMessage}
+                                            value={this.state.message}
+                                            placeholder="短信验证码"
+                                        ><i className="pwd iconfont icon-shoujiyanzhengma"></i>
                                             <Button type="ghost" inline size="small" className="getCode">获取验证码</Button>
                                         </InputItem>
                                     </List>
                                 </div>
                                 <div>
-                                    <AgreeItem data-seed="logId" onChange={e => console.log('checkbox', e)} className="registerCheckbox">
+                                    <Checkbox.AgreeItem 
+                                        defaultChecked={true} 
+                                        data-seed="logId" 
+                                        onChange={(e) => this.setState({checked:e.target.checked})} 
+                                        className="registerCheckbox"
+                                    >
                                         &nbsp;&nbsp;我已阅读并同意<a className="agreeRulesColor" onClick={(e) => { e.preventDefault(); console.log('ok'); }}>使用条款和隐私政策</a>
-                                    </AgreeItem>
-                                    <Button type="primary" onClick={() => prompt('输入图形验证码', '证明你不是机器人', [
-                                        { text: '取消' },
-                                        { text: '确定', onPress: value => console.log(`输入的内容:${value}`) }
-                                    ], 'default')}>注册/登陆</Button>
+                                    </Checkbox.AgreeItem>
+                                    <Button type="primary" onClick={this.showModal('modal')}>注册/登陆</Button>
+                                    <Modal
+                                        visible={this.state.modal}
+                                        transparent
+                                        maskClosable={false}
+                                        closable={true}
+                                        onClose={this.onClose('modal')}
+                                        title={
+                                            <div style={{ textAlign: 'left', lineHeight: '24px', fontSize: '16px' }}>
+                                                <p>输入图形验证码</p>
+                                                <p>证明你不是机器人</p>
+                                            </div>
+                                        }
+                                        footer={[
+                                            { text: '取消', onPress: () => { this.onClose('modal')(); } },
+                                            { text: '确定', onPress: () => { this.onRegister() } }
+                                        ]}
+                                    >
+                                        <div className="pressYzmWrap">
+                                            <InputItem
+                                                className="pressYzm fn-left"
+                                                type="text"
+                                                placeholder="图形验证码"
+                                                maxLength={4}
+                                                onChange={this.onChangeYzm}
+                                            ></InputItem>
+                                            <img
+                                                src={'https://www.huakewang.com/index.php/verifycode/index/' + this.state.codeNum}
+                                                className="fn-right"
+                                                onClick={(e) => { this.numPlus(e) }}
+                                            />
+                                        </div>
+                                    </Modal>
                                 </div>
                                 <div className="noAccount fn-clear">
                                     <Link className="fn-left" to='/forget'>忘记密码？</Link>
@@ -121,8 +218,7 @@ class LoginView extends React.Component {
         );
     }
 }
-const H5NumberInputExampleWrapper = createForm()(LoginView);
-export default H5NumberInputExampleWrapper;
+
 
 
 
