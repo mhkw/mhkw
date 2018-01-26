@@ -177,4 +177,28 @@ const serverOrderMeet = (props) => (
 //服务方订单
 
 
+//个人中心个人信息
+const PersonalCenterMsg = (props) => {
+    <ul className="mineThingsTodo">
+        <li>
+            <Link to="/account">
+                <p className="num">{props.PersonalCenterAccount}</p>
+                <p>账户</p>
+            </Link>
+        </li>
+        <li>
+            <Link to="/quoteList">
+                <p className="num"><i style={{ color: "red" }}>1</i>/12</p>
+                <p>报价</p>
+            </Link>
+        </li>
+        <li>
+            <Link to="/orderList">
+                <p className="num"><i style={{ color: "red" }}>1</i>/12</p>
+                <p>订单</p>
+            </Link>
+        </li>
+    </ul>
+}
+
 export { ItemPicLists, PersonalMsg, Jiange, Line, AccountListDetails};

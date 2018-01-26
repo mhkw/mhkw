@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { List, Badge,WhiteSpace  } from 'antd-mobile';
-import { Jiange,Line } from './templateHomeCircle';
+import { Jiange, Line, PersonalCenterMsg} from './templateHomeCircle';
 import QueueAnim from 'rc-queue-anim';
+import axios from 'axios';
 
 require ('../css/person.scss');
 
@@ -13,14 +14,34 @@ export default class Mine extends React.Component {
         this.state = {
             bgStyle: "jianGe",
             border: "line",
-            hide: false
-        }
-        this.handleSend=(res)=>{
-            console.log(res)
-        }
+            hide: false,
+            personCenter:{}
+        };
+        
     }
     componentDidMount(){
-        runPromise("login", null, this.handleSend, true, "post");
+        console.log(validate.getCookie('user_id'));
+        axios({
+            method: 'post',
+            url: 'https://www.huakewang.com/hkw_newapi/get_self_info/' + validate.getCookie('user_id'),
+            withCredentials: true,
+            crossDomain: true,
+            headers: { 
+                'Content-Type': 'application/x-www-form-urlencoded' 
+            },
+            responseType: 'json',
+        })
+        .then(function (response) {
+            console.log(response.data);
+            this.setState({
+                personCenter: response.data
+            })
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
     }
     showPersonalMsg=()=>{
         this.setState({
@@ -64,6 +85,9 @@ export default class Mine extends React.Component {
                         </Link>
                     </li>
                 </ul>
+                {/* <PersonalCenterMsg 
+                    PersonalCenterAccount={this.state.personCenter.total_financial}
+                ></PersonalCenterMsg> */}
                 <div className="showAllList">
                     <List>
                         <Line border={this.state.border}></Line>

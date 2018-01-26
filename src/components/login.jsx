@@ -1,5 +1,5 @@
 import React from 'react'
-import { List, InputItem, Toast, Button, Modal } from 'antd-mobile';
+import { List, InputItem, Toast, Button, Modal, ActivityIndicator } from 'antd-mobile';
 import { Link, hashHistory } from 'react-router';
 import QueueAnim from 'rc-queue-anim';
 
@@ -10,7 +10,6 @@ const loginUrl = [
     require('../images/loading.gif'),
 ]
 
-
 export default class LoginView extends React.Component {
     constructor (props) {
         super(props);
@@ -19,8 +18,9 @@ export default class LoginView extends React.Component {
             hasError: false,
             error: false,
             modal: false,
+            animating:false,
             value: '15657185156',
-            keywords:'luolei251537',
+            keywords:'luolei1992',
             code:"",
             codeNum:2
         };
@@ -31,27 +31,26 @@ export default class LoginView extends React.Component {
                 validate.setCookie('user_id',res.data.id);
             }else{
                 if(res.message == "图形验证码不对") {
-                    Toast.info("图形验证码不正确", 1, null, false);
+                    Toast.info("图形验证码不正确", 2, null, false);
                     this.setState({
                         codeNum: ++this.state.codeNum
                     })
                 }else{
-                    Toast.info(res.message, 1, null, false);                    
+                    Toast.info(res.message, 2, null, false);                    
                     this.onClose('modal')();
                 }
             }
         }
     }
-    
     componentDidMount() {
         
     }
     showModal = key => (e) => {   //弹窗提示输入验证码
         e.preventDefault(); // 修复 Android 上点击穿透
         if (this.state.value.replace(/(^\s*)|(\s*$)/g, '') == "" || this.state.keywords.replace(/(^\s*)|(\s*$)/g, '') == "" ) {
-            Toast.info('用户名或者密码不能为空', 1,null,false);
+            Toast.info('用户名或者密码不能为空', 2,null,false);
         }else if(this.state.hasError == true || this.state.error == true) {
-            Toast.info('请输入正确格式的用户名和密码', 1,null,false);
+            Toast.info('请输入正确格式的用户名和密码', 2,null,false);
         }else{
             this.setState({
                 [key]: true,
@@ -67,9 +66,9 @@ export default class LoginView extends React.Component {
    
     onErrorClick = (val) => { //验证错误回调
         if (this.state.hasError) {
-            Toast.info(val,1,null,false);
+            Toast.info(val,2,null,false);
         } else if (this.state.error) {
-            Toast.info(val, 1, null, false);
+            Toast.info(val, 2, null, false);
         }
     }
     
@@ -163,7 +162,7 @@ export default class LoginView extends React.Component {
                                         }
                                         footer={[
                                             { text: '取消', onPress: () => { this.onClose('modal')(); } },
-                                            { text: '确定', onPress: () => { this.onLogin() }}
+                                            { text: '确定', onPress: () => { this.onLogin(); }}
                                         ]}
                                     >
                                         <div className="pressYzmWrap">
@@ -186,6 +185,11 @@ export default class LoginView extends React.Component {
                                     <Link className="fn-left" to='/forget'>忘记密码？</Link>
                                     <Link className="fn-right" to='/register'>注册/手机号登录</Link>
                                 </div>
+                                {/* <ActivityIndicator
+                                    toast
+                                    text="登陆中..."
+                                    animating={this.state.animating}
+                                /> */}
                             </div>
                         </div>
                     </div>,

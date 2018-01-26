@@ -10,6 +10,8 @@ const loginUrl = [
     require('../images/loading.gif'),
 ]
 
+let timeOut = 60;
+
 export default class RegisterView extends React.Component {
     constructor(props){
         super(props);
@@ -20,37 +22,116 @@ export default class RegisterView extends React.Component {
             checked:true,
             value: '15657185156',
             keywords: 'luolei1992',
-            message:"1234",
-            code: "",
+            message:"",       //短信验证码
+            code: "",             //图形验证码
             maskClosable: true,
-            modal: false,
-            codeNum:2
+            modal: false, 
+            codeNum:2,          //图形验证码改变的参数
+            text:"获取验证码",
+            type:'reg',         //手机验证码的类型
+            url:'get_reg_sms_code'
         };
+
+        this.handleLoginSend = (res) => {   //注册或修改密码
+            console.log(res,'注册或修改密码');
+            if (res.success) {
+                hashHistory.goBack();
+                validate.setCookie('user_id', res.data.id);
+            } else {
+                Toast.info(res.message, 2, null, false);
+            }
+        }
+        this.handleIsReg = (res) => {      //判断是否为注册用户
+            console.log(res);
+            
+            if(res.success) {
+                if (res.data.reg_status == 1) {
+                    this.setState({
+                        type: 'get_pass',
+                        url:'get_pass'
+                    })
+                }else{
+                    this.setState({
+                        type: 'reg',
+                        url: 'reg'                        
+                    })
+                }
+            }
+        }
+        this.handlePicSend = (res) => {     //图形验证码
+            console.log(res);
+            if(res.success) {
+                this.sendMessage();
+                this.onClose('modal')();
+            }else{
+                Toast.info('图形验证码错误', 2, null, false);
+                this.setState({codeNum:++this.state.codeNum});
+            }
+        }
+        this.handleMsgSend = (res) => {      //短信发送
+            if(res.success) {
+                Toast.info('短信验证码已发出，请注意查收', 2, null, false);
+                let interval = setInterval(() => {
+                    if (timeOut === 0) {
+                        this.setState({
+                            text: "获取验证码"
+                        })
+                        clearInterval(interval);
+                    } else {
+                        this.setState({
+                            text : timeOut+'s'
+                        })
+                        timeOut --;
+                    }
+                },1000)
+            }else{
+                Toast.info(res.message, 2, null, false);
+            }
+        }
     }
     componentDidMount (){
 
     }
-    onRegister() {   //确认登陆
-        runPromise("reg", {
-            username: this.state.value,
-            password: this.state.keywords,
-            code: this.state.message
-        }, this.handleSend, false, "post");
+    
+    onRegister() {   //确认注册或者修改密码
+        if (this.state.message.length !== 4) {
+            Toast.info('请输入四位验证码', 2, null, false);
+        } else {
+            // console.log(this.state.url);
+            runPromise('get_pass', {
+                username: this.state.value,
+                password: this.state.keywords,     
+                code: this.state.message,     //短信验证码
+                secode:this.state.code        //图形验证码
+            }, this.handleLoginSend, false, "post");
+        }
+    }
+    onPicCode() {   //验证图形验证码
+        runPromise("check", {
+            secode: this.state.code
+        }, this.handlePicSend, false, "post");
+    }
+    sendMessage(){     //发送短信验证码
+        runPromise('get_reg_sms_code', {
+            "type": this.state.type,
+            "mobile": this.state.value,
+            "tokeen": this.state.code
+        }, this.handleMsgSend, false, "post");
     }
     showModal = key => (e) => {  //弹窗提示输入验证码
         e.preventDefault(); // 修复 Android 上点击穿透
-        if (this.state.value.replace(/(^\s*)|(\s*$)/g, '') === "" || this.state.keywords.replace(/(^\s*)|(\s*$)/g, '') === "" ) {
-            Toast.info('用户名或者密码不能为空', 2,null,false);
-        }else if(this.state.hasError === true || this.state.error === true) {
-            Toast.info('请输入正确格式的用户名和密码', 2,null,false);
-        }else if(this.state.message.length !== 4){
-            Toast.info('请输入四位验证码', 2, null, false);
-        }else if(this.state.checked === false){
-            Toast.info('请先同意画客网隐私政策和使用条款', 2, null, false);            
-        }else{
-            this.setState({
-                [key]: true,
-            });
+        if (this.state.text == "获取验证码") {
+            if (this.state.value.replace(/(^\s*)|(\s*$)/g, '') === "" || this.state.keywords.replace(/(^\s*)|(\s*$)/g, '') === "") {
+                Toast.info('用户名或者密码不能为空', 2, null, false);
+            } else if (this.state.hasError === true || this.state.error === true) {
+                Toast.info('请输入正确格式的用户名和密码', 2, null, false);
+            } else if (this.state.checked === false) {
+                Toast.info('请先同意画客网隐私政策和使用条款', 2, null, false);
+            } else {
+                this.setState({
+                    [key]: true,
+                });
+            }
         }
     }
     onClose = key => () => {    //关闭图形验证码弹窗
@@ -59,8 +140,6 @@ export default class RegisterView extends React.Component {
             code: ""
         });
     }
-    
-    
     numPlus(e) {     //图形验证码刷新
         e.currentTarget.setAttribute("src", loginUrl[1]);
         setTimeout(() => {
@@ -81,6 +160,11 @@ export default class RegisterView extends React.Component {
             hasError: validate.CheckPhone(value).hasError,
             value: value
         });
+        if (!validate.CheckPhone(value).hasError) {    //判断是否注册过，没有就注册有就修改密码
+            runPromise("get_reg_status", {
+                username:value
+            }, this.handleIsReg, false, "post");
+        }
     }
     onChangeKeyword = (value) => {   //密码输入
         this.setState({
@@ -142,7 +226,13 @@ export default class RegisterView extends React.Component {
                                             value={this.state.message}
                                             placeholder="短信验证码"
                                         ><i className="pwd iconfont icon-shoujiyanzhengma"></i>
-                                            <Button type="ghost" inline size="small" className="getCode">获取验证码</Button>
+                                            <Button 
+                                                type="ghost" 
+                                                inline 
+                                                size="small" 
+                                                className="getCode" 
+                                                onClick={this.showModal('modal')}
+                                            >{this.state.text}</Button>
                                         </InputItem>
                                         
                                     </List>
@@ -154,9 +244,14 @@ export default class RegisterView extends React.Component {
                                         onChange={(e) => this.setState({checked:e.target.checked})} 
                                         className="registerCheckbox"
                                     >
-                                        &nbsp;&nbsp;我已阅读并同意<a className="agreeRulesColor" onClick={(e) => { e.preventDefault(); console.log('ok'); }}>使用条款和隐私政策</a>
+                                        &nbsp;&nbsp;我已阅读并同意<a className="agreeRulesColor">使用条款和隐私政策</a>
                                     </Checkbox.AgreeItem>
-                                    <Button type="primary" onClick={this.showModal('modal')}>注册/登陆</Button>
+                                    <Button 
+                                        type="primary"
+                                        onClick={()=>{
+                                            this.onRegister();
+                                        }}
+                                    >注册/登陆</Button>
                                     <Modal
                                         visible={this.state.modal}
                                         transparent
@@ -171,7 +266,7 @@ export default class RegisterView extends React.Component {
                                         }
                                         footer={[
                                             { text: '取消', onPress: () => { this.onClose('modal')(); } },
-                                            { text: '确定', onPress: () => { this.onRegister() } }
+                                            { text: '确定', onPress: () => { this.onPicCode() } }
                                         ]}
                                     >
                                         <div className="pressYzmWrap">
