@@ -28,7 +28,7 @@ export default class RegisterView extends React.Component {
         };
     }
     componentDidMount (){
-    
+
     }
     onRegister() {   //确认登陆
         runPromise("reg", {
@@ -144,6 +144,7 @@ export default class RegisterView extends React.Component {
                                         ><i className="pwd iconfont icon-shoujiyanzhengma"></i>
                                             <Button type="ghost" inline size="small" className="getCode">获取验证码</Button>
                                         </InputItem>
+                                        
                                     </List>
                                 </div>
                                 <div>
