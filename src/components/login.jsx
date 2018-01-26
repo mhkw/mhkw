@@ -75,13 +75,13 @@ export default class LoginView extends React.Component {
     
     onChange = (value) => {  //用户名输入
         this.setState({
-            hasError: CheckPhone(value).hasError,
+            hasError: validate.CheckPhone(value).hasError,
             value:value
         });
     }
     onChangeKeyword = (value) => {   //密码输入
         this.setState({
-            error: CheckKeywords(value).hasError,
+            error: validate.CheckKeywords(value).hasError,
             keywords:value
         })
     }
@@ -126,7 +126,7 @@ export default class LoginView extends React.Component {
                                             maxLength={11}
                                             value={this.state.value}
                                             onErrorClick={()=>{
-                                                this.onErrorClick(CheckPhone(this.state.value).errorMessage);
+                                                this.onErrorClick(validate.CheckPhone(this.state.value).errorMessage);
                                             }}
                                             onChange={this.onChange}
                                         ><i className="phone iconfont icon-shouji1"></i></InputItem>
@@ -138,7 +138,7 @@ export default class LoginView extends React.Component {
                                             value={this.state.keywords}                                                                                       
                                             maxLength={18}
                                             onErrorClick={() => {
-                                                this.onErrorClick(CheckKeywords(this.state.keywords).errorMessage);
+                                                this.onErrorClick(validate.CheckKeywords(this.state.keywords).errorMessage);
                                             }}
                                             onChange={this.onChangeKeyword}
                                         ><i className="pwd iconfont icon-icon-test"></i></InputItem>
