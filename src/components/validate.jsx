@@ -24,4 +24,36 @@ const CheckKeywords = (value) => {
 }
 //短信验证码
 
-export { CheckPhone, CheckKeywords };
+const getCookie = (name) => {
+    let arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+    if (arr != null) return decodeURIComponent(arr[2]); return null;
+};
+
+const setCookie = (name, value, time) => {
+    var strsec = getsec(time);
+    var exp = new Date();
+    exp.setTime(exp.getTime() + strsec * 1);
+    document.cookie = name + "=" + encodeURIComponent(value) + ";expires=" + exp.toGMTString();
+};
+const getsec = (str) => {
+    if (str == "" || str == null) {
+        str = "3d";
+    }
+    var str1 = str.substring(1, str.length) * 1;
+    var str2 = str.substring(0, 1);
+    if (str2 == "s") {
+        return str1 * 1000;
+    } else if (str2 == "h") {
+        return str1 * 60 * 60 * 1000;
+    } else if (str2 == "d") {
+        return str1 * 24 * 60 * 60 * 1000;
+    }
+}
+
+export default {
+    CheckPhone, 
+    CheckKeywords, 
+    getCookie, 
+    setCookie
+}
+// export { CheckPhone, CheckKeywords, getCookie, setCookie};

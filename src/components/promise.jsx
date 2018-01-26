@@ -72,7 +72,6 @@ function run(taskDef) {
  */
 export default function runPromise(ajaxName, param, handle, mustLogin = false, method="post", handleParam) {
     let cookie_user_id = getCookie('user_id');
-    console.log(cookie_user_id)
     if (mustLogin && !cookie_user_id) {
         //如果没登录，跳转到登录页
         hashHistory.push({
@@ -132,3 +131,4 @@ function getCookie(name) {
     let arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
     if (arr != null) return decodeURIComponent(arr[2]); return null;
 };
+

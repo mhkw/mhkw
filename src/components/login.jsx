@@ -2,14 +2,12 @@ import React from 'react'
 import { List, InputItem, Toast, Button, Modal } from 'antd-mobile';
 import { Link, hashHistory } from 'react-router';
 import QueueAnim from 'rc-queue-anim';
-import { CheckPhone,CheckKeywords } from './validate';
 
 import '../css/font/iconfont.css'
 
 const loginUrl = [
     require('../images/login_logo.png'),
     require('../images/loading.gif'),
-    // require('../images/login_psd.png')
 ]
 
 
@@ -30,6 +28,7 @@ export default class LoginView extends React.Component {
             console.log(res)
             if(res.success) {
                 hashHistory.goBack();
+                validate.setCookie('user_id',res.data.id);
             }else{
                 if(res.message == "图形验证码不对") {
                     Toast.info("图形验证码不正确", 1, null, false);

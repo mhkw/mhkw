@@ -104,6 +104,7 @@ module.exports = {
     plugins: [
         new webpack.ProvidePlugin({
             runPromise: ['../components/promise.jsx', 'default'],
+            validate: ['../components/validate.jsx', 'default'],
         }),
         new webpack.optimize.ModuleConcatenationPlugin(),
         // new webpack.optimize.CommonsChunkPlugin('shared.js'),
