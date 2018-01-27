@@ -1,6 +1,6 @@
 import React from 'react'
 import { List, InputItem, Toast, Button, WhiteSpace, Checkbox, Modal } from 'antd-mobile';
-import {Link} from 'react-router';
+import { Link, hashHistory} from 'react-router';
 import QueueAnim from 'rc-queue-anim';
 
 import '../css/font/iconfont.css'
@@ -35,8 +35,19 @@ export default class RegisterView extends React.Component {
         this.handleLoginSend = (res) => {   //注册或修改密码
             console.log(res,'注册或修改密码');
             if (res.success) {
-                hashHistory.goBack();
-                validate.setCookie('user_id', res.data.id);
+                if(this.state.type == 'reg') {
+                    Toast.info(res.message, 2, null, false);
+                    hashHistory.goBack();
+                    validate.setCookie('user_id', res.data.id);
+                }else{
+                    Toast.info(res.message, 2, null, false);
+                    setTimeout(()=>{
+                        hashHistory.push({
+                            pathname: '/login'
+                            // query: { form: 'promise',a:'444' }
+                        });
+                    },500);
+                }
             } else {
                 Toast.info(res.message, 2, null, false);
             }
@@ -100,7 +111,7 @@ export default class RegisterView extends React.Component {
             // console.log(this.state.url);
             runPromise('get_pass', {
                 username: this.state.value,
-                password: this.state.keywords,     
+                passwd: this.state.keywords,     
                 code: this.state.message,     //短信验证码
                 secode:this.state.code        //图形验证码
             }, this.handleLoginSend, false, "post");
@@ -136,8 +147,7 @@ export default class RegisterView extends React.Component {
     }
     onClose = key => () => {    //关闭图形验证码弹窗
         this.setState({
-            [key]: false,
-            code: ""
+            [key]: false
         });
     }
     numPlus(e) {     //图形验证码刷新

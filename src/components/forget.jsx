@@ -31,7 +31,8 @@ export default class ForgetView extends React.Component {
             console.log(res, '修改密码');
             if (res.success) {
                 hashHistory.goBack();
-                validate.setCookie('user_id', res.data.id);
+                
+                // validate.setCookie('user_id', res.data.id);
             } else {
                 Toast.info(res.message, 2, null, false);
             }
@@ -89,7 +90,7 @@ export default class ForgetView extends React.Component {
     }
     sendMessage() {     //发送短信验证码
         runPromise('get_reg_sms_code', {
-            "type": this.state.type,
+            "type": "get_pass",
             "mobile": this.state.value,
             "tokeen": this.state.code
         }, this.handleMsgSend, false, "post");

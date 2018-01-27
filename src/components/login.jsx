@@ -43,10 +43,15 @@ export default class LoginView extends React.Component {
         }
     }
     componentDidMount() {
-        
+        if(validate.getCookie('user_id')){
+            hashHistory.push({
+                pathname: '/',
+                query: { form: 'promise' }
+            });
+        };
     }
     showModal = key => (e) => {   //弹窗提示输入验证码
-        e.preventDefault(); // 修复 Android 上点击穿透
+        e.preventDefault();       // 修复 Android 上点击穿透
         if (this.state.value.replace(/(^\s*)|(\s*$)/g, '') == "" || this.state.keywords.replace(/(^\s*)|(\s*$)/g, '') == "" ) {
             Toast.info('用户名或者密码不能为空', 2,null,false);
         }else if(this.state.hasError == true || this.state.error == true) {

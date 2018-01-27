@@ -32,6 +32,9 @@ const ajaxURLList = {
     get_reg_status:"hkw_newapi/get_reg_status",     //判断是否注册过
     get_self_info:"hkw_newapi/get_self_info",       //获取个人信息
     get_user_info:"hkw_newapi/get_user_info",       //获取个人信息需登陆
+    get_frozen_cash:"payapi/get_frozen_cash",       //获取冻结资金
+    get_real_name_auth:"hkw_newapi/get_real_name_auth",       //获取实名认证状态
+    get_financial_list:"payapi/get_financial_list",       //获取交易记录
 }
 
 function get_user_list_ex(params) {
