@@ -134,3 +134,45 @@
 .server-button-modal.am-modal-wrap{
     position: inherit;
 }
+.create-server-popup{
+    padding: .32rem .48rem;
+    text-align: left;
+
+}
+.create-server-popup .txt-div{
+    color: #070707;
+    font-size: 16px;
+    margin-bottom: .36rem;
+}
+.create-server-popup .txt-div .num{
+    margin: 0 .16rem;
+    color: #20c8e1;
+}
+.create-server-popup .txt-div .right {
+    float: right;
+}
+.create-server-popup .txt-div .price{
+    color: #ff0909;
+    margin-left: 0.16rem;
+}
+.create-server-popup .create-server-button{
+    color: #fff;
+    background-color: #00a0e9;
+    border-radius: 0px;
+}
+.create-server-popup .create-server-button.create-server-button-active{
+    background-color: #0276ac;
+}
+html:not([data-scale]) .am-button.create-server-button::before{
+    border-radius: 0px;
+}
+.create-offer{
+    background-color: #f0f0f0;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+.create-offer-main .offer-item .price,
+.create-offer-main .offer-item .number{
+    text-align: right;
+}

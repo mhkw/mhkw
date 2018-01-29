@@ -59,12 +59,15 @@ export default class ServerCreate extends React.Component {
     }
 
     componentDidMount(){
-        
+        const maskDOM = document.getElementsByClassName("am-modal-mask");
+        if (maskDOM) {
+            maskDOM[0].style.display = "none";
+        }
     }
     componentDidUpdate() {
-        const maskDOM = document.getElementsByClassName("am-modal-mask")[0];
+        const maskDOM = document.getElementsByClassName("am-modal-mask");
         if (maskDOM) {
-            maskDOM.style.display = "none";
+            maskDOM[0].style.display = "none";
         }
     }
     //计算已经选中的数量和价格
@@ -178,7 +181,7 @@ export default class ServerCreate extends React.Component {
                 <div className="create-server-popup">
                     <div className="txt-div">
                             <span className="left">共<span className="num">{this.state.checkNum}</span>项服务</span>
-                            <span className="right">合计:<span className="price">{this.state.checkPrice}</span></span>
+                            <span className="right">合计:<span className="price">{this.state.checkPrice + "元"}</span></span>
                     </div>
                     <Button
                         onClick={this.onClickCreateServer}

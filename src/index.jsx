@@ -19,6 +19,7 @@ import Hkcircle from './components/hkCircle';
 import Search from './components/Search';
 import CreatServer from './components/serviceCreate';
 import AddServer from './components/AddServer';
+import CreateOffer from './components/CreateOffer';
 import Mine from './components/mine';
 import Account from './components/account';
 import OrderList from './components/orderList';
@@ -77,5 +78,6 @@ ReactDOM.render(
         </Route>
         <Route path="/creatServer" component={CreatServer} />
         <Route path="/addServer" component={AddServer} />
+        <Route path="/createOffer" component={CreateOffer} />
     </Router>
     , document.getElementById('container'));
