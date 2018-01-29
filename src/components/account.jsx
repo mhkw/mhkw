@@ -100,7 +100,7 @@ export default class Account extends React.Component {
                     <div className="accountListDetails">
                             {console.log(this.state.financialList.item_list , 1111)}
                             
-                        <AccountListDetails item_list={this.state.financialList.item_list}></AccountListDetails>
+                            <AccountListDetails item_list={this.state.financialList.item_list} blance={ this.state.blance }></AccountListDetails>
                     </div>
                 </div>
                 ] : null}

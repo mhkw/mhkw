@@ -61,12 +61,12 @@ export const AccountListDetails = (props) => (
             props.item_list.map(function (value, idx) {                
                 return <li>
                     <div className="fn-left">
-                        <p style={{ fontSize: "16px" }}>{ value.type }</p>
-                        <p>余额: {value.numLeave}</p>
+                        <p style={{ fontSize: "16px" }}>{ value.cause }</p>
+                        <p>余额: {props.blance}</p>
                     </div>
                     <div className="fn-right accountListDetailsRight">
-                        <p style={{ color: "#888888" }}>{value.time}</p>
-                        <p style={{ fontWeight: "800", fontSize: "16px" }}>{value.showMoney}</p>
+                        <p style={{ color: "#888888" }}>{value.add_time}</p>
+                        <p style={{ fontWeight: "800", fontSize: "16px" }}>{value.price}</p>
                     </div>
                 </li>
             })
