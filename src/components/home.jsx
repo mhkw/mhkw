@@ -19,6 +19,7 @@ const loginUrl = [
     require('../images/home/lei8.png'),
     require('../images/touxiang.png'),
     require('../images/homePic.png'),
+    require('../images/mainTop.png'),
 ]
 let realData = [];
 
@@ -212,7 +213,9 @@ export default class HomeView extends React.Component {
 
         return (
             <div className="homeWrap">
-                <div className="homeWrapTop">
+                <div className="homeWrapTop" style={{
+                    background: "url("+loginUrl[10]+") no-repeat center center / 100% 100%"
+}}>
                     <div className="indexNav">
                         <NavBar
                             mode="light"

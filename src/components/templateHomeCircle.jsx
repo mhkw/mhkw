@@ -5,7 +5,7 @@ import { Link } from 'react-router';
  * @param {*} props 
  */
 
-const ItemPicLists = (props) => (
+export const ItemPicLists = (props) => (
     <ul>
         {
             props.works_list.slice(0, 4).map(function (value, idx) {
@@ -21,7 +21,7 @@ const ItemPicLists = (props) => (
 /**
  * 设计师个人信息展示
  */
-const PersonalMsg = (props) => (
+export const PersonalMsg = (props) => (
     <div className="itemsTop">
         <div className="itemsTopPic fn-left">
             <Link to="/">
@@ -43,30 +43,30 @@ const PersonalMsg = (props) => (
     </div>
 )
 // 分隔块
-const Jiange = (props) => (
+export const Jiange = (props) => (
     <div className={props.name}>
 
     </div>
 )
 //分隔线
-const Line = (props) => (
+export const Line = (props) => (
     <div className={props.border}>
 
     </div>
 )
 
-const AccountListDetails = (props) => (
+export const AccountListDetails = (props) => (
     <ul>
         {
-            props.account.map(function (value, idx) {
+            props.item_list.map(function (value, idx) {                
                 return <li>
                     <div className="fn-left">
-                        <p style={{ fontSize: "16px" }}>{value.type}</p>
-                        <p>余额: {value.numLeave}</p>
+                        <p style={{ fontSize: "16px" }}>{ value.cause }</p>
+                        <p>余额: {props.blance}</p>
                     </div>
                     <div className="fn-right accountListDetailsRight">
-                        <p style={{ color: "#888888" }}>{value.time}</p>
-                        <p style={{ fontWeight: "800", fontSize: "16px" }}>{value.showMoney}</p>
+                        <p style={{ color: "#888888" }}>{value.add_time}</p>
+                        <p style={{ fontWeight: "800", fontSize: "16px" }}>{value.price}</p>
                     </div>
                 </li>
             })
@@ -74,7 +74,7 @@ const AccountListDetails = (props) => (
     </ul>
 )
 //需求方订单（服务订单/约见订单）
-const serverOrderOwn = (props) => (
+export const serverOrderOwn = (props) => (
     <ul>
         {
             props.orderList.map(function (value,idx) {
@@ -144,7 +144,7 @@ const serverOrderOwn = (props) => (
         }
     </ul>
 )
-const serverOrderMeet = (props) => (
+export const serverOrderMeet = (props) => (
     props.meetList.map(function (params) {
         return <li className="clearfix">
             <h3>技术咨询约见服务<span className="fn-right">约见订单</span></h3>
@@ -177,4 +177,35 @@ const serverOrderMeet = (props) => (
 //服务方订单
 
 
-export { ItemPicLists, PersonalMsg, Jiange, Line, AccountListDetails};
+//个人中心个人信息
+export const PersonalCenterMsg = (props) => (
+    <ul className="mineThingsTodo">
+        <li>
+            <Link to="/account">
+                <p className="num">{props.PersonalCenterAccount}</p>
+                <p>账户</p>
+            </Link>
+        </li>
+        <li>
+            <Link to="/quoteList">
+                <p className="num"><i style={{ color: "red" }}>{props.working_quote_count}</i>/{props.quote_count}</p>
+                <p>报价</p>
+            </Link>
+        </li>
+        <li>
+            <Link to="/orderList">
+                <p className="num"><i style={{ color: "red" }}>{props.working_order_count}</i>/{props.order_count}</p>
+                <p>订单</p>
+            </Link>
+        </li>
+    </ul>
+)
+
+// export { 
+//     ItemPicLists, 
+//     PersonalMsg, 
+//     Jiange, 
+//     Line, 
+//     AccountListDetails, 
+//     PersonalCenterMsg
+// };

@@ -259,7 +259,35 @@
             }
         }
     }
-}           
+}       
+//输入验证码样式
+.pressYzmWrap {
+    img {
+        height: .9rem;
+        width: 2.5rem;
+        border-top: 2px solid #F2FBFE;
+        border-bottom: 2px solid #F2FBFE;
+    }
+    .pressYzm {
+        padding-left: 0 !important;
+        height: .8rem !important;
+        .am-list-line {
+            padding-right: 0;
+            .am-input-control {
+                input {
+                    line-height: .86rem;
+                    width: 3.9rem;
+                    font-size: 14px;
+                    text-transform: uppercase;
+                    padding-left: .133333rem;
+                    box-sizing: border-box;
+                    border: 1px solid #ccc;
+                }
+            }
+        }
+    }    
+}
+
 .forgetNav {
     position: fixed;
     top: 0;
@@ -299,7 +327,6 @@
     .homeWrapTop {
         height: 4.533333rem;
         width: 100%;
-        background: url('../images/mainTop.png') no-repeat center center / 100% 100%;
         font-size: 16px;
         a {
             color: #fff;        
