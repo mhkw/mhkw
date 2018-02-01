@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavBar, Icon, Button, WingBlank, Flex} from 'antd-mobile';
+import { NavBar, Icon, Button, WingBlank, Flex, InputItem} from 'antd-mobile';
 import { hashHistory, Link } from 'react-router';
 
 const OfferItem = (props) => (
@@ -19,7 +19,8 @@ export default class CreateOffer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            pure_price: "3560.00",
+            remarks: "",
         }
     }
     render() {
@@ -36,9 +37,31 @@ export default class CreateOffer extends React.Component {
                     <OfferItem
                         title={"PS简单处理图片"}
                         price={"2000.00/天"}
+                        remarks={"海报创意，海报定制，创意，营销广告海报创意，海报定制，创意，营销广告海报创意，海报定制，创意，营销广告"}
+                        number={"× 1"}
+                    />
+                    <OfferItem
+                        title={"PS简单处理图片"}
+                        price={"2000.00/天"}
                         remarks={"海报创意，海报定制，创意，营销广告"}
                         number={"× 1"}
                     />
+                    <div className="tax-top-rate-box">
+                        <p className="tax-top clearfix">
+                            <span className="name">税率</span>
+                            <span className="price">{this.state.pure_price + "元"}</span>
+                        </p>
+                        <p className="tax-bottom">6%税率</p>
+                    </div>
+                    <div className="sum-price-box clearfix">
+                        <span className="left-title">总计</span>
+                        <span className="right-sum-price">5632.00</span>
+                    </div>
+                    <InputItem
+                        placeholder="auto focus"
+                        value={this.state.remarks}
+                        onChange={(v) => { this.setState({ remarks: v})}}
+                    >标题</InputItem>
                 </div>
             </div>
         )

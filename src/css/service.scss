@@ -176,3 +176,71 @@ html:not([data-scale]) .am-button.create-server-button::before{
 .create-offer-main .offer-item .number{
     text-align: right;
 }
+
+.create-offer-main {
+    background-color: #fff;
+    padding: .213333rem;
+    margin-top: .133333rem; 
+    margin-bottom: .133333rem; 
+}
+.create-offer-main .offer-item{
+    background-color: #f8f8fa;
+    padding: .36rem;
+    margin-bottom: .133333rem;
+    line-height: .76rem;
+} 
+.create-offer-main .offer-item .title{
+    font-size: 16px;
+    color: #000;
+}
+.create-offer-main .offer-item .price{
+    font-size: 14px;
+    color: #ff1212;
+}
+.create-offer-main .offer-item .remarks{
+    font-size: 14px;
+    color: #8b8b8b;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+.create-offer-main .offer-item .number{
+    font-size: 14px;
+    color: #5a5a5b;
+}
+.create-offer-main .tax-top-rate-box{
+    background-color: #f8f8fa;
+    padding: .36rem;
+    margin-bottom: .133333rem;
+}
+.create-offer-main .tax-top-rate-box .name{
+    font-size: 18px;
+    color: #050505;
+}
+.create-offer-main .tax-top-rate-box .price{
+    font-size: 16px;
+    color: #858585;
+    float: right;
+    line-height: 1.6;
+}
+.create-offer-main .tax-top-rate-box .tax-bottom{
+    font-size: 14px;
+    color: #858585;
+    text-align: right;
+    margin-top: .16rem;
+    // line-height: 1.6;
+}
+.create-offer-main .sum-price-box{
+    margin: .4rem .36rem;
+}
+.create-offer-main .sum-price-box .left-title{
+    font-size: 18px;
+    color: #050505;
+}
+.create-offer-main .sum-price-box .right-sum-price{
+    float: right;
+    font-size: 16px;
+    color: #494949;
+}
