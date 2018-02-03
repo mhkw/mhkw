@@ -154,6 +154,9 @@ export default class CreateOffer extends React.Component {
                     </div>
                 </div>
                 <div className="create-offer-foot">
+                    <div className="discount-select-div">
+                        
+                    </div>
                     <div className="discount">
                         <span className="unit">
                             <span className="title">总计:</span>
