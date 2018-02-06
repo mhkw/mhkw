@@ -27,6 +27,8 @@ export default class CreateOffer extends React.Component {
             project_name: "",
             cut_off_date: "",
             cut_off_day: "",
+            inputDiscountPrice: "", //用户输入的优惠价格
+            howManyDiscount: "9.1",//几折优惠
         }
     }
     onOkDatePicker(date) {
@@ -154,9 +156,39 @@ export default class CreateOffer extends React.Component {
                     </div>
                 </div>
                 <div className="create-offer-foot">
-                    <div className="discount-select-div">
-                        
-                    </div>
+                    {/* <div className="discount-select-div">
+                        <div className="discount-left">
+                            <span className="dot-box"><span className="dot"></span></span>
+                            <span className="txt">设置优惠</span>
+                        </div>
+                        <InputItem
+                            className="discount-middle"
+                            type="money"
+                            moneyKeyboardAlign="left"
+                            placeholder=""
+                            value={this.state.inputDiscountPrice}
+                            onChange={(val) => { this.setState({ inputDiscountPrice: val }) }}
+                        ></InputItem>
+                        <span className="how-many-discount"></span>
+                    </div> */}
+                    <Flex className="discount-select-div">
+                        <Flex.Item className="discount-left" style={{ "flex": "1" }}>
+                            <span className="dot-box"><span className="dot"></span></span>
+                            <span className="txt">设置优惠</span>
+                        </Flex.Item>
+                        <Flex.Item className="discount-middle" style={{ "flex": "1" }}>
+                            <InputItem
+                                className="discount-middle"
+                                type="money"
+                                moneyKeyboardAlign="left"
+                                placeholder=""
+                                value={this.state.inputDiscountPrice}
+                                onChange={(val) => { this.setState({ inputDiscountPrice: val }) }}
+                                onBlur={() => { console.log("blur") }}
+                            ></InputItem>
+                        </Flex.Item>
+                        <Flex.Item className="how-many-discount">约{this.state.howManyDiscount}折</Flex.Item>
+                    </Flex>
                     <div className="discount">
                         <span className="unit">
                             <span className="title">总计:</span>

@@ -26,6 +26,7 @@ import OrderList from './components/orderList';
 import QuoteList from './components/quoteList';
 
 import TempTest from './components/TempTest';
+import ConfirmOffer from './components/ConfirmOffer';
 
 import './css/font/iconfont.css'
 
@@ -81,6 +82,7 @@ ReactDOM.render(
         <Route path="/creatServer" component={CreatServer} />
         <Route path="/addServer" component={AddServer} />
         <Route path="/createOffer" component={CreateOffer} />
+        <Route path="/confirmOffer" component={ConfirmOffer} />
         <Route path="/TempTest" component={TempTest} />
     </Router>
     , document.getElementById('container'));

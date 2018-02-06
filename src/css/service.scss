@@ -383,3 +383,174 @@ html:not([data-scale]) .am-button.create-server-button::before{
 html:not([data-scale]) .am-button.create-offer-button::before{
     border-radius: 0px;
 }
+.create-offer-foot .discount-select-div{
+    padding: .2rem 0;
+    // height: 60px;
+}
+.discount-select-div .discount-left{
+    // display: inline-block;
+    // width: 35%;
+}
+.discount-select-div .discount-left .txt{
+    font-size: 18px;
+    color: #565656;
+    margin-left: .2rem;
+    vertical-align: top;
+}
+.discount-select-div .discount-left .dot-box{
+    display: inline-block;
+    width: .533333rem;
+    height: .533333rem;
+    border: 1px solid #999;
+    // background-color: #000;
+    border-radius: 50%;
+    position: relative;
+}
+.discount-select-div .discount-left .dot-box .dot{
+    display: inline-block;
+    width: .4rem;
+    height: .4rem;
+    border-radius: 50%;
+    background-color: #00a0e9;
+    // top: 50%;
+    // left: 50%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    // transform: translateX(-50%) translateY(-50%);
+}
+.discount-select-div .discount-middle{
+    // display: inline-block;
+    // width: 35%;
+    height: .8rem;
+    min-height: .8rem;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+}
+.create-offer-foot .how-many-discount{
+    // display: inline-block;
+    // width: 25%;
+    text-align: center;
+    font-size: 15px;
+    color: #4b4b4b;
+}
+@media screen and (max-width: 350px) {
+    .discount-select-div .discount-left .txt{
+        font-size: 16px;
+    }
+}
+.confirm-offer{
+    background-color: #f0f0f0;
+    // height: 100%;
+    position: absolute;
+    width: 100%;
+}
+.confirm-offer-remarks-div{
+    background-color: #f8f8fa;
+    padding: .36rem;
+    margin-bottom: .133333rem;
+    min-height: 1.6rem;
+}
+.confirm-offer-remarks-div .title{
+    float: left;
+    font-size: 18px;
+    color: #050505;
+}
+.confirm-offer-remarks-div .remarks{
+    padding-left: 50px;
+    font-size: 16px;
+    color: #858585;
+}
+.create-offer-main .tax-top-rate-box.confirm-offer-style{
+        background-color: transparent;
+}
+.create-offer-main .tax-top-rate-box.confirm-offer-style .name{
+    font-size: 16px;
+}
+.create-offer-main .tax-top-rate-box.confirm-offer-style .price.subtotal{
+    color: #464646;
+}
+.create-offer-main .tax-top-rate-box.confirm-offer-style .price.discount{
+    color: #ff1212;
+    font-size: 18px;
+}
+.create-offer-main .tax-top-rate-box.confirm-offer-tax .name{
+    font-size: 16px;
+    color: #858585;
+}
+.create-offer-main .tax-top-rate-box.confirm-offer-tax .tax-bottom{
+    font-size: 16px;
+    color: #858585;
+}
+.create-offer-main .tax-top-rate-box.confirm-offer-tax .txt{
+    display: inline-block;
+    width: 40px;
+    text-align: right;
+}
+.confirm-offer .confirm-offer-customer{
+    background-color: #fff;
+    padding: .2rem .4rem 0;
+    margin-bottom: .2rem;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+.confirm-offer .confirm-offer-customer .left{
+    font-size: 16px;
+    color: #858585;
+    margin-right: .3rem;
+    float: left;
+}
+.confirm-offer .confirm-offer-customer .right{
+    font-size: 14px;
+    color: #020202;
+    text-align: right;
+}
+
+.confirm-offer-customer-title{
+    font-size: 16px;
+    color: #000;
+    padding: .2rem .4rem .1rem;
+}
+.confirm-offer-customer .customer-box p{
+    height: 1.2rem;
+    line-height: 1.2rem;
+}
+.ellipsis{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+.ellipsis-lines{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}
+.confirm-offer-customer .customer-box .right .name{
+    vertical-align: top;
+    margin-right: 5px;
+}
+.confirm-offer-customer .customer-box.customer .company{
+    color: #858585;
+}
+.confirm-offer-foot .confirm-offer-button {
+    color: #fff;
+    background-color: #00a0e9;
+    border-radius: 0px;
+}
+.confirm-offer-foot .confirm-offer-button-active{
+    background-color: #0a77aa;
+}
+.confirm-offer-foot .create-offer-button-active{
+    background-color: #0a77aa;
+}
+.confirm-offer-foot {
+    background-color: #fff;
+    padding: .3rem .4rem;
+}
+html:not([data-scale]) .am-button.confirm-offer-button::before{
+    border-radius: 0px;
+}
