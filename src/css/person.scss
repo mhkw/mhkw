@@ -169,10 +169,17 @@
                 border-bottom: 1px solid #ECECEC;
                 overflow: hidden;
                 padding: .4rem .533333rem;
-                height: 1.84rem;
+                height: 2rem;
                 box-sizing: border-box;
                 p {
                     line-height: 20px;
+                }
+                p.blance {
+                    font-size: 15px;
+                    margin-top: .2rem;
+                }
+                .fn-left{
+                    max-width: 70%;
                 }
             }
             .accountListDetailsRight {

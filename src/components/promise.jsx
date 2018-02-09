@@ -35,6 +35,8 @@ const ajaxURLList = {
     get_frozen_cash:"payapi/get_frozen_cash",       //获取冻结资金
     get_real_name_auth:"hkw_newapi/get_real_name_auth",       //获取实名认证状态
     get_financial_list:"payapi/get_financial_list",       //获取交易记录
+    add_service_template: "quoteApi/add_service_template", //报价-新增服务模板
+    get_self_service_template_list: "quoteApi/get_self_service_template_list", // 报价-获取自己的服务报价模板列表
 }
 
 function get_user_list_ex(params) {

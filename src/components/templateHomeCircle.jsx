@@ -58,15 +58,21 @@ export const Line = (props) => (
 export const AccountListDetails = (props) => (
     <ul>
         {
-            props.item_list.map(function (value, idx) {                
+            props.item_list.map(function (value, idx) {    
+                let newDate = new Date(parseInt(value.add_time) * 1000);
+                let year = newDate.getFullYear();
+                let month = newDate.getMonth() + 1;
+                let day = newDate.getDate();
+                // let add_time_format = year + '-' + month + '-' + day;   
+                let add_time_format = `${year}-${month}-${day}`;         
                 return <li>
                     <div className="fn-left">
-                        <p style={{ fontSize: "16px" }}>{ value.cause }</p>
-                        <p>余额: {props.blance}</p>
+                        <p className="ellipsis" style={{ fontSize: "16px" }}>{ value.cause }</p>
+                        <p className="blance">余额: {props.blance}</p>
                     </div>
                     <div className="fn-right accountListDetailsRight">
-                        <p style={{ color: "#888888" }}>{value.add_time}</p>
-                        <p style={{ fontWeight: "800", fontSize: "16px" }}>{value.price}</p>
+                        <p style={{ color: "#888888", fontSize: "14px" }}>{add_time_format}</p>
+                        <p className="ellipsis" style={{ fontWeight: "800", fontSize: "16px" }}>{value.price > 0 ? '+' + value.price : value.price}</p>
                     </div>
                 </li>
             })

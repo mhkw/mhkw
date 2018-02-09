@@ -554,3 +554,18 @@ html:not([data-scale]) .am-button.create-offer-button::before{
 html:not([data-scale]) .am-button.confirm-offer-button::before{
     border-radius: 0px;
 }
+.server-button-modal .am-modal-transparent .am-modal-content .am-modal-body {
+    padding: 0;
+}
+.server-button-modal .am-modal-transparent .am-modal-content {
+    padding-top: 0;
+}
+.serverButton .am-button a{
+    color: #009AE8;
+}
+.serverButton .am-button.am-button-active a{
+    color: #fff;
+}
+.server-item .am-checkbox-item{
+    padding-left: 0;
+}

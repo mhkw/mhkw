@@ -48,6 +48,16 @@ export default class CreateOffer extends React.Component {
     onClickCreateOffer() {
         console.log("click create offer")
     }
+    hikeUpKeyboard = (param) => {
+        let DOMCover = this.refs.coverCustomKeyboard;
+        let DOMInput = ReactDOM.findDOMNode(this.refs.cover);
+        DOMInput.scrollIntoView(true)
+        if (param) {
+            DOMCover.style.display = "block";
+        } else {
+            DOMCover.style.display = "none";
+        }
+    }
     render() {
         return (
             <div className="create-offer" key="1">
@@ -178,13 +188,15 @@ export default class CreateOffer extends React.Component {
                         </Flex.Item>
                         <Flex.Item className="discount-middle" style={{ "flex": "1" }}>
                             <InputItem
+                                ref="cover"
                                 className="discount-middle"
-                                type="money"
+                                type="number"
                                 moneyKeyboardAlign="left"
                                 placeholder=""
                                 value={this.state.inputDiscountPrice}
                                 onChange={(val) => { this.setState({ inputDiscountPrice: val }) }}
-                                onBlur={() => { console.log("blur") }}
+                                // onFocus={() => { this.hikeUpKeyboard(true) } }
+                                // onBlur={() => { this.hikeUpKeyboard(false) }}
                             ></InputItem>
                         </Flex.Item>
                         <Flex.Item className="how-many-discount">约{this.state.howManyDiscount}折</Flex.Item>
@@ -201,10 +213,12 @@ export default class CreateOffer extends React.Component {
                         <span className="tax-unit">(含3%税票)</span>
                     </div>
                     <Button
+                        id="create-offer-foot"
                         onClick={this.onClickCreateOffer}
                         className="create-offer-button"
                         activeClassName="create-offer-button-active"
                     >生成报价单</Button>
+                    {/* <div ref="coverCustomKeyboard" style={{"height":"200px"}} className="cover-customKeyboard"></div> */}
                 </div>
             </div>
         )

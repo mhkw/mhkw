@@ -16,12 +16,13 @@ export default class Mine extends React.Component {
             border: "line",
             hide: false,
             personCenter:{
-                nick_name:'用户昵称',
+                nick_name: sessionStorage.getItem("nick_name") || '用户昵称',
                 total_financial:0.00,
                 working_order_count:0,
                 order_count:0,
                 working_quote_count:0,
-                quote_count:0
+                quote_count:0,
+                path_thumb: sessionStorage.getItem("path_thumb")
             }
         };
         
@@ -41,6 +42,12 @@ export default class Mine extends React.Component {
             this.setState({
                 personCenter: response.data.data
             })
+            if (response.data.data.nick_name) {
+                sessionStorage.setItem("nick_name", response.data.data.nick_name)
+            }
+            if (response.data.data.path_thumb) {
+                sessionStorage.setItem("path_thumb", response.data.data.path_thumb)
+            }
         })
         .catch((error) => {
             console.log(error , "错误");

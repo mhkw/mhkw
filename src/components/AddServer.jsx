@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavBar, Icon, WingBlank, List, InputItem, Flex, Popover, TextareaItem } from 'antd-mobile';
+import { NavBar, Icon, WingBlank, List, InputItem, Flex, Popover, TextareaItem, Toast } from 'antd-mobile';
 import { hashHistory } from 'react-router';
 
 const myImg = src => <img src={`https://gw.alipayobjects.com/zos/rmsportal/${src}.svg`} className="am-icon am-icon-xs" alt="" />;
@@ -14,6 +14,15 @@ export default class AddServer extends React.Component {
             Popover_visible: false, //下拉框显示或隐藏的状态
             describe:""
         }
+        this.handleAddService = (res) => {
+            if (res.success) {
+                Toast.success("添加服务成功", 1,()=>{
+                    hashHistory.goBack();
+                });
+            } else {
+                Toast.fail(res.message, 2);
+            }
+        }
     }
     onPopoverSelect = (opt) => {
         this.setState({
@@ -21,6 +30,28 @@ export default class AddServer extends React.Component {
             unit: opt.props.children,
         });
     };
+    addService = () => {
+        let { server_name, unit_price, unit, describe} = this.state;
+        if (!server_name) {
+            Toast.info("请输入服务名称",1);
+            return;
+        }
+        if (!unit_price) {
+            Toast.info("请输入服务单价",1);
+            return;
+        }
+        if (!server_name) {
+            Toast.info("请输入服务单位",1);
+            return;
+        }
+        //新增服务模板
+        runPromise('add_service_template', {
+            Name: server_name,
+            unit_price: unit_price,
+            unit: unit,
+            Description: describe,
+        }, this.handleAddService, true);
+    }
     render() {
         return (
             <div className="add-server" key="1">
@@ -30,7 +61,7 @@ export default class AddServer extends React.Component {
                     icon={<Icon type="left" size="md" color="#108ee9" />}
                     onLeftClick={() => hashHistory.goBack()}
                     leftContent={<span style={{ fontSize: "15px" }}>返回</span>}
-                    rightContent={<span style={{ color: "#108ee9", fontSize: "16px" }}>保存</span>}
+                    rightContent={<span onClick={this.addService} style={{ color: "#108ee9", fontSize: "16px" }}>保存</span>}
                 >添加服务</NavBar>
                 <InputItem
                     className="server-name"
@@ -50,6 +81,7 @@ export default class AddServer extends React.Component {
                             moneyKeyboardAlign ="left"
                             value={this.state.unit_price}
                             onChange={(v) => { this.setState({ unit_price: v }) }}
+                            onBlur={(val) => { let price = (val - 0).toFixed(2); isNaN(price) || price == 0 ? (Toast.offline("金额错误", 1), this.setState({ unit_price: "" })) : this.setState({ unit_price: price }) }}
                         >单价</InputItem>
                     </Flex.Item>
                     <Flex.Item className="flex3">

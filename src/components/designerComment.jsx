@@ -3,7 +3,7 @@ import React from 'react';
 import { hashHistory, Link } from 'react-router';
 import { Toast, NavBar, Icon, Flex, TextareaItem } from 'antd-mobile';
 import QueueAnim from 'rc-queue-anim';
-import axios from 'axios';
+
 
 import PhotoSwipeItem from './photoSwipeElement.jsx';
 import CommentItem from './CommentItem.jsx';

@@ -18,7 +18,7 @@ const ServerItem = (props) => (
             className="my-stepper"
             showNumber
             min={1}
-            max={100000}
+            max={10000}
             step={1}
             value={props.number}
             onChange={(val) => props.onChangeThisNumber(val, props.index)}
@@ -56,17 +56,38 @@ export default class ServerCreate extends React.Component {
                 isChecked: false
             }],
         };
+        //获取自己的服务报价模板列表
+        this.handleGetSelfService = (res) => {
+            console.log(res);
+            if (res.success) {
+                let item_list = res.data.item_list;
+                item_list.map((value,index,elem)=>{
+                    elem[index].number = 1;
+                    elem[index].isChecked = false;
+                    elem[index].server_name = value.Name;
+                    elem[index].describe = value.Description;
+                })
+                this.setState({ serverList: item_list});
+            } else {
+                Toast.fail(res.message, 2);
+            }
+        }
     }
 
     componentDidMount(){
         const maskDOM = document.getElementsByClassName("am-modal-mask");
-        if (maskDOM) {
+        if (maskDOM.length) {
             maskDOM[0].style.display = "none";
         }
+        //新增服务模板
+        runPromise('get_self_service_template_list', {
+            offset: 0,
+            limit: 10,
+        }, this.handleGetSelfService, true);
     }
     componentDidUpdate() {
         const maskDOM = document.getElementsByClassName("am-modal-mask");
-        if (maskDOM) {
+        if (maskDOM.length) {
             maskDOM[0].style.display = "none";
         }
     }
@@ -102,9 +123,15 @@ export default class ServerCreate extends React.Component {
     onChangeThisNumber = (val, index) => {
         let value = (isNaN(val) || val == "" ) ? "" : parseInt(val);
         const newServerList = update(this.state.serverList, { [index]: { number: { $set: value } } });
-        this.setState({
-            serverList: newServerList
-        }, this.countNumberAndPrice)
+        // this.setState({
+        //     serverList: newServerList
+        // }, this.countNumberAndPrice)
+        let token =  setTimeout(() => {
+            this.setState({
+                serverList: newServerList
+            }, this.countNumberAndPrice)
+            clearTimeout(token);
+        }, 200);
     }
     // handleToggle() {
     //     this.setState(({ show }) => ({
@@ -124,10 +151,16 @@ export default class ServerCreate extends React.Component {
                     icon={<Icon type="left" />}
                     onLeftClick={() => hashHistory.goBack()}
                     leftContent={<span style={{fontSize:"15px"}}>返回</span>}
-                    rightContent={[
-                        <i className="iconfont icon-tianjiajiahaowubiankuang" style={{ color:"#A8A8A8",marginRight:"3px"}}></i>,
-                        <span style={{ color: "#000", fontSize: "14px"}}>添加</span>
-                    ]}
+                    // rightContent={[
+                    //     <i className="iconfont icon-tianjiajiahaowubiankuang" style={{ color:"#A8A8A8",marginRight:"3px"}}></i>,
+                    //     <span style={{ color: "#000", fontSize: "14px"}}>添加</span>
+                    // ]}
+                    rightContent={
+                        <Link to="/addServer">
+                            <i className="iconfont icon-tianjiajiahaowubiankuang" style={{ color: "#A8A8A8", marginRight: "3px" }}></i>
+                            <span style={{ color: "#000", fontSize: "14px" }}>添加</span>
+                        </Link>
+                    }
                 >报价</NavBar>
                 <div className="serverStep">
                     <ul>
@@ -166,7 +199,7 @@ export default class ServerCreate extends React.Component {
                         style={{ margin: "0 2.3rem", color: "#009AE8", border:"1px solid #009AE8",height:"1.2rem"}}
                         activeStyle={{ backgroundColor: "#259EEF", color: "#fff",border:"1px solid #259EEF"}}
                     >
-                        添加服务内容
+                        <Link to="/addServer">添加服务内容</Link>
                     </Button>
                 </div>
                 <Modal
