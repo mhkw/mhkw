@@ -20,7 +20,7 @@ export default class LoginView extends React.Component {
             modal: false,
             animating:false,
             value: '15657185156',
-            keywords:'luolei1992',
+            keywords:'luolei251537',
             code:"",
             codeNum:2
         };
@@ -43,12 +43,12 @@ export default class LoginView extends React.Component {
         }
     }
     componentDidMount() {
-        if(validate.getCookie('user_id')){
-            hashHistory.push({
-                pathname: '/',
-                query: { form: 'promise' }
-            });
-        };
+        // if(validate.getCookie('user_id')){
+        //     hashHistory.push({
+        //         pathname: '/',
+        //         query: { form: 'promise' }
+        //     });
+        // };
     }
     showModal = key => (e) => {   //弹窗提示输入验证码
         e.preventDefault();       // 修复 Android 上点击穿透

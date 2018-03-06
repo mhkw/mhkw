@@ -1,11 +1,18 @@
 import React from 'react';
-import { NavBar, Icon, SegmentedControl, WingBlank } from 'antd-mobile';
+import { NavBar, Icon, SegmentedControl, WingBlank, Tabs } from 'antd-mobile';
 import { hashHistory } from 'react-router';
 import { Line,Jiange } from './templateHomeCircle';
+import { OrderItemList } from "./TemplateView";
 import QueueAnim from 'rc-queue-anim';
 
 // require("../css/person.scss");
-const urls = [require('../images/touxiang.png')]
+const urls = [require('../images/touxiang.png')];
+const tempNull = require('../images/tempNull2.png'); //空状态的图片
+
+let tabsLabel = [
+    { title: '进行中的订单', sub: '1' },
+    { title: '历史订单', sub: '2' },
+];
 
 export default class Account extends React.Component {
     constructor(props) {
@@ -13,6 +20,7 @@ export default class Account extends React.Component {
         this.state = {
             border:"line",
             show:true,
+            selectedSegmentIndex: 0,
             account:[
                 {
                     type:"充值",
@@ -26,39 +34,58 @@ export default class Account extends React.Component {
                     time: "2017-12-20",
                     showMoney: "-88.90"
                 }
-            ]
+            ],
+            item_list_ing: [], //进行中的订单
+            item_list_end: [], //历史订单
         }
         this.handleSend = (res,fg) =>{
-            console.log(res);            
-            if(res.success) {
-                if(fg == "a") {
-                    // console.log(res);
-                }
-            }else{
-                // console.log(res,"失败");
+            // console.log(res,fg);            
+            if (fg == 2) {
+                this.setState({
+                    item_list_ing: res.data.item_list
+                });
+            }
+            if (fg == 5) {
+                this.setState({
+                    item_list_end: res.data.item_list
+                });
             }
         }
     }
     componentDidMount(){
-        runPromise("get_main_project_list", {
-            "user_id": "70220",
-            "per_page": 5,
-            "page": 1,
-            /*quote_status：2表示订单*/
-            "quote_status": 2,
-            /*is_quoter：0表示服务方*/
-            "is_quoter": 0,
-            "type": "",
-            stage_id: "",
-            send_time: "",
-            project_name: "" 
-        }, this.handleSend, false, "post", "a");
+        this.getMainProjectList(0, 2);  //进行中的订单
+        this.getMainProjectList(0, 5);  //历史订单
     }
-    onChange = (e) => {
-        console.log(`selectedIndex:${e.nativeEvent.selectedSegmentIndex}`);
+    onChangeControl = (e) => {
+        let selectedSegmentIndex = e.nativeEvent.selectedSegmentIndex;
+        this.getMainProjectList(selectedSegmentIndex, 2);  //进行中的订单
+        this.getMainProjectList(selectedSegmentIndex, 5);  //历史订单
+        this.setState({ selectedSegmentIndex })
     }
     onValueChange = (value) => {
         console.log(value);
+    }
+    /**
+     * ajax获取数据-报价-获取报价列表
+     * 
+     * @author ZhengGuoQing
+     * @param {any} is_quoter 是否报价方（乙方），0否（甲方），1是（乙方）
+     * @param {any} quote_status 报价阶段，0草稿，1待处理，2报价成功，3报价失败，4取消报价，5报价超时，可不填，表示全部 (这里只传空字符串表示进行中，传5表示历史订单)
+     * @param {number} stage_id 项目状态，1甲方付首款，2乙方作业中，3甲方付尾款，4双方互评5，项目完成，可不填，表示全部
+     * @param {number} [per_page=10] 每页大小，默认为10
+     * @param {number} [page=1] 第几页，默认为1（从1开始计数）
+     * @memberof Account
+     */
+    getMainProjectList(is_quoter, stage_id, per_page = 10, page = 1) {
+        runPromise("get_main_project_list", {
+            "per_page": per_page,
+            "page": page,
+            /*quote_status：2表示订单*/
+            "quote_status": 2,
+            /*is_quoter：0表示服务方*/
+            "is_quoter": is_quoter,
+            stage_id: stage_id, //项目状态，进度
+        }, this.handleSend, true, "post", stage_id);
     }
     render() {
         return(
@@ -86,194 +113,58 @@ export default class Account extends React.Component {
                                 values={['作为需求方', '作为服务方']}
                                 tintColor={'#606060'}
                                 style={{ height: '28px', width: '250px' }}
+                                onChange={this.onChangeControl}
+                                selectedIndex={this.state.selectedSegmentIndex}
                             />
                         </WingBlank>
                     </NavBar>
-                    <div className="orderIng">
-                        <p>进行中的订单</p>
-                    </div>
-                    <div className="orderItemList" >
-                        <div className="orderItem">
-                            <div className="orderItemLis">
-                                <ul>
-                                    <li className="clearfix">
-                                        <h3>技术咨询约见服务<span className="fn-right">约见订单</span></h3>                                    
-                                        <div className="orderItemLisWrap clearfix">
-                                            <div className="fn-left">
-                                                <img src={urls[0]} alt=""/>
-                                            </div>
-                                            <div className="fn-right personMsg">
-                                                <div>
-                                                    <i 
-                                                        className="iconfont icon-location" 
-                                                        style={{float:"left",position:"relative",top:"5px",marginRight:"3px"}}>
-                                                    </i>
-                                                    <p> 杭州市西湖区转塘街道西湖区转塘街道回龙雅苑9幢3单元601</p>
-                                                </div>
-                                                <p><i className="iconfont icon-ren12"></i> 冰原落泪（16656565156）</p>
-                                                <p><i className="iconfont icon-shijian2"></i> 2017年11月20日 15:50</p>
-                                            </div>
-                                        </div>
-                                        <div className="btnWrap">
-                                            <p>
-                                                <span style={{ color: "red", fontSize: "18px" }}>300元</span> 
-                                                <i style={{ fontSize: "18px", color:"#DEDEDE"}}> 对方已付款</i> 
-                                                <button style={{marginLeft:"0.7rem"}}>现在出发</button> <button>取消订单</button>
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <Jiange name="jianGe"></Jiange>
-                                    <li className="clearfix">
-                                        <h3>《中控企业》画册设计服务<span className="fn-right">项目订单</span></h3>                                    
-                                        <div className="orderItemLisWrap clearfix spelis">
-                                            <div className="fn-left floatWrap">
-                                                <span className="order fn-left">1</span>
-                                                <h4 className="fn-left"> 整体策划</h4>
-                                                    <p className="fn-left" style={{ color: "#676767" }}>融合产品需要参与策划与数据整合</p>
-                                            </div>
-                                            <div className="fn-right" style={{ color:"#676767"}}>
-                                                <h4>2000</h4>
-                                                <p>x1套</p>
-                                            </div>
-                                        </div>
-                                        <div className="orderItemLisWrap clearfix spelis">
-                                            <div className="fn-left floatWrap">
-                                                <span className="order fn-left">2</span>
-                                                <h4 className="fn-left"> 整体策划</h4>
-                                                    <p className="fn-left" style={{ color: "#676767" }}>融合产品需要参与策划与数据整合</p>
-                                            </div>
-                                            <div className="fn-right" style={{ color:"#676767"}}>
-                                                <h4>2000</h4>
-                                                <p>x1套</p>
-                                            </div>
-                                        </div>
-                                        <div className="orderItemLisWrap clearfix spelis">
-                                            <div className="fn-left floatWrap">
-                                                <span className="order fn-left">3</span>
-                                                <h4 className="fn-left"> 整体策划</h4>
-                                                <p className="fn-left" style={{ color: "#676767" }}>融合产品需要参与策划与数据整合</p>
-                                            </div>
-                                            <div className="fn-right" style={{ color:"#676767"}}>
-                                                <h4>2000</h4>
-                                                <p>x1套</p>
-                                            </div>
-                                        </div>
-                                        <div className="orderItemLisWrap fn-clear spelis paysteps">
-                                            <div className="fn-left floatWrap">
-                                                <span className="order fn-left">4</span>                                        
-                                                <h4 style={{marginBottom:"0"}}>付款方式: <span style={{fontWeight:"normal"}}>30% 20% 50%</span></h4>
-                                            </div>
-                                        </div>
-                                        <div className="fn-clear orderItemLisWrap" style={{ backgroundColor: "#fff" }}>
-                                            <div className="fn-left floatWrap">                                        
-                                                <p style={{marginLeft:".6rem"}}>有效邮箱: 152565458@qq.com</p>
-                                            </div>
-                                        </div>
-                                        <div className="btnWrap">
-                                            <p>
-                                                <span style={{ color: "red", fontSize: "18px" }}>300元</span>
-                                                <i style={{ fontSize: "18px", color: "#DEDEDE" }}> 对方已付款</i>
-                                                <button style={{ marginLeft: "0.7rem" }}>接受订单</button> <button>修改报价</button>
-                                            </p>
-                                        </div>
-                                    </li>
-                                    {/* <Jiange name="jianGe"></Jiange>        */}
-                                </ul>
+                    <Jiange name="jianGe"></Jiange>
+                    <Tabs tabs={tabsLabel}
+                        initialPage={0}
+                        // onChange={(tab, index) => { console.log('onChange', index, tab); }}
+                        // onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
+                    >
+                        <div className="orderItemList" >
+                            <div className="orderItem">
+                                <div className="orderItemLis">
+                                    <ul>
+                                        {
+                                            this.state.item_list_ing.length ? (
+                                                this.state.item_list_ing.map((val, index) => (
+                                                    <div>
+                                                        <OrderItemList {...val} is_quoter="0" />
+                                                        <Jiange name="jianGe"></Jiange>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <img src={tempNull} />
+                                            )
+                                        }
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="orderIng" >
-                        <p>历史订单</p>
-                    </div>
-                    <div className="orderItemList" >
-                        <div className="orderItem">
-                            <div className="orderItemLis">
-                                <ul>
-                                    <li className="clearfix">
-                                        <h3>技术咨询约见服务<span className="fn-right">约见订单</span></h3>
-                                        <div className="orderItemLisWrap clearfix">
-                                            <div className="fn-left">
-                                                <img src={urls[0]} alt="" />
-                                            </div>
-                                            <div className="fn-right personMsg">
-                                                <div>
-                                                    <i
-                                                        className="iconfont icon-location"
-                                                        style={{ float: "left", position: "relative", top: "5px", marginRight: "3px" }}>
-                                                    </i>
-                                                    <p> 杭州市西湖区转塘街道西湖区转塘街道回龙雅苑9幢3单元601</p>
-                                                </div>
-                                                <p><i className="iconfont icon-ren12"></i> 冰原落泪（16656565156）</p>
-                                                <p><i className="iconfont icon-shijian2"></i> 2017年11月20日 15:50</p>
-                                            </div>
-                                        </div>
-                                        <div className="btnWrap">
-                                            <p>
-                                                <span style={{ color: "red", fontSize: "18px" }}>300元</span>
-                                                <i style={{ fontSize: "18px", color: "#DEDEDE" }}> 对方已付款</i>
-                                                <button style={{ marginLeft: "0.7rem" }}>评价</button> <button>删除记录</button>
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <Jiange name="jianGe"></Jiange>
-                                    <li className="clearfix">
-                                        <h3>《中控企业》画册设计服务<span className="fn-right">项目订单</span></h3>
-                                        <div className="orderItemLisWrap clearfix spelis">
-                                            <div className="fn-left floatWrap">
-                                                <span className="order fn-left">1</span>
-                                                <h4 className="fn-left"> 整体策划</h4>
-                                                <p className="fn-left" style={{ color: "#676767" }}>融合产品需要参与策划与数据整合</p>
-                                            </div>
-                                            <div className="fn-right" style={{ color: "#676767" }}>
-                                                <h4>2000</h4>
-                                                <p>x1套</p>
-                                            </div>
-                                        </div>
-                                        <div className="orderItemLisWrap clearfix spelis">
-                                            <div className="fn-left floatWrap">
-                                                <span className="order fn-left">2</span>
-                                                <h4 className="fn-left"> 整体策划</h4>
-                                                <p className="fn-left" style={{ color: "#676767" }}>融合产品需要参与策划与数据整合</p>
-                                            </div>
-                                            <div className="fn-right" style={{ color: "#676767" }}>
-                                                <h4>2000</h4>
-                                                <p>x1套</p>
-                                            </div>
-                                        </div>
-                                        <div className="orderItemLisWrap clearfix spelis">
-                                            <div className="fn-left floatWrap">
-                                                <span className="order fn-left">3</span>
-                                                <h4 className="fn-left"> 整体策划</h4>
-                                                <p className="fn-left" style={{ color: "#676767" }}>融合产品需要参与策划与数据整合</p>
-                                            </div>
-                                            <div className="fn-right" style={{ color: "#676767" }}>
-                                                <h4>2000</h4>
-                                                <p>x1套</p>
-                                            </div>
-                                        </div>
-                                        <div className="orderItemLisWrap fn-clear spelis paysteps">
-                                            <div className="fn-left floatWrap">
-                                                <span className="order fn-left">4</span>
-                                                <h4 style={{ marginBottom: "0" }}>付款方式: <span style={{ fontWeight: "normal" }}>30% 20% 50%</span></h4>
-                                            </div>
-                                        </div>
-                                        <div className="fn-clear orderItemLisWrap" style={{ backgroundColor: "#fff" }}>
-                                            <div className="fn-left floatWrap">
-                                                <p style={{ marginLeft: ".6rem" }}>有效邮箱: 152565458@qq.com</p>
-                                            </div>
-                                        </div>
-                                        <div className="btnWrap">
-                                            <p>
-                                                <span style={{ color: "red", fontSize: "18px" }}>300元</span>
-                                                <i style={{ fontSize: "18px", color: "#DEDEDE" }}> 对方已付款</i>
-                                                <button style={{ marginLeft: "0.7rem" }}>接受订单</button> <button>删除</button>
-                                            </p>
-                                        </div>
-                                    </li>
-                                </ul>
+                        <div className="orderItemList" >
+                            <div className="orderItem">
+                                <div className="orderItemLis">
+                                    <ul>
+                                        {
+                                            this.state.item_list_end.length ? (
+                                                this.state.item_list_end.map((val, index) => (
+                                                    <div>
+                                                        <OrderItemList {...val} is_quoter="1" />
+                                                        <Jiange name="jianGe"></Jiange>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <img src={tempNull} />
+                                            )
+                                        }
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </Tabs>
                 </div>
                 ] : null}
             </QueueAnim>

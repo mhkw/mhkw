@@ -92,9 +92,11 @@ export default function runPromise(ajaxName, param, handle, mustLogin = false, m
         return;
     }
 
+    let serializeParam = { "user_id": cookie_user_id };
+    Object.assign(serializeParam, param);
     run(function* () {
         // let contents = yield ajaxName(param);
-        let contents = yield sendAjax(ajaxURLList[ajaxName], param, method);
+        let contents = yield sendAjax(ajaxURLList[ajaxName], serializeParam, method);
         handle(contents.data, handleParam);
     })
 }
@@ -113,7 +115,7 @@ function sendAjax(url, param, method) {
                 }
             }
             Ajax.get(URL).then(req => {
-                resolve(req);
+                requestIsSuccess(req) && resolve(req); //先判断请求是否返回成功
             }).catch(error => {
                 //全局处理网络请求错误
                 console.log(error);
@@ -121,7 +123,7 @@ function sendAjax(url, param, method) {
             });
         } else {
             Ajax.post(url, qs.stringify(param)).then(req => {
-                resolve(req);
+                requestIsSuccess(req) && resolve(req); //先判断请求是否返回成功
             }).catch(error => {
                 //全局处理网络请求错误
                 console.log(error);
@@ -143,3 +145,27 @@ function getCookie(name) {
     if (arr != null) return decodeURIComponent(arr[2]); return null;
 };
 
+/**
+ * 判断请求是不是返回成功。如果是，则传递req，否则判断是不是未登入，如果不是弹出错误信息，否则自动跳转到未登录页
+ * 
+ * @author ZhengGuoQing
+ * @param {any} req 
+ */
+function requestIsSuccess(req) {
+    let res = req.data;
+    if (res && res.success) {
+        return true;
+    } else if (res.field == "user_id" || res.field == "username") {
+        Toast.offline("请先登录!", 1, ()=>{
+            //如果没登录，跳转到登录页
+            hashHistory.push({
+                pathname: '/login',
+                query: { form: 'promise' }
+            });
+        })
+        return false;
+    } else {
+        Toast.offline("请求错误!", 1)
+        return false;
+    }
+}

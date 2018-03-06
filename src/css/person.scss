@@ -212,15 +212,20 @@
                             box-sizing: border-box;
                             margin-bottom: .266667rem;
                             font-weight: 800;                                                                
-                            span {
+                            span.fn-right {
                                 color: #17A9DE;
+                            }
+                            span.name {
+                                width: 7rem;
+                                display: inline-block;
                             }
                         }
                         .spelis {
-                            height: 1.173333rem;
+                            // height: 1.173333rem;
                         }
                         .paysteps {
-                            line-height: 1.173333rem;                            
+                            line-height: 2; 
+                            background-color: #fff!important;                       
                         }
                         .orderItemLisWrap {
                             background-color: #F7F7F7;
@@ -245,10 +250,14 @@
                                 }
                             }
                             h4 {
-                                margin-bottom: .28rem;                                
+                                font-size: 16px;                             
+                            }
+                            p{
+                                font-size: 14px;
                             }
                             .floatWrap {
-                                width: 6.933333rem;
+                                // width: 6.933333rem;
+                                max-width: 7.5rem;
                                 .order {
                                     display: inline-block;
                                     width: .6rem;
@@ -261,7 +270,13 @@
                                     width: 6rem;
                                     font-size: 14px;
                                     font-weight: 800;
-                                    margin-bottom: .266667rem;
+                                }
+                                p.fn-left{
+                                    margin-top: .1rem;
+                                    margin-bottom: .1rem;
+                                }
+                                .pay-stages{
+                                    width: 7.5rem;
                                 }
                             }
                         }
@@ -269,15 +284,32 @@
                             height: 1.253333rem;
                             line-height: 1.253333rem;
                             border-top: 1px solid #D7DBE3;
+                            position: relative;
+                            i{
+                                margin-left: 0.5rem;
+                                font-size: 18px;
+                                color: #555;
+                            }
                             button {
                                 height: .746667rem;
                                 width: 2.24rem;
                                 border: 1px solid #cccccc;
                                 margin: 0 .08rem;
                                 border-radius: 5px;
+                                position: absolute;
+                                right: 0;
+                                top: 0;
+                                bottom: 0;
+                                margin: auto;
                             }
                         }
                     }
+                }
+                img{
+                    width: 142px;
+                    height: 150px;
+                    display: block;
+                    margin: 50px auto 0;
                 }
             }
         }
