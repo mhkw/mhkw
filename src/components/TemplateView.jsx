@@ -83,7 +83,9 @@ export const OrderItemList = (props) => {
                             props.is_quoter == "1" ? (
                                 <button>提醒验收</button>
                             ) : (
-                                <button>确认验收</button>
+                                <button
+                                    onClick={() => { props.changeShowConfirmOrder(true), props.setState({ confirmOrderID: props.project_id}) }}
+                                >确认验收</button>
                             )
                         ) : null
                     }
@@ -97,7 +99,7 @@ export const OrderItemList = (props) => {
                     {
                         props.stage_id == "4" || props.stage_id == "5" ? (
                             props.clt_appraise_score ? (
-                                <button>查看评价</button>
+                                <button>已评价</button>
                             ) : (
                                 <button>评价</button>
                             )

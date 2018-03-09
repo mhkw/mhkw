@@ -37,6 +37,7 @@ const ajaxURLList = {
     get_financial_list:"payapi/get_financial_list",       //获取交易记录
     add_service_template: "quoteApi/add_service_template", //报价-新增服务模板
     get_self_service_template_list: "quoteApi/get_self_service_template_list", // 报价-获取自己的服务报价模板列表
+    project_pay_confirm:"quoteApi/project_pay_confirm", //报价订单，同意验收
 }
 
 function get_user_list_ex(params) {
@@ -157,6 +158,7 @@ function requestIsSuccess(req) {
         return true;
     } else if (res.field == "user_id" || res.field == "username") {
         Toast.offline("请先登录!", 1, ()=>{
+            validate.setCookie("user_id","");
             //如果没登录，跳转到登录页
             hashHistory.push({
                 pathname: '/login',
@@ -165,7 +167,8 @@ function requestIsSuccess(req) {
         })
         return false;
     } else {
-        Toast.offline("请求错误!", 1)
-        return false;
+        //返回失败也要返回数据，因为返回失败可能要做其他的事
+        // Toast.offline(res.message, 1)
+        return true;
     }
 }
