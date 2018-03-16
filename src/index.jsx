@@ -24,6 +24,8 @@ import Mine from './components/mine';
 import Account from './components/account';
 import OrderList from './components/orderList';
 import QuoteList from './components/quoteList';
+import QuoteList2 from './components/quoteList2';
+import Withdraw from './components/Withdraw';
 
 import TempTest from './components/TempTest';
 import ConfirmOffer from './components/ConfirmOffer';
@@ -63,7 +65,14 @@ ReactDOM.render(
         <Route path="/search" component={Search} />
         <Route path="/account" component={Account} />
         <Route path="/orderList" component={OrderList} />
-        <Route path="/quoteList" component={QuoteList} />
+        {/* <Route path="/quoteList" component={QuoteList} /> */}
+        <Route path="/quoteList" component={QuoteList2}>
+            <Route component={OrderPopup}>
+                <IndexRoute component={PayModal} />
+                <Route path="/payModal" component={PayModal} />
+                <Route path="/payMethod" component={PayMethod} />
+            </Route>
+        </Route>
         <Route path="/designerHome" component={designerHome}>
             <IndexRoute component={WorksCollection} />
             <Route path="worksCollection" component={WorksCollection} />
@@ -84,5 +93,6 @@ ReactDOM.render(
         <Route path="/createOffer" component={CreateOffer} />
         <Route path="/confirmOffer" component={ConfirmOffer} />
         <Route path="/TempTest" component={TempTest} />
+        <Route path="/withdraw" component={Withdraw} />
     </Router>
     , document.getElementById('container'));

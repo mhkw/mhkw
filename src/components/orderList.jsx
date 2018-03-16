@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavBar, Icon, SegmentedControl, WingBlank, Tabs, Modal, InputItem, Toast } from 'antd-mobile';
+import { NavBar, Icon, SegmentedControl, WingBlank, Tabs, Modal, InputItem, Toast, TextareaItem } from 'antd-mobile';
 import { hashHistory } from 'react-router';
 import { Line,Jiange } from './templateHomeCircle';
 import { OrderItemList } from "./TemplateView";
@@ -45,6 +45,10 @@ export default class Account extends React.Component {
             ],
             item_list_ing: [], //进行中的订单
             item_list_end: [], //历史订单
+            showScoreModal: false,
+            selectedScore: 0, //选中的弹窗的评分
+            selectedScoreComment: "", //选中的弹窗的评论留言
+            selectedScoreEnd: false //选中的评论弹窗是否已经评论。即弹窗是已评论还是没评论，已评论
         }
         this.handleSend = (res,fg) =>{
             // console.log(res,fg);            
@@ -85,6 +89,27 @@ export default class Account extends React.Component {
                 Toast.info(res.message, 1.5, ()=>{
                     this.changeShowConfirmOrder(false);
                 });
+            } else {
+                Toast.info(res.message, 1.5);
+            }
+        }
+        //订单评价后的处理函数
+        this.handleAppraise = (res) => {
+            if (res.success) {
+                Toast.info(res.message, 1.5, () => {
+                    this.changeShowScoreModal(false);
+                    let index = this.state.selectedSegmentIndex;
+                    this.getMainProjectList(index, 2);  //进行中的订单
+                    this.getMainProjectList(index, 5);  //历史订单
+                });
+            } else {
+                Toast.info(res.message, 1.5);
+            }
+        }
+        //提醒验收后的处理函数
+        this.handleRemindOrder = (res) => {
+            if (res.success) {
+                Toast.info("成功提醒对方验收!", 1.5);
             } else {
                 Toast.info(res.message, 1.5);
             }
@@ -242,6 +267,59 @@ export default class Account extends React.Component {
             "tokeen": secode
         }, this.handleMsgSend, false, "post");
     }
+    //判断是打开还是关闭评价的弹窗
+    changeShowScoreModal = (isShow) => {
+        this.setState({ showScoreModal: isShow });
+        //如果是关闭，则清空图形验证码和短信验证码
+        if (!isShow) {
+            this.setState({
+                selectedScore: 0, //选中的弹窗的评分
+                selectedScoreComment: "" //选中的弹窗的评论留言
+            })
+        } else {
+            let token = setTimeout(() => {
+                if (this.state.selectedScoreEnd) {
+                    document.querySelector(".comment textarea").value = this.state.selectedScoreComment;
+                }
+                clearTimeout(token);
+            }, 300);
+        }
+    }
+    //确认评价
+    ConfirmScore() {
+        let { selectedScore, selectedScoreComment, confirmOrderID, selectedScoreEnd} = this.state;
+        if (selectedScoreEnd) {
+            this.changeShowScoreModal(false);
+            return;
+        }
+        if (selectedScore < 1) {
+            Toast.info("请选择评分", 1);
+            return ;
+        }
+        if (selectedScoreComment.trim().length < 1) {
+            Toast.info("请输入评价", 1);
+            return;
+        }
+        //ajax发送评价的请求
+        runPromise('do_appraise', {
+            "project_id": confirmOrderID,
+            "appraise_score": selectedScore,
+            "appraise_txt": selectedScoreComment
+        }, this.handleAppraise);
+    }
+    //ajax提醒验收
+    remindOrder = () => {
+        let { confirmOrderID } = this.state;
+        //ajax发送提醒验收的请求,项目验收提醒
+        runPromise('project_pay_ask', {
+            "project_id": confirmOrderID,
+        }, this.handleRemindOrder);
+
+        //ajax发送提醒验收的请求,项目验收提醒
+        runPromise('project_pay_remind', {
+            "project_id": confirmOrderID,
+        }, () => {});
+    }
     render() {
         return(
             <QueueAnim className="demo-content" type={['right', 'right']}>
@@ -291,6 +369,8 @@ export default class Account extends React.Component {
                                                             {...val} 
                                                             is_quoter={this.state.selectedSegmentIndex}
                                                             changeShowConfirmOrder={this.changeShowConfirmOrder}
+                                                            changeShowScoreModal={this.changeShowScoreModal}
+                                                            remindOrder={this.remindOrder}
                                                             setState={this.setState.bind(this)} 
                                                         />
                                                         <Jiange name="jianGe"></Jiange>
@@ -316,6 +396,8 @@ export default class Account extends React.Component {
                                                             {...val} 
                                                             is_quoter={this.state.selectedSegmentIndex}
                                                             changeShowConfirmOrder={this.changeShowConfirmOrder}
+                                                            changeShowScoreModal={this.changeShowScoreModal}
+                                                            remindOrder={this.remindOrder}
                                                             setState={this.setState.bind(this)}  
                                                         />
                                                         <Jiange name="jianGe"></Jiange>
@@ -348,20 +430,6 @@ export default class Account extends React.Component {
                             { text: '确定', onPress: () => { this.ConfirmOrder(); } }
                         ]}
                     >
-                        {/* <div className="pressYzmWrap">
-                            <InputItem
-                                className="pressYzm fn-left"
-                                type="text"
-                                placeholder="图形验证码"
-                                maxLength={4}
-                                onChange={this.onChangeYzm}
-                            ></InputItem>
-                            <img
-                                src={'https://www.huakewang.com/index.php/verifycode/index/' + this.state.codeNum}
-                                className="fn-right"
-                                onClick={(e) => { this.numPlus(e) }}
-                            />
-                        </div> */}
                         <div className="verification-phone-box" style={{"margin-bottom": "0.3rem"}}>
                             {/* <input type="text" value="" className="verification-code h5offerInput"/> */}
                             <InputItem
@@ -396,6 +464,38 @@ export default class Account extends React.Component {
                                 onClick={this.handleSMSCode}
                             >{this.state.SMSCodeTxt}</span>
                         </div>
+                    </Modal>
+                    <Modal
+                        className="score-modal"
+                        visible={this.state.showScoreModal}
+                        transparent
+                        maskClosable={false}
+                        closable={true}
+                        onClose={() => { this.changeShowScoreModal(false) }}
+                        footer={[
+                            { text: '取消', onPress: () => { this.changeShowScoreModal(false) } },
+                            { text: '确定', onPress: () => { this.ConfirmScore(); } }
+                        ]}
+                    >
+                        <div className="info">
+                            <span className="scoreTitle">评分</span>
+                            <i onClick={() => { !this.state.selectedScoreEnd ? this.setState({selectedScore: 1}) : null }} className={ this.state.selectedScore > 0 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing" } ></i>
+                            <i onClick={() => { !this.state.selectedScoreEnd ? this.setState({selectedScore: 2}) : null }} className={ this.state.selectedScore > 1 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing" } ></i>
+                            <i onClick={() => { !this.state.selectedScoreEnd ? this.setState({selectedScore: 3}) : null }} className={ this.state.selectedScore > 2 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing" } ></i>
+                            <i onClick={() => { !this.state.selectedScoreEnd ? this.setState({selectedScore: 4}) : null }} className={ this.state.selectedScore > 3 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing" } ></i>
+                            <i onClick={() => { !this.state.selectedScoreEnd ? this.setState({selectedScore: 5}) : null }} className={ this.state.selectedScore > 4 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing" } ></i>
+                        </div>
+                        <TextareaItem
+                            className="comment"
+                            title="评价"
+                            count={200}
+                            autoHeight 
+                            disabled={this.state.selectedScoreEnd}
+                            // value={this.state.selectedScoreComment}
+                            // onChange={(val) => { this.setState({ selectedScoreComment: val}) }}
+                            // ref={el => this.commentTextarea = el }
+                            onBlur={(val) => { this.setState({ selectedScoreComment: val }) }}
+                        />
                     </Modal>
                 </div>
                 ] : null}

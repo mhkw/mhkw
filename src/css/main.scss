@@ -325,9 +325,11 @@
         }
     }
     .homeWrapTop {
-        height: 4.533333rem;
+        // height: 4.533333rem;
+        height: 4rem;
         width: 100%;
         font-size: 16px;
+        padding-top: 20px;
         a {
             color: #fff;        
         }
@@ -352,7 +354,7 @@
         .hometabs {
             height: 2.133333rem;
             color: #fff;
-            margin-top: .32rem;
+            margin-top: .1rem;
             .am-tabs-default-bar {
                 // background-color: !important;
                 .am-tabs-default-bar-tab{

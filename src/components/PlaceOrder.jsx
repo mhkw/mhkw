@@ -13,7 +13,7 @@ export default class PlaceOrder extends React.Component {
             orderPrice: "",
             remarks: "",
             payment: "1",
-            showModal: true, //显示弹窗
+            showModal: false, //显示弹窗
             projectId: 0, //订单号，0默认为充值
         }
         //ajax处理函数，给设计师下单

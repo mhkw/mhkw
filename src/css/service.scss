@@ -614,4 +614,110 @@ html:not([data-scale]) .am-button.confirm-offer-button::before{
 .verification-phone-box .am-list-item .am-input-control input{
     line-height: 1.6;
 }
+.score-modal .info{
+    text-align: left;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 18px;
+}
+.score-modal .info .scoreTitle{
+    margin-right: 10px;
+}
+.score-modal .info .icon-wujiaoxing{
+    font-size: 20px;
+    margin: 0 5px;
+}
+.am-list-item.comment{
+    padding-left: 0;
+    color: #888;
+}
+.am-list-item.comment .am-textarea-label.am-textarea-label-5{
+    width: 40px;
+    color: #888;
+}
+.am-list-item.comment .am-textarea-control{
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.am-list-item.comment .am-textarea-control textarea{
+    min-height: 80px;
+    max-height: 130px;
+}
+.am-modal.am-modal-operation .am-modal-content .am-modal-button{
+    text-align: center;
+    padding-left:0;
+}
+.withdraw-page .input-form{
+    background-color: #f5f5f9;
+}
+.withdraw-page .am-navbar{
+    border-bottom: 0.02rem solid #ccc;
+}
+.input-form .withdraw-list .am-input-item {
+    border-bottom: 0.01rem solid #ccc;
+}
+.withdraw-page .am-list-item .am-input-label.am-input-label-5 {
+    width: 1.7rem;
+}
+.input-form .am-list-header{
+    padding: 0.3rem 0.2rem 0.1rem 0.3rem;
+    font-size: 16px;
+    color: #828080;
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+}
+.input-form .am-list-header .iconfont{
+    font-size: 20px;
+    margin-right: 6px;
+    color: #555;
+}
+.input-form .am-list-header .balance{
+    color: red;
+}
+.input-form .verification-phone-box{
+    border-left: none;
+    border-right: none;
+}
+.input-form .verification-phone-box.two{
+    border-top: none;
+}
+.input-form .verification-phone-box .code{
+    height: 44px;
+}
+.input-form .verification-phone-box .h5offerSpan{
+    font-size: 16px;
+}
+.withdraw-page .withdraw-time{
+    margin-top: 0.6rem;
+    margin-bottom: 0.2rem;
+    font-size: 14px;
+    color: #555;
+    text-align: center;
+}
+.withdraw-time .day{
+    color: #08A1EF;
+}
+.withdraw-time .fees{
+    color: #999;
+}
+.withdraw-page .pay-button{
+    font-size: 20px;
+    color: #fff;
+    background-color: #fd4d65;
+}
+.withdraw-page .pay-button-active{
+    font-size: 20px;
+    color: #fff;
+    background-color: #de2a42;
+}
+.withdraw-phone.am-list-item .am-input-label{
+    color: #bbb;
+}
+.withdraw-phone.am-list-item .am-input-control input{
+    color: #bbb;
+}
 /**************** orderList end*********/

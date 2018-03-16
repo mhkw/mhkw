@@ -37,7 +37,13 @@ const ajaxURLList = {
     get_financial_list:"payapi/get_financial_list",       //获取交易记录
     add_service_template: "quoteApi/add_service_template", //报价-新增服务模板
     get_self_service_template_list: "quoteApi/get_self_service_template_list", // 报价-获取自己的服务报价模板列表
-    project_pay_confirm:"quoteApi/project_pay_confirm", //报价订单，同意验收
+    project_pay_confirm: "quoteApi/project_pay_confirm", //报价订单，同意验收
+    do_appraise: "quoteApi/do_appraise", //报价订单，评价
+    project_pay_ask: "quoteApi/project_pay_ask", //报价订单，提醒验收，申请验收
+    project_pay_remind: "quoteApi/project_pay_remind", //报价订单，提醒验收，验收提醒
+    change_main_project_status: "quoteApi/change_main_project_status", //报价订单，报价状态切换
+    get_pay_param: "payapi/get_pay_param", //支付-获取签名后的订单参数
+    applay_for_withdraw: "payapi/applay_for_withdraw", //支付-申请提现
 }
 
 function get_user_list_ex(params) {

@@ -73,6 +73,13 @@ export default class Account extends React.Component {
         }else{
             Toast.info('您还未实名认证，不能提现', 2, null, false);
         }
+        hashHistory.push({
+            pathname: '/withdraw',
+            query: { form: 'account' },
+            state: {
+                realName: this.state.realName,
+            }
+        });
     }
     render() {
         return(
