@@ -55,15 +55,11 @@ export default class LoginView extends React.Component {
             placeholderWords:"留言：",
             commentToId:"",
             commentId:"",
-            content:""
+            content:"",
+            keyCode:"-1",
+            sendBtnStatus:false
         };
         this.genData = (pIndex = 0, realLength, data) => {
-            // const dataBlob = {};
-            // for (let i = 0; i < NUM_ROWS; i++) {
-            //     const ii = (pIndex * NUM_ROWS) + i;
-            //     dataBlob[`${ii}`] = data[i];
-            // }
-            // return dataBlob;
             const dataArr = [];
             for (let i = 0; i < realLength; i++) {
                 dataArr.push(data[i]);
@@ -87,7 +83,7 @@ export default class LoginView extends React.Component {
                     res: res.data.item_list,
                 });
             }else{
-
+                console.log(res);
             }
         }
         this.addheartlis=(res,para)=>{
@@ -193,6 +189,30 @@ export default class LoginView extends React.Component {
             content: ""   //评论内容
         }, this.addcommentlis, true, "post", { e: e, idx: rowID });
     }
+    onChangeReplyInput=(value)=>{
+        if(value.length > 0){
+            this.setState({ 
+                sendBtnStatus: true,
+                content:value
+            })
+        }
+    }
+    toggleInput = (key,uid,id) =>{
+        if(key == this.state.keyCode  ) {
+            this.setState({
+                showReplyInput: !this.state.showReplyInput,
+            }, () => { this.textarea.focus(); });
+        } else if (key != this.state.keyCode && !this.state.showReplyInput){
+            this.setState({
+                showReplyInput: !this.state.showReplyInput,
+            }, () => { this.textarea.focus(); });
+        } else if (key != this.state.keyCode && this.state.showReplyInput) {
+            this.setState({
+                showReplyInput: this.state.showReplyInput,
+            }, () => { this.textarea.focus(); });
+        };
+        this.setState({ commentToId: uid, commentId: id, keyCode: key})
+    }
     render() {
         const separator = (sectionID, rowID) => (   //这个是每个元素之间的间距
             <div
@@ -271,12 +291,7 @@ export default class LoginView extends React.Component {
                                             display: "inline-block",
                                             paddingTop:"4px" 
                                         }}
-                                        onClick={(e) => { this.setState({ 
-                                            showReplyInput: !this.state.showReplyInput,
-                                            commentToId: obj.uid,
-                                            commentId: obj.id,
-                                        }, () => { this.textarea.focus();});
-                                    }}>
+                                        onClick={(e) => { this.toggleInput(rowID,obj.uid,obj.id) }}>
                                         <i className="iconfont icon-liuyan" 
                                             style={{ 
                                                 fontSize: "14px", 
@@ -411,15 +426,14 @@ export default class LoginView extends React.Component {
                 >
                     <TextareaItem
                         id="abc"
-                        ref="commentInput"
                         className="comment-input"
                         autoHeight
                         ref={(temp) => { this.textarea = temp; }}
                         placeholder={this.state.placeholderWords}
                         maxLength="100"
-                        value={this.state.replyText}
+                        value={this.state.content}
                         onChange={this.onChangeReplyInput}
-                        onBlur={this.onBlurReplyInput}
+                        // onBlur={()=>{this.setState({ showReplyInput:false})}}
                     />
                     <span className="send-btn" ref="abcd"
                         style={this.state.sendBtnStatus ? {

@@ -64,7 +64,6 @@ export default class HomeView extends React.Component {
                 const ii = (pIndex * NUM_ROWS) + i;
                 dataBlob[`${ii}`] = data[i];
             }
-            console.log(dataBlob);
             return dataBlob;
         };
         this.changeTabBgPic = (index,tab) => {
@@ -168,7 +167,6 @@ export default class HomeView extends React.Component {
             // }
             // const obj = this.state.res[index--];
             const obj = rowData;
-            console.log(obj);
             return (
                 <div key={rowID}>
                     <div className="items">
@@ -196,7 +194,7 @@ export default class HomeView extends React.Component {
             <div className="homeWrap">
                 <div className="homeWrapTop" style={{
                     background: "url("+loginUrl[10]+") no-repeat center center / 100% 100%"
-}}>
+                    }}>
                     <div className="indexNav">
                         <NavBar
                             mode="light"
