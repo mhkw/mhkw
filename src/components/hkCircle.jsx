@@ -386,7 +386,7 @@ export default class LoginView extends React.Component {
                     </div>
                 </div>
                 <div className="homeWrapMain" id="hkCircle">
-                    <ListView         //列表渲染
+                    <ListView         
                         key={this.state.useBodyScroll ? '0' : '1'}
                         ref={el => this.lv = el}
                         dataSource={this.state.dataSource}
