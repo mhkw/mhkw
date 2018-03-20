@@ -22,10 +22,7 @@ const loginUrl = [
     require('../images/mainTop.png'),
 ]
 let realData = [];
-
-let tabs = [
-    
-];
+let tabs = [];
 let index = realData.length - 1;
 let realDataLength = realData.length;
 let NUM_ROWS = 8;
@@ -67,42 +64,47 @@ export default class HomeView extends React.Component {
                 const ii = (pIndex * NUM_ROWS) + i;
                 dataBlob[`${ii}`] = data[i];
             }
+            console.log(dataBlob);
             return dataBlob;
         };
         this.changeTabBgPic = (index,tab) => {
             let lis = document.querySelectorAll(".tabsList");
         }
-        this.handleSend = (res,fg) => {
+        this.handleSend = (res) => {
             if (res.success) {
-                console.log(res, fg);
-                if(fg == 'a') {
-                    realData = res.data.item_list;
-                    index = realData.length - 1;
-                    realDataLength = res.data.item_list.length;
-                    NUM_ROWS = realDataLength;
-                    this.rData = { ...this.rData, ...this.genData(pageIndex++, realDataLength, res.data.item_list) };
-                    // const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
-                    this.setState({
-                        dataSource: this.state.dataSource.cloneWithRows(this.rData),
-                        // height: hei,
-                        hasMore: res.data.total_pages > pageIndex ? true : false,
-                        refreshing: false,
-                        isLoading: false,
-                        page:++this.state.page
-                    });
-                }else if(fg == "b"){
-                    this.setState({
-                        tabsData:res.data
-                    })
-                    tabs = [{ title: <div className="fn-clear tabsList"><img src={loginUrl[0]} /><p>附近</p></div> }];
-                    for (let i = 0; i < this.state.tabsData.length;i++) {
-                        tabs.push({ 
-                            title: <div className="fn-clear tabsList" data-src={this.state.tabsData[i].path1}><img src={this.state.tabsData[i].path} /><p>{this.state.tabsData[i].category_name}</p></div> 
-                        })
-                    }
-                }
+                realData = res.data.item_list;
+                index = realData.length - 1;
+                realDataLength = res.data.item_list.length;
+                NUM_ROWS = realDataLength;
+                this.rData = { ...this.rData, ...this.genData(pageIndex++, realDataLength, res.data.item_list) };
+                
+                // const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
+                this.setState({
+                    dataSource: this.state.dataSource.cloneWithRows(this.rData),
+                    // height: hei,
+                    hasMore: res.data.total_pages > pageIndex ? true : false,
+                    refreshing: false,
+                    isLoading: false,
+                    page:++this.state.page
+                });
             } else {
-                console.log(res, 0);
+                console.log(res);
+            }
+        },
+        this.getPicsLis = (res) =>{
+            if(res.success) {
+                this.setState({
+                    tabsData: res.data
+                })
+                tabs = [{ title: <div className="fn-clear tabsList"><img src={loginUrl[0]} /><p>附近</p></div> }];
+                for (let i = 0; i < this.state.tabsData.length; i++) {
+                    tabs.push({
+                        title: <div className="fn-clear tabsList" data-src={this.state.tabsData[i].path1}>
+                        <img src={this.state.tabsData[i].path} /><p>{this.state.tabsData[i].category_name}</p></div>
+                    })
+                }
+            }else{
+                console.log(res);
             }
         }
     }
@@ -114,38 +116,22 @@ export default class HomeView extends React.Component {
             document.body.style.overflow = 'hidden';
         }
     }
-    componentWillReceiveProps(nextProps) {
-        // changeKeyWord =(idx)=>{
-        //     keywords: this.state.keyArray[index]
-        // }
-    }
-    shouldComponentUpdate(){
-        return (this.props.router.location.action === 'POP')
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     // changeKeyWord =(idx)=>{
+    //     //     keywords: this.state.keyArray[index]
+    //     // }
+    // }
+    // shouldComponentUpdate(){
+    //     // return (this.props.router.location.action === 'POP')
+    // }
 
     componentDidMount() {
-        runPromise("get_user_list_ex", {
-            sort: "add_time",
-            offices: "all",
-            keywords: this.state.keywords,
-            longitude: "0",
-            latitude: "0",
-            per_page: "8",
-            page: "1"
-        }, this.handleSend,false,"post","a");
-        runPromise("get_designer_tree", null, this.handleSend,false,"get","b");
+        this.getWorkList("",1);
+        runPromise("get_designer_tree", null, this.getPicsLis,false,"get");
     }
 
     onRefresh = () => {   //顶部下拉刷新数据
-        runPromise("get_user_list_ex", {
-            sort: "add_time",
-            offices: "all",
-            keywords: this.state.keywords,
-            longitude: "0",
-            latitude: "0",
-            per_page: "8",
-            page: "1"
-        }, this.handleSend, false, "post", "a");
+        this.getWorkList(this.state.keywords,1);
     };
 
     onEndReached = (event) => {
@@ -154,40 +140,35 @@ export default class HomeView extends React.Component {
         if (this.state.isLoading && !this.state.hasMore) {
             return;
         };
-        console.log('加载下一页的数据');
-        this.setState({ isLoading: true });
+        this.setState({ 
+            isLoading: true
+        });
+        this.getWorkList(this.state.keywords, this.state.page);
+    };
+    changeUserList  (index) {
+        this.getWorkList(this.state.keyArray[index], 1)
+    }
+    getWorkList = (keywords,page) => {
         runPromise("get_user_list_ex", {
             sort: "add_time",
             offices: "all",
-            keywords: this.state.keywords,
+            keywords: keywords,
             longitude: "0",
             latitude: "0",
             per_page: "8",
-            page: this.state.page
-        }, this.handleSend, false, "post", "a");
-    };
-    changeUserList  (index) {
-        this.setState({ keywords: this.state.keyArray[index] });
-        setTimeout(() => {
-            runPromise("get_user_list_ex", {
-                sort: "add_time",
-                offices: "all",
-                keywords: this.state.keywords,
-                longitude: "0",
-                latitude: "0",
-                per_page: "8",
-                page: "1"
-            }, this.handleSend, false, "post", "a");
-        }, 200);
+            page: page
+        }, this.handleSend, false, "post");
     }
     render() {
         // let index = this.state.res.length - 1;
+
         const row = (rowData, sectionID, rowID) => {
-            if (index < 0) {
-                index = this.state.res.length - 1;
-            }
+            // if (index < 0) {
+            //     index = this.state.res.length - 1;
+            // }
             // const obj = this.state.res[index--];
             const obj = rowData;
+            console.log(obj);
             return (
                 <div key={rowID}>
                     <div className="items">
@@ -203,7 +184,7 @@ export default class HomeView extends React.Component {
                         />
                         <div className="itemPicList">
                             <ItemPicLists 
-                                works_list={obj.works_list} 
+                                works_list={obj.works_list}
                             />
                         </div>
                     </div>
@@ -241,6 +222,7 @@ export default class HomeView extends React.Component {
                             // }}
                             onTabClick={(tab, index) => { 
                                 // this.setState({keywords:this.state.keyArray[index]}); 
+                                console.log(tab);
                                 this.changeUserList(index);
                             }}
                         >
@@ -258,7 +240,7 @@ export default class HomeView extends React.Component {
                         </div>)}
                         renderRow={row}
                         renderSeparator={separator}
-                        distanceToRefresh={5}
+                        distanceToRefresh={1}
                         useBodyScroll={this.state.useBodyScroll}
                         style={this.state.useBodyScroll ? {} : {
                             height: "30px",
@@ -269,7 +251,8 @@ export default class HomeView extends React.Component {
                             onRefresh={this.onRefresh}
                         />}
                         onEndReached={this.onEndReached}
-                        pageSize={3}
+                        pageSize={8}
+                        scrollRenderAheadDistance={100}
                     />
                 </div>
             </div>

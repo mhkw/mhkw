@@ -150,6 +150,17 @@
     bottom: 0;
     width: 100%;
 }
+.circle-popup-comment-input-box{
+    bottom: 1.4rem;
+    left: 0;
+    border-bottom: 1px solid #bbb;
+    background-color: #e6e6e6fa;
+    .am-textarea-control textarea {
+        font-size: 14px;
+        color:#333;
+    }
+}
+
 .popup-comment-input-box .comment-input{
     background-color: transparent;
     width: 80%;

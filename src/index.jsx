@@ -26,6 +26,7 @@ import OrderList from './components/orderList';
 import QuoteList from './components/quoteList';
 import QuoteList2 from './components/quoteList2';
 import Withdraw from './components/Withdraw';
+import Test from './components/page1';
 
 import TempTest from './components/TempTest';
 import ConfirmOffer from './components/ConfirmOffer';
@@ -58,6 +59,7 @@ ReactDOM.render(
             <Route path="/mine" component={Mine} />             
         </Route>
         <Route path="/city" component={listViewDemo} />        
+        <Route path="/page1" component={Test} />        
         <Route path="/bind" component={Bind} />
         <Route path="/forget" component={Forget} />
         <Route path="/login" component={Login} />
