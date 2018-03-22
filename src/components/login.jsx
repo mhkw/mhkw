@@ -32,6 +32,7 @@ export default class LoginView extends React.Component {
                 hashHistory.goBack();
                 validate.setCookie('user_id', res.data.id);
                 validate.setCookie('user_phone', res.data.mobile);
+                validate.setCookie('user_name', res.data.nick_name);
             }else{
                 if(res.message == "图形验证码不对") {
                     Toast.info("图形验证码不正确", 2, null, false);
@@ -106,11 +107,13 @@ export default class LoginView extends React.Component {
         },200)
     }
     onLogin() {       //确认登陆
+
         runPromise("login", {
             username: this.state.value,
             password: this.state.keywords,
             code: this.state.code
         }, this.handleSend, false, "post");
+        
     }
     render() {
         return (
@@ -141,7 +144,7 @@ export default class LoginView extends React.Component {
                                         <InputItem
                                             type="password"
                                             placeholder="请输入密码"
-                                            error={this.state.error} 
+                                            error={this.state.error}        
                                             value={this.state.keywords}                                                                                       
                                             maxLength={18}
                                             onErrorClick={() => {

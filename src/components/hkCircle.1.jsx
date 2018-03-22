@@ -61,13 +61,14 @@ export default class LoginView extends React.Component {
             replySendStatus:false,    //回复还是留言
             rep_user_id:"",     //被回复人的id
             comment_id:"",      //回复的回复id
-            replay_name:""     //给..回复
+            replay_name:"",     //给..回复
+            tempObj:{}
         };
         this.genData = (pIndex = 0, realLength, data) => {
             let dataBlob = [];
             for (let i = 0; i < realLength; i++) {
                 const ii = (pIndex * realLength) + i;
-                dataBlob = data;
+                dataBlob=data;
             }
             return dataBlob;
         };
@@ -121,23 +122,36 @@ export default class LoginView extends React.Component {
                 }
             }
         }
-        this.addcommentlis=(req)=>{
-            if(req.success){
+        this.addcommentlis=(res)=>{
+            if(res.success){
                 if (!this.state.replySendStatus){        //回复
-                    
-
+                    let replyLis = {
+                        comment_id: this.state.comment_id,          //留言id
+                        content: this.state.content,                //评论内容
+                        rep_user_id: this.state.rep_user_id,       //被回复人的id
+                        nick_name: decodeURIComponent(validate.getCookie('user_name')) ,     //回复人的昵称
+                        currentName: this.state.replay_name ,     //被回复人的昵称
+                        commentrep_data:{commentrep_list:[]},
+                    }
+                    let commentLis = this.state.res[this.state.keyCode].comment_data.comment_list;
+                    commentLis.push(replyLis);
+                    let newList = update(this.state.res, { [this.state.keyCode]: { comment_data: { comment_list: { $set: commentLis } } } });
+                    this.setState({ res: newList, content: "", showReplyInput: false })
                 }else{                           //留言
-                    let wrap = document.createElement("div");
-                    let domLi = document.createElement('li');
-                    let innerSpan = document.createElement('span');
-                    let innerI = document.createElement('i');
-                    innerSpan.innerHTML = req.data.nick_name;
-                    innerI.innerHTML = req.data.comment_content;
-                    domLi.appendChild(innerSpan);
-                    domLi.appendChild(innerI);
-                    wrap.appendChild(domLi);
-                    let currentLi = document.getElementById("rowid"+this.state.keyCode);
-                    currentLi.appendChild(wrap);
+                    let replyLis = {
+                        comment_id: this.state.comment_id,          //留言id
+                        content: this.state.content,                //评论内容
+                        user_id_from:res.data.id,
+                        nick_name: decodeURIComponent(validate.getCookie('user_name')),     //回复人的昵称
+                        id:res.data.comment_id,
+                        commentrep_data: { commentrep_list: [] },
+                    }
+                    let commentLis = this.state.res[this.state.keyCode].comment_data.comment_list;
+                    commentLis.push(replyLis);
+                    let newList = update(this.state.res, { [this.state.keyCode]: { comment_data: { comment_list: { $set: commentLis } } } });
+                    this.setState({ res: newList, content: "", showReplyInput: false }, () => {
+                        this.setState({ tempObj: this.state.res[this.state.keyCode] })
+                    })
                 }
             }
         }
@@ -157,7 +171,9 @@ export default class LoginView extends React.Component {
         this.getNoticeList(1);
     }
     getNoticeList=(page)=>{
-        runPromise("get_circle_list", {        //获取列表
+        // let perIdx;
+        // pageIndex == 0 ? perIdx = 1 : perIdx = pageIndex;
+        runPromise("get_circle_list", {
             user_id: '0',
             per_page: "5",
             page: page
@@ -176,10 +192,9 @@ export default class LoginView extends React.Component {
     }
     onRefresh = () => {   //顶部下拉刷新数据
         this.setState({ 
-            // refreshing: true, 
+            refreshing: true, 
             isLoading: true 
         });
-        this.getNoticeList(1);
         // simulate initial Ajax
         // setTimeout(() => {
         //     this.rData = genData();
@@ -251,7 +266,7 @@ export default class LoginView extends React.Component {
                 comment_id: this.state.comment_id,          //留言id
                 content: this.state.content,                //评论内容
                 rep_user_id: this.state.rep_user_id,       //被回复人的id
-                rep_user_nick_name: this.state.replay_name  //被回复人名称
+                rep_user_nick_name: this.state.replay_name
             }, this.addcommentlis, true, "post");
         }
     }
@@ -269,157 +284,16 @@ export default class LoginView extends React.Component {
         const row = (rowData, sectionID, rowID) => {
             const obj = rowData;
             return (
-                <div key={rowID}>
-                    <div className="items">
-                        <div className="itemsTop">
-                            <div className="itemsTopPic fn-left" onClick={() => {
-                                hashHistory.push({
-                                    pathname: '/designerHome',
-                                    query: { userId: obj.uid }
-                                })
-                            }}>
-                                <img src={obj.path_thumb ? obj.path_thumb : loginUrl.selec} alt="" />
-                            </div>
-                            <div className="itemsTopRight">
-                                <p onClick={() => {
-                                    hashHistory.push({
-                                        pathname: '/designerHome',
-                                        query: { userId: obj.uid }
-                                    })
-                                }}>
-                                    <span className="fn-left" style={{ fontSize: '16px' }}>{obj.nick_name} <i className="iconfont icon-xingbienv_f" style={{
-                                        color: "#F46353",
-                                        fontWeight: "800",
-                                        fontSize: "12px"
-                                    }}></i></span>
-                                    <span className="fn-right personalMsg">发布了帖子</span>
-                                </p>
-                                <p className="personalMsg">
-                                    <span>{obj.job_name}</span> | <span>{obj.company}</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div className="itemPicList">
-                            <p>{obj.title}</p>
-                            <ul>
-                                {
-                                    obj.attachment_list.map((value, idx) => {
-                                        return idx < 6 ? <li>
-                                            <a href="javascript:;">
-                                                <img src={value.path_thumb} alt="" style={{ height: "100%" }} />
-                                            </a>
-                                        </li> : ""
-                                    })
-                                }
-                            </ul>
-                            <div style={{ color: "#949494", overflow: "hidden", borderBottom: "1px dotted #dedcdc", marginBottom: "10px" }}>
-                                <div style={{ float: "left", paddingTop: "4px" }}>{obj.add_time_format}</div>
-                                <div style={{ float: "right" }}>
-                                    <div onClick={(e) => {
-                                        this.addHeart(e, obj.id, rowID);
-                                    }}
-                                        style={{ display: "inline-block", paddingTop: "4px" }}>
-                                        <i className="iconfont icon-Pingjia"
-                                            style={{
-                                                fontSize: "14px",
-                                                verticalAlign: "middle",
-                                                color: obj.islove ? "#F95231" : "",
-                                                position: "relative",
-                                                top: "1px"
-                                            }}
-                                        ></i> <span>{obj.love_count}</span>&nbsp;&nbsp;&nbsp;
-                                    </div>
-                                    <div style={{
-                                        display: "inline-block",
-                                        paddingTop: "4px"
-                                    }}
-                                        onClick={(e) => {
-                                            this.toggleInput(rowID, obj.uid, obj.id);
-                                            this.setState({ placeholderWords: "给" + obj.nick_name + "留言：" })
-                                        }}>
-                                        <i className="iconfont icon-liuyan"
-                                            style={{
-                                                fontSize: "14px",
-                                                verticalAlign: "middle",
-                                                position: "relative",
-                                                top: "1px"
-                                            }}
-                                        ></i> <span>{obj.comment_count}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="itemsBtm">
-                            <div className="loveList" style={{ backgroundColor: "#f0f0f0", lineHeight: "0.75rem", display: obj.love_list.length > 0 ? "block" : "none" }}>
-                                <i className="iconfont icon-Pingjia" style={{ position: "relative", top: "2px", margin: "0 5px" }}></i>
-                                <ul style={{ display: "inline-block" }}>
-                                    {
-                                        obj.love_list.map((value, idx) => {
-                                            return <li onClick={() => {
-                                                hashHistory.push({
-                                                    pathname: '/designerHome',
-                                                    query: { userId: value.user_id }
-                                                })
-                                            }} style={{ float: "left", color: "#1199d2" }}>
-                                                {value.nick_name},
-                                            </li>
-                                        })
-                                    } 觉得很赞
-                                </ul>
-                            </div>
-                            <div className="commentList" style={{ marginTop: "8px", display: obj.comment_data.comment_list.length > 0 ? "block" : "none" }}>
-                                <ul id={"rowid" + rowID}>
-                                    {
-                                        obj.comment_data.comment_list.map((value, idx) => {
-                                            return <div>
-                                                <li onClick={() => {
-                                                    this.setState({
-                                                        placeholderWords: "回复：" + value.nick_name,
-                                                        showReplyInput: true,
-                                                        replySendStatus: false,
-                                                        keyCode: rowID,
-                                                        comment_id: value.id,
-                                                        rep_user_id: value.user_id_from,
-                                                        replay_name: value.nick_name
-                                                    }, () => {
-                                                        this.textarea.focus();
-                                                    })
-                                                }}>
-                                                    <span >{value.nick_name}: </span>
-                                                    {value.content ? value.content : value.comment_content}
-                                                </li>
-                                                {
-                                                    value.commentrep_data && value.commentrep_data.commentrep_list.length > 0 ?
-                                                        value.commentrep_data.commentrep_list.map((val) => {
-                                                            return <li onClick={() => {
-                                                                this.setState({
-                                                                    placeholderWords: "回复：" + val.nick_name,
-                                                                    showReplyInput: true,
-                                                                    replySendStatus: false,
-                                                                    keyCode: rowID,
-                                                                    comment_id: val.comment_id,
-                                                                    rep_user_id: val.user_id,
-                                                                    replay_name: val.nick_name
-                                                                }, () => {
-                                                                    this.textarea.focus();
-                                                                })
-                                                            }}>
-                                                                {
-                                                                    val.nick_name_to ? <span>{val.nick_name}回复:{val.nick_name_to} </span> :
-                                                                        <span>{val.nick_name}: </span>
-                                                                }
-                                                                {val.content ? val.content : val.comment_content}
-                                                            </li>
-                                                        }) : ""
-                                                }
-                                            </div>
-                                        })
-                                    }
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <Item 
+                    obj={rowData}
+                    sectionID={sectionID}
+                    rowID={rowID}
+                    keyCode={this.state.keyCode}
+                    huifu={this.state.tempObj}
+                    toggleInput={this.toggleInput}
+                    setState={this.setState.bind(this)}  
+                    textarea={this.textarea}
+                ></Item>
             );
         };
 
@@ -491,13 +365,12 @@ export default class LoginView extends React.Component {
                             {this.state.isLoading ? '加载中...' : '加载完成'}
                         </div>)}
                         renderRow={row}
-                        renderSeparator={separator}                        
+                        scrollRenderAheadDistance={1000}
+                        renderSeparator={separator}
                         useBodyScroll={this.state.useBodyScroll}
                         pullToRefresh={<PullToRefresh
                             refreshing={this.state.refreshing}
                             onRefresh={this.onRefresh}
-                            damping="on"
-                            damping={100}                    
                         />}
                         onEndReached={this.onEndReached}
                         pageSize={5}
@@ -534,3 +407,177 @@ export default class LoginView extends React.Component {
     }
 }
 
+class Item extends React.Component{
+    constructor(props) {
+        super(props)
+        this.state = {
+
+        }
+        
+    }
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps, 111111111);
+        if (nextProps.keyCode == nextProps.rowID) {
+            // this.setState({obj:})
+            console.log(nextProps,111111111);
+        }
+    }
+    render () {
+        let { obj, sectionID, rowID, toggleInput,addHeart} = this.props;
+        return (
+            <div key={rowID}>
+                <div className="items">
+                    <div className="itemsTop">
+                        <div className="itemsTopPic fn-left" onClick={() => {
+                            hashHistory.push({
+                                pathname: '/designerHome',
+                                query: { userId: obj.uid }
+                            })
+                        }}>
+                            <img src={obj.path_thumb ? obj.path_thumb : loginUrl.selec} alt="" />
+                        </div>
+                        <div className="itemsTopRight">
+                            <p onClick={() => {
+                                hashHistory.push({
+                                    pathname: '/designerHome',
+                                    query: { userId: obj.uid }
+                                })
+                            }}>
+                                <span className="fn-left" style={{ fontSize: '16px' }}>{obj.nick_name} <i className="iconfont icon-xingbienv_f" style={{
+                                    color: "#F46353",
+                                    fontWeight: "800",
+                                    fontSize: "12px"
+                                }}></i></span>
+                                <span className="fn-right personalMsg">发布了帖子</span>
+                            </p>
+                            <p className="personalMsg">
+                                <span>{obj.job_name}</span> | <span>{obj.company}</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div className="itemPicList">
+                        <p>{obj.title}</p>
+                        <ul>
+                            {
+                                obj.attachment_list.map((value, idx) => {
+                                    return idx < 6 ? <li>
+                                        <a href="javascript:;">
+                                            <img src={value.path_thumb} alt="" style={{ height: "100%" }} />
+                                        </a>
+                                    </li> : ""
+                                })
+                            }
+                        </ul>
+                        <div style={{ color: "#949494", overflow: "hidden", borderBottom: "1px dotted #dedcdc", marginBottom: "10px" }}>
+                            <div style={{ float: "left", paddingTop: "4px" }}>{obj.add_time_format}</div>
+                            <div style={{ float: "right" }}>
+                                <div onClick={(e) => {
+                                    this.props.addHeart(e, obj.id, rowID);
+                                }}
+                                    style={{ display: "inline-block", paddingTop: "4px" }}>
+                                    <i className="iconfont icon-Pingjia"
+                                        style={{
+                                            fontSize: "14px",
+                                            verticalAlign: "middle",
+                                            color: obj.islove ? "#F95231" : "",
+                                            position: "relative",
+                                            top: "1px"
+                                        }}
+                                    ></i> <span>{obj.love_count}</span>&nbsp;&nbsp;&nbsp;
+                                    </div>
+                                <div style={{
+                                    display: "inline-block",
+                                    paddingTop: "4px"
+                                }}
+                                    onClick={(e) => {
+                                        toggleInput(rowID, obj.uid, obj.id);
+                                        this.props.setState({ placeholderWords: "给" + obj.nick_name + "留言：" })
+                                    }}>
+                                    <i className="iconfont icon-liuyan"
+                                        style={{
+                                            fontSize: "14px",
+                                            verticalAlign: "middle",
+                                            position: "relative",
+                                            top: "1px"
+                                        }}
+                                    ></i> <span>{obj.comment_count}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="itemsBtm">
+                        <div className="loveList" style={{ backgroundColor: "#f0f0f0", lineHeight: "0.75rem", display: obj.love_list.length > 0 ? "block" : "none" }}>
+                            <i className="iconfont icon-Pingjia" style={{ position: "relative", top: "2px", margin: "0 5px" }}></i>
+                            <ul style={{ display: "inline-block" }}>
+                                {
+                                    obj.love_list.map((value, idx) => {
+                                        return <li onClick={() => {
+                                            hashHistory.push({
+                                                pathname: '/designerHome',
+                                                query: { userId: value.user_id }
+                                            })
+                                        }} style={{ float: "left", color: "#1199d2" }}>
+                                            {value.nick_name},
+                                            </li>
+                                    })
+                                } 觉得很赞
+                                </ul>
+                        </div>
+                        <div className="commentList" style={{ marginTop: "8px", display: obj.comment_data.comment_list.length > 0 ? "block" : "none" }}>
+                            <ul>
+                                {
+                                    obj.comment_data.comment_list.map((value, idx) => {
+                                        return <div>
+                                            <li onClick={() => {
+                                                this.props.setState({
+                                                    placeholderWords: "回复：" + value.nick_name,
+                                                    showReplyInput: true,
+                                                    replySendStatus: false,
+                                                    keyCode: rowID,
+                                                    comment_id: value.id,
+                                                    rep_user_id: value.user_id_from,
+                                                    replay_name: value.nick_name
+                                                }, () => {
+                                                    this.props.textarea.focus();
+                                                })
+                                            }}
+                                                style={{ backgroundColor: "#f0f0f0", lineHeight: "0.75rem" }}>
+                                                <span style={{ color: "#1199d2", marginLeft: "6px" }}>{value.nick_name}: </span>
+                                                <span>{value.content ? value.content : value.comment_content}</span>
+                                            </li>
+                                            {
+                                                value.commentrep_data && value.commentrep_data.commentrep_list.length > 0 ?
+                                                    value.commentrep_data.commentrep_list.map((val) => {
+                                                        return <li onClick={() => {
+                                                            this.props.setState({
+                                                                placeholderWords: "回复：" + val.nick_name,
+                                                                showReplyInput: true,
+                                                                replySendStatus: false,
+                                                                keyCode: rowID,
+                                                                comment_id: val.comment_id,
+                                                                rep_user_id: val.user_id,
+                                                                replay_name: val.nick_name
+                                                            }, () => {
+                                                                this.props.textarea.focus();
+                                                            })
+                                                        }}
+                                                            style={{ backgroundColor: "#f0f0f0", lineHeight: "0.75rem" }}>
+                                                            {
+                                                                val.nick_name_to ? <span style={{ color: "#1199d2", marginLeft: "6px" }}>{value.nick_name}回复:{value.nick_name_to} </span> :
+                                                                    <span style={{ color: "#1199d2", marginLeft: "6px" }}>{value.nick_name}: </span>
+                                                            }
+                                                            <span>{value.content ? value.content : value.comment_content}</span>
+                                                        </li>
+                                                    }) : ""
+                                            }
+                                        </div>
+                                    })
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+}

@@ -216,3 +216,13 @@
   background-color: #ccc;
   color: #999;
 }
+
+.commentList ul li {
+  background-color: #f0f0f0;
+  line-height: 0.75rem;
+}
+
+.commentList ul li span {
+  color: #1199d2;
+  margin-left: 6px;
+}

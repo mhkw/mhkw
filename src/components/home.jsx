@@ -45,17 +45,18 @@ export default class HomeView extends React.Component {
             rowHasChanged: (row1, row2) => row1 !== row2,
         });
         this.state = {
-            dataSource: dataSource.cloneWithRows({}),
+            dataSource: dataSource.cloneWithRows(JSON.parse(sessionStorage.getItem("fstdata")) ? JSON.parse(sessionStorage.getItem("fstdata")) : {}),
             refreshing: false,
-            isLoading: false,
+            isLoading: true,
             keywords:"",
             height: document.documentElement.clientHeight,
             useBodyScroll: true,
             res: [],
-            tabsData:[],
+            tabsData: JSON.parse(sessionStorage.getItem("designer_tree")) || [],
             page:1,
             hasMore:true,
-            keyArray:["附近","艺术绘画","品牌建设","互联网设计","产品设计","空间设计","虚拟现实","多媒体","程序开发","其他设计"]
+            keyArray:["附近","艺术绘画","品牌建设","互联网设计","产品设计","空间设计","虚拟现实","多媒体","程序开发","其他设计"],
+            currentIdx:""
         };
         
         this.genData = (pIndex = 0, NUM_ROWS, data) => {
@@ -75,14 +76,16 @@ export default class HomeView extends React.Component {
                 index = realData.length - 1;
                 realDataLength = res.data.item_list.length;
                 NUM_ROWS = realDataLength;
-                this.rData = { ...this.rData, ...this.genData(pageIndex++, realDataLength, res.data.item_list) };
-                
-                // const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
+                if (pageIndex == 0){
+                    this.rData = {};
+                    this.rData = { ...this.rData, ...this.genData(++pageIndex, realDataLength, realData) };
+                    sessionStorage.setItem("fstdata", JSON.stringify(realData));
+                }else{
+                    this.rData = { ...this.rData, ...this.genData(++pageIndex, realDataLength, realData) };
+                }
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(this.rData),
-                    // height: hei,
                     hasMore: res.data.total_pages > pageIndex ? true : false,
-                    refreshing: false,
                     isLoading: false,
                     page:++this.state.page
                 });
@@ -92,16 +95,19 @@ export default class HomeView extends React.Component {
         },
         this.getPicsLis = (res) =>{
             if(res.success) {
+                sessionStorage.setItem("designer_tree", JSON.stringify(res.data));
                 this.setState({
                     tabsData: res.data
+                },()=>{
+                    tabs = [{ title: <div className="fn-clear tabsList"><img src={loginUrl[0]} /><p>附近</p></div> }];
+                    for (let i = 0; i < this.state.tabsData.length; i++) {
+                        tabs.push({
+                            title: <div className="fn-clear tabsList" dataSrc={this.state.tabsData[i].path1}>
+                                <img id={"img" + i} src={this.state.tabsData[i].path} /><p>{this.state.tabsData[i].category_name}</p></div>
+                        })
+                    }
                 })
-                tabs = [{ title: <div className="fn-clear tabsList"><img src={loginUrl[0]} /><p>附近</p></div> }];
-                for (let i = 0; i < this.state.tabsData.length; i++) {
-                    tabs.push({
-                        title: <div className="fn-clear tabsList" data-src={this.state.tabsData[i].path1}>
-                        <img src={this.state.tabsData[i].path} /><p>{this.state.tabsData[i].category_name}</p></div>
-                    })
-                }
+                
             }else{
                 console.log(res);
             }
@@ -127,6 +133,14 @@ export default class HomeView extends React.Component {
     componentDidMount() {
         this.getWorkList("",1);
         runPromise("get_designer_tree", null, this.getPicsLis,false,"get");
+
+        tabs = [{ title: <div className="fn-clear tabsList"><img src={loginUrl[0]} /><p>附近</p></div> }];
+        for (let i = 0; i < this.state.tabsData.length; i++) {
+            tabs.push({
+                title: <div className="fn-clear tabsList" dataSrc={this.state.tabsData[i].path1}>
+                    <img id={"img"+i} src={this.state.tabsData[i].path} /><p>{this.state.tabsData[i].category_name}</p></div>
+            })
+        }
     }
 
     onRefresh = () => {   //顶部下拉刷新数据
@@ -137,15 +151,28 @@ export default class HomeView extends React.Component {
         // load new data   数据加载完成
         // hasMore: from backend data, indicates whether it is the last page, here is false
         if (this.state.isLoading && !this.state.hasMore) {
-            return;
+            return ;
         };
         this.setState({ 
             isLoading: true
         });
         this.getWorkList(this.state.keywords, this.state.page);
     };
-    changeUserList  (index) {
-        this.getWorkList(this.state.keyArray[index], 1)
+    
+    changeUserList  (tab,index) {
+        pageIndex = 0;
+        if (this.state.currentIdx){
+            let Idx = this.state.currentIdx - 1;
+            let currentBg = this.state.tabsData[Idx].path;
+            let change = document.getElementById("img" + Idx);
+            change.src = currentBg;
+            console.log(change);
+        }
+        this.setState({currentIdx : index});
+        let idx = index-1;
+        let currentImg = document.getElementById("img"+idx);
+        idx<0?"":currentImg.src = tab.title.props.dataSrc;
+        this.getWorkList(this.state.keyArray[index], 1);
     }
     getWorkList = (keywords,page) => {
         runPromise("get_user_list_ex", {
@@ -160,7 +187,6 @@ export default class HomeView extends React.Component {
     }
     render() {
         // let index = this.state.res.length - 1;
-
         const row = (rowData, sectionID, rowID) => {
             // if (index < 0) {
             //     index = this.state.res.length - 1;
@@ -179,6 +205,7 @@ export default class HomeView extends React.Component {
                             experience={obj.experience}
                             works_count={obj.works_count}
                             hits_count={obj.hits_count}
+                            id={obj.id}
                         />
                         <div className="itemPicList">
                             <ItemPicLists 
@@ -220,8 +247,7 @@ export default class HomeView extends React.Component {
                             // }}
                             onTabClick={(tab, index) => { 
                                 // this.setState({keywords:this.state.keyArray[index]}); 
-                                console.log(tab);
-                                this.changeUserList(index);
+                                this.changeUserList(tab,index);
                             }}
                         >
                         </Tabs>
