@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavBar, Icon, InputItem, Toast, List, Button, WingBlank } from 'antd-mobile';
+import { NavBar, Icon, InputItem, Toast, List, Button, WingBlank, NoticeBar } from 'antd-mobile';
 import { hashHistory } from 'react-router';
 import QueueAnim from 'rc-queue-anim';
 
@@ -9,16 +9,17 @@ export default class Withdraw extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            phone: "17683993335",
+            phone: validate.getCookie('user_phone') ? validate.getCookie('user_phone') : '',
             code: "",
             alipay_account: "",
             alipay_user_name: "",
             amount: "",
-            balance: 0.01,
+            balance: 0,
             picCode: "", //确认验收的图形验证码
             codeNum: 2, //确认验收的图形验证码图片地址后缀
             SMSCode: "", //确认验收的短信验证码
             SMSCodeTxt: "获取验证码", //确认验收的短信验证码上的文字
+            withdrawInfo: 0, //正在提现中的金额，提现有延迟，可能需要等待
         }
         //短信验证码发送成功后的执行函数
         this.handleMsgSend = (res) => {
@@ -38,6 +39,22 @@ export default class Withdraw extends React.Component {
                 Toast.info(res.message, 1.5);
             }
         }
+        this.handleWithdrawInfo = (res) => {
+            if (res.success) {
+                this.setState({
+                    withdrawInfo: res.data.amount
+                })
+            }
+        }
+    }
+    componentWillMount() {
+        let balance = this.props.location.state.blance;
+        if (balance) {
+            this.setState({ balance });
+        }
+    }
+    componentDidMount() {
+        this.ajaxWithdrawInfo();
     }
     numPlus(e) {     //图形验证码刷新
         e.currentTarget.setAttribute("src", loadingGif);
@@ -68,7 +85,14 @@ export default class Withdraw extends React.Component {
     //校验提现金额
     testPrice(val) {
         if (!(/(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/.test(val))) {
-            Toast.info("输入金额错误！", 1);
+            Toast.info("输入金额错误！", 1, () => {
+                this.setState({ amount: "" })
+            });
+            return false;
+        } else if (val > this.state.balance){
+            Toast.info("超过可提现余额！", 1, ()=>{
+                this.setState({ amount: this.state.balance })
+            });
             return false;
         } else {
             return true;
@@ -138,7 +162,16 @@ export default class Withdraw extends React.Component {
         }, this.handleMsgSend, false, "post");
     }
     onClickPay = () => {
+        //如果今天不是周三,不让提现
+        if ((new Date()).getDay() != 3) {
+            Toast.info("每周三开通提现功能！", 1.5);
+            return false
+        }
         let { phone, alipay_account, alipay_user_name, amount, SMSCode } = this.state;
+        if (amount < 500 || amount > 200000) {
+            Toast.info("提现金额区间为500元-20万元！", 1.5);
+            return false
+        }
         if (this.testAccount(alipay_account) && this.testName(alipay_user_name) && this.testPrice(amount) && this.testPhone(phone) && this.testSMSCode(SMSCode)) {
             this.ajaxWithdraw();
         }
@@ -153,7 +186,11 @@ export default class Withdraw extends React.Component {
             amount
         }, this.handleWithdraw);
     }
+    ajaxWithdrawInfo = () => {
+        runPromise('get_withdraw_info', {}, this.handleWithdrawInfo);
+    }
     render() {
+        let withdrawInfoSpan = <span className="withdraw-Info" style={{ "font-size": "12px", "color": "#fd4d65"}}>(有￥{this.state.withdrawInfo}元正在提现)</span>
         return (
             <QueueAnim className="demo-content" leaveReverse
                 animConfig={[
@@ -164,8 +201,11 @@ export default class Withdraw extends React.Component {
                         mode="light"
                         icon={<Icon type="left" size="lg" color="#333" />}
                         onLeftClick={() => hashHistory.goBack()}
-                    >申请提现</NavBar>
+                    >申请提现{this.state.withdrawInfo ? withdrawInfoSpan : null }</NavBar>
                     <div className="input-form">
+                        <NoticeBar mode="closable" marqueeProps={{ loop: true, leading: 500, trailing: 800, fps: 30 }}>
+                            每周三开通提现功能，每次提现金额区间为500元-20万元
+                        </NoticeBar>
                         <List renderHeader={() => <span><i className="iconfont icon-zhifubao1"></i>支付宝</span> } className="withdraw-list">
                             <InputItem
                                 type="string"
@@ -190,6 +230,7 @@ export default class Withdraw extends React.Component {
                                 moneyKeyboardAlign="left" 
                                 value={this.state.amount}
                                 onChange={(val) => { this.setState({ amount: val }) }}
+                                onBlur={() => { this.testPrice(this.state.amount) }}
                                 placeholder="请输入提现金额"
                                 maxLength="10"
                                 clear

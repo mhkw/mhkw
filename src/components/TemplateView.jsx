@@ -117,12 +117,14 @@ export const OrderItemList = (props) => {
     )
 }
 //自定义狂拽酷炫吊炸天的自定义button，手指按下去时背景有阴影
-const Qbutton = (props) => {
+export const Qbutton = (props) => {
+    let oldBackgroundColor = "#fff";
     const touchStart = (e) => { 
-        e.target.style.backgroundColor = "#eee"
+        oldBackgroundColor = e.target.style.backgroundColor;
+        e.target.style.backgroundColor = "#eee";
     }
     const touchEnd = (e) => { 
-        e.target.style.backgroundColor = "#fff"
+        e.target.style.backgroundColor = oldBackgroundColor;
     }
     return <button
         {...props}

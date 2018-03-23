@@ -26,6 +26,8 @@ import OrderList from './components/orderList';
 import QuoteList from './components/quoteList';
 import QuoteList2 from './components/quoteList2';
 import Withdraw from './components/Withdraw';
+import Contacts from './components/Contacts';
+import HOCoffer from './components/HOCoffer';
 
 import TempTest from './components/TempTest';
 import ConfirmOffer from './components/ConfirmOffer';
@@ -63,7 +65,13 @@ ReactDOM.render(
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/search" component={Search} />
-        <Route path="/account" component={Account} />
+        <Route path="/account" component={Account} >
+            <Route component={OrderPopup}>
+                <IndexRoute component={PayModal} />
+                <Route path="/payModal" component={PayModal} />
+                <Route path="/payMethod" component={PayMethod} />
+            </Route>
+        </Route>
         <Route path="/orderList" component={OrderList} />
         {/* <Route path="/quoteList" component={QuoteList} /> */}
         <Route path="/quoteList" component={QuoteList2}>
@@ -88,10 +96,13 @@ ReactDOM.render(
                 <Route path="/payMethod" component={PayMethod} />
             </Route>
         </Route>
-        <Route path="/creatServer" component={CreatServer} />
-        <Route path="/addServer" component={AddServer} />
-        <Route path="/createOffer" component={CreateOffer} />
-        <Route path="/confirmOffer" component={ConfirmOffer} />
+        <Route path="/" component={HOCoffer}>
+            <Route path="creatServer" component={CreatServer} />
+            <Route path="addServer" component={AddServer} />
+            <Route path="createOffer" component={CreateOffer} />
+            <Route path="confirmOffer" component={ConfirmOffer} />
+            <Route path="contacts" component={Contacts} />
+        </Route>
         <Route path="/TempTest" component={TempTest} />
         <Route path="/withdraw" component={Withdraw} />
     </Router>

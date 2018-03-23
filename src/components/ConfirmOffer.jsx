@@ -30,7 +30,7 @@ export default class ConfirmOffer extends React.Component {
         return (
             <div className="confirm-offer" key="1">
                 <NavBar
-                    className="create-server-nav-bar"
+                    className="create-server-nav-bar add-server-nav-bar"
                     mode="light"
                     icon={<Icon type="left" />}
                     onLeftClick={() => hashHistory.goBack()}

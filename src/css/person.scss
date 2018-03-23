@@ -138,7 +138,7 @@
         line-height: 2.5rem;
         text-align: center;
         font-size: 28px;
-        i {
+        button {
             font-size: 22px;
             display: inline-block;
             height: 1.733333rem;
@@ -148,6 +148,7 @@
             border-radius: 50%;
             text-align: center;
             color: #fff;
+            border: 0;
         }
     }
     .getPayTitle {

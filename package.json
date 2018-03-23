@@ -8,7 +8,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "antd-mobile": "^2.0.0",
+    "antd-mobile": "^2.1.6",
     "axios": "^0.17.1",
     "babel-runtime": "^6.11.6",
     "immutability-helper": "^2.6.4",

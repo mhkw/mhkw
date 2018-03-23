@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavBar, Icon, Button, WingBlank, Flex, InputItem, DatePicker, List} from 'antd-mobile';
+import { NavBar, Icon, Button, WingBlank, Flex, InputItem, DatePicker, List, Toast} from 'antd-mobile';
 import { hashHistory, Link } from 'react-router';
 
 const OfferItem = (props) => (
@@ -9,7 +9,7 @@ const OfferItem = (props) => (
             <Flex.Item className="price">{props.price}</Flex.Item>
         </Flex>
         <Flex justify="between" align="start">
-            <Flex.Item className="remarks" style={{ "flex": "3" }}>{props.remarks}</Flex.Item>
+            <Flex.Item className="remarks" style={{ "flex": "3" }}>{props.describe}</Flex.Item>
             <Flex.Item className="number">{props.number}</Flex.Item>
         </Flex>
     </div>
@@ -28,8 +28,29 @@ export default class CreateOffer extends React.Component {
             cut_off_date: "",
             cut_off_day: "",
             inputDiscountPrice: "", //用户输入的优惠价格
-            howManyDiscount: "9.1",//几折优惠
+            inputDiscountPriceError: false, //用户输入的优惠价格是否错误
+            howManyDiscount: "10",//几折优惠
+            checkedServerList: [], //选中的服务项，即报价列表也页传递过来的数据
+            checkPrice: 0, //选中的服务项的总价，即报价列表也页传递过来的数据
+            checkPriceTax: 0, //选中的服务项的总价加上%6的税价。这个价格是这个页面生成的，还不是最后的价格，不保存到HOCoffer.jsx里
         }
+    }
+    componentWillMount() {
+        if (this.props.location.state) {
+            let { checkedServerList, checkPrice } = this.props.location.state;
+            this.setState({ 
+                checkedServerList, 
+                checkPrice,
+                checkPriceTax: (parseFloat(checkPrice).toFixed(2) * 1.06).toFixed(2)
+             });
+        }
+        // if (this.props.customer_name) {
+        //     this.setState({
+        //         customer_name: this.props.customer_name,
+        //         customer_company: this.props.customer_company,
+        //         customer_phone: this.props.customer_phone,
+        //     })
+        // }
     }
     onOkDatePicker(date) {
         let year = date.getFullYear();
@@ -40,13 +61,13 @@ export default class CreateOffer extends React.Component {
         let nowTime = (new Date()).getTime(); //现在的时间
         let curTime = (new Date(date)).getTime(); //选择的时间
         let cut_off_day = Math.ceil( (curTime - nowTime) / (1000 * 60 * 60 * 24) );
-        this.setState({ 
+        this.props.setState({ 
             cut_off_date: formatDate,
             cut_off_day: cut_off_day
         });
     }
-    onClickCreateOffer() {
-        console.log("click create offer")
+    onClickCreateOffer = () => {
+        this.props.CreateOfferQuotation(); //点击生成报价单
     }
     hikeUpKeyboard = (param) => {
         let DOMCover = this.refs.coverCustomKeyboard;
@@ -58,53 +79,96 @@ export default class CreateOffer extends React.Component {
             DOMCover.style.display = "none";
         }
     }
+    selectContacts = () => {
+        hashHistory.push({
+            pathname: '/contacts',
+            query: { form: 'CreateOffer' },
+        });
+    }
+    // componentWillReceiveProps(nextProps) {
+    //     if (nextProps.inputDiscountPrice) {
+    //         this.setState({
+    //             inputDiscountPrice: nextProps.inputDiscountPrice
+    //         })
+    //     }
+    // }
+    onChangeDiscount = (val) => {
+        if ((val - 0) < (this.state.checkPriceTax - 0) ) {
+            this.setState({
+                inputDiscountPrice: val,
+                inputDiscountPriceError: false,
+                howManyDiscount: (parseFloat(val / this.state.checkPriceTax) * 10).toFixed(2)
+            })
+        } else {
+            this.setState({ inputDiscountPrice: val, inputDiscountPriceError: true})
+        }
+    }
+    onBlurDiscount = (val) => {
+        if ((val - 0) > (this.state.checkPriceTax - 0) * 0.6 && (val - 0) < (this.state.checkPriceTax - 0) ) {
+            this.props.setState({ inputDiscountPrice: val });
+            this.setState({ inputDiscountPriceError: false })
+        } else {
+            this.setState({ inputDiscountPriceError: true })
+        }
+    }
+    //切换是否有优惠，如果切换成没有优惠了，则把优惠的值设成0
+    switchHaveDiscount = () => {
+        if (this.props.haveDiscount) {
+            this.props.setState({ haveDiscount: !this.props.haveDiscount, inputDiscountPrice: '' });
+            this.setState({
+                inputDiscountPrice: '',
+                inputDiscountPriceError: false,
+                howManyDiscount: (10).toFixed(2)
+            })
+        } else {
+            this.props.setState({ haveDiscount: !this.props.haveDiscount });
+        }
+    }
     render() {
         return (
             <div className="create-offer" key="1">
                 <NavBar
-                    className="create-server-nav-bar"
+                    className="create-server-nav-bar add-server-nav-bar"
                     mode="light"
                     icon={<Icon type="left" />}
                     onLeftClick={() => hashHistory.goBack()}
                     leftContent={<span style={{ fontSize: "15px" }}>返回</span>}
                 >创建报价</NavBar>
                 <div className="create-offer-main">
-                    <OfferItem
-                        title={"PS简单处理图片"}
-                        price={"2000.00/天"}
-                        remarks={"海报创意，海报定制，创意，营销广告海报创意，海报定制，创意，营销广告海报创意，海报定制，创意，营销广告"}
-                        number={"× 1"}
-                    />
-                    <OfferItem
-                        title={"PS简单处理图片"}
-                        price={"2000.00/天"}
-                        remarks={"海报创意，海报定制，创意，营销广告"}
-                        number={"× 1"}
-                    />
+                    {
+                        this.state.checkedServerList.map((val, index) => (
+                            <OfferItem
+                                title={val.Name}
+                                price={val.unit_price + val.unit}
+                                describe={val.describe}
+                                number={`× ${val.number}`}
+                            />
+                        ))
+                    }
                     <div className="tax-top-rate-box">
                         <p className="tax-top clearfix">
                             <span className="name">税率</span>
-                            <span className="price">{this.state.pure_price + "元"}</span>
+                            <span className="price">{this.state.checkPrice + "元"}</span>
                         </p>
                         <p className="tax-bottom">6%税率</p>
                     </div>
                     <div className="sum-price-box clearfix">
                         <span className="left-title">总计</span>
-                        <span className="right-sum-price">5632.00</span>
+                        <span className="right-sum-price">{this.state.checkPriceTax}</span>
                     </div>
                     <InputItem
                         className="remarks-input-create-offer"
                         type="string"
                         placeholder="添加备注"
-                        value={this.state.remarks}
-                        onChange={(val) => { this.setState({ remarks: val }) }}
+                        value={this.props.remarks}
+                        onChange={(val) => { this.props.setState({ remarks: val}) }}
                     ><i className="iconfont icon-bianji"></i></InputItem>
                 </div>
                 <div className="create-offer-customer">
                     <p className="customer-title">
                         <span className="left">客户信息</span>
                         <span className="right">请输入客户信息</span>
-                        <i className="iconfont icon-geren3"></i>
+                        <i className="iconfont icon-geren3" onClick={this.selectContacts}></i>
                     </p>
                     <div className="customer-input-box">
                         <InputItem
@@ -112,24 +176,24 @@ export default class CreateOffer extends React.Component {
                             type="string"
                             maxLength="10"
                             placeholder=""
-                            value={this.state.customer_name}
-                            onChange={(val) => { this.setState({ customer_name: val }) }}
+                            value={this.props.customer_name}
+                            onChange={(val) => { this.props.setState({ customer_name: val }) }}
                         >姓名</InputItem>
                         <InputItem
                             className="input-company"
                             type="string"
                             maxLength="30"
                             placeholder="用于身份确认"
-                            value={this.state.customer_company}
-                            onChange={(val) => { this.setState({ customer_company: val }) }}
+                            value={this.props.customer_company}
+                            onChange={(val) => { this.props.setState({ customer_company: val }) }}
                         >公司</InputItem>
                         <InputItem
                             className="input-phone"
                             type="number" 
                             maxLength="11"
                             placeholder="输入手机号用于接收短信"
-                            value={this.state.customer_phone}
-                            onChange={(val) => { this.setState({ customer_phone: val }) }}
+                            value={this.props.customer_phone}
+                            onChange={(val) => { this.props.setState({ customer_phone: val }) }}
                         >手机</InputItem>
                     </div>
                 </div>
@@ -144,8 +208,8 @@ export default class CreateOffer extends React.Component {
                             type="string"
                             maxLength="20"
                             placeholder=""
-                            value={this.state.project_name}
-                            onChange={(val) => { this.setState({ project_name: val }) }}
+                            value={this.props.proname}
+                            onChange={(val) => { this.props.setState({ proname: val }) }}
                         >项目名称</InputItem>
                         <DatePicker
                             className="cut-off-date"
@@ -153,11 +217,11 @@ export default class CreateOffer extends React.Component {
                             title="请选择截止日期(至少5天)"
                             // extra={<span>报价在<span className="num">{this.state.cut_off_date}</span>天后自动截止</span>}
                             // extra="请选择截止日期"
-                            extra={this.state.cut_off_day ? `报价在${this.state.cut_off_day}天后自动截止` : "请选择截止日期"}
-                            format={date => `报价在${this.state.cut_off_day}天后自动截止`}
+                            extra={this.props.cut_off_day ? `报价在${this.props.cut_off_day}天后自动截止` : "请选择截止日期"}
+                            format={date => `报价在${this.props.cut_off_day}天后自动截止`}
                             // value={this.state.date}
-                            value={this.state.date}
-                            onChange={date => this.setState({ date })}
+                            value={this.props.date}
+                            onChange={date => this.props.setState({ date })}
                             onOk={date => this.onOkDatePicker(date)}
                             minDate={new Date((new Date()).getTime() + (5 * 24 * 60 * 60 * 1000))}
                         >
@@ -182,35 +246,39 @@ export default class CreateOffer extends React.Component {
                         <span className="how-many-discount"></span>
                     </div> */}
                     <Flex className="discount-select-div">
-                        <Flex.Item className="discount-left" style={{ "flex": "1" }}>
-                            <span className="dot-box"><span className="dot"></span></span>
+                        <Flex.Item className="discount-left" style={{ "flex": "1" }} onClick={() => { this.switchHaveDiscount() }}>
+                            <span className="dot-box"><span style={{ "visibility": this.props.haveDiscount ? "visible" : "hidden"}} className="dot"></span></span>
                             <span className="txt">设置优惠</span>
                         </Flex.Item>
-                        <Flex.Item className="discount-middle" style={{ "flex": "1" }}>
+                        <Flex.Item className="discount-middle" style={{ "flex": "1" }} style={{ "visibility": this.props.haveDiscount ? "visible" : "hidden" }} >
                             <InputItem
                                 ref="cover"
                                 className="discount-middle"
-                                type="number"
-                                moneyKeyboardAlign="left"
+                                type="text"
+                                // moneyKeyboardAlign="left"
                                 placeholder=""
+                                error={this.state.inputDiscountPriceError}
+                                onErrorClick={()=>{
+                                    Toast.fail("优惠后的价格低于原价但不能低于原价的60%！", 2);
+                                }}
                                 value={this.state.inputDiscountPrice}
-                                onChange={(val) => { this.setState({ inputDiscountPrice: val }) }}
+                                onChange={(val) => { this.onChangeDiscount(val) }}
+                                onBlur={(val) => { this.onBlurDiscount(val) }}
                                 // onFocus={() => { this.hikeUpKeyboard(true) } }
-                                // onBlur={() => { this.hikeUpKeyboard(false) }}
                             ></InputItem>
                         </Flex.Item>
-                        <Flex.Item className="how-many-discount">约{this.state.howManyDiscount}折</Flex.Item>
+                        <Flex.Item className="how-many-discount" style={{ "visibility": this.props.haveDiscount ? "visible" : "hidden" }} >约{this.state.howManyDiscount}折</Flex.Item>
                     </Flex>
                     <div className="discount">
                         <span className="unit">
                             <span className="title">总计:</span>
-                            <span className="price">5632.00</span>
+                            <span className="price">{this.state.checkPriceTax}</span>
                         </span>
-                        <span className="unit">
+                        <span className="unit" style={{ "visibility": this.props.haveDiscount ? "visible" : "hidden" }} >
                             <span className="title">优惠后:</span>
-                            <span className="price">5000.00</span>
+                            <span className="price">{this.state.inputDiscountPrice && !isNaN(this.state.inputDiscountPrice) ? this.state.inputDiscountPrice : this.state.checkPriceTax }</span>
                         </span>
-                        <span className="tax-unit">(含3%税票)</span>
+                        <span className="tax-unit">(含6%税票)</span>
                     </div>
                     <Button
                         id="create-offer-foot"

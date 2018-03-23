@@ -1,19 +1,19 @@
 import React from 'react'
-import { NavBar, Icon, Button, WingBlank, Checkbox, Stepper, Modal } from 'antd-mobile';
+import { NavBar, Icon, Button, WingBlank, Checkbox, Stepper, Modal, Toast } from 'antd-mobile';
 import { hashHistory, Link } from 'react-router';
 
 import update from 'immutability-helper';
 
 const ServerItem = (props) => (
     <div className="server-item clearfix">
-        <Checkbox.CheckboxItem key={props.index} onChange={() => props.onChangeisChecked(props.index)}>
+        <Checkbox.CheckboxItem key={props.index} checked={props.isChecked} onChange={() => props.onChangeisChecked(props.index)}>
             {[
                 <h2 className="ellipsis">{props.title}</h2>, 
                 <Link to="/addServer">编辑</Link>
             ]}
         </Checkbox.CheckboxItem>
         <p className="describe ellipsis-lines">{props.describe}</p>
-        <div className="unit-box"><span className="unit_price">{props.unit_price}</span>/<span className="unit">{props.unit}</span></div>
+        <div className="unit-box"><span className="unit_price">{props.unit_price}</span><span className="unit">{props.unit}</span></div>
         <Stepper
             className="my-stepper"
             showNumber
@@ -37,53 +37,51 @@ export default class ServerCreate extends React.Component {
             checkNum: 0, //用户已经选中了几个服务模板
             checkPrice: 0, //用户已经选中了几个服务模板的价格总计
             checkedServerList: [],
-            serverList: [{
-                id: "1",
-                server_name: "PS简单处理图片",
-                unit_price: "2000.00", //单价
-                unit: "小时", //单位
-                describe: "海报设计定制图片海报设计定制图片海报设计定制图片", //简介
-                number: 1,
-                isChecked: false
-            },
-            {
-                id: "2",
-                server_name: "PS简单处理图片2",
-                unit_price: "1000.00", //单价
-                unit: "天", //单位
-                describe: "巴拉巴拉", //简介
-                number: 1,
-                isChecked: false
-            }],
+            serverList: [],
+            // serverList: [{
+            //     id: "1",
+            //     server_name: "PS简单处理图片",
+            //     unit_price: "2000.00", //单价
+            //     unit: "小时", //单位
+            //     describe: "海报设计定制图片海报设计定制图片海报设计定制图片", //简介
+            //     number: 1,
+            //     isChecked: false
+            // },
+            // {
+            //     id: "2",
+            //     server_name: "PS简单处理图片2",
+            //     unit_price: "1000.00", //单价
+            //     unit: "天", //单位
+            //     describe: "巴拉巴拉", //简介
+            //     number: 1,
+            //     isChecked: false
+            // }],
         };
-        //获取自己的服务报价模板列表
-        this.handleGetSelfService = (res) => {
-            console.log(res);
-            if (res.success) {
-                let item_list = res.data.item_list;
-                item_list.map((value,index,elem)=>{
-                    elem[index].number = 1;
-                    elem[index].isChecked = false;
-                    elem[index].server_name = value.Name;
-                    elem[index].describe = value.Description;
-                })
-                this.setState({ serverList: item_list});
-            } else {
-                Toast.fail(res.message, 2);
-            }
-        }
+        
     }
 
-    componentDidMount(){
+    componentWillMount() {
+        if (this.props.state.checkNum) {
+            let { checkNum, checkPrice, checkedServerList, showModal } = this.props.state;
+            this.setState({ checkNum, checkPrice, checkedServerList, showModal });
+        }
+        if (this.props.state.serverList) {
+            let { serverList } = this.props.state;
+            this.setState({ serverList });
+        }
+        
+    }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.state.serverList) {
+            let { serverList } = nextProps.state;
+            this.setState({ serverList });
+        }
+    }
+    componentDidMount() {
         const maskDOM = document.getElementsByClassName("am-modal-mask");
         if (maskDOM.length) {
             maskDOM[0].style.display = "none";
         }
-        //新增服务模板
-        runPromise('get_self_service_template_list', {
-            offset: 0,
-            limit: 10,
-        }, this.handleGetSelfService, true);
     }
     componentDidUpdate() {
         const maskDOM = document.getElementsByClassName("am-modal-mask");
@@ -105,10 +103,11 @@ export default class ServerCreate extends React.Component {
         })
         this.setState({
             checkNum: sumNumber,
-            checkPrice: sumPrice,
+            checkPrice: sumPrice.toFixed(2),
             checkedServerList: checkedServerList,
             showModal: !!sumNumber
         })
+        this.props.updateCountNumberAndPrice(sumNumber, sumPrice.toFixed(2), checkedServerList, !!sumNumber, this.state.serverList);
     }
     onChangeisChecked = (index) => {
         const isChecked = this.state.serverList[index].isChecked;
@@ -121,7 +120,14 @@ export default class ServerCreate extends React.Component {
         
     }
     onChangeThisNumber = (val, index) => {
-        let value = (isNaN(val) || val == "" ) ? "" : parseInt(val);
+        // console.log(val, index)
+        // let value = (isNaN(val) || val == "" ) ? "" : parseInt(val);
+        let value;
+        if (isNaN(val) || val == "") {
+            return ;
+        } else {
+            value = parseInt(val);
+        }
         const newServerList = update(this.state.serverList, { [index]: { number: { $set: value } } });
         // this.setState({
         //     serverList: newServerList
@@ -139,7 +145,18 @@ export default class ServerCreate extends React.Component {
     //     }))
     // }
     onClickCreateServer = () => {
-
+        if (this.state.checkNum) {
+            hashHistory.push({
+                pathname: '/createOffer',
+                query: { form: 'creatServer' },
+                state: {
+                    checkedServerList: this.state.checkedServerList,
+                    checkPrice: this.state.checkPrice
+                }
+            });
+        } else {
+            Toast.info("请选择服务项目", 1.5);
+        }
     }
     render () {
         // this.countNumberAndPrice();
@@ -187,6 +204,7 @@ export default class ServerCreate extends React.Component {
                                 unit={val.unit}
                                 number={val.number}
                                 onChangeThisNumber={this.onChangeThisNumber}
+                                isChecked={val.isChecked}
                             ></ServerItem>
                         )
                     })
@@ -206,7 +224,7 @@ export default class ServerCreate extends React.Component {
                     wrapClassName="server-button-modal"
                     popup
                     visible={this.state.showModal}
-                    onClose={() => { this.setState({ showModal: false}) }}
+                    // onClose={() => { this.setState({ showModal: false}) }}
                     animationType="slide-up"
                     maskClosable={false}
                     transparent={true}

@@ -75,7 +75,7 @@ class OrderPopup extends React.Component {
     }
     onClickPay = () => {
         console.log({ "payment": this.props.payment, "PayMethod": this.state.PayMethod});
-        this.ajaxToPay(this.props.model_id, this.props.payment, this.state.PayMethod);
+        this.ajaxToPay(this.props.model_id, this.props.payment, this.state.PayMethod, this.props.pay_model,);
         //由于生成订单需要时间，加一个弹窗提示。
         Toast.loading("加载中...", 6);
     }
@@ -107,16 +107,9 @@ class OrderPopup extends React.Component {
                 orderInfo: orderInfo
             }, (ret, err) => {
                 if (ret.code == 9000) {
-                    Toast.success("支付成功!", 1, ()=>{
-                        this.props.setShowModal(false); //关闭支付Modal
-                        if (this.props.getMainProjectList) {
-                            this.props.getMainProjectList();
-                        }
-                    })
+                    this.props.paySuccessCallback();
                 } else {
-                    Toast.offline("支付失败!", 1, ()=>{
-                        this.props.setShowModal(false); //关闭支付Modal
-                    })
+                    this.props.payFailCallback();
                 }
             });
         }

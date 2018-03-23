@@ -721,3 +721,68 @@ html:not([data-scale]) .am-button.confirm-offer-button::before{
     color: #bbb;
 }
 /**************** orderList end*********/
+
+.am-button.rechargeButton::before{
+    border: none!important;
+}
+.rechargeButton{
+    height: auto;
+    line-height: 30px;
+    padding: 0 8px;
+    background-color: #17A9DE;
+    color: #fff;
+}
+.recharge-input.am-list-item.am-input-item{
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+.pay-modal-div .pay-list .two .am-list-extra{
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+
+// .am-list-header .contacts-list-footer{
+//     background-color: #F5F5F9;
+//     height: 5px;
+//     border-top: 1px solid #ECECED;
+//     border-bottom: 1px solid #ECECED;
+// }
+// .contacts-list .am-list-header{
+//     padding: 0;
+// }
+.contacts-swipe::after{
+    content: '';
+    background-color: #F5F5F9;
+    height: 3px;
+    border-top: 1px solid #ECECED;
+    border-bottom: 1px solid #ECECED;
+    display: block;
+}
+.contacts-swipe .am-list-brief{
+    font-size: 16px!important;
+}
+.contacts-swipe .icon-dianhua{
+    font-size: 18px;
+}
+.recharge-input .am-input-label-5{
+    width: 26px!important;
+}  
+.recharge-input .am-input-label-5 .iconfont{
+    font-size: 20px;
+    line-height: 1;
+}
+.contacts-modal .recharge-input.am-list-item.am-input-item{
+    border-bottom: 0;
+    border-radius: 0;
+}
+.contacts-modal .recharge-input.am-list-item.am-input-item.one{
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+.contacts-modal .recharge-input.am-list-item.am-input-item.four{
+    border-bottom: 1px solid #ddd;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}

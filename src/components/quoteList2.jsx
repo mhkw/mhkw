@@ -169,6 +169,19 @@ export default class Account2 extends React.Component {
             message,
         }, this.handleChangeProjectStatus);
     }
+    //支付成功的回调
+    paySuccessCallback = () => {
+        Toast.success("支付成功!", 1, () => {
+            this.setShowModal(false); //关闭支付Modal
+            this.getMainProjectList(); //重新刷新项目列表
+        })
+    }
+    //支付失败的回调
+    payFailCallback = () => {
+        Toast.offline("支付失败!", 1, () => {
+            this.setShowModal(false); //关闭支付Modal
+        })
+    }
     render() {
         return(
             <QueueAnim className="demo-content" type={['right', 'right']}>
@@ -255,7 +268,15 @@ export default class Account2 extends React.Component {
                                 setState={this.setState.bind(this)}
                             />
                     </Tabs>
-                        {this.props.children && React.cloneElement(this.props.children, { getMainProjectList: this.getMainProjectList.bind(this), setShowModal: this.setShowModal, showModal: this.state.showPayModal, model_id: this.state.payModel_id, payment: this.state.payTotalAmount })}
+                        {this.props.children && React.cloneElement(this.props.children, { 
+                            paySuccessCallback: this.paySuccessCallback, 
+                            payFailCallback: this.payFailCallback, 
+                            setShowModal: this.setShowModal, 
+                            showModal: this.state.showPayModal, 
+                            pay_model: 'project', 
+                            model_id: this.state.payModel_id, 
+                            payment: this.state.payTotalAmount 
+                        })}
                 </div>
                 ] : null}
             </QueueAnim>
