@@ -66,10 +66,9 @@ export default class LoginView extends React.Component {
         };
         this.genData = (pIndex = 0, realLength, data) => {
             let dataBlob = [];
-            for (let i = 0; i < realLength; i++) {
-                const ii = (pIndex * realLength) + i;
-                dataBlob=data;
-            }
+            // for (let i = 0; i < realLength; i++) {
+                dataBlob = data;
+            // }
             return dataBlob;
         };
         this.handleSend = (res) => {
@@ -288,7 +287,7 @@ export default class LoginView extends React.Component {
                     obj={rowData}
                     sectionID={sectionID}
                     rowID={rowID}
-                    keyCode={this.state.keyCode}
+                    customId={this.state.commentId}
                     huifu={this.state.tempObj}
                     toggleInput={this.toggleInput}
                     setState={this.setState.bind(this)}  
@@ -365,7 +364,7 @@ export default class LoginView extends React.Component {
                             {this.state.isLoading ? '加载中...' : '加载完成'}
                         </div>)}
                         renderRow={row}
-                        scrollRenderAheadDistance={1000}
+                        scrollRenderAheadDistance={10000}
                         renderSeparator={separator}
                         useBodyScroll={this.state.useBodyScroll}
                         pullToRefresh={<PullToRefresh
@@ -411,13 +410,13 @@ class Item extends React.Component{
     constructor(props) {
         super(props)
         this.state = {
-
+            
         }
         
     }
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps, 111111111);
-        if (nextProps.keyCode == nextProps.rowID) {
+        console.log(nextProps);
+        if (nextProps.obj.id == nextProps.customId) {
             // this.setState({obj:})
             console.log(nextProps,111111111);
         }

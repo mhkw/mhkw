@@ -122,15 +122,20 @@ export default class LoginView extends React.Component {
             }
         }
         this.addcommentlis=(req)=>{
-            if(req.success){
+            if (req.success) {
+                let wrap = document.createElement("div");
+                let domLi = document.createElement('li');
+                let innerSpan = document.createElement('span');
+                let innerI = document.createElement('i');
                 if (!this.state.replySendStatus){        //回复
-                    
-
+                    innerSpan.innerHTML = decodeURIComponent(validate.getCookie('user_name'))+'回复:'+ this.state.replay_name;
+                    innerI.innerHTML = this.state.content;
+                    domLi.appendChild(innerSpan);
+                    domLi.appendChild(innerI);
+                    wrap.appendChild(domLi);
+                    let currentLi = document.getElementById("rowid" + this.state.keyCode);
+                    currentLi.appendChild(wrap);
                 }else{                           //留言
-                    let wrap = document.createElement("div");
-                    let domLi = document.createElement('li');
-                    let innerSpan = document.createElement('span');
-                    let innerI = document.createElement('i');
                     innerSpan.innerHTML = req.data.nick_name;
                     innerI.innerHTML = req.data.comment_content;
                     domLi.appendChild(innerSpan);
@@ -391,7 +396,7 @@ export default class LoginView extends React.Component {
                                                 {
                                                     value.commentrep_data && value.commentrep_data.commentrep_list.length > 0 ?
                                                         value.commentrep_data.commentrep_list.map((val) => {
-                                                            return <li onClick={() => {
+                                                            return val.content?<li onClick={() => {
                                                                 this.setState({
                                                                     placeholderWords: "回复：" + val.nick_name,
                                                                     showReplyInput: true,
@@ -409,7 +414,7 @@ export default class LoginView extends React.Component {
                                                                         <span>{val.nick_name}: </span>
                                                                 }
                                                                 {val.content ? val.content : val.comment_content}
-                                                            </li>
+                                                            </li>:""
                                                         }) : ""
                                                 }
                                             </div>
@@ -497,7 +502,7 @@ export default class LoginView extends React.Component {
                             refreshing={this.state.refreshing}
                             onRefresh={this.onRefresh}
                             damping="on"
-                            damping={100}                    
+                            damping={100}
                         />}
                         onEndReached={this.onEndReached}
                         pageSize={5}
