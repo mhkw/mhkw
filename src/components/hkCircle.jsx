@@ -286,11 +286,9 @@ export default class LoginView extends React.Component {
                                         query: { userId: obj.uid }
                                     })
                                 }}>
-                                    <span className="fn-left" style={{ fontSize: '16px' }}>{obj.nick_name} <i className="iconfont icon-xingbienv_f" style={{
-                                        color: "#F46353",
-                                        fontWeight: "800",
-                                        fontSize: "12px"
-                                    }}></i></span>
+                                    <span className="fn-left" style={{ fontSize: '16px' }}>{obj.nick_name} 
+                                        {obj.sex == '女' ? <i className="iconfont icon-xingbienv_f" style={{ color: '#F46353', fontWeight: "800", fontSize: "12px" }} /> : obj.sex == '男' ? <i className="iconfont icon-xingbienanxuanzhong" style={{ color: '#4DA7E0', fontWeight: "800", fontSize: "12px" }} /> : ""}
+                                    </span>
                                     <span className="fn-right personalMsg">发布了帖子</span>
                                 </p>
                                 <p className="personalMsg">

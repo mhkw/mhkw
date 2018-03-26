@@ -27,6 +27,7 @@ import QuoteList from './components/quoteList';
 import QuoteList2 from './components/quoteList2';
 import Withdraw from './components/Withdraw';
 import DemandList from './components/DemandList';
+import DemandDetail from './components/DemandDetail';
 import Test from './components/page1';
 
 import TempTest from './components/TempTest';
@@ -69,6 +70,7 @@ ReactDOM.render(
         <Route path="/account" component={Account} />
         <Route path="/orderList" component={OrderList} />
         <Route path="/demand" component={DemandList} />
+        <Route path="/demandDetail" component={DemandDetail} />
         {/* <Route path="/quoteList" component={QuoteList} /> */}
         <Route path="/quoteList" component={QuoteList2}>
             <Route component={OrderPopup}>

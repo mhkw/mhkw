@@ -3,6 +3,7 @@ import { List, InputItem, PullToRefresh, ListView, Toast, Button, NavBar, Icon }
 import { Link,hashHistory} from 'react-router';
 import axios from 'axios';
 import QueueAnim from 'rc-queue-anim';
+import update from 'immutability-helper';
 
 import '../css/font/iconfont.css'
 
@@ -33,6 +34,29 @@ export default class DemandList extends React.Component {
             let dataBlob = [];
             dataBlob = data;
             return dataBlob;
+        };
+        this.addheartlis = (res, para) => {   //点赞
+            if (res.success) {
+                let numStar = para.e.target.parentNode.children[1].innerText;
+                let loveLis = this.state.res[para.idx].love_list;
+                if (res.message.type == 'delete') {
+                    loveLis.map((value, index) => {
+                        if (res.message.nick_name == value.nick_name) {
+                            loveLis.splice(index, 1);
+                        }
+                    })
+                    para.e.target.parentNode.children[0].style.color = "#333";
+                    para.e.target.parentNode.children[1].innerHTML = numStar - 1;
+                    let newList = update(this.state.res, { [para.idx]: { love_list: { $set: loveLis } } });
+                    this.setState({ res: newList })
+                } else if (res.message.type == 'add') {
+                    para.e.target.parentNode.children[0].style.color = "#F95231";
+                    para.e.target.parentNode.children[1].innerHTML = numStar - 0 + 1;
+                    loveLis.push(res.message);
+                    let newList = update(this.state.res, { [para.idx]: { love_list: { $set: loveLis } } });
+                    this.setState({ res: newList })
+                }
+            }
         };
         this.handleLoginSend = (res) => { 
             console.log(res);
@@ -88,8 +112,8 @@ export default class DemandList extends React.Component {
     getProgectList(page,type = "add_time") {  
         axios({
             method: "POST",
-            url: 'https://www.huakewang.com/hkw_newapi/get_project_list/0/'+type+'/0/0/10/'+page,
-            // url: 'https://www.huakewang.com/hkw_newapi/get_project_list/0/' + type +'/120.219375/30.259244/10/'+page,
+            // url: 'https://www.huakewang.com/hkw_newapi/get_project_list/0/'+type+'/0/0/10/'+page,
+            url: 'https://www.huakewang.com/hkw_newapi/get_project_list/0/' + type +'/120.219375/30.259244/10/'+page,
             data: {
                 keycode:""
             }
@@ -112,6 +136,14 @@ export default class DemandList extends React.Component {
         // }, this.handleLoginSend, false, "get");
 
     }
+    addHeart = (e, toId, rowID) => {    //点赞
+        e.persist();
+        runPromise("add_love", {
+            id: toId,
+            user_id: validate.getCookie('user_id'),
+            model: "project"
+        }, this.addheartlis, true, "post", { e: e, idx: rowID });
+    }
     onRefresh = () => {   //顶部下拉刷新数据
         this.setState({
             refreshing: true,
@@ -130,7 +162,7 @@ export default class DemandList extends React.Component {
             <div
                 key={`${sectionID}-${rowID}`}
                 style={{
-                    backgroundColor: '#fff',
+                    backgroundColor: '#e2e2e2',
                     height: 8,
                 }}
             />
@@ -140,7 +172,7 @@ export default class DemandList extends React.Component {
             return (
                 <div key={rowID}>
                     <div className="items">
-                        <div className="itemsTop">
+                        <div className="itemsTop" style={{paddingRight:"0"}}>
                             <div className="itemsTopPic fn-left" onClick={() => {
                                 hashHistory.push({
                                     pathname: '/designerHome',
@@ -156,30 +188,29 @@ export default class DemandList extends React.Component {
                                         query: { userId: obj.uid }
                                     })
                                 }}>
-                                    <span className="fn-left" style={{ fontSize: '16px' }}>{obj.nick_name} <i className="iconfont icon-xingbienv_f" style={{
-                                        color: "#F46353",
-                                        fontWeight: "800",
-                                        fontSize: "12px"
-                                    }}></i></span>
-                                    
+                                    <span className="fn-left" style={{ fontSize: '16px' }}>{obj.nick_name} 
+                                        {obj.sex == '女' ? <i className="iconfont icon-xingbienv_f" style={{ color: '#F46353', fontWeight: "800", fontSize: "12px" }} /> : obj.sex == '男' ? <i className="iconfont icon-xingbienanxuanzhong" style={{ color: '#4DA7E0', fontWeight: "800", fontSize: "12px" }} /> : ""}
+                                    </span>
                                 </p>
                                 <p className="personalMsg">
                                     <span>{obj.title}</span>
                                     <span className="fn-right personalMsg">
-                                        <i className="iconfont icon-dingwei"></i>
-                                        {((obj.distance - 0) / 1000).toFixed(2) > 20 || ((obj.distance - 0) / 1000).toFixed(2) == 0 ? "[未知]" : ((obj.distance - 0) / 1000).toFixed(2)+'km'}
+                                        <i className="iconfont icon-dingwei"></i>&nbsp;
+                                        {((obj.distance - 0) / 1000).toFixed(2) > 200 || ((obj.distance - 0) / 1000).toFixed(2) == 0 ? "[未知]" : ((obj.distance - 0) / 1000).toFixed(2)+'km'}
                                     </span>
                                 </p>
                             </div>
                         </div>
-
                         <div className="itemPicList">
-                            <p>{obj.title}</p>
-                            <div>
+                            <div style={{padding:"10px 0 10px 0",lineHeight:"18px"}}>
+                                <i style={{ color: "red" }}>预算：{obj.budget_price}</i>&nbsp;&nbsp;
                                 {obj.content}
                             </div>
                             <div style={{ color: "#949494", overflow: "hidden", borderBottom: "1px dotted #dedcdc", marginBottom: "10px" }}>
-                                <div style={{ float: "left", paddingTop: "4px" }}>{obj.add_time_format}</div>
+                                <div style={{ float: "left", paddingTop: "4px" }}>
+                                    <i className="iconfont icon-shijian2"></i>&nbsp;{obj.add_time_format}&nbsp;&nbsp;&nbsp;
+                                    <i className="iconfont icon-yanjing" style={{ color:"#ccc"}}></i>&nbsp;{obj.hits}
+                                </div>
                                 <div style={{ float: "right" }}>
                                     <div onClick={(e) => {
                                         this.addHeart(e, obj.id, rowID);
@@ -199,10 +230,12 @@ export default class DemandList extends React.Component {
                                         display: "inline-block",
                                         paddingTop: "4px"
                                     }}
-                                        onClick={(e) => {
-                                            this.toggleInput(rowID, obj.uid, obj.id);
-                                            this.setState({ placeholderWords: "给" + obj.nick_name + "留言：" })
-                                        }}>
+                                    onClick={(e) => {
+                                        hashHistory.push({
+                                            pathname: '/demandDetail',
+                                            query: { demandId: obj.id,name:obj.nick_name }
+                                        })
+                                    }}>
                                         <i className="iconfont icon-liuyan"
                                             style={{
                                                 fontSize: "14px",
@@ -224,7 +257,7 @@ export default class DemandList extends React.Component {
                 animConfig={[
                     { opacity: [1, 0], translateX: [0, 150] }
                 ]}>
-                    <div className="forgetNav" key="120">
+                    <div className="forgetNav" key="1">
                         <NavBar
                             mode="light"
                             icon={<Icon type="left" size="lg" color="#707070" />}
@@ -236,13 +269,13 @@ export default class DemandList extends React.Component {
                         >需求</NavBar>
                     </div>
                     <div style={{height:"1.2rem"}}></div>
-                    <div className="homeWrap ">
+                    <div className="homeWrap">
                         <div className="mainwrap homeWrapMain">
                             <ListView
                                 key={this.state.useBodyScroll}
                                 ref={el => this.lv = el}
                                 dataSource={this.state.dataSource}
-                                renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center', marginBottom: "1.4rem" }}>
+                                renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center' }}>
                                     {this.state.isLoading ? '加载中...' : '加载完成'}
                                 </div>)}
                                 style={{

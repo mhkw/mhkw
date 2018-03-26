@@ -179,6 +179,10 @@
   width: 100%;
 }
 
+.demand-popup-comment-input-box {
+  left: 0;
+}
+
 .circle-popup-comment-input-box {
   bottom: 1.4rem;
   left: 0;
@@ -199,7 +203,7 @@
   box-sizing: border-box;
 }
 
-.popup-comment-input-box .comment-input textarea {
+.comment-input textarea {
   min-height: 25px;
   border-bottom: 1px solid #409ad6;
 }

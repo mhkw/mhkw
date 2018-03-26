@@ -34,8 +34,8 @@ export const PersonalMsg = (props) => (
         <div className="itemsTopRight">
             <p>
                 <span className="fn-left" onClick={() => { hashHistory.push({ pathname: '/designerHome', query: { userId: props.id } }) }} style={{ fontSize: '16px' }}>
-                    {props.nick_name} <i className={props.sex == '男' ? 'iconfont icon-xingbienanxuanzhong' : 'iconfont icon-xingbienv_f'}
-                        style={props.sex == '男' ? { color: '#4DA7E0', fontWeight: "800", fontSize: "12px" } : { color: '#F46353', fontWeight: "800", fontSize: "12px" }}></i>
+                    {props.nick_name}&nbsp;
+                    {props.sex == '女' ? <i className="iconfont icon-xingbienv_f" style={{ color: '#F46353', fontWeight: "800", fontSize: "12px" }} /> : props.sex == '男' ? <i className="iconfont icon-xingbienanxuanzhong" style={{ color: '#4DA7E0', fontWeight: "800", fontSize: "12px" }} /> : ""}
                 </span>
                 <span className="fn-right personalMsg"><i className="iconfont icon-dingwei"></i>{props.distance}km</span>
             </p>
