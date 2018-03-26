@@ -86,9 +86,14 @@ export default class HomeView extends React.Component {
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(this.rData),
                     hasMore: res.data.total_pages > pageIndex ? true : false,
-                    isLoading: false,
+                    isLoading: true,
                     page:++this.state.page
                 });
+                setTimeout(() => {
+                    this.setState({
+                        refreshing: false
+                    })
+                }, 300);
             } else {
                 console.log(res);
             }
@@ -144,18 +149,20 @@ export default class HomeView extends React.Component {
     }
 
     onRefresh = () => {   //顶部下拉刷新数据
+        this.setState({
+            refreshing: true,
+            isLoading: true 
+        })
         this.getWorkList(this.state.keywords,1);
     };
 
     onEndReached = (event) => {
         // load new data   数据加载完成
         // hasMore: from backend data, indicates whether it is the last page, here is false
-        if (this.state.isLoading && !this.state.hasMore) {
+        if (!this.state.isLoading && !this.state.hasMore) {
             return ;
         };
-        this.setState({ 
-            isLoading: true
-        });
+        // this.setState({ isLoading: true });
         this.getWorkList(this.state.keywords, this.state.page);
     };
     
@@ -260,7 +267,7 @@ export default class HomeView extends React.Component {
                         dataSource={this.state.dataSource}
                         // renderHeader={() => <span>Pull to refresh</span>}
                         renderFooter={() => (<div style={{ padding: 20, textAlign: 'center' }}>
-                            {/* {this.state.isLoading ? 'Loading...' : 'Loaded'} */}
+                            {this.state.isLoading ? 'Loading...' : 'Loaded'}
                         </div>)}
                         renderRow={row}
                         renderSeparator={separator}

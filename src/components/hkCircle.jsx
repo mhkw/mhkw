@@ -2,7 +2,6 @@ import React from 'react'
 import { List, InputItem, PullToRefresh, ListView, Carousel, WingBlank, Modal, TextareaItem, Toast } from 'antd-mobile';
 import { Link, hashHistory } from 'react-router';
 import QueueAnim from 'rc-queue-anim';
-import axios from 'axios';
 import { ItemPicLists, PersonalMsg } from './templateHomeCircle';
 
 import update from 'immutability-helper';
@@ -44,7 +43,7 @@ export default class LoginView extends React.Component {
             page:"1",
             imgHeight: 176,
             slideIndex: 0,
-            dataSource: dataSource.cloneWithRows(JSON.parse(sessionStorage.getItem("resdata")) ? JSON.parse(sessionStorage.getItem("resdata")) : {}),
+            dataSource: dataSource.cloneWithRows(JSON.parse(sessionStorage.getItem("resdata")) ? JSON.parse(sessionStorage.getItem("resdata")) : []),
             refreshing: false,
             isLoading: true,
             useBodyScroll: true,
@@ -65,10 +64,7 @@ export default class LoginView extends React.Component {
         };
         this.genData = (pIndex = 0, realLength, data) => {
             let dataBlob = [];
-            for (let i = 0; i < realLength; i++) {
-                const ii = (pIndex * realLength) + i;
-                dataBlob = data;
-            }
+            dataBlob = data;
             return dataBlob;
         };
         this.handleSend = (res) => {
@@ -84,16 +80,18 @@ export default class LoginView extends React.Component {
                 }else{
                     this.rData = [ ...this.rData, ...this.genData(pageIndex++, realDataLength, realData) ];
                 }
-                
-                // sessionStorage.setItem("users", JSON.stringify(realData))
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(this.rData),
-                    hasMore: res.data.total_pages > pageIndex ? true : false,
-                    // refreshing: false,
-                    isLoading: false,
+                    hasMore: res.data.is_next_page ? true : false,
+                    isLoading: res.data.is_next_page ? true : false,
                     page: ++this.state.page,
                     res: this.state.dataSource.cloneWithRows(this.rData)._dataBlob.s1,
                 });
+                setTimeout(() => {
+                    this.setState({
+                        refreshing: false                        
+                    })
+                }, 300);
             }else{
                 console.log(res);
             }
@@ -156,10 +154,17 @@ export default class LoginView extends React.Component {
         }
     }
     shouldComponentUpdate(){
-        return (this.props.router.location.action === 'POP')
+        return (this.props.router.location.action === 'POP');
     }
     componentDidMount() {
+        this.props.router.setRouteLeaveHook(
+            this.props.route,
+            this.routerWillLeave
+        )
         this.getNoticeList(1);
+    }
+    routerWillLeave(nextLocation) {
+        pageIndex = 0;
     }
     getNoticeList=(page)=>{
         runPromise("get_circle_list", {        //获取列表
@@ -181,28 +186,17 @@ export default class LoginView extends React.Component {
     }
     onRefresh = () => {   //顶部下拉刷新数据
         this.setState({ 
-            // refreshing: true, 
-            isLoading: true 
+            refreshing: true
         });
         this.getNoticeList(1);
-        // simulate initial Ajax
-        // setTimeout(() => {
-        //     this.rData = genData();
-        //     this.setState({
-        //         dataSource: this.state.dataSource.cloneWithRows(this.rData),
-        //         refreshing: false,
-        //         isLoading: false
-        //     });
-        // }, 600);
     };
 
     onEndReached = (event) => {
         // load new data   数据加载完成
-        if (this.state.isLoading && !this.state.hasMore) {
+        if (!this.state.isLoading && !this.state.hasMore) {
             return;
         }
         this.getNoticeList(this.state.page);
-        this.setState({ isLoading: true });
     };
     addHeart=(e,toId,rowID)=>{    //点赞
         e.persist();
@@ -308,13 +302,13 @@ export default class LoginView extends React.Component {
                             <p>{obj.title}</p>
                             <ul>
                                 {
-                                    obj.attachment_list.map((value, idx) => {
+                                    obj.attachment_list?obj.attachment_list.map((value, idx) => {
                                         return idx < 6 ? <li>
                                             <a href="javascript:;">
                                                 <img src={value.path_thumb} alt="" style={{ height: "100%" }} />
                                             </a>
                                         </li> : ""
-                                    })
+                                    }):""
                                 }
                             </ul>
                             <div style={{ color: "#949494", overflow: "hidden", borderBottom: "1px dotted #dedcdc", marginBottom: "10px" }}>
@@ -460,7 +454,7 @@ export default class LoginView extends React.Component {
                     </WingBlank>
                     <div className="fourAvt">
                         <ul>
-                            <li>
+                            <li onClick={() => {hashHistory.push({pathname: '/demand'})}}>
                                 <Link>
                                     <img src={loginUrl.demand} />
                                     <p>项目</p>
@@ -501,8 +495,6 @@ export default class LoginView extends React.Component {
                         pullToRefresh={<PullToRefresh
                             refreshing={this.state.refreshing}
                             onRefresh={this.onRefresh}
-                            damping="on"
-                            damping={100}
                         />}
                         onEndReached={this.onEndReached}
                         pageSize={5}
