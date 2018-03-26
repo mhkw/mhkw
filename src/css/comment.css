@@ -1,0 +1,232 @@
+@charset "UTF-8";
+.info .icon-wujiaoxing {
+  color: #ccc;
+}
+
+.info .icon-wujiaoxing.light {
+  color: #409ad6;
+}
+
+.comment-item {
+  padding: 10px 15px 0;
+  margin: .266667rem 0 .4rem;
+}
+
+.comment-item .user-pic {
+  float: left;
+  width: 1rem;
+  margin-right: 15px;
+}
+
+.comment-item .user-img {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 100%;
+}
+
+.comment-item .comment-top {
+  margin-left: 1.2rem;
+  height: 1.2rem;
+}
+
+.comment-item .comment-top .scoreTitle {
+  color: #6d6d6d;
+  margin-right: .133333rem;
+}
+
+.comment-item .context .text {
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: #6d6d6d;
+  font-size: 14px;
+}
+
+.comment-item .context .get-all {
+  display: inline-block;
+  padding: .066667rem;
+  color: #409ad6;
+}
+
+.comment-item .dishPic {
+  margin-top: .266667rem;
+  overflow: auto;
+}
+
+.comment-item .dishPic .imgFrame {
+  font-size: 0;
+  width: 30%;
+  margin: 0 .08rem;
+  box-sizing: border-box;
+  margin-bottom: .08rem;
+  float: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.comment-item .dishPic .imgFrame:after {
+  content: '';
+  display: block;
+  margin-top: 100%;
+  /* margin 百分比相对父元素宽度计算 */
+}
+
+.comment-item .dishPic .imgFrame img {
+  position: absolute;
+  height: 100%;
+  transform: translateX(-50%);
+  left: 50%;
+}
+
+.comment-item .bottom-box {
+  margin-top: .2rem;
+  color: #ccc;
+  font-size: 14px;
+  padding-bottom: 5px;
+  border-bottom: 1px dashed #ccc;
+}
+
+.comment-item .bottom-box .time {
+  vertical-align: sub;
+}
+
+.comment-item .bottom-box .comment-icon {
+  float: right;
+  position: relative;
+}
+
+.comment-item .bottom-box .comment-icon span {
+  margin: .133333rem;
+  font-size: 16px;
+}
+
+.comment-item .bottom-box .comment-icon .dashed-arrow {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+  border-top: 1px dashed #ccc;
+  border-left: 1px dashed #ccc;
+  transform: rotate(45deg);
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -10px;
+  margin: 0 auto;
+}
+
+.comment-item .comment-like-box {
+  padding: .133333rem;
+  padding-bottom: 0;
+  color: #409ad6;
+  margin-top: .2rem;
+  background-color: #eee;
+}
+
+.comment-item .comment-like-box .iconfont {
+  float: left;
+  margin-right: .066667rem;
+}
+
+.comment-item .comment-like-box .like-user li {
+  float: left;
+}
+
+.comment-item .comment-like-box .txt {
+  float: left;
+}
+
+.comment-item .comment-reply-box {
+  color: #555;
+  padding: .133333rem;
+  background-color: #eee;
+}
+
+.comment-reply-box .reply-line {
+  padding: .066667rem 0;
+  -webkit-tap-highlight-color: #504242;
+}
+
+.comment-reply-box .reply-line:active {
+  background-color: #ccc;
+}
+
+.comment-reply-box .reply-line .origin {
+  float: left;
+  color: #409ad6;
+}
+
+.clearfix:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+  font-size: 0;
+}
+
+.clearfix {
+  *zoom: 1;
+}
+
+.popup-comment-input-box {
+  border-top: 1px solid #bbb;
+  background-color: #ddd;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.demand-popup-comment-input-box {
+  left: 0;
+}
+
+.circle-popup-comment-input-box {
+  bottom: 1.4rem;
+  left: 0;
+  border-bottom: 1px solid #bbb;
+  background-color: #e6e6e6fa;
+}
+
+.circle-popup-comment-input-box .am-textarea-control textarea {
+  font-size: 14px;
+  color: #333;
+}
+
+.popup-comment-input-box .comment-input {
+  background-color: transparent;
+  width: 80%;
+  width: 100%;
+  padding-right: 1.8rem;
+  box-sizing: border-box;
+}
+
+.comment-input textarea {
+  min-height: 25px;
+  border-bottom: 1px solid #409ad6;
+}
+
+.popup-comment-input-box .send-btn {
+  position: absolute;
+  right: .16rem;
+  bottom: .16rem;
+  font-size: 16px;
+  display: inline-block;
+  padding: .08rem .16rem;
+  border-radius: 3px;
+  border: 1px solid #999;
+  background-color: #ccc;
+  color: #999;
+}
+
+.commentList ul li {
+  background-color: #f0f0f0;
+  line-height: 0.75rem;
+}
+
+.commentList ul li span {
+  color: #1199d2;
+  margin-left: 6px;
+}

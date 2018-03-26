@@ -1,17 +1,22 @@
-import { Link } from 'react-router';
+import { Link, hashHistory } from 'react-router';
 
 /**
  * 设计师作品展示4张
  * @param {*} props 
  */
+const loginUrl = {
+    "selec": require('../images/selec.png'),
+}
 
 export const ItemPicLists = (props) => (
     <ul>
         {
             props.works_list.slice(0, 4).map(function (value, idx) {
                 return <li>
-                    <a href="#">
-                        <img src={value.path + '!540x390'} alt="" />
+                    <a href="javascript:;">
+                        <img src={
+                            value.path.indexOf('upaiyun.com') != -1 ? value.path + '!540x390' : value.path
+                        } alt="" />
                     </a>
                 </li>
             })
@@ -23,16 +28,14 @@ export const ItemPicLists = (props) => (
  */
 export const PersonalMsg = (props) => (
     <div className="itemsTop">
-        <div className="itemsTopPic fn-left">
-            <Link to="/">
-                <img src={props.path_thumb} alt="" />
-            </Link>
+        <div className="itemsTopPic fn-left" onClick={()=>{hashHistory.push({pathname: '/designerHome',query: { userId: props.id }})}}>
+            <img src={props.path_thumb || loginUrl.selec } alt="" />
         </div>
         <div className="itemsTopRight">
             <p>
-                <span className="fn-left" style={{ fontSize: '16px' }}>
-                    {props.nick_name} <i className={props.sex == '男' ? 'iconfont icon-xingbienanxuanzhong' : 'iconfont icon-xingbienv_f'}
-                        style={props.sex == '男' ? { color: '#4DA7E0', fontWeight: "800", fontSize: "12px" } : { color: '#F46353', fontWeight: "800", fontSize: "12px" }}></i>
+                <span className="fn-left" onClick={() => { hashHistory.push({ pathname: '/designerHome', query: { userId: props.id } }) }} style={{ fontSize: '16px' }}>
+                    {props.nick_name}&nbsp;
+                    {props.sex == '女' ? <i className="iconfont icon-xingbienv_f" style={{ color: '#F46353', fontWeight: "800", fontSize: "12px" }} /> : props.sex == '男' ? <i className="iconfont icon-xingbienanxuanzhong" style={{ color: '#4DA7E0', fontWeight: "800", fontSize: "12px" }} /> : ""}
                 </span>
                 <span className="fn-right personalMsg"><i className="iconfont icon-dingwei"></i>{props.distance}km</span>
             </p>

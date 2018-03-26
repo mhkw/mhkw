@@ -8,7 +8,7 @@ const ServerItem = (props) => (
     <div className="server-item clearfix">
         <Checkbox.CheckboxItem key={props.index} checked={props.isChecked} onChange={() => props.onChangeisChecked(props.index)}>
             {[
-                <h2 className="ellipsis">{props.title}</h2>, 
+                <h2 className="ellipsis">{props.title}</h2>,
                 <Link to="/addServer">编辑</Link>
             ]}
         </Checkbox.CheckboxItem>
@@ -26,7 +26,6 @@ const ServerItem = (props) => (
         />
     </div>
 )
-
 
 export default class ServerCreate extends React.Component {
     constructor(props) {

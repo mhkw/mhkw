@@ -18,6 +18,12 @@ let Ajax = axios.create({
 
 const ajaxURLList = {
     get_user_list_ex: "hkw_newapi/get_user_list_ex", //获取设计师列表 
+    get_circle_list:"hkw_newapi/get_circle_list",       //画客圈
+    add_love:"hkw_newapi/add_love",       //点赞
+    // get_comment_list:"hkw_newapi/get_comment_list",       //获取评论列表
+    add_comment: "hkw_newapi/add_comment", //添加评论
+    get_project_list: "hkw_newapi/get_project_list", //获取项目列表
+    rep_comment: "hkw_newapi/rep_comment", //添加回复
     search: "hkw_newapi/search", //获取搜索设计师列表
     get_works_list: "hkw_newapi/get_works_list/NULL/add_time/16/1/f", //临时测试
     get_blance: "payapi/get_blance", //支付-获取现金余额
@@ -34,7 +40,7 @@ const ajaxURLList = {
     get_user_info:"hkw_newapi/get_user_info",       //获取个人信息需登陆
     get_frozen_cash:"payapi/get_frozen_cash",       //获取冻结资金
     get_real_name_auth:"hkw_newapi/get_real_name_auth",       //获取实名认证状态
-    get_financial_list:"payapi/get_financial_list",       //获取交易记录
+    get_financial_list:"payapi/get_financial_list",           //获取交易记录
     add_service_template: "quoteApi/add_service_template", //报价-新增服务模板
     get_self_service_template_list: "quoteApi/get_self_service_template_list", // 报价-获取自己的服务报价模板列表
     project_pay_confirm: "quoteApi/project_pay_confirm", //报价订单，同意验收
@@ -107,9 +113,14 @@ export default function runPromise(ajaxName, param, handle, mustLogin = false, m
         });
         return;
     }
-
+    
     let serializeParam = { "user_id": cookie_user_id };
-    Object.assign(serializeParam, param);
+    if (method == "post") {
+        Object.assign(serializeParam, param);
+    } else {
+        serializeParam = param;
+    }
+    
     run(function* () {
         // let contents = yield ajaxName(param);
         let contents = yield sendAjax(ajaxURLList[ajaxName], serializeParam, method);
@@ -171,7 +182,7 @@ function requestIsSuccess(req) {
     let res = req.data;
     if (res && res.success) {
         return true;
-    } else if (res.field == "user_id" || res.field == "username") {
+    } else if (res.field == "user_id" || res.field == "username" || req.filed == "login") {
         Toast.offline("请先登录!", 1, ()=>{
             validate.setCookie("user_id","");
             //如果没登录，跳转到登录页

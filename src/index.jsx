@@ -28,6 +28,9 @@ import QuoteList2 from './components/quoteList2';
 import Withdraw from './components/Withdraw';
 import Contacts from './components/Contacts';
 import HOCoffer from './components/HOCoffer';
+import DemandList from './components/DemandList';
+import DemandDetail from './components/DemandDetail';
+import Test from './components/page1';
 
 import TempTest from './components/TempTest';
 import ConfirmOffer from './components/ConfirmOffer';
@@ -60,6 +63,7 @@ ReactDOM.render(
             <Route path="/mine" component={Mine} />             
         </Route>
         <Route path="/city" component={listViewDemo} />        
+        <Route path="/page1" component={Test} />        
         <Route path="/bind" component={Bind} />
         <Route path="/forget" component={Forget} />
         <Route path="/login" component={Login} />
@@ -73,6 +77,8 @@ ReactDOM.render(
             </Route>
         </Route>
         <Route path="/orderList" component={OrderList} />
+        <Route path="/demand" component={DemandList} />
+        <Route path="/demandDetail" component={DemandDetail} />
         {/* <Route path="/quoteList" component={QuoteList} /> */}
         <Route path="/quoteList" component={QuoteList2}>
             <Route component={OrderPopup}>
