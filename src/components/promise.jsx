@@ -7,7 +7,7 @@ import qs from 'qs';
 let Ajax = axios.create({
     // baseURL: 'https://bird.ioliu.cn/v2?Content-Type=application/x-www-form-urlencoded&url=https://www.huakewang.com/',
     baseURL: 'https://www.huakewang.com/',
-    timeout: 2000,
+    timeout: 3000,
     withCredentials: true,
     crossDomain: true,
     // headers: {
@@ -52,6 +52,7 @@ const ajaxURLList = {
     SaveMainProject: "quoteApi/SaveMainProject", //报价-添加项目信息
     saveProjects: "quoteApi/saveProjects", //报价-添加报价详细信息
     savePayStages: "quoteApi/savePayStages", //报价-添加付款列表
+    send_quote: "quoteApi/send_quote", //报价-发送报价
 }
 
 function get_user_list_ex(params) {

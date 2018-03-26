@@ -29,7 +29,7 @@ export default class CreateOffer extends React.Component {
             cut_off_day: "",
             inputDiscountPrice: "", //用户输入的优惠价格
             inputDiscountPriceError: false, //用户输入的优惠价格是否错误
-            howManyDiscount: "10",//几折优惠
+            howManyDiscount: "",//几折优惠
             checkedServerList: [], //选中的服务项，即报价列表也页传递过来的数据
             checkPrice: 0, //选中的服务项的总价，即报价列表也页传递过来的数据
             checkPriceTax: 0, //选中的服务项的总价加上%6的税价。这个价格是这个页面生成的，还不是最后的价格，不保存到HOCoffer.jsx里
@@ -67,7 +67,11 @@ export default class CreateOffer extends React.Component {
         });
     }
     onClickCreateOffer = () => {
-        this.props.CreateOfferQuotation(); //点击生成报价单
+        // this.props.CreateOfferQuotation(); //点击生成报价单
+        hashHistory.push({
+            pathname: '/confirmOffer',
+            query: { form: 'CreateOffer' },
+        });
     }
     hikeUpKeyboard = (param) => {
         let DOMCover = this.refs.coverCustomKeyboard;
@@ -93,19 +97,25 @@ export default class CreateOffer extends React.Component {
     //     }
     // }
     onChangeDiscount = (val) => {
-        if ((val - 0) < (this.state.checkPriceTax - 0) ) {
+        if ( (val - 0) < (this.state.checkPriceTax - 0) ) {
             this.setState({
                 inputDiscountPrice: val,
                 inputDiscountPriceError: false,
                 howManyDiscount: (parseFloat(val / this.state.checkPriceTax) * 10).toFixed(2)
             })
+            if (val > 0) {
+                this.props.setState({ 
+                    inputDiscountPrice: parseFloat(val).toFixed(2),
+                    howManyDiscount: (parseFloat(val / this.state.checkPriceTax) * 10).toFixed(2)
+                 });
+            }
         } else {
             this.setState({ inputDiscountPrice: val, inputDiscountPriceError: true})
         }
     }
     onBlurDiscount = (val) => {
         if ((val - 0) > (this.state.checkPriceTax - 0) * 0.6 && (val - 0) < (this.state.checkPriceTax - 0) ) {
-            this.props.setState({ inputDiscountPrice: val });
+            this.props.setState({ inputDiscountPrice: parseFloat(val).toFixed(2) });
             this.setState({ inputDiscountPriceError: false })
         } else {
             this.setState({ inputDiscountPriceError: true })
@@ -261,13 +271,13 @@ export default class CreateOffer extends React.Component {
                                 onErrorClick={()=>{
                                     Toast.fail("优惠后的价格低于原价但不能低于原价的60%！", 2);
                                 }}
-                                value={this.state.inputDiscountPrice}
+                                value={this.state.inputDiscountPrice ? this.state.inputDiscountPrice : this.props.inputDiscountPrice }
                                 onChange={(val) => { this.onChangeDiscount(val) }}
                                 onBlur={(val) => { this.onBlurDiscount(val) }}
                                 // onFocus={() => { this.hikeUpKeyboard(true) } }
                             ></InputItem>
                         </Flex.Item>
-                        <Flex.Item className="how-many-discount" style={{ "visibility": this.props.haveDiscount ? "visible" : "hidden" }} >约{this.state.howManyDiscount}折</Flex.Item>
+                        <Flex.Item className="how-many-discount" style={{ "visibility": this.props.haveDiscount ? "visible" : "hidden" }} >约{this.state.howManyDiscount ? this.state.howManyDiscount : (this.props.state.howManyDiscount ? this.props.state.howManyDiscount : '10' ) }折</Flex.Item>
                     </Flex>
                     <div className="discount">
                         <span className="unit">
@@ -276,7 +286,7 @@ export default class CreateOffer extends React.Component {
                         </span>
                         <span className="unit" style={{ "visibility": this.props.haveDiscount ? "visible" : "hidden" }} >
                             <span className="title">优惠后:</span>
-                            <span className="price">{this.state.inputDiscountPrice && !isNaN(this.state.inputDiscountPrice) ? this.state.inputDiscountPrice : this.state.checkPriceTax }</span>
+                            <span className="price">{this.state.inputDiscountPrice && (this.state.inputDiscountPrice > 0) ? this.state.inputDiscountPrice : (this.props.inputDiscountPrice ? this.props.inputDiscountPrice : this.state.checkPriceTax ) }</span>
                         </span>
                         <span className="tax-unit">(含6%税票)</span>
                     </div>

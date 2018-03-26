@@ -9,7 +9,7 @@ const OfferItem = (props) => (
             <Flex.Item className="price">{props.price}</Flex.Item>
         </Flex>
         <Flex justify="between" align="start">
-            <Flex.Item className="remarks" style={{ "flex": "3" }}>{props.remarks}</Flex.Item>
+            <Flex.Item className="remarks" style={{ "flex": "3" }}>{props.describe}</Flex.Item>
             <Flex.Item className="number">{props.number}</Flex.Item>
         </Flex>
     </div>
@@ -24,7 +24,7 @@ export default class ConfirmOffer extends React.Component {
         }
     }
     onClickConfirmOffer() {
-        console.log("click confirm offer")
+        this.props.CreateOfferQuotation(); //点击生成报价单
     }
     render() {
         return (
@@ -37,7 +37,7 @@ export default class ConfirmOffer extends React.Component {
                     leftContent={<span style={{ fontSize: "15px" }}>返回</span>}
                 >报价确认</NavBar>
                 <div className="create-offer-main">
-                    <OfferItem
+                    {/* <OfferItem
                         title={"PS简单处理图片"}
                         price={"2000.00/天"}
                         remarks={"海报创意，海报定制，创意，营销广告海报创意，海报定制，创意，营销广告海报创意，海报定制，创意，营销广告"}
@@ -48,11 +48,21 @@ export default class ConfirmOffer extends React.Component {
                         price={"2000.00/天"}
                         remarks={"海报创意，海报定制，创意，营销广告"}
                         number={"× 1"}
-                    />
+                    /> */}
+                    {
+                        this.props.state.checkedServerList && this.props.state.checkedServerList.map((val, index) => (
+                            <OfferItem
+                                title={val.Name}
+                                price={val.unit_price + val.unit}
+                                describe={val.describe}
+                                number={`× ${val.number}`}
+                            />
+                        ))
+                    }
                     <div className="tax-top-rate-box">
                         <p className="tax-top clearfix">
                             <span className="name">税率</span>
-                            <span className="price">{this.state.pure_price + "元"}</span>
+                            <span className="price">{this.props.state.checkPrice}元</span>
                         </p>
                         <p className="tax-bottom">6%税率</p>
                     </div>
@@ -69,16 +79,16 @@ export default class ConfirmOffer extends React.Component {
                     </Flex> */}
                     <div className="confirm-offer-remarks-div">
                         <span className="title">说明</span>
-                        <div className="remarks">{this.state.remarks}</div>
+                        <div className="remarks">{this.props.remarks}</div>
                     </div>
                     <div className="tax-top-rate-box confirm-offer-style">
                         <p className="tax-top clearfix">
-                            <span className="name subtotal">小计:</span>
-                            <span className="price subtotal">5632.00</span>
+                            <span className="name subtotal">总计:</span>
+                            <span className="price subtotal" style={{ "color": this.props.inputDiscountPrice ? "#464646" : "#ff1212" }}>{this.props.state.checkPriceTax}</span>
                         </p>
-                        <p className="tax-top clearfix">
+                        <p className="tax-top clearfix" style={{ "display": this.props.inputDiscountPrice ? "block" : "none" }}>
                             <span className="name discount">优惠后(含发票):</span>
-                            <span className="price discount">5600.00</span>
+                            <span className="price discount">{this.props.inputDiscountPrice}</span>
                         </p>
                     </div>
                     <div className="tax-top-rate-box confirm-offer-tax">
@@ -94,11 +104,11 @@ export default class ConfirmOffer extends React.Component {
                     <div className="customer-box customer">
                         <p>
                             <span className="left">姓名</span>
-                            <p className="right ellipsis"><span className="name">张兰</span><span className="company">(杭州画客科技有限公司 总经理)</span></p>
+                            <p className="right ellipsis"><span className="name">{this.props.customer_name}</span><span className="company">({this.props.customer_company})</span></p>
                         </p>
                         <p>
                             <span className="left">手机</span>
-                            <p className="right">18904815162</p>
+                            <p className="right">{this.props.customer_phone}</p>
                         </p>
                     </div>
                 </div>
@@ -107,11 +117,11 @@ export default class ConfirmOffer extends React.Component {
                     <div className="customer-box">
                         <p>
                             <span className="left">项目名称</span>
-                            <p className="right ellipsis">PS简单处理图片</p>
+                            <p className="right ellipsis">{this.props.proname}</p>
                         </p>
                         <p>
                             <span className="left">截止日期</span>
-                            <p className="right">2018-02-15</p>
+                            <p className="right">{this.props.cut_off_date}</p>
                         </p>
                     </div>
                 </div>
