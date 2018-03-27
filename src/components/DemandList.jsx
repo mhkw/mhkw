@@ -5,8 +5,6 @@ import axios from 'axios';
 import QueueAnim from 'rc-queue-anim';
 import update from 'immutability-helper';
 
-import '../css/font/iconfont.css'
-
 let realData = [];
 let index = realData.length - 1;
 let realDataLength = realData.length;
@@ -28,7 +26,8 @@ export default class DemandList extends React.Component {
             refreshing: false,
             isLoading: true,
             page:1,
-            height:""
+            height:"",
+            hasMore:false
         };
         this.genData = (pIndex = 0, realLength, data) => {
             let dataBlob = [];
@@ -45,13 +44,13 @@ export default class DemandList extends React.Component {
                             loveLis.splice(index, 1);
                         }
                     })
-                    para.e.target.parentNode.children[0].style.color = "#333";
-                    para.e.target.parentNode.children[1].innerHTML = numStar - 1;
+                    para.e.target.style.color = "#333";
+                    para.e.target.nextSibling.innerHTML = numStar - 1;
                     let newList = update(this.state.res, { [para.idx]: { love_list: { $set: loveLis } } });
                     this.setState({ res: newList })
                 } else if (res.message.type == 'add') {
-                    para.e.target.parentNode.children[0].style.color = "#F95231";
-                    para.e.target.parentNode.children[1].innerHTML = numStar - 0 + 1;
+                    para.e.target.style.color = "#F95231";
+                    para.e.target.nextSibling.innerHTML = numStar - 0 + 1;
                     loveLis.push(res.message);
                     let newList = update(this.state.res, { [para.idx]: { love_list: { $set: loveLis } } });
                     this.setState({ res: newList })
@@ -59,7 +58,6 @@ export default class DemandList extends React.Component {
             }
         };
         this.handleLoginSend = (res) => { 
-            console.log(res);
             if (res.success) {
                 realData = res.data.item_list;
                 realDataLength = res.data.item_list.length;
@@ -112,8 +110,8 @@ export default class DemandList extends React.Component {
     getProgectList(page,type = "add_time") {  
         axios({
             method: "POST",
-            // url: 'https://www.huakewang.com/hkw_newapi/get_project_list/0/'+type+'/0/0/10/'+page,
-            url: 'https://www.huakewang.com/hkw_newapi/get_project_list/0/' + type +'/120.219375/30.259244/10/'+page,
+            url: 'https://www.huakewang.com/hkw_newapi/get_project_list/0/'+type+'/0/0/10/'+page,
+            // url: 'https://www.huakewang.com/hkw_newapi/get_project_list/0/' + type +'/120.219375/30.259244/10/'+page,
             data: {
                 keycode:""
             }
@@ -123,7 +121,6 @@ export default class DemandList extends React.Component {
         })
         .catch((error) => {
             console.log(error.data);
-            console.log(error.message);
         });
         // runPromise('get_project_list', {
         //     user_id:validate.getCookie('user_id') || 0,
@@ -202,7 +199,12 @@ export default class DemandList extends React.Component {
                             </div>
                         </div>
                         <div className="itemPicList">
-                            <div style={{padding:"10px 0 10px 0",lineHeight:"18px"}}>
+                            <div style={{padding:"10px 0 10px 0",lineHeight:"18px"}} onClick={()=>{
+                                hashHistory.push({
+                                    pathname: '/demandDetail',
+                                    query: { demandId: obj.id, name: obj.nick_name }
+                                })
+                            }}>
                                 <i style={{ color: "red" }}>预算：{obj.budget_price}</i>&nbsp;&nbsp;
                                 {obj.content}
                             </div>
@@ -212,11 +214,11 @@ export default class DemandList extends React.Component {
                                     <i className="iconfont icon-yanjing" style={{ color:"#ccc"}}></i>&nbsp;{obj.hits}
                                 </div>
                                 <div style={{ float: "right" }}>
-                                    <div onClick={(e) => {
-                                        this.addHeart(e, obj.id, rowID);
-                                    }}
-                                        style={{ display: "inline-block", paddingTop: "4px" }}>
+                                    <div style={{ display: "inline-block", paddingTop: "4px" }}>
                                         <i className="iconfont icon-Pingjia"
+                                            onClick={(e) => {
+                                                this.addHeart(e, obj.id, rowID);
+                                            }}
                                             style={{
                                                 fontSize: "14px",
                                                 verticalAlign: "middle",
@@ -224,7 +226,7 @@ export default class DemandList extends React.Component {
                                                 position: "relative",
                                                 top: "1px"
                                             }}
-                                        ></i> <span>{obj.love_count}</span>&nbsp;&nbsp;&nbsp;
+                                        ></i><span style={{marginLeft:"3px"}}>{obj.love_count}</span>&nbsp;&nbsp;&nbsp;
                                     </div>
                                     <div style={{
                                         display: "inline-block",
@@ -248,6 +250,29 @@ export default class DemandList extends React.Component {
                                 </div>
                             </div>
                         </div>
+                        <div className="loveList" style={{ 
+                            backgroundColor: "#f0f0f0", 
+                            lineHeight: "0.75rem", 
+                            display: obj.love_list.length > 0 ? "block" : "none" 
+                        }}>
+                            <i style={{ margin: "0 0 0 5px" }}></i>
+                            <ul style={{ display: "inline-block" }}>
+                                {
+                                    obj.love_list.map((value, idx) => {
+                                        return <li onClick={() => {
+                                            hashHistory.push({
+                                                pathname: '/designerHome',
+                                                query: { userId: value.user_id }
+                                            })
+                                        }} style={{ float: "left", color: "#1199d2" }}>
+                                            <img src={value.path_thumb ? value.path_thumb:loginUrl.selec} 
+                                                style={{width:"0.5rem",height:"0.5rem",borderRadius:"50%",verticalAlign:"middle"}}
+                                            />&nbsp;
+                                        </li>
+                                    })
+                                } 觉得很赞
+                            </ul>
+                        </div>
                     </div>
                 </div>
             );
@@ -266,7 +291,7 @@ export default class DemandList extends React.Component {
                             //     <Icon key="0" type="search" style={{ marginRight: '16px' }} />,
                             //     <i key="1" type="ellipsis" className="iconfont icon-shijian2" />,
                             // ]}
-                        >需求</NavBar>
+                        >项目</NavBar>
                     </div>
                     <div style={{height:"1.2rem"}}></div>
                     <div className="homeWrap">

@@ -208,6 +208,7 @@ export default class HomeView extends React.Component {
                             nick_name={obj.nick_name} 
                             sex={obj.sex} 
                             distance={obj.distance}  
+                            txt_address={obj.txt_address}
                             group_name={obj.group_name}
                             experience={obj.experience}
                             works_count={obj.works_count}

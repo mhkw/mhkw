@@ -23,6 +23,8 @@ const ajaxURLList = {
     // get_comment_list:"hkw_newapi/get_comment_list",       //获取评论列表
     add_comment: "hkw_newapi/add_comment", //添加评论
     get_project_list: "hkw_newapi/get_project_list", //获取项目列表
+    get_menu_class: "hkw_newapi/get_menu_class", //获取作品分类
+    get_works_list_ex: "hkw_newapi/get_works_list_ex", //获取作品列表
     rep_comment: "hkw_newapi/rep_comment", //添加回复
     search: "hkw_newapi/search", //获取搜索设计师列表
     get_works_list: "hkw_newapi/get_works_list/NULL/add_time/16/1/f", //临时测试

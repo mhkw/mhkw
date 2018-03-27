@@ -24,13 +24,6 @@ let realDataLength = realData.length;
 const NUM_ROWS = 7;
 let pageIndex = 0;
 
-// function genData(pIndex = 0) {
-//     const dataArr = [];
-//     for (let i = 0; i < NUM_ROWS; i++) {
-//         dataArr.push(`row - ${(pIndex * NUM_ROWS) + i}`);
-//     }
-//     return dataArr;
-// }
 
 export default class LoginView extends React.Component {
     constructor(props) {
@@ -68,7 +61,6 @@ export default class LoginView extends React.Component {
             return dataBlob;
         };
         this.handleSend = (res) => {
-            console.log(res);
             if(res.success) {
                 realData = res.data.item_list;
                 index = realData.length - 1;
@@ -106,13 +98,13 @@ export default class LoginView extends React.Component {
                             loveLis.splice(index,1);
                         }
                     })
-                    para.e.target.parentNode.children[0].style.color = "#333";
-                    para.e.target.parentNode.children[1].innerHTML = numStar-1;
+                    para.e.target.style.color = "#333";
+                    para.e.target.nextSibling.innerHTML = numStar-1;
                     let newList = update(this.state.res, { [para.idx]: { love_list: { $set: loveLis } } });
                     this.setState({ res: newList})
                 } else if (res.message.type == 'add') {
-                    para.e.target.parentNode.children[0].style.color = "#F95231";
-                    para.e.target.parentNode.children[1].innerHTML = numStar - 0 + 1;
+                    para.e.target.style.color = "#F95231";
+                    para.e.target.nextSibling.innerHTML = numStar - 0 + 1;
                     loveLis.push(res.message);
                     let newList = update(this.state.res, { [para.idx]: { love_list: { $set: loveLis } } });
                     this.setState({ res: newList })
@@ -233,7 +225,12 @@ export default class LoginView extends React.Component {
                 showReplyInput: this.state.showReplyInput,
             }, () => { this.textarea.focus(); });
         };
-        this.setState({ commentToId: uid, commentId: id, keyCode: key, replySendStatus: true,})
+        this.setState({ 
+            commentToId: uid, 
+            commentId: id, 
+            keyCode: key, 
+            replySendStatus: true
+        })
     }
     onTouchSend=()=>{
         if (this.state.sendBtnStatus && this.state.replySendStatus){  //留言
@@ -312,11 +309,11 @@ export default class LoginView extends React.Component {
                             <div style={{ color: "#949494", overflow: "hidden", borderBottom: "1px dotted #dedcdc", marginBottom: "10px" }}>
                                 <div style={{ float: "left", paddingTop: "4px" }}>{obj.add_time_format}</div>
                                 <div style={{ float: "right" }}>
-                                    <div onClick={(e) => {
-                                        this.addHeart(e, obj.id, rowID);
-                                    }}
-                                        style={{ display: "inline-block", paddingTop: "4px" }}>
+                                    <div style={{ display: "inline-block", paddingTop: "4px" }}>
                                         <i className="iconfont icon-Pingjia"
+                                            onClick={(e) => {
+                                                this.addHeart(e, obj.id, rowID);
+                                            }}
                                             style={{
                                                 fontSize: "14px",
                                                 verticalAlign: "middle",
@@ -324,7 +321,7 @@ export default class LoginView extends React.Component {
                                                 position: "relative",
                                                 top: "1px"
                                             }}
-                                        ></i> <span>{obj.love_count}</span>&nbsp;&nbsp;&nbsp;
+                                        ></i><span style={{marginLeft:"3px"}}>{obj.love_count}</span>&nbsp;&nbsp;&nbsp;
                                     </div>
                                     <div style={{
                                         display: "inline-block",
@@ -348,7 +345,8 @@ export default class LoginView extends React.Component {
                         </div>
                         <div className="itemsBtm">
                             <div className="loveList" style={{ backgroundColor: "#f0f0f0", lineHeight: "0.75rem", display: obj.love_list.length > 0 ? "block" : "none" }}>
-                                <i className="iconfont icon-Pingjia" style={{ position: "relative", top: "2px", margin: "0 5px" }}></i>
+                                {/* <i className="iconfont icon-Pingjia" style={{ position: "relative", top: "2px", margin: "0 5px" }}></i> */}
+                                <i style={{ margin: "0 0 0 5px" }}></i>
                                 <ul style={{ display: "inline-block" }}>
                                     {
                                         obj.love_list.map((value, idx) => {
@@ -358,7 +356,9 @@ export default class LoginView extends React.Component {
                                                     query: { userId: value.user_id }
                                                 })
                                             }} style={{ float: "left", color: "#1199d2" }}>
-                                                {value.nick_name},
+                                                <img src={value.path_thumb ? value.path_thumb : loginUrl.selec}
+                                                    style={{ width: "0.5rem", height: "0.5rem", borderRadius: "50%", verticalAlign: "middle" }}
+                                                />&nbsp;
                                             </li>
                                         })
                                     } 觉得很赞
@@ -458,7 +458,7 @@ export default class LoginView extends React.Component {
                                     <p>项目</p>
                                 </Link>
                             </li>
-                            <li>
+                            <li onClick={() => { hashHistory.push({ pathname: '/workList' }) }}>
                                 <Link>
                                     <img src={loginUrl.work} />
                                     <p>作品</p>
@@ -499,7 +499,7 @@ export default class LoginView extends React.Component {
                     />
                 </div>
 
-                <div className="popup-comment-input-box circle-popup-comment-input-box"
+                <div className="popup-comment-input-box circle-popup-comment-input-box "
                     // style={{ "display": this.state.showReplyInput ? "block" : "none" }}
                     style={{ "visibility": this.state.showReplyInput ? "visible" : "hidden" }}
                 >
@@ -515,7 +515,7 @@ export default class LoginView extends React.Component {
                         onBlur={()=>{this.setState({ showReplyInput:false})}}
                         onFocus={()=>{this.setState({ showReplyInput:true})}}
                     />
-                    <span className="send-btn" ref="abcd"
+                    <span className="send-btn  demand-send-btn" ref="abcd"
                         style={this.state.sendBtnStatus ? {
                             "border": "1px solid #0e80d2",
                             "background-color": "#409ad6",
