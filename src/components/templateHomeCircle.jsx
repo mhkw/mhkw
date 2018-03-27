@@ -37,7 +37,14 @@ export const PersonalMsg = (props) => (
                     {props.nick_name}&nbsp;
                     {props.sex == '女' ? <i className="iconfont icon-xingbienv_f" style={{ color: '#F46353', fontWeight: "800", fontSize: "12px" }} /> : props.sex == '男' ? <i className="iconfont icon-xingbienanxuanzhong" style={{ color: '#4DA7E0', fontWeight: "800", fontSize: "12px" }} /> : ""}
                 </span>
-                <span className="fn-right personalMsg"><i className="iconfont icon-dingwei"></i>{props.distance}km</span>
+                <span className="fn-right personalMsg">
+                <i className="iconfont icon-dingwei"></i>
+                {/* {props.distance}km */}
+                    {((props.distance - 0) / 1000).toFixed(2) > 200 || ((props.distance - 0) / 1000).toFixed(2) == 0 ?
+                        props.txt_address == "" ?
+                            "[未知]" : props.txt_address.split(" ").length > 1 ?
+                                props.txt_address.split(" ").slice(1).join(" ") : props.txt_address : ((props.distance - 0) / 1000).toFixed(2) + 'km'}
+                </span>
             </p>
             <p className="personalMsg">
                 <span>{props.group_name}</span> | <span>{props.experience}</span> | <span>{props.works_count}件作品</span> | <span>{props.hits_count}人喜欢</span>
