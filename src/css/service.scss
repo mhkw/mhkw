@@ -786,3 +786,17 @@ html:not([data-scale]) .am-button.confirm-offer-button::before{
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
 }
+.am-action-sheet-wrap  .am-action-sheet.am-action-sheet-share{
+    background-color: #fff;
+}
+.am-action-sheet-share-list-item-icon .iconfont.icon-weixin1{
+    font-size: 50px;
+    color: #21d328;
+}
+.am-action-sheet-body .am-action-sheet-title{
+    text-align: left;
+}
+.am-action-sheet-share .am-action-sheet-share-list-item-title{
+    font-size: 14px;
+    color: #202020;
+}

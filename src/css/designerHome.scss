@@ -39,6 +39,12 @@
     vertical-align: sub;
     color: #ff6f8a;
 }
+.brief-box-out .nick-name .iconfont.icon-icccxingbie-female{
+    color: #ff6f8a;
+}
+.brief-box-out .nick-name .iconfont.icon-xingbie-male{
+    color: #2bc9ff;
+}
 .brief-more-flex.am-flexbox,
 .brief-data-flex.am-flexbox
 {
@@ -106,4 +112,14 @@
 }
 .flex-city .am-list-item.am-list-item-active{
     background-color: #ccc;
+}
+.designer-home .black-font{
+    color: #000!important;
+}
+.designer-home .brief-more{
+    font-size: 14px;
+}
+.designer-home .brief-more .iconfont{
+    margin-left: 10px;
+    margin-right: 3px;
 }

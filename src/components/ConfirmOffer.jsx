@@ -1,6 +1,6 @@
 import React from 'react';
 import { hashHistory, Link } from 'react-router';
-import { NavBar, Icon, Button, WingBlank, Flex, List } from 'antd-mobile';
+import { NavBar, Icon, Button, WingBlank, Flex, List, ActionSheet } from 'antd-mobile';
 
 const OfferItem = (props) => (
     <div className="offer-item">
@@ -15,16 +15,59 @@ const OfferItem = (props) => (
     </div>
 )
 
+const ActionDataList = [{
+    icon: <i className="iconfont icon-weixin1" ></i>,
+    title: '微信好友'
+}]
+
 export default class ConfirmOffer extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            remarks: "15天内完成，满意为止",
-            pure_price: "3560.00",
+            remarks: "",
+            pure_price: "",
+            clicked: 'none',
+        }
+        this.wx = api.require('wx');
+    }
+    onClickConfirmOffer = () => {
+        this.props.CreateOfferQuotation(); //点击生成报价单
+        // this.showShareActionSheet();
+    }
+    showShareActionSheet = () => {
+        ActionSheet.showShareActionSheetWithOptions({
+            options: ActionDataList,
+            title: '分享到',
+        },
+            (buttonIndex) => {
+                this.setState({ clicked: buttonIndex > -1 ? ActionDataList[buttonIndex].title : 'cancel' });
+                //点击的是微信
+                if (buttonIndex == 0) {
+                    this.wxShareWebpage(this.props.state.proname, this.props.offerShareURL);
+                }
+            }
+        );
+    }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.offerShareURL) {
+            this.showShareActionSheet();
         }
     }
-    onClickConfirmOffer() {
-        this.props.CreateOfferQuotation(); //点击生成报价单
+    wxShareWebpage = (description, contentUrl, title = '画客网报价', thumb = 'widget://dist/images/huakerappicon.png', scene = 'session', ) => {
+        this.wx.shareWebpage({
+            scene: scene,
+            title: title,
+            description: description,
+            thumb: thumb,
+            contentUrl: contentUrl
+        }, (ret, err) => {
+            if (ret.status) {
+                // alert(JSON.stringify(ret))
+
+            } else {
+
+            }
+        });
     }
     render() {
         return (

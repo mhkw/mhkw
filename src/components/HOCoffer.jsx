@@ -14,6 +14,7 @@ export default class HOCoffer extends React.Component {
             haveDiscount: false,
             inputDiscountPrice: null, //用户输入的优惠价格，即优先级最大的最终价格
             project_id: 0, //项目ID，这个值在第一次为项目添加客户信息时获取，作为生成报价单的项目ID。其他接口共用这个ID
+            offerShareURL: '', //确认发送报价后的分享链接
         }
         //获取自己的服务报价模板列表
         this.handleGetSelfService = (res) => {
@@ -75,10 +76,13 @@ export default class HOCoffer extends React.Component {
                 Toast.fail(res.message, 1.5);
             }
         }
+        //最后发送报价的ajax处理函数
         this.handleSendQuote = (res) => {
             if (res.success) {
                 console.log(res);
-
+                this.setState({
+                    offerShareURL: 'https://www.huakewang.com/2017_data/H5offerSheet.html?id=122,name=%E9%83%91%E5%9B%BD%E5%BA%86,phone=17683993335,count=oauth,timestamp=1512631141'
+                })
             } else {
                 Toast.fail(res.message, 1.5);
             }
@@ -197,6 +201,7 @@ export default class HOCoffer extends React.Component {
         // runPromise('send_quote', {
         //     project_id: this.state.project_id,
         // }, this.handleSendQuote);
+        Toast.loading('发送报价中，请稍候',6);
         axios({
             method: 'post',
             url: 'https://www.huakewang.com/quoteApi/send_quote',
@@ -211,9 +216,11 @@ export default class HOCoffer extends React.Component {
             })
         })
             .then((response) => {
+                Toast.hide();
                 requestIsSuccess(response) && this.handleSendQuote(response.data)
             })
             .catch((error) => {
+                Toast.hide();
                 console.log(error, "错误");
             });
     }
@@ -240,6 +247,7 @@ export default class HOCoffer extends React.Component {
                             haveDiscount: this.state.haveDiscount, //是否设置优惠项
                             inputDiscountPrice: this.state.inputDiscountPrice, //用户输入的优惠价格
                             CreateOfferQuotation: this.CreateOfferQuotation, // 最后的点击，生成报价单
+                            offerShareURL: this.state.offerShareURL,
                         }
                     ) 
                 }

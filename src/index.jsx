@@ -34,6 +34,7 @@ import Test from './components/page1';
 
 import TempTest from './components/TempTest';
 import ConfirmOffer from './components/ConfirmOffer';
+import HOCdesignerHome from './components/HOCdesignerHome';
 
 import './css/font/iconfont.css'
 
@@ -87,21 +88,23 @@ ReactDOM.render(
                 <Route path="/payMethod" component={PayMethod} />
             </Route>
         </Route>
-        <Route path="/designerHome" component={designerHome}>
-            <IndexRoute component={WorksCollection} />
-            <Route path="worksCollection" component={WorksCollection} />
-            <Route path="designerComment" component={DesignerComment} />
+        <Route path="/" component={HOCdesignerHome}>
+            <Route path="designerHome" component={designerHome}>
+                <IndexRoute component={WorksCollection} />
+                <Route path="worksCollection" component={WorksCollection} />
+                <Route path="designerComment" component={DesignerComment} />
+            </Route>
+            <Route path="writerComment" component={WriterComment} />
+            <Route path="placeOrder" component={PlaceOrder}>
+                <Route component={OrderPopup}>
+                    <IndexRoute component={PayModal} />
+                    <Route path="/payModal" component={PayModal} />
+                    <Route path="/payMethod" component={PayMethod} />
+                </Route>
+            </Route>
         </Route>
         {/* 测试,评论页不是单独一页 */}
         {/* <Route path="/designerComment" component={DesignerComment} /> */}
-        <Route path="/writerComment" component={WriterComment} />
-        <Route path="/placeOrder" component={PlaceOrder}>
-            <Route component={OrderPopup}>
-                <IndexRoute component={PayModal} />
-                <Route path="/payModal" component={PayModal} />
-                <Route path="/payMethod" component={PayMethod} />
-            </Route>
-        </Route>
         <Route path="/" component={HOCoffer}>
             <Route path="creatServer" component={CreatServer} />
             <Route path="addServer" component={AddServer} />
