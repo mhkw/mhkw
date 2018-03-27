@@ -96,6 +96,8 @@ ReactDOM.render(
                 <Route path="worksCollection" component={WorksCollection} />
                 <Route path="designerComment" component={DesignerComment} />
             </Route>
+            {/* 先将作品提出来，写完了再嵌套到/designerHome */}
+            <Route path="worksCollection" component={WorksCollection} />
             <Route path="writerComment" component={WriterComment} />
             <Route path="placeOrder" component={PlaceOrder}>
                 <Route component={OrderPopup}>
