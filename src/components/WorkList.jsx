@@ -114,6 +114,7 @@ export default class WorkList extends React.Component {
         this.setState({
             refreshing: true
         });
+        pageIndex = 0;
         this.getWorkList(this.state.typeId, 0);
     };
     onEndReached = (event) => {

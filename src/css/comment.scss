@@ -216,10 +216,30 @@
 .homeWrap .list-view-section-body {
     overflow: hidden;
 }
+.homeWrap .am-list-view-scrollview-content.am-list {
+    max-width: 100%;
+}
 
 .exlips {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+}
+.modalNeedPrice {
+    width: 250px;
+    .am-modal-title {
+        i {
+            padding: 0 3px;
+        }
+    }
+    .needPriceLists {
+        li {
+            height: 30px;
+            line-height: 30px;
+            letter-spacing: 2px;
+            font-size: 16px;
+            color: #225CF9;
+        }
+    }
 }

@@ -177,6 +177,7 @@ export default class LoginView extends React.Component {
         });
     }
     onRefresh = () => {   //顶部下拉刷新数据
+        pageIndex = 0;
         this.setState({ 
             refreshing: true
         });
@@ -452,6 +453,12 @@ export default class LoginView extends React.Component {
                     </WingBlank>
                     <div className="fourAvt">
                         <ul>
+                            <li onClick={() => { hashHistory.push({ pathname: '/circle' }) }}>
+                                <Link>
+                                    <img src={loginUrl.tiezi} />
+                                    <p>帖子</p>
+                                </Link>
+                            </li>
                             <li onClick={() => {hashHistory.push({pathname: '/demand'})}}>
                                 <Link>
                                     <img src={loginUrl.demand} />
@@ -462,12 +469,6 @@ export default class LoginView extends React.Component {
                                 <Link>
                                     <img src={loginUrl.work} />
                                     <p>作品</p>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link>
-                                    <img src={loginUrl.tiezi} />
-                                    <p>帖子</p>
                                 </Link>
                             </li>
                             <li>
