@@ -102,9 +102,29 @@ export default class Account extends React.Component {
         if (this.testPrice(payRecharge)) {
             this.setState({ showPayInputModal: false, showPayModal: true })
         }
+        hashHistory.push({
+            pathname: '/account/payModal',
+            query: { form: 'account' },
+            state: {}
+        });
     }
     setShowModal = (param) => {
         this.setState({ showPayModal: param })
+    }
+    //支付成功的回调
+    paySuccessCallback = () => {
+        Toast.success("支付成功!", 1, () => {
+            this.setShowModal(false); //关闭支付Modal
+            hashHistory.goBack();
+            this.getMainProjectList(); //重新刷新项目列表
+        })
+    }
+    //支付失败的回调
+    payFailCallback = () => {
+        Toast.offline("支付失败!", 1, () => {
+            this.setShowModal(false); //关闭支付Modal
+            hashHistory.goBack();
+        })
     }
     render() {
         return(

@@ -23,6 +23,11 @@ export default class PlaceOrder extends React.Component {
                     projectId: res.data,
                     showModal: true
                 })
+                hashHistory.push({
+                    pathname: '/placeOrder/payModal',
+                    query: { form: 'placeOrder' },
+                    state: {}
+                });
             } else {
                 Toast.fail(res.message, 2);
             }
@@ -47,6 +52,21 @@ export default class PlaceOrder extends React.Component {
     }
     setShowModal = (param) => {
         this.setState({ showModal: param })
+    }
+    //支付成功的回调
+    paySuccessCallback = () => {
+        Toast.success("支付成功!", 1, () => {
+            this.setShowModal(false); //关闭支付Modal
+            hashHistory.goBack();
+            this.getMainProjectList(); //重新刷新项目列表
+        })
+    }
+    //支付失败的回调
+    payFailCallback = () => {
+        Toast.offline("支付失败!", 1, () => {
+            this.setShowModal(false); //关闭支付Modal
+            hashHistory.goBack();
+        })
     }
     render() {
         return (
@@ -85,7 +105,15 @@ export default class PlaceOrder extends React.Component {
                     <Button onClick={() => { this.onClickSubmit() }} className="payment-bottom" activeClassName="payment-bottom-active" >和设计师已确认，立即下单</Button>
                 </WingBlank>
                 {/* <OrderPopup setShowModal={this.setShowModal} showModal={this.state.showModal} payment={this.state.payment} /> */}
-                {this.props.children && React.cloneElement(this.props.children, { setShowModal: this.setShowModal, showModal: this.state.showModal, payment: this.state.payment})}
+                {this.props.children && React.cloneElement(this.props.children,{ 
+                    paySuccessCallback: this.paySuccessCallback,
+                    payFailCallback: this.payFailCallback, 
+                    setShowModal: this.setShowModal, 
+                    showModal: this.state.showModal,
+                    payment: this.state.payment,
+                    pay_model: 'other',
+                    model_id: '', 
+                })}
             </div>
         )
     }

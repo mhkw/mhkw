@@ -124,3 +124,51 @@
     margin-left: 10px;
     margin-right: 3px;
 }
+.index-works-collection .view-more{
+    width: 2rem;
+    height: 1rem;
+    line-height: 1rem;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: .3rem;
+    margin-bottom: .3rem;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+html,body,#container{
+    height: 100%;
+}
+.hoc-designer-home{
+    // height: 100%;
+}
+.am-flexbox.bottom-features{
+    height: 1.2rem;
+    // background-color: #2068ab;
+    color: #fff;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+.bottom-features .am-flexbox-item{
+    height: 100%;
+    border-right: 1px solid #4d87bc;
+    text-align: center;
+    font-size: 12px;
+    margin-left: 0;
+}
+.bottom-features .am-flexbox-item:nth-child(3){
+    border-right: none;
+}
+.bottom-features .am-flexbox-item:last-child{
+    border-right: none;
+    // background-color: #00a0e9;
+    font-size: 18px;
+    line-height: 1.2rem;
+}
+.bottom-features .am-flexbox-item .iconfont{
+    display: block;
+    margin-top: 0.2rem;
+}

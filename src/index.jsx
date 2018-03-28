@@ -11,6 +11,7 @@ import Index from './components/home';
 import listViewDemo from './components/listViewDemo';
 import designerHome from './components/DesignerHome';
 import WorksCollection from './components/worksCollection';
+import { IndexWorksCollection } from './components/DesignerHome';
 import DesignerComment from './components/designerComment';
 import WriterComment from './components/WriterComment';
 import PlaceOrder from './components/PlaceOrder';
@@ -74,8 +75,8 @@ ReactDOM.render(
         <Route path="/account" component={Account} >
             <Route component={OrderPopup}>
                 <IndexRoute component={PayModal} />
-                <Route path="/payModal" component={PayModal} />
-                <Route path="/payMethod" component={PayMethod} />
+                <Route path="payModal" component={PayModal} />
+                <Route path="payMethod" component={PayMethod} />
             </Route>
         </Route>
         <Route path="/orderList" component={OrderList} />
@@ -86,14 +87,14 @@ ReactDOM.render(
         <Route path="/quoteList" component={QuoteList2}>
             <Route component={OrderPopup}>
                 <IndexRoute component={PayModal} />
-                <Route path="/payModal" component={PayModal} />
-                <Route path="/payMethod" component={PayMethod} />
+                <Route path="payModal" component={PayModal} />
+                <Route path="payMethod" component={PayMethod} />
             </Route>
         </Route>
         <Route path="/" component={HOCdesignerHome}>
             <Route path="designerHome" component={designerHome}>
-                <IndexRoute component={WorksCollection} />
-                <Route path="worksCollection" component={WorksCollection} />
+                <IndexRoute component={IndexWorksCollection} />
+                <Route path="indexWorksCollection" component={IndexWorksCollection} />
                 <Route path="designerComment" component={DesignerComment} />
             </Route>
             {/* 先将作品提出来，写完了再嵌套到/designerHome */}
@@ -102,8 +103,8 @@ ReactDOM.render(
             <Route path="placeOrder" component={PlaceOrder}>
                 <Route component={OrderPopup}>
                     <IndexRoute component={PayModal} />
-                    <Route path="/payModal" component={PayModal} />
-                    <Route path="/payMethod" component={PayMethod} />
+                    <Route path="payModal" component={PayModal} />
+                    <Route path="payMethod" component={PayMethod} />
                 </Route>
             </Route>
         </Route>

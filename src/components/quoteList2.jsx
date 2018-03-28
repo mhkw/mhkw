@@ -132,6 +132,11 @@ export default class Account2 extends React.Component {
             payModel_id: model_id,  //付款的模块ID
             payTotalAmount: totalAmount,  //付款的支付总金额
         })
+        hashHistory.push({
+            pathname: '/quoteList/payModal',
+            query: { form: 'quoteList' },
+            state: {}
+        });
     }
     
     setShowModal = (param) => {
@@ -173,6 +178,7 @@ export default class Account2 extends React.Component {
     paySuccessCallback = () => {
         Toast.success("支付成功!", 1, () => {
             this.setShowModal(false); //关闭支付Modal
+            hashHistory.goBack();
             this.getMainProjectList(); //重新刷新项目列表
         })
     }
@@ -180,6 +186,7 @@ export default class Account2 extends React.Component {
     payFailCallback = () => {
         Toast.offline("支付失败!", 1, () => {
             this.setShowModal(false); //关闭支付Modal
+            hashHistory.goBack();
         })
     }
     render() {

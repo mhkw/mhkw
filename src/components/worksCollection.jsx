@@ -18,7 +18,7 @@ export default class WorksCollection extends React.Component {
         this.state = {
             dataSource: dataSource.cloneWithRows(JSON.parse(sessionStorage.getItem("myWorkData")) ? JSON.parse(sessionStorage.getItem("myWorkData")) : []),
             hasMore:false,
-            useBodyScroll: true,
+            useBodyScroll: false,
             refreshing: false,
             isLoading: true,
             size: 0,
@@ -70,14 +70,15 @@ export default class WorksCollection extends React.Component {
         )
         //初始化获取数据
         this.getWorkList();
+        document.querySelector(".worksCollection").scrollIntoView(true);
     }
-    componentDidUpdate() {
-        if (this.state.useBodyScroll) {
-            document.body.style.overflow = 'auto';
-        } else {
-            document.body.style.overflow = 'hidden';
-        }
-    }
+    // componentDidUpdate() {
+    //     if (this.state.useBodyScroll) {
+    //         document.body.style.overflow = 'auto';
+    //     } else {
+    //         document.body.style.overflow = 'hidden';
+    //     }
+    // }
     routerWillLeave(nextLocation) {  //离开页面
         pageIndex = 0;
     }
@@ -98,9 +99,8 @@ export default class WorksCollection extends React.Component {
     getWorkList(n = 1) {     //获取作品列表
         runPromise("get_user_works_list_ex", {
             // user_id: validate.getCookie("user_id"),
-            user_id: 24,
+            user_id: this.props.designer.id || validate.getCookie("user_id"),
             sort: "add_time",
-            keyword: "",
             per_page: 8,        //每页数量
             page: n,            //第几页，从第一页开始
         }, this.handleGetWorkList, true, "get");
@@ -127,29 +127,36 @@ export default class WorksCollection extends React.Component {
         );
     }
     render() {
-        
         return (
-            <div className="homeWrap worksCollection" style={{ width: "100%", padding: "0 5px", boxSizing: "border-box" }}>
-                <ListView
-                    // key={this.state.useBodyScroll}
-                    ref={el => this.lv = el}
-                    dataSource={this.state.dataSource}
-                    renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center' }}>
-                        {this.state.isLoading ? '加载中...' : '加载完成'}
-                    </div>)}
-                    style={{
-                        // height: this.state.height,
-                        overflow: "auto"
-                    }}
-                    renderRow={this.row}
-                    useBodyScroll={this.state.useBodyScroll}
-                    pullToRefresh={<PullToRefresh
-                        refreshing={this.state.refreshing}
-                        onRefresh={this.onRefresh}
-                    />}
-                    onEndReached={this.onEndReached}
-                    pageSize={8}
-                />
+            <div className="worksCollection">
+                <NavBar
+                    mode="light"
+                    icon={<Icon type="left" size="lg" color="#707070" />}
+                    onLeftClick={() => hashHistory.goBack()}
+                >作品集</NavBar>
+                <div style={{ "height": "10px", "borderTop": "1px solid #ddd" }} ></div>
+                <div className="homeWrap" style={{ width: "100%", padding: "0 5px", boxSizing: "border-box" }}>
+                    <ListView
+                        // key={this.state.useBodyScroll}
+                        ref={el => this.lv = el}
+                        dataSource={this.state.dataSource}
+                        renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center' }}>
+                            {this.state.isLoading ? '加载中...' : '加载完成'}
+                        </div>)}
+                        style={{
+                            height: this.state.height,
+                            overflow: "auto"
+                        }}
+                        renderRow={this.row}
+                        useBodyScroll={this.state.useBodyScroll}
+                        pullToRefresh={<PullToRefresh
+                            refreshing={this.state.refreshing}
+                            onRefresh={this.onRefresh}
+                        />}
+                        onEndReached={this.onEndReached}
+                        pageSize={8}
+                    />
+                </div>
             </div>
         )
     }

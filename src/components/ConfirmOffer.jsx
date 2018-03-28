@@ -20,6 +20,9 @@ const ActionDataList = [{
     title: '微信好友'
 }]
 
+if (window.api) {
+    var wx = api.require('wx');
+}
 export default class ConfirmOffer extends React.Component {
     constructor(props) {
         super(props)
@@ -28,7 +31,7 @@ export default class ConfirmOffer extends React.Component {
             pure_price: "",
             clicked: 'none',
         }
-        this.wx = api.require('wx');
+        // this.wx = api.require('wx');
     }
     onClickConfirmOffer = () => {
         this.props.CreateOfferQuotation(); //点击生成报价单
@@ -54,20 +57,22 @@ export default class ConfirmOffer extends React.Component {
         }
     }
     wxShareWebpage = (description, contentUrl, title = '画客网报价', thumb = 'widget://dist/images/huakerappicon.png', scene = 'session', ) => {
-        this.wx.shareWebpage({
-            scene: scene,
-            title: title,
-            description: description,
-            thumb: thumb,
-            contentUrl: contentUrl
-        }, (ret, err) => {
-            if (ret.status) {
-                // alert(JSON.stringify(ret))
+        if (wx) {
+            wx.shareWebpage({
+                scene: scene,
+                title: title,
+                description: description,
+                thumb: thumb,
+                contentUrl: contentUrl
+            }, (ret, err) => {
+                if (ret.status) {
+                    // alert(JSON.stringify(ret))
 
-            } else {
+                } else {
 
-            }
-        });
+                }
+            });
+        }
     }
     render() {
         return (

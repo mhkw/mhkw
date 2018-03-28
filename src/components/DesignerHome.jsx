@@ -4,6 +4,7 @@ import { Toast, NavBar, Icon, Flex } from 'antd-mobile';
 import QueueAnim from 'rc-queue-anim';
 
 const defaultAvatar = require("../images/selec.png");
+const tempNull = require('../images/tempNull2.png'); //空状态的图片
 
 export default class DesignerHome extends React.Component {
     constructor(props) {
@@ -23,10 +24,18 @@ export default class DesignerHome extends React.Component {
             works_collect: "8",
             comment: "10",
             tab_index: 0, //设计师主页展示作品集还是评论，就看这个状态
+            buttomBackgroundColor1: "#2068ab", //底部栏原始的背景颜色
+            buttomBackgroundColor2: "#2068ab", //底部栏原始的背景颜色
+            buttomBackgroundColor3: "#2068ab", //底部栏原始的背景颜色
+            touchButtomBackgroundColor: "#4ba8ff", //底部栏按下去的背景颜色
+            endButtomBackgroundColor: "#2068ab", //底部栏按下去的背景颜色
+            buttomBackgroundColorLast: "#00a0e9", //底部栏最后那个按钮原始的背景颜色
+            touchButtomBackgroundColorLast: "#4ba8ff", //底部栏最后那个按钮按下去的背景颜色
+            endButtomBackgroundColorLast: "#00a0e9", //底部栏最后那个按钮按下去的背景颜色
         }
     }
     handleGo(index) {
-        let path = index == 0 ? "/designerHome/worksCollection" : "/designerHome/designerComment";
+        let path = index == 0 ? "/designerHome/indexWorksCollection" : "/designerHome/designerComment";
         this.setState({
             tab_index: index
         })
@@ -41,6 +50,52 @@ export default class DesignerHome extends React.Component {
             state: this.state
         });
 
+    }
+    touchStartStyle = (index) => {
+        this.setState({
+            ["buttomBackgroundColor" + index]: this.state.touchButtomBackgroundColor
+        })
+    }
+    touchEndStyle = (index) => {
+        this.setState({
+            ["buttomBackgroundColor" + index]: this.state.endButtomBackgroundColor
+        })
+    }
+    //底部栏最后那个按钮
+    touchStartStyleLast = () => {
+        this.setState({
+            buttomBackgroundColorLast: this.state.touchButtomBackgroundColorLast
+        })
+    }
+    //底部栏最后那个按钮
+    touchEndStyleLast = () => {
+        this.setState({
+            buttomBackgroundColorLast: this.state.endButtomBackgroundColorLast
+        })
+    }
+    //打电话
+    handleCall = () => {
+        console.log(1)
+    }
+    //交谈，即时聊天
+    handleTalk = () => {
+        console.log(2)
+    }
+    //评论
+    handleComment = () => {
+        hashHistory.push({
+            pathname: '/writerComment',
+            query: { form: 'designerHome' },
+            state: {}
+        });
+    }
+    //立即下单,快速服务下单
+    handleStartOrder = () => {
+        hashHistory.push({
+            pathname: '/placeOrder',
+            query: { form: 'designerHome' },
+            state: {}
+        });
     }
     render() {
         let { path, nick_name, sex, txt_address, experience, works_count, signature, signature_bbs, } = this.props.designer;
@@ -108,12 +163,113 @@ export default class DesignerHome extends React.Component {
                             </span>
                         </Flex.Item>
                     </Flex>
-                    {this.props.children}
+                    {/* {this.props.children} */}
+                    {this.props.children &&
+                        React.cloneElement(
+                            this.props.children,
+                            {
+                                state: this.props.state,
+                                setState: this.props.setState,
+                                designer: this.props.designer,
+                                indexWorksList: this.props.indexWorksList,
+                            }
+                        )
+                    }
+                    <div style={{"height":"1.2rem"}}></div>
+                    <Flex className="bottom-features">
+                        <Flex.Item
+                        style={{ "background-color": this.state.buttomBackgroundColor1}}
+                        onTouchStart={() => this.touchStartStyle(1)}
+                        onTouchEnd={() => this.touchEndStyle(1)}
+                        onClick={this.handleCall}
+                        ><i className="iconfont icon-icon-phone"></i>电话</Flex.Item>
+                        <Flex.Item
+                        style={{ "background-color": this.state.buttomBackgroundColor2 }}
+                        onTouchStart={() => this.touchStartStyle(2)}
+                        onTouchEnd={() => this.touchEndStyle(2)}
+                        onClick={this.handleTalk}
+                        ><i className="iconfont icon-icon-talk"></i>交谈</Flex.Item>
+                        <Flex.Item
+                        style={{ "background-color": this.state.buttomBackgroundColor3 }}
+                        onTouchStart={() => this.touchStartStyle(3)}
+                        onTouchEnd={() => this.touchEndStyle(3)}
+                        onClick={this.handleComment}
+                        ><i className="iconfont icon-icon-comment"></i>评论</Flex.Item>
+                        <Flex.Item
+                        style={{ "flex": "2", "background-color": this.state.buttomBackgroundColorLast }}
+                        onTouchStart={this.touchStartStyleLast}
+                        onTouchEnd={this.touchEndStyleLast}
+                        onClick={this.handleStartOrder}
+                        >立即下单</Flex.Item>
+                    </Flex>
                 </div>
             // </QueueAnim>
         )
     }
 }
+
+export const IndexWorksCollection = (props) => {
+    let oldBackgroundColor = "#fff";
+    const touchStart = (e) => {
+        oldBackgroundColor = e.target.style.backgroundColor;
+        e.target.style.backgroundColor = "#eee";
+    }
+    const touchEnd = (e) => {
+        e.target.style.backgroundColor = oldBackgroundColor;
+    }
+    const handleClick = () => {
+        hashHistory.push({
+            pathname: '/worksCollection',
+            query: { form: 'designerHome' },
+        });
+    }
+    return (
+        <div className="index-works-collection">
+            {
+                props.indexWorksList.map((value, index) => (
+                    <WorksItem
+                        {...value}
+                    />
+                ))
+            }
+            <div
+                style={{ "display": props.indexWorksList.length < 1 ? "none" : "block" }}
+                className="view-more"
+                onTouchStart={touchStart}
+                onTouchEnd={touchEnd}
+                onClick={handleClick}
+            >查看更多</div>
+            <img
+                style={{ 
+                    "display": props.indexWorksList.length < 1 ? "block" : "none",
+                    "width": "142px",
+                    "height": "150px",
+                    "margin": "50px auto 0",
+                }}
+                src={tempNull} 
+            />
+        </div>
+    )
+}
+
+const WorksItem = (props) => (
+    <div key={props.id} style={{ display: "inline-block", width: "50%", boxSizing: "border-box", padding: "5px" }}>
+        <div className="items" style={{
+            border: "1px solid #ccc",
+            boxSizing: "border-box",
+            borderRadius: "3px",
+            backgroundColor: "#f5f5f5",
+            boxShadow: "0px 0px 10px #ccc",
+        }}>
+            <div>
+                <img src={props.path_thumb ? props.path_thumb : props.path} style={{ width: "100%", height: "5rem" }} />
+                <div style={{ height: "26px", overflow: "hidden" }}>
+                    <p className="exlips" style={{ lineHeight: "24px", padding: "0 4px" }}>{props.title}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+)
 
 DesignerHome.contextTypes = {
     router: React.PropTypes.object

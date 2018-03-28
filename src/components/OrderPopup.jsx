@@ -8,12 +8,12 @@ const PayMethod = (props) => (
             className="NewNavBar"
             mode="light"
             icon={<Icon type="left" size="lg" style={{ "color": "#a3a3a3" }} />}
-            onLeftClick={() => { hashHistory.replace({ pathname: '/payModal'}) }}
+            onLeftClick={() => { hashHistory.goBack() }}
         >选择支付方式</NavBar>
         <List className="pay-method-list">
-            <List.Item arrow="horizontal" onClick={() => { hashHistory.replace({ pathname: '/payModal' }), props.setState({ "PayMethod": "BankCardPay" }) }}><i className="iconfont icon-yinhangqia"></i>使用银行卡</List.Item>
-            <List.Item arrow="horizontal" onClick={() => { hashHistory.replace({ pathname: '/payModal' }), props.setState({ "PayMethod": "AliPay" }) }}><i className="iconfont icon-zhifubao"></i>支付宝</List.Item>
-            <List.Item arrow="horizontal" onClick={() => { hashHistory.replace({ pathname: '/payModal' }), props.setState({ "PayMethod": "WxPay" }) }}><i className="iconfont icon-wxpay"></i>微信</List.Item>
+            <List.Item arrow="horizontal" onClick={() => { hashHistory.goBack(), props.setState({ "PayMethod": "BankCardPay" }) }}><i className="iconfont icon-yinhangqia"></i>使用银行卡</List.Item>
+            <List.Item arrow="horizontal" onClick={() => { hashHistory.goBack(), props.setState({ "PayMethod": "AliPay" }) }}><i className="iconfont icon-zhifubao"></i>支付宝</List.Item>
+            <List.Item arrow="horizontal" onClick={() => { hashHistory.goBack(), props.setState({ "PayMethod": "WxPay" }) }}><i className="iconfont icon-wxpay"></i>微信</List.Item>
         </List>
     </div>
 )
@@ -24,13 +24,13 @@ const PayModal = (props) => (
             className="NewNavBar"
             mode="light"
             icon={<i className="iconfont icon-untitled94"></i>}
-            onLeftClick={() => { props.props.setShowModal(false) }}
+            onLeftClick={() => { hashHistory.goBack(), props.props.setShowModal(false) }}
         >订单支付</NavBar>
         <List className="pay-list">
             <List.Item
                 className="one"
                 extra={<span>{props.state.PayMethodText[props.state.PayMethod]}<i className="iconfont icon-jiantou1"></i></span>}
-                onClick={() => { hashHistory.replace({ pathname: '/payMethod' }) }}
+                onClick={() => { hashHistory.push({ pathname: `/${props.location.query.form}/payMethod` }) }}
             >付款方式</List.Item>
             <List.Item
                 className="two"
@@ -141,10 +141,20 @@ class OrderPopup extends React.Component {
                 <Modal
                     popup
                     visible={this.props.showModal}
-                    onClose={() => { this.props.setShowModal(false) }}
+                    onClose={() => { hashHistory.goBack(), this.props.setShowModal(false) }}
                     animationType="slide-up"
                 >
-                    {this.props.children && React.cloneElement(this.props.children, { state: this.state , props: this.props , setState: this.setState.bind(this) , onClickPay: this.onClickPay })}
+                    {this.props.children && 
+                        React.cloneElement(
+                            this.props.children,
+                            { 
+                                state: this.state,
+                                props: this.props,
+                                setState: this.setState.bind(this),
+                                onClickPay: this.onClickPay,
+                            }
+                        )
+                    }
                 </Modal>
             </WingBlank>
         )
