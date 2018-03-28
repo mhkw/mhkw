@@ -142,6 +142,7 @@ export default class DemandList extends React.Component {
         }, this.addheartlis, true, "post", { e: e, idx: rowID });
     }
     onRefresh = () => {   //顶部下拉刷新数据
+        pageIndex = 0;
         this.setState({
             refreshing: true,
         });

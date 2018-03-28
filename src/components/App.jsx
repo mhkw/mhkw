@@ -210,12 +210,16 @@ export default class App extends Component {
                             <div className="demo-thead navPlusAnim" key="a">
                                 <ul className="fourWrap">
                                     <li className="upNeed">
-                                        <img src={appUrl.upNeed} alt="" />
-                                        发布需求
+                                        <Link to='creatNeed'>
+                                            <img src={appUrl.upNeed} alt="" />
+                                            发布需求
+                                        </Link>
                                     </li>
                                     <li className="upWorks">
-                                        <img src={appUrl.upWorks} alt="" />
-                                        发布作品
+                                        <Link to='/'>
+                                            <img src={appUrl.upWorks} alt="" />
+                                            发布作品
+                                        </Link>
                                     </li>
                                     <li className="upQuote">
                                         <Link to="/creatServer">

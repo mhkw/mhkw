@@ -149,6 +149,7 @@ export default class HomeView extends React.Component {
     }
 
     onRefresh = () => {   //顶部下拉刷新数据
+        pageIndex = 0;
         this.setState({
             refreshing: true,
             isLoading: true 

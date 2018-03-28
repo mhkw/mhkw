@@ -32,6 +32,7 @@ import HOCoffer from './components/HOCoffer';
 import DemandList from './components/DemandList';
 import DemandDetail from './components/DemandDetail';
 import WorkList from './components/WorkList';
+import CreatNeed from './components/CreatNeed';
 import Test from './components/page1';
 
 import TempTest from './components/TempTest';
@@ -83,6 +84,7 @@ ReactDOM.render(
         <Route path="/demand" component={DemandList} />
         <Route path="/demandDetail" component={DemandDetail} />
         <Route path="/workList" component={WorkList} />
+        <Route path="/creatNeed" component={CreatNeed} />
         {/* <Route path="/quoteList" component={QuoteList} /> */}
         <Route path="/quoteList" component={QuoteList2}>
             <Route component={OrderPopup}>
