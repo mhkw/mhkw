@@ -242,7 +242,7 @@ export default class HomeView extends React.Component {
                                     </div>
                                 </Link>
                             ]}
-                        ><Link to="/city"><i className="iconfont icon-dingwei"></i>山景路666号</Link></NavBar>
+                        ><Link to="/address"><i className="iconfont icon-dingwei"></i>山景路666号</Link></NavBar>
                     </div>
                     <div className="hometabs">
                         <Tabs tabs={tabs}

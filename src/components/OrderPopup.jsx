@@ -74,7 +74,7 @@ class OrderPopup extends React.Component {
         }
     }
     onClickPay = () => {
-        console.log({ "payment": this.props.payment, "PayMethod": this.state.PayMethod});
+        // console.log({ "payment": this.props.payment, "PayMethod": this.state.PayMethod});
         this.ajaxToPay(this.props.model_id, this.props.payment, this.state.PayMethod, this.props.pay_model,);
         //由于生成订单需要时间，加一个弹窗提示。
         Toast.loading("加载中...", 6);

@@ -1,0 +1,76 @@
+.select-address{
+    background-color: #f0f0f0;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+.select-address .toCitySetStyle{
+    color: #000;
+}
+.label-city.am-list-item .am-input-label.am-input-label-5{
+    width: 3rem;
+}
+.home.am-list-item .am-input-label.am-input-label-5,
+.company.am-list-item .am-input-label.am-input-label-5{
+    width: 1.7rem;
+}
+.position-InputItem .icon-dingwei{
+    font-size: 20px;
+}
+.position-InputItem .icon-dituzhaofang{
+    font-size: 20px;
+}
+.position-InputItem.am-list-item .am-input-extra{
+    max-height: 3rem;
+    line-height: 2;
+    width: 1rem;
+    margin-left: 0.3rem;
+    text-align: right;
+} 
+.position-current-location.am-list-item .am-list-line .am-list-content{
+    text-align: center;
+    color: #0e80db;
+}
+.position-current-location .iconfont{
+    font-size: 16px;
+    color: #0e80db;
+    margin-right: 0.1rem;
+}
+.position-InputItem .icon-fangzi,
+.position-InputItem .icon-iconset0190{
+    font-size: 20px;
+    margin-right: 0.1rem;
+}
+.position-InputItem.home{
+    border-bottom: 1px solid #eee;
+}
+.history-list .icon-dingwei{
+    font-size: 20px;
+}
+.history-list .am-list-item{
+    border-bottom: 1px solid #eee;
+}
+.history-list .am-list-item .am-list-line .am-list-extra{
+    -webkit-flex-basis: 12%;
+    -ms-flex-preferred-size: 12%;
+    flex-basis: 12%;
+}
+.history.more-address-box .icon-shanchu{
+    display: block;
+}
+.history.more-address-box .title-p{
+    font-size: 16px;
+    margin-bottom: 5px;
+    padding-left: 15px;
+}
+.label-city.am-list-item .am-list-line,
+.history-list .am-list-item .am-list-line{
+    padding-right: 0;
+}
+.history-list .am-list-extra .icon-shanchu{
+    padding-right: 15px;
+}
+.label-city .am-input-extra .icon-dituzhaofang{
+    display: block;
+    padding-right: 10px;
+}

@@ -172,3 +172,25 @@ html,body,#container{
     display: block;
     margin-top: 0.2rem;
 }
+
+// placeOrder start
+.am-list-item.am-input-item.order-price-box{
+    height: 1.68rem;
+    line-height: 1.68rem;
+    padding: 0 .32rem;
+    font-size: 18px;
+    color: #0a0a0a;
+    border-bottom: 1px solid #e8e8e8;
+}
+.am-list.order-price-out-box{
+    background-color: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: .16rem;
+    margin-bottom: .8rem;
+    overflow: hidden;
+}
+.am-list-item.list-switch{
+    border-bottom: 1px solid #e8e8e8;
+    height: 55px;
+}
+// placeOrder end

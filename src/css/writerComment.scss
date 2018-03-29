@@ -102,17 +102,7 @@
     margin: .32rem auto .32rem;
     font-size: 14px;
 }
-.am-list-item.am-input-item.order-price-box{
-    height: 1.68rem;
-    line-height: 1.68rem;
-    background-color: #fff;
-    border: 1px solid #e8e8e8;
-    border-radius: .16rem;
-    padding: 0 .32rem;
-    font-size: 18px;
-    color: #0a0a0a;
-    margin-bottom: .8rem;
-}
+
 // .place-order .order-price-box .right{
 //     float: right;
 //     font-size: 36px;
@@ -134,7 +124,8 @@
     padding: 0 .32rem;
     font-size: 18px;
     color: #0a0a0a;
-    margin-bottom: .8rem;
+    // margin-bottom: .8rem;
+    margin-bottom: .3rem;
 }
 .place-order .payment-box .right{
     float: right;

@@ -116,7 +116,6 @@ export default class Account extends React.Component {
         Toast.success("支付成功!", 1, () => {
             this.setShowModal(false); //关闭支付Modal
             hashHistory.goBack();
-            this.getMainProjectList(); //重新刷新项目列表
         })
     }
     //支付失败的回调
