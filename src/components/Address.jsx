@@ -20,6 +20,8 @@ export default class Address extends React.Component {
         this.state = {
             address: "",
             city: "", //通过城市列表选择的城市
+            lon: "", //经度
+            lat: "", //纬度
             currentLocation: "", //定位当前位置的地址
             searchInCity_results: [], //搜索
             searchInCity_pageIndex: 1, //搜索的结果的当前页数索引
@@ -40,6 +42,11 @@ export default class Address extends React.Component {
     //选择地图上选点
     selectMapAddr = (e) => {
         console.log("选择地图上选点");
+        hashHistory.push({
+            pathname: '/baiduMap',
+            query: { form: 'address' },
+            state: {}
+        });
     }
     //点击历史地址
     historyAddress = (e) => {
@@ -87,7 +94,9 @@ export default class Address extends React.Component {
                 this.setState({
                     city,
                     address,
-                    currentLocation: streetName + sematicDescription
+                    lon: lon, //经度
+                    lat: lat, //纬度
+                    currentLocation: streetName + sematicDescription,
                 })
                 //会话存储保存地址信息
                 sessionStorage.setItem("city", city);

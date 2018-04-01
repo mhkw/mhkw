@@ -36,10 +36,10 @@ module.exports = {
     output: {
         filename: '[name].js',
         chunkFilename: '[id].chunk.js',
-        // path: path.join(__dirname, './dist/'),
-        // publicPath: './dist/'
-        path: path.join(__dirname, '../画客网H5打包/dist/'),
-        publicPath: '../画客网H5打包/dist/'
+        path: path.join(__dirname, './dist/'),
+        publicPath: './dist/'
+        // path: path.join(__dirname, '../画客网H5打包/dist/'),
+        // publicPath: '../画客网H5打包/dist/'
     },
     
     resolve: {

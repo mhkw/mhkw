@@ -39,6 +39,7 @@ import TempTest from './components/TempTest';
 import ConfirmOffer from './components/ConfirmOffer';
 import HOCdesignerHome from './components/HOCdesignerHome';
 import Address from './components/Address';
+import BaiduMap from './components/BaiduMap';
 
 import './css/font/iconfont.css'
 
@@ -67,6 +68,7 @@ ReactDOM.render(
             <Route path="/circle" component={Hkcircle} />   
             <Route path="/mine" component={Mine} />             
         </Route>
+        <Route path="/baiduMap" component={BaiduMap} />        
         <Route path="/address" component={Address} />        
         <Route path="/city" component={listViewDemo} />        
         <Route path="/page1" component={Test} />        
