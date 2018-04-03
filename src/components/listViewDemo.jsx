@@ -52,8 +52,10 @@ class StageSelectCity extends React.Component {
         }
     }
     getCity = (city) => {
-        localStorage.setItem("city", city);
+        // localStorage.setItem("city", city);
         // this.context.router.push('/addr');
+        //0402更新，将选择的城市传递到顶层HOC对象里去
+        this.props.propsSetState('Address', { city });
         hashHistory.goBack();
     }
     onSearch = (val) => {
@@ -144,7 +146,9 @@ export default class ListViewDemo extends React.Component {
     onClickCity(tar) {
         if (tar.target.className == "am-list-content") {
             let city = tar.target.innerHTML;
-            localStorage.setItem("city", city);
+            // localStorage.setItem("city", city);
+            //0402更新，将选择的城市传递到顶层HOC对象里去
+            this.props.propsSetState('Address', { city });
             // this.context.router.push('/addr');
             hashHistory.goBack();
         }
@@ -156,7 +160,7 @@ export default class ListViewDemo extends React.Component {
                 {/* <QueueAnim animConfig={[ */}
                     {/* { opacity: [1, 0], translateX: [0, 50] }, */}
                 {/* ]}> */}
-                    <StageSelectCity onSearch={this.onSearch} key="1" />
+                <StageSelectCity propsSetState={this.props.propsSetState} onSearch={this.onSearch} key="1" />
                 {/* </QueueAnim > */}
                 
                 <ListView.IndexedList

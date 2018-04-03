@@ -62,6 +62,7 @@ const ajaxURLList = {
     savePayStages: "quoteApi/savePayStages", //报价-添加付款列表
     send_quote: "quoteApi/send_quote", //报价-发送报价
     get_user_works_list_ex: "hkw_newapi/get_user_works_list_ex", //获取个人作品列表
+    get_works_info: "hkw_newapi/get_works_info", //作品详情页
 }
 
 function get_user_list_ex(params) {

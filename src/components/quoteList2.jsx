@@ -134,8 +134,7 @@ export default class Account2 extends React.Component {
         })
         hashHistory.push({
             pathname: '/quoteList/payModal',
-            query: { form: 'quoteList' },
-            state: {}
+            query: { form: 'quoteList' }
         });
     }
     

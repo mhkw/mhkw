@@ -36,13 +36,21 @@ export default class CreateOffer extends React.Component {
         }
     }
     componentWillMount() {
-        if (this.props.location.state) {
-            let { checkedServerList, checkPrice } = this.props.location.state;
-            this.setState({ 
-                checkedServerList, 
+        // if (this.props.location.state) {
+        //     let { checkedServerList, checkPrice } = this.props.location.state;
+        //     this.setState({ 
+        //         checkedServerList, 
+        //         checkPrice,
+        //         checkPriceTax: (parseFloat(checkPrice).toFixed(2) * 1.06).toFixed(2)
+        //      });
+        // }
+        if (this.props.state.checkedServerList) {
+            let { checkedServerList, checkPrice, checkPriceTax } = this.props.state;
+            this.setState({
+                checkedServerList,
                 checkPrice,
-                checkPriceTax: (parseFloat(checkPrice).toFixed(2) * 1.06).toFixed(2)
-             });
+                checkPriceTax,
+            });
         }
         // if (this.props.customer_name) {
         //     this.setState({
@@ -145,6 +153,7 @@ export default class CreateOffer extends React.Component {
                     leftContent={<span style={{ fontSize: "15px" }}>返回</span>}
                 >创建报价</NavBar>
                 <div className="create-offer-main">
+                    {console.log(this.state.checkedServerList)}
                     {
                         this.state.checkedServerList.map((val, index) => (
                             <OfferItem

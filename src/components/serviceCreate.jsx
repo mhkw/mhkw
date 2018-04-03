@@ -148,10 +148,10 @@ export default class ServerCreate extends React.Component {
             hashHistory.push({
                 pathname: '/createOffer',
                 query: { form: 'creatServer' },
-                state: {
-                    checkedServerList: this.state.checkedServerList,
-                    checkPrice: this.state.checkPrice
-                }
+                // state: {
+                //     checkedServerList: this.state.checkedServerList,
+                //     checkPrice: this.state.checkPrice
+                // }
             });
         } else {
             Toast.info("请选择服务项目", 1.5);

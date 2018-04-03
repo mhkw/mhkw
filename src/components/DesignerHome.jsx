@@ -47,7 +47,7 @@ export default class DesignerHome extends React.Component {
         hashHistory.replace({
             pathname: path,
             query: { form: 'designerHome' },
-            state: this.state
+            // state: this.state
         });
 
     }
@@ -85,16 +85,14 @@ export default class DesignerHome extends React.Component {
     handleComment = () => {
         hashHistory.push({
             pathname: '/writerComment',
-            query: { form: 'designerHome' },
-            state: {}
+            query: { form: 'designerHome' }
         });
     }
     //立即下单,快速服务下单
     handleStartOrder = () => {
         hashHistory.push({
             pathname: '/placeOrder',
-            query: { form: 'designerHome' },
-            state: {}
+            query: { form: 'designerHome' }
         });
     }
     render() {
@@ -223,12 +221,22 @@ export const IndexWorksCollection = (props) => {
             query: { form: 'designerHome' },
         });
     }
+    const handleClickWorksDetails = (works_id) => {
+        hashHistory.push({
+            pathname: '/designerWorksDetails',
+            query: { 
+                form: 'designerHome', 
+                works_id,
+            },
+        });
+    }
     return (
         <div className="index-works-collection">
             {
                 props.indexWorksList.map((value, index) => (
                     <WorksItem
                         {...value}
+                        handleClickWorksDetails={handleClickWorksDetails}
                     />
                 ))
             }
@@ -253,7 +261,7 @@ export const IndexWorksCollection = (props) => {
 }
 
 const WorksItem = (props) => (
-    <div key={props.id} style={{ display: "inline-block", width: "50%", boxSizing: "border-box", padding: "5px" }}>
+    <div key={props.id} onClick={() => { props.handleClickWorksDetails(props.id) }} style={{ display: "inline-block", width: "50%", boxSizing: "border-box", padding: "5px" }}>
         <div className="items" style={{
             border: "1px solid #ccc",
             boxSizing: "border-box",

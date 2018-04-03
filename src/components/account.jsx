@@ -80,11 +80,11 @@ export default class Account extends React.Component {
         }
         hashHistory.push({
             pathname: '/withdraw',
-            query: { form: 'account' },
-            state: {
-                realName: this.state.realName,
-                blance: this.state.blance,
-            }
+            query: { form: 'account', blance: this.state.blance },
+            // state: {
+            //     realName: this.state.realName,
+            //     blance: this.state.blance,
+            // }
         });
     }
     //校验充值金额
@@ -104,8 +104,7 @@ export default class Account extends React.Component {
         }
         hashHistory.push({
             pathname: '/account/payModal',
-            query: { form: 'account' },
-            state: {}
+            query: { form: 'account' }
         });
     }
     setShowModal = (param) => {

@@ -1,6 +1,6 @@
 import React from "react";
 import { hashHistory, Link } from "react-router";
-import { Toast, NavBar, Icon, WhiteSpace, InputItem, List} from "antd-mobile";
+import { Toast, NavBar, Icon, WhiteSpace, InputItem, List, Modal} from "antd-mobile";
 
 //首先判断用户是不是移动端，（是否存在api这个接口）
 let UserIsPhone = false;
@@ -26,8 +26,29 @@ export default class Address extends React.Component {
             searchInCity_results: [], //搜索
             searchInCity_pageIndex: 1, //搜索的结果的当前页数索引
             searchInCity_totalPage: 0, //搜索的结果的总页数
+            historyAddress: localStorage.getItem('historyAddress') ? JSON.parse(localStorage.getItem('historyAddress')) : [], //历史位置，用户输入地址，或者定位当前位置后都会新增一条，点击某条地址后跳到最前面，最多保存10条地址
         }
         this.bMap = window.bMap || null ;
+    }
+    componentWillMount() {
+        let { city, lon, lat, address, currentLocation } = this.props.state.Address;
+        this.setState({
+            address,
+            city,
+            lon,
+            lat,
+            currentLocation,
+        })
+    }
+    componentWillReceiveProps(nextProps) {
+        let { city, lon, lat, address, currentLocation } = nextProps.state.Address;
+        this.setState({
+            address,
+            city,
+            lon,
+            lat,
+            currentLocation,
+        })
     }
     //点击定位当前位置
     locateNowAddress = () => {
@@ -37,29 +58,55 @@ export default class Address extends React.Component {
     //输入地址，
     onChangeAddr = (value) => {
         console.log(value);
-        this.searchInCity(value)
+        if (value) {
+            this.searchInCity(value);
+        } else {
+            this.setState({
+                searchInCity_results: [], //搜索
+                searchInCity_pageIndex: 1, //搜索的结果的当前页数索引
+                searchInCity_totalPage: 0, //搜索的结果的总页数
+            })
+        }
     }
     //选择地图上选点
     selectMapAddr = (e) => {
-        console.log("选择地图上选点");
-        hashHistory.push({
-            pathname: '/baiduMap',
-            query: { form: 'address' },
-            state: {}
-        });
-    }
-    //点击历史地址
-    historyAddress = (e) => {
-        console.log("点击历史地址")
-    }
-    //点击删除某个常用地址
-    deleteHistoryAddr = (e) => {
-        e.stopPropagation(); //阻止事件冒泡
-        console.log("点击删除某个常用地址")
+        console.log("选择地图上选点"); 
+        if (this.bMap) {
+            hashHistory.push({
+                pathname: '/baiduMap',
+                query: { form: 'address' }
+            });
+        } else {
+            Toast.info("请在手机上打开",1);
+        }
+        
     }
     //点击百度地图搜索出来的位置
-    onClickSelectAddr = (e) => {
-        console.log("点击百度地图搜索出来的位置")
+    onClickSelectAddr = (value) => {
+        console.log("点击百度地图搜索出来的位置");
+        let { lon, lat, address, name, uid, city } = value;
+        this.props.propsSetState('Address', {
+            city,
+            address,
+            lon, //经度
+            lat, //纬度
+            currentLocation: name,
+        });
+        this.setState({
+            searchInCity_results: [], //搜索
+            searchInCity_pageIndex: 1, //搜索的结果的当前页数索引
+            searchInCity_totalPage: 0, //搜索的结果的总页数
+        })
+
+        //保存到历史记录里去
+        this.addHistoryAddress({
+            uid,
+            city,
+            address,
+            lon, //经度
+            lat, //纬度
+            currentLocation: name,
+        })
     }
     //以下都是百度地图的相关方法。使用前都得判断百度地图是否存在
     //定位当前位置
@@ -91,18 +138,36 @@ export default class Address extends React.Component {
         }, (ret, err) => {
             if (ret.status) {
                 let { city, district, streetName, streetNumber, lon, lat, address, sematicDescription } = ret;
-                this.setState({
+                // this.setState({
+                //     city,
+                //     address,
+                //     lon: lon, //经度
+                //     lat: lat, //纬度
+                //     currentLocation: streetName + sematicDescription,
+                // })
+                this.props.propsSetState('Address',{
                     city,
                     address,
-                    lon: lon, //经度
-                    lat: lat, //纬度
+                    lon, //经度
+                    lat, //纬度
                     currentLocation: streetName + sematicDescription,
                 })
                 //会话存储保存地址信息
-                sessionStorage.setItem("city", city);
-                sessionStorage.setItem("titleAddr", district + streetName );
-                sessionStorage.setItem("longitude", lon); //经度
-                sessionStorage.setItem("latitude", lat);  //纬度
+                // sessionStorage.setItem("city", city);
+                // sessionStorage.setItem("titleAddr", district + streetName );
+                // sessionStorage.setItem("longitude", lon); //经度
+                // sessionStorage.setItem("latitude", lat);  //纬度
+
+                //保存到历史记录里去
+                this.addHistoryAddress({
+                    city,
+                    address,
+                    lon, //经度
+                    lat, //纬度
+                    currentLocation: streetName + sematicDescription,
+                    uid: lon + lat, //历史记录是列表，必须得有UID
+                })
+
                 //关闭正在定位中的提示
                 Toast.hide();
             } else {
@@ -133,7 +198,66 @@ export default class Address extends React.Component {
             }
         });
     }
+    //以下是历史位置的处理。
+    //添加一个位置
+    addHistoryAddress = (value) => {
+        let oldHistoryAddress = this.state.historyAddress;
+        oldHistoryAddress.forEach((element, index) => {
+            if (element.uid == value.uid) {
+                oldHistoryAddress.splice(index,1); // 如果已经存在，删除一个元素
+            }
+        });
+        oldHistoryAddress.unshift(value);
+        if (oldHistoryAddress.length >10) {
+            oldHistoryAddress.length = 10;
+        }
+        this.setState({
+            historyAddress: oldHistoryAddress
+        });
+        localStorage.setItem('historyAddress', JSON.stringify(oldHistoryAddress));
+    }
+    //点击历史地址
+    clickHistoryAddress = (value) => {
+        console.log("点击历史地址");
+        this.addHistoryAddress(value);
+        //传递地址信息到高阶组件
+        let { address, lon, lat, currentLocation, city} = value;
+        this.props.propsSetState('Address', {
+            city,
+            address,
+            lon, //经度
+            lat, //纬度
+            currentLocation,
+        });
+    }
+    //点击删除某个常用地址
+    clickDeleteHistoryAddr = (e, uid, value) => {
+        e.stopPropagation(); //阻止事件冒泡
+        Modal.alert('删除地址?', value, [
+            { text: '取消', onPress: () => {}, style: 'default' },
+            { text: '确定', onPress: () => this.deleteHistoryAddr(uid) },
+        ]);
+    }
+    //删除某个常用地址
+    deleteHistoryAddr = (uid) => {
+        console.log("点击删除某个历史地址");
+
+        let oldHistoryAddress = this.state.historyAddress;
+        oldHistoryAddress.forEach((element, index) => {
+            if (element.uid == uid) {
+                oldHistoryAddress.splice(index, 1); // 如果已经存在，删除一个元素
+            }
+        });
+        this.setState({
+            historyAddress: oldHistoryAddress
+        });
+        localStorage.setItem('historyAddress', JSON.stringify(oldHistoryAddress));
+    }
+    // shouldComponentUpdate() {
+    //     return this.props.router.location.action === 'POP';
+    // }
     render() {
+        console.log("Address")
         return (
             <div className="select-address" key="1">
                 <NavBar
@@ -149,7 +273,7 @@ export default class Address extends React.Component {
                 <List.Item
                     className="position-current-location"
                     onClick={this.locateNowAddress}
-                ><span><i className="iconfont icon-zhongxindingwei"></i>{this.state.currentLocation ? this.state.currentLocation : '定位当前地址' }</span></List.Item>
+                ><span><i className="iconfont icon-zhongxindingwei"></i>{this.state.address ? this.state.address : '定位当前地址' }</span></List.Item>
                 <WhiteSpace size="lg" />
                 <InputItem
                     className="position-InputItem label-city"
@@ -201,12 +325,10 @@ export default class Address extends React.Component {
                 {
                     this.state.searchInCity_results.map((value, index)=>(
                             <List.Item
+                                key={value.uid}
                                 multipleLine
                                 thumb={<i className="iconfont icon-dingwei"></i>}
-                                data-name={value.name}
-                                data-lon={value.lon}
-                                data-lat={value.lat}
-                                onClick={this.onClickSelectAddr}
+                                onClick={() => { this.onClickSelectAddr(value) }}
                             >
                                 {value.name}
                                 <List.Item.Brief>{value.address}</List.Item.Brief>
@@ -217,16 +339,21 @@ export default class Address extends React.Component {
                 <div className="history more-address-box" style={{ "display": this.state.searchInCity_totalPage ? "none" : "block" }}>
                     <p className="title-p">历史位置</p>
                     <List className="history-list">
-                        <List.Item
+                        {/* <List.Item
                             thumb={<i className="iconfont icon-dingwei"></i>}
                             extra={<i onClick={this.deleteHistoryAddr} className="iconfont icon-shanchu"></i>}
-                            onClick={this.historyAddress}
-                        >杭州市西湖区</List.Item>
-                        <List.Item
-                            thumb={<i className="iconfont icon-dingwei"></i>}
-                            extra={<i onClick={this.deleteHistoryAddr} className="iconfont icon-shanchu"></i>}
-                            onClick={this.historyAddress}
-                        >上海市东方明珠塔</List.Item>
+                            onClick={this.clickHistoryAddress}
+                        >杭州市西湖区</List.Item> */}
+                        
+                        {
+                            this.state.historyAddress.map((value, index) => (
+                                <List.Item
+                                    thumb={<i className="iconfont icon-dingwei"></i>}
+                                    extra={<i onClick={(e) => { this.clickDeleteHistoryAddr(e, value.uid, value.currentLocation) }} className="iconfont icon-shanchu"></i>}
+                                    onClick={() => { this.clickHistoryAddress(value) }}
+                                >{value.address}</List.Item>
+                            ))
+                        }
                     </List>
                 </div>
             </div>

@@ -1,0 +1,71 @@
+.WorksDetails .am-navbar-left{
+    -webkit-box-flex: 0.2;
+    -webkit-flex: 0.2;
+    -ms-flex: 0.2;
+    flex: 0.2;
+}
+.WorksDetails .am-navbar-right{
+    -webkit-box-flex: 0.4;
+    -webkit-flex: 0.4;
+    -ms-flex: 0.4;
+    flex: 0.4;
+}
+.WorksDetails .am-navbar-title{
+    overflow: hidden;
+    -webkit-box-pack: left;
+    -webkit-justify-content: left;
+    -ms-flex-pack: left;
+    justify-content: left;
+}
+.WorksDetails .am-navbar-title img{
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+}
+.WorksDetails .am-navbar {
+    border-bottom: 0.02rem solid #ccc;
+}
+.works-base-info{
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+.works-base-info .am-flexbox-item{
+    font-size: 16px;
+    color: #555;
+    margin: 10px 0 0;
+}
+.works-base-info .am-flexbox-item .iconfont{
+    padding-right: 0.1rem;
+    padding-left: 0.2rem;
+    font-size: 16px;
+    font-weight: 700;
+}
+.works-base-info .am-flexbox-item.right{
+    text-align: right;
+}
+.WorksDetails .works-title{
+    font-size: 16px;
+    text-align: center;
+    margin: 10px 0 5px;
+    font-weight: 700;
+    color: #555;
+}
+.WorksDetails .content-box{
+    line-height: 1.6;
+    white-space: pre-wrap;
+    font-size: 14px;
+    color: #555;
+}
+.attachment-box .mb-img{
+    width: 100%;
+    height: auto;
+    margin-top: 10px;
+}
+.WorksDetails .avatar-name{
+    color: #17A9DE;
+    margin-left: 5px;
+}
+.works-details.bottom-features .am-flexbox-item:last-child {
+    font-size: 12px;
+    line-height: 1;
+}

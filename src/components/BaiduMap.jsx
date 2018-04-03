@@ -39,9 +39,36 @@ export default class BaiduMap extends React.Component {
     //完成地图选点
     complete = () => {
         console.log(this.state.address);
-        this.bMap.close();
-        this.closeFrame();
+        //传递给HOC高阶组件
+        let { city, address, lon, lat, currentLocation } = this.state;
+        this.props.propsSetState('Address', {
+            city,
+            address,
+            lon, //经度
+            lat, //纬度
+            currentLocation,
+        })
+        this.addHistoryAddress(this.state); //添加到历史位置。注意了，此时把整个state都传进去了。
+        this.bMap.close(); //关闭地图
+        this.closeFrame(); //关闭地图浮动层页面
         hashHistory.goBack();
+    }
+    //添加一个历史位置
+    addHistoryAddress = (value) => {
+        if (!value.uid) {
+            value.uid = value.lon + value.lat; //不存在UID，就使用经度和纬度替代
+        }
+        let oldHistoryAddress = localStorage.getItem('historyAddress') ? JSON.parse(localStorage.getItem('historyAddress')) : [] ;
+        oldHistoryAddress.forEach((element, index) => {
+            if (element.uid == value.uid) {
+                oldHistoryAddress.splice(index, 1); // 如果已经存在，删除一个元素
+            }
+        });
+        oldHistoryAddress.unshift(value);
+        if (oldHistoryAddress.length > 10) {
+            oldHistoryAddress.length = 10;
+        }
+        localStorage.setItem('historyAddress', JSON.stringify(oldHistoryAddress));
     }
     /**
      * 使用API打开一个Frame页面，这个页面可以悬浮在window页面之上。
@@ -139,8 +166,8 @@ export default class BaiduMap extends React.Component {
                 this.setState({
                     city,
                     address,
-                    lon: lon, //经度
-                    lat: lat, //纬度
+                    lon, //经度
+                    lat, //纬度
                     currentLocation: streetName + sematicDescription,
                 });
                 //有API发布一个事件

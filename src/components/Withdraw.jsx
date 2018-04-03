@@ -48,7 +48,7 @@ export default class Withdraw extends React.Component {
         }
     }
     componentWillMount() {
-        let balance = this.props.location.state.blance;
+        let balance = this.props.location.query.blance;
         if (balance) {
             this.setState({ balance });
         }

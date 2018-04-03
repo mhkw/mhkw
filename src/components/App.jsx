@@ -59,7 +59,18 @@ export default class App extends Component {
     render() {
         return (
             <div>
-                {this.props.children && React.cloneElement(this.props.children, { state: this.state, props: this.props, setState: this.setState.bind(this)})}
+                {this.props.children && 
+                    React.cloneElement(
+                        this.props.children,
+                        {
+                            state: this.state,
+                            props: this.props,
+                            setState: this.setState.bind(this),
+                            HOCState: this.props.state,
+                            propsSetState: this.props.propsSetState,
+                        }
+                    )
+                }
                 <div className="barBottom fn-clear" style={{display:this.state.display}}>
                     <TabBar className="tabBarUl"
                         unselectedTintColor="#949494"

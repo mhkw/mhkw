@@ -16,7 +16,8 @@ export default class HOCdesignerHome extends React.Component {
             if (res.success) {
                 this.setState({
                     designer: res.data
-                })
+                });
+                // this.props.propsSetState("Designer", res.data)
             } else {
                 Toast.fail(res.message, 1.5);
             }

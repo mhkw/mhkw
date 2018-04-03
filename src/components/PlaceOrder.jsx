@@ -27,8 +27,7 @@ export default class PlaceOrder extends React.Component {
                 })
                 hashHistory.push({
                     pathname: '/placeOrder/payModal',
-                    query: { form: 'placeOrder' },
-                    state: {}
+                    query: { form: 'placeOrder' }
                 });
             } else {
                 Toast.fail(res.message, 2);

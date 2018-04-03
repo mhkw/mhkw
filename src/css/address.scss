@@ -77,3 +77,16 @@
 .select-address-list .icon-dingwei{
     font-size: 20px;
 }
+// 主页的地址太长就隐藏
+.index-address{
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+.select-address .am-navbar-title{
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}

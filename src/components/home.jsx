@@ -187,8 +187,8 @@ export default class HomeView extends React.Component {
             sort: "add_time",
             offices: "all",
             keywords: keywords,
-            longitude: "0",
-            latitude: "0",
+            longitude: this.props.HOCState.Address ? this.props.HOCState.Address.lon : "0" ,
+            latitude: this.props.HOCState.Address ? this.props.HOCState.Address.lat : "0",
             per_page: "8",
             page: page
         }, this.handleSend, false, "post");
@@ -242,7 +242,7 @@ export default class HomeView extends React.Component {
                                     </div>
                                 </Link>
                             ]}
-                        ><Link to="/address"><i className="iconfont icon-dingwei"></i>山景路666号</Link></NavBar>
+                        ><Link to="/address" className="index-address"><i className="iconfont icon-dingwei"></i>{this.props.HOCState.Address ? (this.props.HOCState.Address.currentLocation ? this.props.HOCState.Address.currentLocation : '未定位') : '未定位'}</Link></NavBar>
                     </div>
                     <div className="hometabs">
                         <Tabs tabs={tabs}
