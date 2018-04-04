@@ -15,7 +15,7 @@ export default class HOCdesignerHome extends React.Component {
         this.handleGetSelfInfo = (res) => {
             if (res.success) {
                 this.setState({
-                    designer: res.data
+                    designer: { ...this.state.designer, ...res.data }
                 });
                 // this.props.propsSetState("Designer", res.data)
             } else {
@@ -31,6 +31,13 @@ export default class HOCdesignerHome extends React.Component {
             } else {
                 Toast.fail(res.message, 1.5);
             }
+        }
+    }
+    componentWillMount() {
+        if (this.props.designer.id) {
+            this.setState({
+                designer: this.props.designer
+            });
         }
     }
     componentDidMount() {

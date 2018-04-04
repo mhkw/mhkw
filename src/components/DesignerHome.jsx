@@ -96,7 +96,7 @@ export default class DesignerHome extends React.Component {
         });
     }
     render() {
-        let { path, nick_name, sex, txt_address, experience, works_count, signature, signature_bbs, } = this.props.designer;
+        let { path, nick_name, sex, txt_address, experience, works_count, signature, signature_bbs, comment_count } = this.props.designer;
         return (
             // <QueueAnim className="designer-home-anim"
             //     animConfig={[
@@ -157,7 +157,7 @@ export default class DesignerHome extends React.Component {
                                 onClick={() => { this.handleGo(1) }}
                             >
                                 <span className="txt">评论</span>
-                                ({this.state.comment})
+                            ({comment_count})
                             </span>
                         </Flex.Item>
                     </Flex>

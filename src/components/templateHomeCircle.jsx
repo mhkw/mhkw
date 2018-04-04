@@ -7,6 +7,9 @@ import { Link, hashHistory } from 'react-router';
 const loginUrl = {
     "selec": require('../images/selec.png'),
 }
+const zhanWei = require('../images/logoZhanWei.png');
+
+const defaultAvatar = require("../images/selec.png");
 
 export const ItemPicLists = (props) => (
     <ul>
@@ -14,20 +17,25 @@ export const ItemPicLists = (props) => (
             props.works_list.slice(0, 4).map(function (value, idx) {
                 const handleClickWorksDetails = (works_id) => {
                     hashHistory.push({
-                        pathname: '/designerWorksDetails',
+                        pathname: '/worksDetails',
                         query: {
                             form: 'home',
                             works_id,
                         },
                     });
                 }
-                return <li>
-                    <a href="javascript:;" onClick={() => { handleClickWorksDetails(value.id) }}>
-                        <img src={
-                            value.path.indexOf('upaiyun.com') != -1 ? value.path + '!540x390' : value.path
-                        } alt="" />
-                    </a>
-                </li>
+                const onErrorImg = (e) => {
+                    // console.log(e.target);
+                    e.target.src = zhanWei;
+                    e.target.className = "zhan-wei";
+                }
+                return <li onClick={() => { handleClickWorksDetails(value.id) }} >
+                        <img 
+                            // src={value.path.indexOf('upaiyun.com') != -1 ? value.path + '!540x390' : value.path}
+                            src={value.path_thumb}
+                            onError={(e) => { onErrorImg(e) }}
+                        />
+                    </li>
             })
         }
     </ul>
@@ -38,7 +46,7 @@ export const ItemPicLists = (props) => (
 export const PersonalMsg = (props) => (
     <div className="itemsTop">
         <div className="itemsTopPic fn-left" onClick={()=>{hashHistory.push({pathname: '/designerHome',query: { userId: props.id }})}}>
-            <img src={props.path_thumb || loginUrl.selec } alt="" />
+            <img src={props.path_thumb || loginUrl.selec} alt="" onError={(e) => { e.target.src = defaultAvatar }} />
         </div>
         <div className="itemsTopRight">
             <p>

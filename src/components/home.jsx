@@ -56,7 +56,7 @@ export default class HomeView extends React.Component {
             page:1,
             hasMore:true,
             keyArray:["附近","艺术绘画","品牌建设","互联网设计","产品设计","空间设计","虚拟现实","多媒体","程序开发","其他设计"],
-            currentIdx:""
+            currentIdx:0
         };
         
         this.genData = (pIndex = 0, NUM_ROWS, data) => {
@@ -106,9 +106,13 @@ export default class HomeView extends React.Component {
                 },()=>{
                     tabs = [{ title: <div className="fn-clear tabsList"><img src={loginUrl[0]} /><p>附近</p></div> }];
                     for (let i = 0; i < this.state.tabsData.length; i++) {
+                        let src = this.state.tabsData[i].path; //未被点击的样式
+                        if (this.state.currentIdx > 0 && i == this.state.currentIdx - 1) {
+                            src = this.state.tabsData[this.state.currentIdx - 1].path1; //点击的样式
+                        }
                         tabs.push({
                             title: <div className="fn-clear tabsList" dataSrc={this.state.tabsData[i].path1}>
-                                <img id={"img" + i} src={this.state.tabsData[i].path} /><p>{this.state.tabsData[i].category_name}</p></div>
+                                <img id={"img" + i} src={src} /><p>{this.state.tabsData[i].category_name}</p></div>
                         })
                     }
                 })
@@ -135,15 +139,28 @@ export default class HomeView extends React.Component {
     //     // return (this.props.router.location.action === 'POP')
     // }
 
+    componentWillMount() {
+        if (this.props.HOCState.Home.currentIdx) {
+            this.setState({
+                currentIdx: this.props.HOCState.Home.currentIdx
+            })
+        }
+    }
     componentDidMount() {
-        this.getWorkList("",1);
-        runPromise("get_designer_tree", null, this.getPicsLis,false,"get");
+        this.getWorkList(this.state.keyArray[this.state.currentIdx],1);
+        if (!sessionStorage.getItem("designer_tree")) {
+            runPromise("get_designer_tree", null, this.getPicsLis,false,"get");
+        }
 
         tabs = [{ title: <div className="fn-clear tabsList"><img src={loginUrl[0]} /><p>附近</p></div> }];
         for (let i = 0; i < this.state.tabsData.length; i++) {
+            let src = this.state.tabsData[i].path; //未被点击的样式
+            if (this.state.currentIdx > 0 && i == this.state.currentIdx - 1 ) {
+                src = this.state.tabsData[this.state.currentIdx -1].path1; //点击的样式
+            }
             tabs.push({
                 title: <div className="fn-clear tabsList" dataSrc={this.state.tabsData[i].path1}>
-                    <img id={"img"+i} src={this.state.tabsData[i].path} /><p>{this.state.tabsData[i].category_name}</p></div>
+                    <img id={"img" + i} src={src} /><p>{this.state.tabsData[i].category_name}</p></div>
             })
         }
     }
@@ -154,7 +171,7 @@ export default class HomeView extends React.Component {
             refreshing: true,
             isLoading: true 
         })
-        this.getWorkList(this.state.keywords,1);
+        this.getWorkList(this.state.keyArray[this.state.currentIdx],1);
     };
 
     onEndReached = (event) => {
@@ -164,7 +181,7 @@ export default class HomeView extends React.Component {
             return ;
         };
         // this.setState({ isLoading: true });
-        this.getWorkList(this.state.keywords, this.state.page);
+        this.getWorkList(this.state.keyArray[this.state.currentIdx], this.state.page);
     };
     
     changeUserList  (tab,index) {
@@ -177,6 +194,8 @@ export default class HomeView extends React.Component {
             console.log(change);
         }
         this.setState({currentIdx : index});
+        this.props.propsSetState('Home', { currentIdx: index });
+        console.log(index);
         let idx = index-1;
         let currentImg = document.getElementById("img"+idx);
         idx<0?"":currentImg.src = tab.title.props.dataSrc;
@@ -193,6 +212,21 @@ export default class HomeView extends React.Component {
             page: page
         }, this.handleSend, false, "post");
     }
+    //选择某个设计师后将信息通过props回调传给HOC
+    selectDesignerToHOC = (obj) => {
+        let { path_thumb, path, nick_name, sex, txt_address, experience, works_count, comment_count, id } = obj;
+        this.props.propsSetState('Designer', {
+            path_thumb,
+            path,
+            nick_name,
+            sex,
+            txt_address,
+            experience,
+            works_count,
+            comment_count,
+            id,
+        });
+    }
     render() {
         // let index = this.state.res.length - 1;
         const row = (rowData, sectionID, rowID) => {
@@ -203,7 +237,7 @@ export default class HomeView extends React.Component {
             const obj = rowData;
             return (
                 <div key={rowID}>
-                    <div className="items">
+                    <div className="items" onClick={() => { this.selectDesignerToHOC(obj) }}>
                         <PersonalMsg 
                             path_thumb={obj.path_thumb} 
                             nick_name={obj.nick_name} 
@@ -258,6 +292,7 @@ export default class HomeView extends React.Component {
                                 // this.setState({keywords:this.state.keyArray[index]}); 
                                 this.changeUserList(tab,index);
                             }}
+                            initialPage={this.state.currentIdx ? this.state.currentIdx : 0}
                         >
                         </Tabs>
                     </div>

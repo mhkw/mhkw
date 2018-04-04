@@ -119,6 +119,7 @@ export default function runPromise(ajaxName, param, handle, mustLogin = false, m
     }
     
     let serializeParam = { "user_id": cookie_user_id };
+    // let serializeParam = {};
     if (method == "post") {
         Object.assign(serializeParam, param);
     } else {

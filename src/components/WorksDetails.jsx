@@ -72,7 +72,7 @@ export default class WorksDetails extends React.Component {
                     onLeftClick={() => hashHistory.goBack()}
                     // leftContent={<span style={{ fontSize: "15px" }}>返回</span>}
                     rightContent={<Button className="rechargeButton" style={{ "line-height": "26px", "font-size": "14px"}} onClick={() => { console.log("交流")  }}>交流</Button>}
-                ><img src={this.state.avatarUrl ? this.state.avatarUrl : defaultAvatar} /><span className="avatar-name">{this.state.nick_name}</span></NavBar>
+                ><img onError={(e) => { e.target.src = defaultAvatar }} src={this.state.avatarUrl ? this.state.avatarUrl : defaultAvatar} /><span className="avatar-name">{this.state.nick_name}</span></NavBar>
                 <WingBlank>
                     <h1 className="works-title">{this.state.title}</h1>
                     <Flex className="works-base-info">

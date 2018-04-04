@@ -71,7 +71,7 @@ export default class App extends Component {
                         }
                     )
                 }
-                <div className="barBottom fn-clear" style={{display:this.state.display}}>
+                <div className="barBottom fn-clear" style={{display:this.state.display,zIndex:1000}}>
                     <TabBar className="tabBarUl"
                         unselectedTintColor="#949494"
                         tintColor="#33A3F4"

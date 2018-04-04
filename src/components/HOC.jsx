@@ -16,6 +16,10 @@ export default class HOC extends React.Component{
                 currentLocation: "", //定位当前位置的地址
             },
             Designer: {}, //设计师，拿到设计师常规数据后直接放进去吧
+            Home: {       //主页
+                currentIdx: 0,
+            }, 
+            
         }
     }
     /**
