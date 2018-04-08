@@ -20,7 +20,7 @@ const ajaxURLList = {
     get_user_list_ex: "hkw_newapi/get_user_list_ex", //获取设计师列表 
     get_circle_list:"hkw_newapi/get_circle_list",       //画客圈
     add_love:"hkw_newapi/add_love",       //点赞
-    // get_comment_list:"hkw_newapi/get_comment_list",       //获取评论列表
+    get_comment_list:"hkw_newapi/get_comment_list",       //获取评论列表
     add_comment: "hkw_newapi/add_comment", //添加评论
     get_project_list: "hkw_newapi/get_project_list", //获取项目列表
     get_menu_class: "hkw_newapi/get_menu_class", //获取作品分类
@@ -63,6 +63,9 @@ const ajaxURLList = {
     send_quote: "quoteApi/send_quote", //报价-发送报价
     get_user_works_list_ex: "hkw_newapi/get_user_works_list_ex", //获取个人作品列表
     get_works_info: "hkw_newapi/get_works_info", //作品详情页
+    logout: "hkw_newapi/logout",   //退出登录
+    change_password: "hkw_newapi/change_password",   //修改密码
+    upload_image_byw_upy2: "upload/upload_image_byw_upy2",   //上传图片,base64的方式上传
 }
 
 function get_user_list_ex(params) {

@@ -89,7 +89,8 @@ export default class DesignerComment extends React.Component {
                 keycode: "1",
                 longitude: "0",
                 latitude: true,
-            }, this.handleSend, false, "get");       
+            }, this.handleSend, false, "get");   
+            this.setState({ replyText: '' });   
         }
     }
     onTouchImg = (index, dishPic) => {
@@ -142,6 +143,7 @@ export default class DesignerComment extends React.Component {
                         value={this.state.replyText}
                         onChange={this.onChangeReplyInput}
                         onBlur={this.onBlurReplyInput}
+                        // clear
                     />
                     <span className="send-btn" ref="abcd"
                         style={this.state.sendBtnStatus ? {

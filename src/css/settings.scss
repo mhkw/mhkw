@@ -1,0 +1,59 @@
+.settings-page .am-navbar {
+    border-bottom: 0.02rem solid #ccc;
+}
+.settings-page{
+    background-color: #f0f0f0;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+.settings-more .am-list-item{
+    border-bottom: 0.02rem solid #ddd;
+}
+.settings-sign-out .am-list-item .am-list-line .am-list-content{
+    text-align: center;
+    color: red;
+}
+.change-password-page .am-navbar {
+    border-bottom: 0.02rem solid #ccc;
+}
+.change-password-page{
+    background-color: #f0f0f0;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+.change-password-list .am-list-item{
+    border-bottom: 0.02rem solid #ddd;
+}
+.change-password-list .am-list-item .am-input-label.am-input-label-5{
+    width: 30px;
+}
+.change-password-list .iconfont{
+    font-size: 20px;
+}
+.change-password-list .am-list-body .am-list-item:last-child{
+    border-bottom: 0.02rem solid #ddd;
+}
+.feedback-page .title {
+    color: #000;
+    font-size: 17px;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    margin-left: 15px;
+}
+.about-us-page .about-us-p{
+    font-size: 14px;
+    color: #000;
+    line-height: 2;
+}
+.about-us-page .am-navbar {
+    border-bottom: 0.02rem solid #ccc;
+}
+.important.about-us-p{
+    color: red;
+    margin: 10px 0 20px;
+}
+.body.about-us-p{
+    text-indent: 2em;
+}

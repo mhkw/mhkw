@@ -23,7 +23,7 @@ export default class DesignerHome extends React.Component {
             huake_info: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis dicta voluptatibus voluptatum fuga amet eius modi! Repellat, labore fuga. In, atque dolores! Unde, placeat incidunt quaerat dolorem, asperiores praesentium ipsa dolor nulla ab alias delectus amet doloremque aperiam molestias quibusdam tenetur vero corporis id aliquam quae expedita tempora impedit non.",
             works_collect: "8",
             comment: "10",
-            tab_index: 0, //设计师主页展示作品集还是评论，就看这个状态
+            tab_index: 1, //设计师主页展示作品集还是评论，就看这个状态
             buttomBackgroundColor1: "#2068ab", //底部栏原始的背景颜色
             buttomBackgroundColor2: "#2068ab", //底部栏原始的背景颜色
             buttomBackgroundColor3: "#2068ab", //底部栏原始的背景颜色

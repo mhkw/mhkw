@@ -6,14 +6,55 @@ export default class WriterComment extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            navBarTitle: "品牌设计师 Miazhang",
+            id: '', //设计师ID
+            navBarTitle: "",
             score: 0,
             commentText: "",
             commentCount: 0, //输入框还差多少个字
             showCommentLackCount: true, //显示输入框还差多少个字的提示
             scoreTextArray: ["", "差！","较差！","一般！","良！","优！"], //评论的汉字
             imgFiles: [],
+            imgUploadIds:'', // 图片上传成功后的id
+            isStartPublish: false, //当用户点击发表时，先上传图片，图片全部上传成功后拿到了图片ID，再发表整个评论
+            isRefresh: false, //发表需要过程，需要弹窗等待一会
             cost: "" //消费金额
+        }
+        this.handleUploadImage = (res) => {
+            console.log(this.state.imgUploadIds);
+            if (res.success) {
+                this.setState({
+                    imgUploadIds: this.state.imgUploadIds + '_' + res.data.id
+                },()=>{
+                    let { imgFiles, imgUploadIds } = this.state;
+                    if (imgFiles.length <= imgUploadIds.split('_').length - 1) {
+                        Toast.hide();
+                        this.ajaxAddComment();
+                    }
+                })
+            } else {
+                Toast.hide();
+                Toast.fail(req.message, 1);
+            }
+        }
+        this.handleAddComment = (res) => {
+            console.log(res);
+            if (res.success) {
+                Toast.success('发表成功', 1,()=>{
+                    hashHistory.goBack();
+                })
+            } else {
+                Toast.fail(req.message, 1);
+            }
+        }
+    }
+    componentWillMount() {
+        console.log(this.props.designer);
+        if (this.props.designer) {
+            let { nick_name, id } = this.props.designer;
+            this.setState({
+                navBarTitle: nick_name,
+                id,
+            })
         }
     }
     componentDidMount() {
@@ -40,8 +81,50 @@ export default class WriterComment extends React.Component {
             imagePickerUploadBtn.appendChild(elemt);
         }
     }
+    //点击发表
     onClickPublish = () => {
-        
+        let { score, commentText, imgFiles  } = this.state;
+        if (this.testScore(score) && this.testComment(commentText) ) {
+            if (imgFiles.length) {
+                //有图片
+                Toast.loading('上传图片...', 6);
+                for (const img of imgFiles) {
+                    this.ajaxUploadImage(img.url);
+                }
+            } else {
+                //没图片
+                this.ajaxAddComment();
+            }   
+        }
+    }
+    testComment(val) {
+        if (!val.trim()) {
+            Toast.info("请输入评价内容！", 1);
+            return false;
+        } else {
+            return true;
+        }
+    }
+    testScore(val) {
+        if (!val) {
+            Toast.info("请选择评分！", 1);
+            return false;
+        } else {
+            return true;
+        }
+    }
+    //发表对设计师的评论
+    ajaxAddComment = () => {
+        let { id, commentText, score, imgUploadIds } = this.state;
+        runPromise("add_comment", {
+            user_id: validate.getCookie('user_id'), //评论人的id
+            type: "user",               //works=作品；project=需求;news=文章;circle=帖子;
+            user_id_to: id,     //发布文章人的id
+            article_id: id,          //文章id
+            content: commentText,   //评论内容
+            appraise_score: score,   //评论评分
+            appendixs: imgUploadIds,   //图片内容
+        }, this.handleAddComment, true, "post");
     }
     handleChangeTextarea(val) {
         let commentLength = val.trim().replace(/\s+/g, "").length;
@@ -63,6 +146,17 @@ export default class WriterComment extends React.Component {
         this.setState({
             imgFiles: files
         });
+        // if (files.length) {
+        //     let url = files[files.length - 1].url;
+        //     this.ajaxUploadImage(url);
+        // }
+    }
+    //上传图片
+    ajaxUploadImage = (url) => {
+        //发送ajax,上传图片
+        runPromise("upload_image_byw_upy2", {
+            arr: url,
+        }, this.handleUploadImage);   
     }
     render() {
         return (
@@ -100,13 +194,13 @@ export default class WriterComment extends React.Component {
                         multiple={true}
                     />
                 </div>
-                <InputItem
+                {/* <InputItem
                     className="cost"
                     type="number"
                     placeholder="请输入消费金额"
                     value={this.state.cost}
                     onChange= {(val) => { this.setState({cost: val}) }}
-                ><span className="text">费用</span><span className="icon">￥</span></InputItem>
+                ><span className="text">费用</span><span className="icon">￥</span></InputItem> */}
             </div>
         )
     }

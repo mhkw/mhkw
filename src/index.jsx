@@ -42,6 +42,10 @@ import Address from './components/Address';
 import BaiduMap from './components/BaiduMap';
 import HOC from './components/HOC';
 import WorksDetails from './components/WorksDetails';
+import Settings from './components/Settings';
+import ChangePassword from './components/ChangePassword';
+import Feedback from './components/Feedback';
+import AboutUs from './components/AboutUs';
 
 import './css/font/iconfont.css'
 
@@ -172,7 +176,7 @@ ReactDOM.render(
             <Route path="worksDetails" component={WorksDetails} />
             <Route component={HOCdesignerHome}>
                 <Route path="designerHome" component={designerHome}>
-                    <IndexRoute component={IndexWorksCollection} />
+                    <IndexRoute component={DesignerComment} />
                     <Route path="indexWorksCollection" component={IndexWorksCollection} />
                     <Route path="designerComment" component={DesignerComment} />
                 </Route>
@@ -199,6 +203,10 @@ ReactDOM.render(
             </Route>
             <Route path="TempTest" component={TempTest} />
             <Route path="withdraw" component={Withdraw} />
+            <Route path="settings" component={Settings} />
+            <Route path="changePassword" component={ChangePassword} />
+            <Route path="feedback" component={Feedback} />
+            <Route path="aboutUs" component={AboutUs} />
         </Route>
     </Router>
     , document.getElementById('container'));
