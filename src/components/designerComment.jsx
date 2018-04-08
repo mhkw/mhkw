@@ -34,7 +34,8 @@ export default class DesignerComment extends React.Component {
         super(props)
         this.state = {
             commentKeywords: [],
-            commentList: [],
+            commentList: [], //评论列表
+            comment_total_count: 0, // 评论总数
             replyText:"",
             showReplyInput: false,
             sendBtnStatus: false , //判断发送按钮是否可点击，以及按钮上的样式变化
@@ -44,6 +45,24 @@ export default class DesignerComment extends React.Component {
                 console.log(req);
             } else {
                 Toast.fail(req.message, 2);
+            }
+        }
+        this.handleGetCommentList = (res) => {
+            if (res.success) {
+                // console.log(res);
+                this.setState({
+                    commentList: res.data.item_list,
+                    comment_total_count: res.data.comment_total_count,
+                })
+            } else {
+                // Toast.fail(res.message, 1);
+            }
+        }
+        this.handleAddLove = (res) => {
+            if (res.success) {
+                console.log(res);
+            } else {
+                Toast.fail(res.message, 1);
             }
         }
     }
@@ -98,17 +117,43 @@ export default class DesignerComment extends React.Component {
         let items = [];
         dishPic.map((value)=>{
             let item = {};
-            item.src = value;
-            item.w = 1242;
-            item.h = 298;
+            item.src = value.path + '!540x390';
+            item.w = 540;
+            item.h = 390;
             items.push(item);
         })
         openPhotoSwipe(items, index)
     }
+    ajaxGetCommentList = ( per_page = 10, page = 1 ) => {
+        let article_id = this.props.designer ? (this.props.designer.id ? this.props.designer.id : 0 ) : 0;
+        runPromise('get_comment_list', {
+            type: 'user',
+            article_id,
+            param1: 0,
+            param2: 0,
+            per_page,
+            page,
+        }, this.handleGetCommentList, false, 'get');
+    }
+    componentDidMount() {
+        this.ajaxGetCommentList();
+    }
+    //点赞
+    AddLove = (id) => {
+        this.ajaxAddLove(id);
+    }
+    ajaxAddLove = (id) => {
+        runPromise("add_love", {
+            id,
+            user_id: validate.getCookie('user_id'),
+            // model: "user_comment",
+            model: "user",
+        }, this.handleAddLove);
+    }
     render() {
         return (
             <div className="designerComment">
-                <CommentItem
+                {/* <CommentItem
                     avatarImg={imgUrl.userImg} 
                     nick_name="D&S-小鹿设计师" 
                     score="4" 
@@ -117,17 +162,32 @@ export default class DesignerComment extends React.Component {
                     index="1"
                     onActive={this.onTouchReply}
                     TouchImg={this.onTouchImg}
-                />
-                <CommentItem
-                    avatarImg={imgUrl.userImg}
-                    nick_name="D&S-小鹿设计师"
-                    score="4"
-                    dishPic={imgUrl.dishPic}
-                    time={"11月08日"}
-                    index="2"
-                    onActive={this.onTouchReply}
-                    TouchImg={this.onTouchImg}
-                />
+                /> */}
+                
+                {
+                    this.state.commentList &&
+                    this.state.commentList.map((value, index)=>(
+                        <CommentItem
+                            key={value.id}
+                            id={value.id}
+                            avatarImg={value.path_thumb}
+                            nick_name={value.nick_name}
+                            score={value.appraise_score}
+                            content={value.content}
+                            // dishPic={imgUrl.dishPic}
+                            dishPic={value.attachment_list}
+                            time={value.add_time_format}
+                            islove={value.islove}
+                            love_count={value.love_count}
+                            love_list={value.love_list}
+                            commentrep_data={value.commentrep_data}
+                            index={value.index}
+                            onActive={this.onTouchReply}
+                            TouchImg={this.onTouchImg}
+                            AddLove={this.AddLove}
+                        />
+                    ))
+                }
                 <div className="popup-comment-input-box"
                     // style={{ "display": this.state.showReplyInput ? "block" : "none" }}
                     style={{ "visibility": this.state.showReplyInput ? "visible" : "hidden"}}

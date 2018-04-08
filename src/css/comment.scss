@@ -119,6 +119,8 @@
     color: #555;
     padding: .133333rem;
     background-color: #eee;
+    z-index: 1;
+    position: relative;
 }
 .comment-reply-box .reply-line{
     padding: .066667rem 0;
