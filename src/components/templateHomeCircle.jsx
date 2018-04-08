@@ -81,7 +81,12 @@ export const Line = (props) => (
 
     </div>
 )
-
+export const CategoryPub = (props) => (
+    <div className={props.className} 
+        onClick={(e) => { props.changeCategory(e)}}
+        id={props.id}
+    >{props.text}</div>
+);
 export const AccountListDetails = (props) => (
     <ul>
         {
@@ -91,7 +96,7 @@ export const AccountListDetails = (props) => (
                 let month = newDate.getMonth() + 1;
                 let day = newDate.getDate();
                 // let add_time_format = year + '-' + month + '-' + day;   
-                let add_time_format = `${year}-${month}-${day}`;         
+                let add_time_format = `${year}-${month}-${day}`;
                 return <li>
                     <div className="fn-left">
                         <p className="ellipsis" style={{ fontSize: "16px" }}>{ value.cause }</p>

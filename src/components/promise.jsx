@@ -65,7 +65,9 @@ const ajaxURLList = {
     get_works_info: "hkw_newapi/get_works_info", //作品详情页
     logout: "hkw_newapi/logout",   //退出登录
     change_password: "hkw_newapi/change_password",   //修改密码
-    upload_image_byw_upy2: "upload/upload_image_byw_upy2",   //上传图片,base64的方式上传
+    upload_image_byw_upy2: "upload/upload_image_byw_upy2", //base64转图片
+    get_menu_class: "hkw_newapi/get_menu_class", //获取作品类别
+    add_project: "hkw_newapi/add_project", //获取作品类别
 }
 
 function get_user_list_ex(params) {
