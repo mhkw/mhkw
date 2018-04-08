@@ -191,7 +191,6 @@ export default class HomeView extends React.Component {
             let currentBg = this.state.tabsData[Idx].path;
             let change = document.getElementById("img" + Idx);
             change.src = currentBg;
-            console.log(change);
         }
         this.setState({currentIdx : index});
         this.props.propsSetState('Home', { currentIdx: index });

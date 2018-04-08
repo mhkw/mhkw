@@ -243,3 +243,41 @@
         }
     }
 }
+
+
+.categoryWrap {
+    padding: 0 .27rem;
+    overflow: hidden;
+    .categoryPub {
+        border-bottom: 1px solid #D6D6D6;
+        overflow: hidden;
+        h3 {
+            font-size: 16px;
+            padding: .27rem 0;
+        }
+        .categoryPubLis {
+            text-align: center;
+            border: 1px solid #D6D6D6;
+            border-radius: 5px;
+            height: 26px;
+            line-height: 26px;
+            padding: 0 8px;
+            margin: 5px;
+            float: left;
+        }
+        .categoryPubLisBg {
+            background-color: #00A0E9;
+            border: 1px solid #00A0E9;
+            color: #fff;
+        }
+    }
+}
+.needLists .am-list-item .am-list-line .am-list-extra {
+    flex-basis:80%;
+}
+.needLists .am-list-item .am-list-line .am-list-extra .needTitle {
+    width: 100%;
+    text-align: right;
+    border:0 none;
+    padding: .15rem 0;
+}

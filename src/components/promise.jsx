@@ -63,6 +63,9 @@ const ajaxURLList = {
     send_quote: "quoteApi/send_quote", //报价-发送报价
     get_user_works_list_ex: "hkw_newapi/get_user_works_list_ex", //获取个人作品列表
     get_works_info: "hkw_newapi/get_works_info", //作品详情页
+    upload_image_byw_upy2: "upload/upload_image_byw_upy2", //base64转图片
+    get_menu_class: "hkw_newapi/get_menu_class", //获取作品类别
+    add_project: "hkw_newapi/add_project", //获取作品类别
 }
 
 function get_user_list_ex(params) {

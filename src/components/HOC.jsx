@@ -18,8 +18,7 @@ export default class HOC extends React.Component{
             Designer: {}, //设计师，拿到设计师常规数据后直接放进去吧
             Home: {       //主页
                 currentIdx: 0,
-            }, 
-            
+            }
         }
     }
     /**
@@ -41,7 +40,7 @@ export default class HOC extends React.Component{
         return this.props.router.location.action === 'POP';
     }
     render() {
-        console.log('HOC::' + this.state.Address.address)
+        // console.log('HOC::' + this.state.Address.address)
         return (
             <div className="hoc-max-box">
                 {this.props.children &&
