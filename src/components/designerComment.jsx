@@ -110,8 +110,44 @@ export default class DesignerComment extends React.Component {
         }
         this.handleRepComment = (res) => {
             if (res.success) {
-                console.log(res);
-                this.ajaxGetCommentList();
+                let { comment_id, rep_user_id : user_id_to, rep_user_nick_name: nick_name_to, replyText: content, commentList  } = this.state;
+                let nick_name;
+                let user_id;
+                if (this.props.designer) {
+                    nick_name = this.props.designer.nick_name;
+                    user_id = this.props.designer.id;
+                }
+                // console.log(res);
+                // this.ajaxGetCommentList();
+
+                //新构建的的一个回复留言的对象
+                let newCommentrep = {
+                    comment_id,
+                    content,
+                    nick_name,
+                    nick_name_to,
+                    user_id,
+                    user_id_to,
+                }; 
+
+                let commentIndex = 0; //选中的大评论的索引
+
+                for (let i = 0; i < commentList.length; i++) {
+                    const comment = commentList[i];
+                    if (comment.id == comment_id) {
+                        commentIndex = i;
+                        break;
+                    }
+                }
+                let commentrep_list_length = commentList[commentIndex].commentrep_data.commentrep_list.length;
+                let new_commentrep_list_page = 0;
+                if (commentrep_list_length >= 3) {
+                    new_commentrep_list_page = 1;
+                }
+                const newCommentList1 = update(commentList, { [commentIndex]: { commentrep_data: { commentrep_list: { $push: [newCommentrep] } }} });
+                const newCommentList = update(newCommentList1, { [commentIndex]: { commentrep_data: { is_next_page: { $set: new_commentrep_list_page } }} });
+                this.setState({ commentList: newCommentList, replyText: '' });
+
             } else {
                 Toast.fail(res.message, 1);
             }
@@ -162,7 +198,7 @@ export default class DesignerComment extends React.Component {
         if (this.state.sendBtnStatus) {
             //发送ajax,发送留言或回复
             this.ajaxRepComment();  
-            this.setState({ replyText: '' });   
+            // this.setState({ replyText: '' });   
         }
     }
     //ajax发送留言或回复
