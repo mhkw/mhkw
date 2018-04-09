@@ -18,7 +18,16 @@ export default class HOC extends React.Component{
             Designer: {}, //设计师，拿到设计师常规数据后直接放进去吧
             Home: {       //主页
                 currentIdx: 0,
-            }
+            },
+            fcategoryId:"",
+            categoryId:"",
+            category:"",
+            content:"",
+            files:[],
+            needTitle:"",
+            price:"",
+            ids:[],
+            urls:[]
         }
     }
     /**

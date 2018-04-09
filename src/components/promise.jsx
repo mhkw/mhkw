@@ -7,7 +7,7 @@ import qs from 'qs';
 let Ajax = axios.create({
     // baseURL: 'https://bird.ioliu.cn/v2?Content-Type=application/x-www-form-urlencoded&url=https://www.huakewang.com/',
     baseURL: 'https://www.huakewang.com/',
-    timeout: 3000,
+    timeout: 6000,
     withCredentials: true,
     crossDomain: true,
     // headers: {
@@ -69,6 +69,10 @@ const ajaxURLList = {
     upload_image_byw_upy2: "upload/upload_image_byw_upy2", //base64转图片
     get_menu_class: "hkw_newapi/get_menu_class", //获取作品类别
     add_project: "hkw_newapi/add_project", //获取作品类别
+    add_works_ex: "hkw_newapi/add_works_ex", //发布作品
+    getKeycode: "hkw_newapi/getKeycode", //自动提取关键词
+    add_circle: "hkw_newapi/add_circle", //发布帖子
+    search: "hkw_newapi/search", //关键词搜索
 }
 
 function get_user_list_ex(params) {

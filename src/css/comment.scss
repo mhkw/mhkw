@@ -276,7 +276,8 @@
     }
 }
 .needLists .am-list-item .am-list-line .am-list-extra {
-    flex-basis:80%;
+    flex-basis:70%;
+    color: #000;
 }
 .needLists .am-list-item .am-list-line .am-list-extra .needTitle {
     width: 100%;
@@ -295,4 +296,19 @@
 .comment-item .comment-reply-box.more{
     text-align: center;
     color: #409ad6;
+}
+.cicleCard {
+    overflow: hidden;
+    .needDes {
+        .am-list-item {
+            padding-right: 10px;
+            padding-left: 10px;
+        }
+        textarea {
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            border-radius: 5px;
+            padding: 3px;
+        }
+    }
 }

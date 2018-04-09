@@ -66,6 +66,7 @@ export default class Search extends React.Component {
         //     hashHistory.goBack()
         // }, 100);
     }
+    
     render() {
         return (
             <QueueAnim>

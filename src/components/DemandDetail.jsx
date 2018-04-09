@@ -25,11 +25,18 @@ let openPhotoSwipe = function (items, index) {
     let gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
     gallery.init();
 }
+let staticData = {
+    long_lat_address: "",
+    distance: "0.00",
+    comment_data:{
+        comment_list:[]
+    }
+}
 export default class DemandDetail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            demandDetail: JSON.parse(sessionStorage.getItem("demandDetail")) ? JSON.parse(sessionStorage.getItem("demandDetail")) : { distance: "0.00" },
+            demandDetail: JSON.parse(sessionStorage.getItem("demandDetail")) ? JSON.parse(sessionStorage.getItem("demandDetail")) : staticData,
             files: [],
             showReplyInput: false,
             commentToId: "",
@@ -74,7 +81,7 @@ export default class DemandDetail extends React.Component {
                     wrap.appendChild(domLi);
                     let currentLi = document.getElementById("demandCommentList");
                     currentLi.appendChild(wrap);
-                } else {                           //留言
+                } else {                                 //留言
                     innerSpan.innerHTML = req.data.nick_name;
                     innerI.innerHTML = req.data.comment_content;
                     domLi.appendChild(innerSpan);
@@ -87,6 +94,7 @@ export default class DemandDetail extends React.Component {
         }
     }
     componentDidMount() {
+        console.log(this.props.location.query.demandId);
         this.getProgectList(this.props.location.query.demandId);
     }
     getProgectList(id) {
