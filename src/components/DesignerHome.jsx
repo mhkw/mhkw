@@ -170,6 +170,7 @@ export default class DesignerHome extends React.Component {
                                 setState: this.props.setState,
                                 designer: this.props.designer,
                                 indexWorksList: this.props.indexWorksList,
+                                updateSelectedComment: this.props.updateSelectedComment,
                             }
                         )
                     }

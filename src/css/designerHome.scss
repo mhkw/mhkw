@@ -150,6 +150,7 @@ html,body,#container{
     position: fixed;
     width: 100%;
     bottom: 0;
+    z-index: 2;
 }
 
 .bottom-features .am-flexbox-item{

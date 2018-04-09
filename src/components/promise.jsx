@@ -20,7 +20,8 @@ const ajaxURLList = {
     get_user_list_ex: "hkw_newapi/get_user_list_ex", //获取设计师列表 
     get_circle_list:"hkw_newapi/get_circle_list",       //画客圈
     add_love:"hkw_newapi/add_love",       //点赞
-    get_comment_list:"hkw_newapi/get_comment_list",       //获取评论列表
+    get_comment_list: "hkw_newapi/get_comment_list",       //获取评论列表
+    get_rep_comment_list:"hkw_newapi/get_rep_comment_list",       //获取评论列表,新增
     add_comment: "hkw_newapi/add_comment", //添加评论
     get_project_list: "hkw_newapi/get_project_list", //获取项目列表
     get_menu_class: "hkw_newapi/get_menu_class", //获取作品分类

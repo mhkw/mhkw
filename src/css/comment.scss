@@ -9,6 +9,7 @@
     padding: 10px 15px 0;
     margin: .266667rem 0 .4rem;
 }
+
 .comment-item .user-pic{
     // position: relative;
     float: left;
@@ -103,7 +104,7 @@
     padding-bottom: 0;
     color: #409ad6;
     margin-top: .2rem;
-    background-color: #eee;
+    background-color: #f4f4f4;
 }
 .comment-item .comment-like-box .iconfont{
     float: left;
@@ -118,7 +119,7 @@
 .comment-item .comment-reply-box{
     color: #555;
     padding: .133333rem;
-    background-color: #eee;
+    background-color: #f4f4f4;
     z-index: 1;
     position: relative;
 }
@@ -282,4 +283,16 @@
     text-align: right;
     border:0 none;
     padding: .15rem 0;
+}
+.comment-item .comment-like-box{
+    font-size: 13px;
+    word-break: break-word;
+}
+.comment-item .comment-reply-box{
+    font-size: 13px;
+    word-break: break-word;
+}
+.comment-item .comment-reply-box.more{
+    text-align: center;
+    color: #409ad6;
 }

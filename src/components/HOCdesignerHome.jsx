@@ -11,6 +11,7 @@ export default class HOCdesignerHome extends React.Component {
             userId: '',
             designer: {},
             indexWorksList: [], //首页的作品列表，最多只显示八个
+            selectedComment: {}, //跳到评论详情页前，记录当前选择的评论，评论详情页直接可以拿到了
         }
         this.handleGetSelfInfo = (res) => {
             if (res.success) {
@@ -85,6 +86,9 @@ export default class HOCdesignerHome extends React.Component {
                 console.log(error, "错误");
             });
     }
+    updateSelectedComment = (selectedComment) => {
+        this.setState({ selectedComment });
+    }
     render() {
         return (
             <div className="hoc-designer-home">
@@ -96,6 +100,8 @@ export default class HOCdesignerHome extends React.Component {
                             setState: this.setState.bind(this),
                             designer: this.state.designer,
                             indexWorksList: this.state.indexWorksList,
+                            selectedComment: this.state.selectedComment,
+                            updateSelectedComment: this.updateSelectedComment,
                         }
                     )
                 }
