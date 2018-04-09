@@ -222,7 +222,8 @@ export default class HomeView extends React.Component {
             experience,
             works_count,
             comment_count,
-            id,
+            // id,
+            id: 69590,
         });
     }
     render() {
@@ -246,7 +247,8 @@ export default class HomeView extends React.Component {
                             experience={obj.experience}
                             works_count={obj.works_count}
                             hits_count={obj.hits_count}
-                            id={obj.id}
+                            // id={obj.id}
+                            id={69590}
                         />
                         <div className="itemPicList">
                             <ItemPicLists 

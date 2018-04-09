@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, hashHistory } from 'react-router';
 import { List, Badge,WhiteSpace  } from 'antd-mobile';
 import { Jiange, Line, PersonalCenterMsg} from './templateHomeCircle';
 import QueueAnim from 'rc-queue-anim';
@@ -50,7 +50,13 @@ export default class Mine extends React.Component {
             }
         })
         .catch((error) => {
-            console.log(error , "错误");
+            // console.log(error , "错误");
+            //如果没登录，跳转到登录页
+            validate.setCookie('user_id', '');
+            hashHistory.push({
+                pathname: '/login',
+                query: { form: 'mine' }
+            });
         });
 
     }
@@ -62,6 +68,13 @@ export default class Mine extends React.Component {
             hide:!this.state.hide
         })
     }
+    //点击右上角的设置按钮
+    clickSettings = () => {
+        hashHistory.push({
+            pathname: '/settings',
+            query: { form: 'mine' }
+        });
+    }
     render () {
         return (
             <div className="mineWrap">
@@ -71,7 +84,7 @@ export default class Mine extends React.Component {
                             this.showPersonalMsg();
                             this.props.setState({display:"none"})
                         }}>{this.state.personCenter.nick_name}<i className="iconfont icon-tubiao-"></i></a>
-                        <span className="iconfont icon-shezhi" style={{ color:"#2a2a34",float:'right' }}></span>                    
+                        <span onClick={ this.clickSettings } className="iconfont icon-shezhi" style={{ color:"#2a2a34",float:'right' }}></span>                    
                     </p>
                 </div>
                 <div className="minePic">
