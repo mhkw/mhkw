@@ -202,7 +202,7 @@ export default class RegisterView extends React.Component {
                     <div className="loginWrap" key="1">
                         <div className="loginIn">
                             <div className="loginCenter">
-                                <div className="loginLogo">
+                                <div className="loginLogo" onClick={() => { hashHistory.push({ pathname: '/' }) }}>
                                     <img src={loginUrl[0]} alt="" />
                                 </div>
                                 <div className="loginIpt">

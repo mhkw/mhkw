@@ -1,6 +1,6 @@
 import React from 'react'
 import { hashHistory } from 'react-router'
-import { NavBar, ImagePicker, List, Icon, TextareaItem, WingBlank, Modal,Button,Toast} from 'antd-mobile'
+import { NavBar, ImagePicker, List, Icon, TextareaItem, WingBlank,Toast} from 'antd-mobile'
 import { Line, Jiange } from './templateHomeCircle';
 
 import PhotoSwipeItem from './photoSwipeElement.jsx';
@@ -23,7 +23,7 @@ let openPhotoSwipe = function (items, index) {
     let gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
     gallery.init();
 }
-export default class CreatNeed extends React.Component {
+export default class CreatWork extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -32,38 +32,52 @@ export default class CreatNeed extends React.Component {
             files: [],
             price:"",
             ids:[],
+            urls:[],
             needTitle:""
         }
         this.handleBackPicSrc = (res) => {
             let tmpArrIds = this.state.ids;
+            let tmpArrUrls = this.state.urls;
             tmpArrIds.push(res.data.id);
+            tmpArrUrls.push(res.data.path);
             this.setState({
-                ids: tmpArrIds
+                ids: tmpArrIds,
+                urls: tmpArrUrls
+            })
+            this.props.setState({
+                ids: tmpArrIds,
+                urls: tmpArrUrls
             })
         }
         this.handleSendNeedMsg = (res) => {
-            console.log(res);
-            if(res.success) {
-                Toast.info('需求发送成功,等待相关人员审核', 2, ()=>{hashHistory.push({pathname:"/"})}, false);
+            if(res.success){
+                this.props.setState({
+                    fcategoryId: "",
+                    categoryId: "",
+                    needTitle: "",
+                    category: "",
+                    content: "",
+                    price: "",
+                    files: [],
+                    urls: [],
+                    ids: [],
+                })
+                Toast.info("作品发送成功，等待相关人员审核", 2, () => { hashHistory.push({ pathname: "/" })}, false);
             }else{
                 Toast.info(res.message, 2, null, false);
+            }
+        }
+        this.handleGetKeyword=(res)=>{
+            if(res.success){
+                this.props.setState({ price: res.data.keycode})
+            }else{
+                console.log(res);
             }
         }
     }
     componentDidMount(){
         this.autoFocusInst.focus();
         this.setState({ categoryId: this.props.location.query.categoryId })
-    }
-    showModal = key => (e) => {
-        e.preventDefault(); // 修复 Android 上点击穿透
-        this.setState({
-            [key]: true,
-        });
-    }
-    onClose = key => () => {
-        this.setState({
-            [key]: false,
-        });
     }
     onSelectPic = (files, type, index) => {
         let img,item;
@@ -79,6 +93,7 @@ export default class CreatNeed extends React.Component {
                 files,
                 modal1: false
             });
+            this.props.setState({files})
         } else {
             img.src = files[files.length - 1].url;
             img.onload = function (argument) {
@@ -93,12 +108,14 @@ export default class CreatNeed extends React.Component {
                 files,
                 modal1: false
             });
+            this.props.setState({ files })
         }
     };
 
     onTouchImg = (index) => {
+        console.log(size);
         let items = [];
-        let resultFile = this.state.files;
+        let resultFile =this.props.state.files;
         resultFile.map((value,idx) => {
             let item = {};
             item.w = size[idx].w;
@@ -109,31 +126,37 @@ export default class CreatNeed extends React.Component {
         openPhotoSwipe(items, index);
     }
     checkNeedMsg=()=>{
-        if (!this.state.content.trim()) {
-            Toast.info('请输入需求描述', 2, null, false);
-        }else if (!this.state.needTitle.trim()) {
-            Toast.info('请输入需求标题', 2, null, false);
-        } else if (this.state.price == ""){
-            Toast.info('请选择需求预算', 2, null, false);
-        } else if (!this.props.state.Address.address.trim()) {
-            Toast.info('请选择地址', 2, null, false);
+        if (!this.props.state.content.trim()) {
+            Toast.info('请输入作品描述', 2, null, false);
+        }else if (!this.props.state.needTitle.trim()) {
+            Toast.info('请输入作品标题', 2, null, false);
+        } else if (this.props.state.category.trim() == ""){
+            Toast.info('请选择作品类别', 2, null, false);
+        } else if (!this.props.state.price.trim()) {
+            Toast.info('请填写关键词', 2, null, false);
         }else{
             this.sendNeedMsg();
         }
     }
     sendNeedMsg = () => {
-        runPromise('add_project', {
-            user_id: validate.getCookie('user_id'),         //用户id
-            direction: this.state.needTitle,                //标题(字符串)
-            batch_path_ids: this.state.ids.join("_"),       //附件id（_id_id_id）
-            content: this.state.content,                   //需求描述（字符串）
-            budget_price_str: this.state.price,            //预算（限制只能输入数字）
-            longitude: this.props.state.Address.lon,
-            latitude: this.props.state.Address.lat,
-            long_lat_address: this.props.state.Address.address,     //地址（字符串）
-            auth_user_id: "",
-            project_id: ""
+        runPromise('add_works_ex', {
+            title: this.props.state.needTitle,
+            content: this.props.state.content,
+            batch_path_ids: this.props.state.ids,
+            batch_video_urls: [],
+            keyword: this.props.state.price,
+            category_ids_1: 148,  //类别
+            category_ids_2: this.props.state.fcategoryId,
+            category_ids_3: this.props.state.categoryId,
+            path: this.props.state.urls[this.props.state.urls.length-1],       //封面
+            image_upload_way: 2,
+            user_id: validate.getCookie('user_id')
         }, this.handleSendNeedMsg, false, "post");
+    }
+    getkeywords = () => {
+        runPromise('getKeycode', {
+            title: this.props.state.needTitle,
+        }, this.handleGetKeyword, false, "post");
     }
 
     render(){
@@ -147,27 +170,27 @@ export default class CreatNeed extends React.Component {
                         rightContent={
                             <span onClick={(e) => { this.checkNeedMsg()}}>确定</span>
                         }
-                    >发布需求</NavBar>
+                    >发布作品</NavBar>
                 </div>
                 <div style={{ height: "1.2rem" }}></div>
                 <div className="needDes" style={{paddingRight:"12px"}}>
                     <TextareaItem
-                        placeholder="请填写您的需求..."
+                        placeholder="请填写作品描述..."
                         ref={el => this.autoFocusInst = el}
                         autoHeight
                         rows={5}
                         count={200}
-                        value={this.state.content}
-                        onChange={(value) => { this.setState({ content: value });}}
+                        value={this.props.state.content}
+                        onChange={(value) => { this.setState({ content: value }), this.props.setState({ content: value}) }}
                     />
                 </div>
                 <div className="needPics">
                     <WingBlank>
                         <ImagePicker
-                            files={this.state.files}
+                            files={this.props.state.files}
                             onChange={this.onSelectPic}
                             onImageClick={(index, fs) => this.onTouchImg(index)}
-                            selectable={this.state.files.length < 20}
+                            selectable={this.props.state.files.length < 20}
                             accept="image/gif,image/jpeg,image/jpg,image/png"
                             multiple={true}
                         />
@@ -177,62 +200,38 @@ export default class CreatNeed extends React.Component {
                     <List>
                         <Line border="line"></Line>
                         <Item
-                            onClick={() => {  }}
                             arrow="horizontal"
-                            extra="杭州市 西湖区 转塘"
-                        >地点</Item>
-                        {/* <Line border="line"></Line>
-                        <Jiange name="jianGe"></Jiange>
-                        <Line border="line"></Line>
-                        <Item
-                            onClick={() => { hashHistory.push({ pathname:"/category"}) }}
-                            arrow="horizontal"
-                            extra={this.props.location.query.category}
-                        >领域</Item> */}
-                        <Line border="line"></Line>
-                        <Jiange name="jianGe"></Jiange>
-                        <Line border="line"></Line>
-                        <Item
-                            arrow="horizontal"
-                            extra={<input className="needTitle" type="text" 
-                                value={this.state.needTitle} 
-                                onChange={(e) => { this.setState({ needTitle: e.currentTarget.value }) }} />}
+                            extra={<input className="needTitle" type="text"
+                                value={this.props.state.needTitle}
+                                onBlur={() => { this.getkeywords()}}
+                                onChange={(e) => { 
+                                    this.setState({ needTitle: e.currentTarget.value })
+                                    this.props.setState({ needTitle: e.currentTarget.value }) 
+                                }}/>}
                         >标题</Item>
                         <Line border="line"></Line>
                         <Jiange name="jianGe"></Jiange>
                         <Line border="line"></Line>
                         <Item
-                            extra={this.state.price}
-                            onClick={this.showModal('modal1')}
+                            onClick={() => { hashHistory.push({pathname:'/category'}) }}
                             arrow="horizontal"
-                        >预算</Item>
+                            extra={this.props.state.category}
+                        >类别</Item>
+                        <Line border="line"></Line>
+                        <Jiange name="jianGe"></Jiange>
+                        <Line border="line"></Line>
+                        <Item
+                            arrow="horizontal"
+                            extra={<input className="needTitle" type="text"
+                                value={this.props.state.price}
+                                placeholder="请用英文逗号隔开"
+                                onChange={(e) => { 
+                                    this.setState({ price: e.currentTarget.value });
+                                    this.props.setState({ price: e.currentTarget.value }); }} />}
+                        >关键词</Item>
                         <Line border="line"></Line>
                     </List>
                 </div>
-                <Modal
-                    visible={this.state.modal1}
-                    transparent
-                    maskClosable={false}
-                    onClose={this.onClose('modal1')}
-                    title={<p>选择您的预算 <i className="iconfont icon-chuyidong1-copy fn-right" onClick={(e) => { 
-                        this.onClose('modal1')(e)}}></i>
-                    </p>}
-                    className="modalNeedPrice"
-                >
-                    <ul className="needPriceLists">
-                        <Line border="line"></Line>
-                        <li onClick={(e)=>{this.setState({ price: e.currentTarget.innerHTML});this.onClose('modal1')();}}>当面商谈</li>
-                        <Line border="line"></Line>
-                        <li onClick={(e)=>{this.setState({price:e.currentTarget.innerHTML});this.onClose('modal1')()}}>一万元以内</li>
-                        <Line border="line"></Line>
-                        <li onClick={(e)=>{this.setState({price:e.currentTarget.innerHTML});this.onClose('modal1')()}}>五万元以内</li>
-                        <Line border="line"></Line>
-                        <li onClick={(e)=>{this.setState({price:e.currentTarget.innerHTML});this.onClose('modal1')()}}>十万以内</li>
-                        <Line border="line"></Line>
-                        <li onClick={(e)=>{this.setState({price:e.currentTarget.innerHTML});this.onClose('modal1')()}}>十五万以内</li>
-                        <Line border="line"></Line>
-                    </ul>
-                </Modal>
                 <PhotoSwipeItem />
             </div>
         )

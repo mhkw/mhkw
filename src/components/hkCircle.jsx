@@ -295,7 +295,7 @@ export default class LoginView extends React.Component {
                             </div>
                         </div>
                         <div className="itemPicList">
-                            <p>{obj.title}</p>
+                            <p>{obj.content}</p>
                             <ul>
                                 {
                                     obj.attachment_list?obj.attachment_list.map((value, idx) => {
@@ -434,10 +434,7 @@ export default class LoginView extends React.Component {
                             selectedIndex={1}
                         >
                             {this.state.data.map(val => (
-                                <a
-                                    key={val}
-                                    style={{ display: 'inline-block' }}
-                                >
+                                <a key={val} style={{ display: 'inline-block' }}>
                                     <img
                                         src={val}
                                         alt=""

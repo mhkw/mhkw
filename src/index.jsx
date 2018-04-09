@@ -33,6 +33,8 @@ import DemandList from './components/DemandList';
 import DemandDetail from './components/DemandDetail';
 import WorkList from './components/WorkList';
 import CreatNeed from './components/CreatNeed';
+import CreatWork from './components/CreatWork';
+import CreatCard from './components/CreatCard';
 import Category from './components/Category';
 import Test from './components/page1';
 
@@ -162,6 +164,8 @@ ReactDOM.render(
             <Route path="demandDetail" component={DemandDetail} />
             <Route path="workList" component={WorkList} />
             <Route path="creatNeed" component={CreatNeed} />
+            <Route path="creatWork" component={CreatWork} />
+            <Route path="creatCard" component={CreatCard} />
             <Route path="category" component={Category} />
             {/* <Route path="/quoteList" component={QuoteList} /> */}
             <Route path="quoteList" component={QuoteList2}>

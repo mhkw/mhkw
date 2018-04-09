@@ -273,11 +273,27 @@
     }
 }
 .needLists .am-list-item .am-list-line .am-list-extra {
-    flex-basis:80%;
+    flex-basis:70%;
+    color: #000;
 }
 .needLists .am-list-item .am-list-line .am-list-extra .needTitle {
     width: 100%;
     text-align: right;
     border:0 none;
     padding: .15rem 0;
+}
+.cicleCard {
+    overflow: hidden;
+    .needDes {
+        .am-list-item {
+            padding-right: 10px;
+            padding-left: 10px;
+        }
+        textarea {
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            border-radius: 5px;
+            padding: 3px;
+        }
+    }
 }

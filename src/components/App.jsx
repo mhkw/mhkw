@@ -221,13 +221,13 @@ export default class App extends Component {
                             <div className="demo-thead navPlusAnim" key="a">
                                 <ul className="fourWrap">
                                     <li className="upNeed">
-                                        <Link to='creatNeed'>
+                                        <Link to='/creatNeed'>
                                             <img src={appUrl.upNeed} alt="" />
                                             发布需求
                                         </Link>
                                     </li>
                                     <li className="upWorks">
-                                        <Link to='/'>
+                                        <Link to='/creatWork'>
                                             <img src={appUrl.upWorks} alt="" />
                                             发布作品
                                         </Link>
@@ -240,8 +240,10 @@ export default class App extends Component {
                                         </Link>
                                     </li>
                                     <li className="upTalk">
-                                        <img src={appUrl.upTalk} alt="" />
-                                        发送帖子
+                                        <Link to='/creatCard'>
+                                            <img src={appUrl.upTalk} alt="" />
+                                            发送帖子
+                                        </Link>
                                     </li>
                                 </ul>
                                 <span className="iconfont icon-chuyidong1-copy" onClick={this.showWhatDo}></span>

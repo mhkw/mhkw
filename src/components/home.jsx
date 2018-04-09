@@ -151,7 +151,6 @@ export default class HomeView extends React.Component {
         if (!sessionStorage.getItem("designer_tree")) {
             runPromise("get_designer_tree", null, this.getPicsLis,false,"get");
         }
-
         tabs = [{ title: <div className="fn-clear tabsList"><img src={loginUrl[0]} /><p>附近</p></div> }];
         for (let i = 0; i < this.state.tabsData.length; i++) {
             let src = this.state.tabsData[i].path; //未被点击的样式
@@ -169,7 +168,7 @@ export default class HomeView extends React.Component {
         pageIndex = 0;
         this.setState({
             refreshing: true,
-            isLoading: true 
+            isLoading: true
         })
         this.getWorkList(this.state.keyArray[this.state.currentIdx],1);
     };
