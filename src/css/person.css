@@ -165,7 +165,7 @@
   font-size: 28px;
 }
 
-.accountWrap .accountWrapMid i {
+.accountWrap .accountWrapMid button {
   font-size: 22px;
   display: inline-block;
   height: 1.733333rem;
@@ -175,6 +175,7 @@
   border-radius: 50%;
   text-align: center;
   color: #fff;
+  border: 0;
 }
 
 .accountWrap .getPayTitle {
@@ -196,12 +197,21 @@
   border-bottom: 1px solid #ECECEC;
   overflow: hidden;
   padding: .4rem .533333rem;
-  height: 1.84rem;
+  height: 2rem;
   box-sizing: border-box;
 }
 
 .accountWrap .accountListDetails ul li p {
   line-height: 20px;
+}
+
+.accountWrap .accountListDetails ul li p.blance {
+  font-size: 15px;
+  margin-top: .2rem;
+}
+
+.accountWrap .accountListDetails ul li .fn-left {
+  max-width: 70%;
 }
 
 .accountWrap .accountListDetails ul .accountListDetailsRight {
@@ -232,16 +242,18 @@
   font-weight: 800;
 }
 
-.orderListWrap .orderItemList .orderItem .orderItemLis ul li h3 span {
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li h3 span.fn-right {
   color: #17A9DE;
 }
 
-.orderListWrap .orderItemList .orderItem .orderItemLis ul li .spelis {
-  height: 1.173333rem;
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li h3 span.name {
+  width: 6rem;
+  display: inline-block;
 }
 
 .orderListWrap .orderItemList .orderItem .orderItemLis ul li .paysteps {
-  line-height: 1.173333rem;
+  line-height: 2;
+  background-color: #fff !important;
 }
 
 .orderListWrap .orderItemList .orderItem .orderItemLis ul li .orderItemLisWrap {
@@ -273,11 +285,15 @@
 }
 
 .orderListWrap .orderItemList .orderItem .orderItemLis ul li .orderItemLisWrap h4 {
-  margin-bottom: .28rem;
+  font-size: 16px;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li .orderItemLisWrap p {
+  font-size: 14px;
 }
 
 .orderListWrap .orderItemList .orderItem .orderItemLis ul li .orderItemLisWrap .floatWrap {
-  width: 6.933333rem;
+  max-width: 7.5rem;
 }
 
 .orderListWrap .orderItemList .orderItem .orderItemLis ul li .orderItemLisWrap .floatWrap .order {
@@ -293,13 +309,28 @@
   width: 6rem;
   font-size: 14px;
   font-weight: 800;
-  margin-bottom: .266667rem;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li .orderItemLisWrap .floatWrap p.fn-left {
+  margin-top: .1rem;
+  margin-bottom: .1rem;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li .orderItemLisWrap .floatWrap .pay-stages {
+  width: 7.5rem;
 }
 
 .orderListWrap .orderItemList .orderItem .orderItemLis ul li .btnWrap {
   height: 1.253333rem;
   line-height: 1.253333rem;
   border-top: 1px solid #D7DBE3;
+  position: relative;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li .btnWrap i {
+  margin-left: 0.5rem;
+  font-size: 15px;
+  color: #555;
 }
 
 .orderListWrap .orderItemList .orderItem .orderItemLis ul li .btnWrap button {
@@ -308,6 +339,22 @@
   border: 1px solid #cccccc;
   margin: 0 .08rem;
   border-radius: 5px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis ul li .btnWrap .button-1 {
+  margin-right: 2.6rem;
+}
+
+.orderListWrap .orderItemList .orderItem .orderItemLis img {
+  width: 142px;
+  height: 150px;
+  display: block;
+  margin: 50px auto 0;
 }
 
 .line {
@@ -325,4 +372,11 @@
   height: 1px;
   width: 100%;
   background: #c9c9c9;
+}
+
+.searchIpt .am-tabs-tab-bar-wrap {
+  position: fixed;
+  top: 1.2rem;
+  z-index: 9999;
+  width: 100%;
 }
