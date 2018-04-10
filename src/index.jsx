@@ -51,6 +51,7 @@ import Settings from './components/Settings';
 import ChangePassword from './components/ChangePassword';
 import Feedback from './components/Feedback';
 import AboutUs from './components/AboutUs';
+import Activity from './components/Activity';
 
 import './css/font/iconfont.css'
 
@@ -174,6 +175,7 @@ ReactDOM.render(
             <Route path="creatCard" component={CreatCard} />
             <Route path="Searchresult" component={SearchResult} />
             <Route path="category" component={Category} />
+            <Route path="activity" component={Activity} />
             {/* <Route path="/quoteList" component={QuoteList} /> */}
             <Route path="quoteList" component={QuoteList2}>
                 <Route component={OrderPopup}>

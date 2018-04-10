@@ -252,6 +252,14 @@ export default class LoginView extends React.Component {
             }, this.addcommentlis, true, "post");
         }
     }
+    //点击帖子
+    clickPost = () => {
+        // this.onRefresh();
+        // // console.log("点击帖子");
+        // this.setState({
+        //     refreshing: true
+        // });
+    }
     render() {
         const separator = (sectionID, rowID) => (   //这个是每个元素之间的间距
             <div
@@ -450,7 +458,7 @@ export default class LoginView extends React.Component {
                     </WingBlank>
                     <div className="fourAvt">
                         <ul>
-                            <li onClick={() => { hashHistory.push({ pathname: '/circle' }) }}>
+                            <li onClick={this.clickPost}>
                                 <Link>
                                     <img src={loginUrl.tiezi} />
                                     <p>帖子</p>
@@ -468,7 +476,7 @@ export default class LoginView extends React.Component {
                                     <p>作品</p>
                                 </Link>
                             </li>
-                            <li>
+                            <li onClick={() => { hashHistory.push({ pathname: '/activity' }) }}>
                                 <Link>
                                     <img src={loginUrl.essay} />
                                     <p>活动</p>

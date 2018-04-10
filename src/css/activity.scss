@@ -1,0 +1,55 @@
+.activity-page{
+    background-color: #f2f2f2;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+.activity-page .activity-page-box{
+    background-color: #fff;
+}
+.activity-page .activity-img{
+    width: 100%;
+}
+.activity-page-box .flex-item-right{
+    -webkit-box-flex: 2;
+    -webkit-flex: 2;
+    -ms-flex: 2;
+    flex: 2;
+}
+.activity-page-box .activity-item{
+    height: 100px;
+    overflow: hidden;
+    padding-top: 0.2rem;
+}
+.activity-item .bottom .single{
+    display: inline-block;
+    overflow: hidden;
+    color: #878787;
+    height: 20px;
+    font-size: 12px;
+}
+.activity-item .bottom .single.one{
+    width: 40%;
+}
+.activity-item .bottom .single.tow{
+    width: 30%;
+}
+.activity-item .bottom .icon-location{
+    color: #33a3ff;
+}
+.activity-item .bottom .single.three{
+    width: 30%;
+    text-align: right;
+}
+.activity-item .bottom .number{
+    color: #0100d3;
+}
+.activity-item .flex-item-right .title{
+    font-size: 16px;
+    padding-top: 5px;
+}
+.activity-item .flex-item-right .sponsor{
+    font-size: 14px;
+    color: #888;
+    padding: 7px 0;
+}
