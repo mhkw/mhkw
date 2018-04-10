@@ -72,6 +72,7 @@ const ajaxURLList = {
     getKeycode: "hkw_newapi/getKeycode", //自动提取关键词
     add_circle: "hkw_newapi/add_circle", //发布帖子
     search: "hkw_newapi/search", //关键词搜索
+    get_search_history: "hkw_newapi/get_search_history", //获取搜索记录
 }
 
 function get_user_list_ex(params) {
