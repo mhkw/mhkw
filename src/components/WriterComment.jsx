@@ -26,9 +26,12 @@ export default class WriterComment extends React.Component {
                     imgUploadIds: this.state.imgUploadIds + '_' + res.data.id
                 },()=>{
                     let { imgFiles, imgUploadIds } = this.state;
-                    if (imgFiles.length <= imgUploadIds.split('_').length - 1) {
+                    let UploadcompleteCount = imgUploadIds.split('_').length - 1;
+                    if (imgFiles.length <= UploadcompleteCount) {
                         Toast.hide();
                         this.ajaxAddComment();
+                    } else {
+                        this.ajaxUploadImage(imgFiles[UploadcompleteCount].url);
                     }
                 })
             } else {
@@ -43,7 +46,7 @@ export default class WriterComment extends React.Component {
                     hashHistory.goBack();
                 })
             } else {
-                Toast.fail(req.message, 1);
+                Toast.fail(res.message, 1);
             }
         }
     }
@@ -88,9 +91,10 @@ export default class WriterComment extends React.Component {
             if (imgFiles.length) {
                 //有图片
                 Toast.loading('上传图片...', 6);
-                for (const img of imgFiles) {
-                    this.ajaxUploadImage(img.url);
-                }
+                // for (const img of imgFiles) {
+                //     this.ajaxUploadImage(img.url); //一个循环同时上传，开销太大，换成异步的
+                // }
+                this.ajaxUploadImage(imgFiles[0].url);
             } else {
                 //没图片
                 this.ajaxAddComment();

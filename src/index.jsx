@@ -188,6 +188,7 @@ ReactDOM.render(
                     <Route path="indexWorksCollection" component={IndexWorksCollection} />
                     <Route path="designerComment" component={DesignerComment} />
                 </Route>
+                <Route path="commentDetails" component={DesignerComment} />
                 <Route path="designerWorksDetails" component={WorksDetails} />
                 {/* 先将作品提出来，写完了再嵌套到/designerHome */}
                 <Route path="worksCollection" component={WorksCollection} />
