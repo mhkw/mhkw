@@ -12,13 +12,14 @@ export default class HOCdesignerHome extends React.Component {
             designer: {},
             indexWorksList: [], //首页的作品列表，最多只显示八个
             selectedComment: {}, //跳到评论详情页前，记录当前选择的评论，评论详情页直接可以拿到了
+            tab_index: 0, //设计师主页展示作品集还是评论，就看这个状态
         }
         this.handleGetSelfInfo = (res) => {
             if (res.success) {
                 this.setState({
                     designer: { ...this.state.designer, ...res.data }
                 });
-                // this.props.propsSetState("Designer", res.data)
+                this.props.propsSetState("Designer", res.data);
             } else {
                 Toast.fail(res.message, 1.5);
             }
@@ -89,6 +90,9 @@ export default class HOCdesignerHome extends React.Component {
     updateSelectedComment = (selectedComment) => {
         this.setState({ selectedComment });
     }
+    updateTabIndex = (tab_index) => {
+        this.setState({ tab_index });
+    }
     render() {
         return (
             <div className="hoc-designer-home">
@@ -102,6 +106,8 @@ export default class HOCdesignerHome extends React.Component {
                             indexWorksList: this.state.indexWorksList,
                             selectedComment: this.state.selectedComment,
                             updateSelectedComment: this.updateSelectedComment,
+                            tab_index: this.state.tab_index,
+                            updateTabIndex: this.updateTabIndex, //高阶组件，保存tab状态
                         }
                     )
                 }

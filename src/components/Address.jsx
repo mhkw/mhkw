@@ -31,7 +31,12 @@ export default class Address extends React.Component {
         this.bMap = window.bMap || null ;
     }
     componentWillMount() {
-        let { city, lon, lat, address, currentLocation } = this.props.state.Address;
+        let HOCAddressPage = 'Address';
+        let query = this.props.location.query;
+        if (query && query.form) {
+            HOCAddressPage = query.form;
+        }
+        let { city, lon, lat, address, currentLocation } = this.props.state[HOCAddressPage];
         this.setState({
             address,
             city,
@@ -41,7 +46,12 @@ export default class Address extends React.Component {
         })
     }
     componentWillReceiveProps(nextProps) {
-        let { city, lon, lat, address, currentLocation } = nextProps.state.Address;
+        let HOCAddressPage = 'Address';
+        let query = this.props.location.query;
+        if (query && query.form) {
+            HOCAddressPage = query.form;
+        }
+        let { city, lon, lat, address, currentLocation } = nextProps.state[HOCAddressPage];
         this.setState({
             address,
             city,
@@ -85,19 +95,19 @@ export default class Address extends React.Component {
     onClickSelectAddr = (value) => {
         console.log("点击百度地图搜索出来的位置");
         let { lon, lat, address, name, uid, city } = value;
-        this.props.propsSetState('Address', {
-            city,
-            address,
-            lon, //经度
-            lat, //纬度
-            currentLocation: name,
-        });
+        // this.props.propsSetState('Address', {
+        //     city,
+        //     address,
+        //     lon, //经度
+        //     lat, //纬度
+        //     currentLocation: name,
+        // });
         this.setState({
             searchInCity_results: [], //搜索
             searchInCity_pageIndex: 1, //搜索的结果的当前页数索引
             searchInCity_totalPage: 0, //搜索的结果的总页数
         })
-
+        
         //保存到历史记录里去
         this.addHistoryAddress({
             uid,
@@ -107,6 +117,7 @@ export default class Address extends React.Component {
             lat, //纬度
             currentLocation: name,
         })
+        this.updateHOCAddress(city, address, lon, lat, name);        
     }
     //以下都是百度地图的相关方法。使用前都得判断百度地图是否存在
     //定位当前位置
@@ -145,19 +156,19 @@ export default class Address extends React.Component {
                 //     lat: lat, //纬度
                 //     currentLocation: streetName + sematicDescription,
                 // })
-                this.props.propsSetState('Address',{
-                    city,
-                    address,
-                    lon, //经度
-                    lat, //纬度
-                    currentLocation: streetName + sematicDescription,
-                })
+                // this.props.propsSetState('Address',{
+                //     city,
+                //     address,
+                //     lon, //经度
+                //     lat, //纬度
+                //     currentLocation: streetName + sematicDescription,
+                // })
                 //会话存储保存地址信息
                 // sessionStorage.setItem("city", city);
                 // sessionStorage.setItem("titleAddr", district + streetName );
                 // sessionStorage.setItem("longitude", lon); //经度
                 // sessionStorage.setItem("latitude", lat);  //纬度
-
+                
                 //保存到历史记录里去
                 this.addHistoryAddress({
                     city,
@@ -167,9 +178,10 @@ export default class Address extends React.Component {
                     currentLocation: streetName + sematicDescription,
                     uid: lon + lat, //历史记录是列表，必须得有UID
                 })
-
+                
                 //关闭正在定位中的提示
                 Toast.hide();
+                this.updateHOCAddress(city, address, lon, lat, streetName + sematicDescription); 
             } else {
                 Toast.fail(err.msg, 1)
             }
@@ -222,13 +234,14 @@ export default class Address extends React.Component {
         this.addHistoryAddress(value);
         //传递地址信息到高阶组件
         let { address, lon, lat, currentLocation, city} = value;
-        this.props.propsSetState('Address', {
-            city,
-            address,
-            lon, //经度
-            lat, //纬度
-            currentLocation,
-        });
+        // this.props.propsSetState('Address', {
+        //     city,
+        //     address,
+        //     lon, //经度
+        //     lat, //纬度
+        //     currentLocation,
+        // });
+        this.updateHOCAddress(city, address, lon, lat, currentLocation); 
     }
     //点击删除某个常用地址
     clickDeleteHistoryAddr = (e, uid, value) => {
@@ -256,6 +269,21 @@ export default class Address extends React.Component {
     // shouldComponentUpdate() {
     //     return this.props.router.location.action === 'POP';
     // }
+    updateHOCAddress = (city, address, lon, lat, currentLocation ) => {
+        let HOCAddressPage = 'Address';
+        let query = this.props.location.query;
+        if (query && query.form) {
+            HOCAddressPage = query.form;
+        }
+        this.props.propsSetState(HOCAddressPage, {
+            city,
+            address,
+            lon, //经度
+            lat, //纬度
+            currentLocation,
+        });
+        hashHistory.goBack(); //选好地址后回到上一页
+    }
     render() {
         console.log("Address")
         return (
@@ -337,7 +365,10 @@ export default class Address extends React.Component {
                 }
                 </List>
                 <div className="history more-address-box" style={{ "display": this.state.searchInCity_totalPage ? "none" : "block" }}>
-                    <p className="title-p">历史位置</p>
+                    <p
+                        className="title-p"
+                        style={{ "display": this.state.historyAddress.length > 0 ? "block" : "none" }}
+                    >历史位置</p>
                     <List className="history-list">
                         {/* <List.Item
                             thumb={<i className="iconfont icon-dingwei"></i>}

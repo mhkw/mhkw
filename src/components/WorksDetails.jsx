@@ -2,7 +2,26 @@ import React from 'react'
 import { NavBar, Icon, Toast, Button, Flex, WingBlank  } from 'antd-mobile';
 import { Link, hashHistory } from 'react-router';
 
+const zhanWei = require('../images/logoZhanWei.png');
 const defaultAvatar = require("../images/selec.png");
+
+import PhotoSwipeItem from './photoSwipeElement.jsx';
+
+import '../js/photoswipe/photoswipe.css';
+import '../js/photoswipe/default-skin/default-skin.css';
+import PhotoSwipe from '../js/photoswipe/photoswipe.min.js';
+import PhotoSwipeUI_Default from '../js/photoswipe/photoswipe-ui-default.min.js';
+
+let openPhotoSwipe = function (items, index) {
+    let pswpElement = document.querySelectorAll('.pswp')[0];
+    let options = {
+        index: index,
+        showAnimationDuration: 100,
+        hideAnimationDuration: 100
+    }
+    let gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+    gallery.init();
+}
 
 export default class WorksDetails extends React.Component {
     constructor(props){
@@ -63,6 +82,30 @@ export default class WorksDetails extends React.Component {
             works_id,
         }, this.handleGetWorks, false, 'get');
     }
+    clickDesignerTitle = () => {
+        let query = this.props.location.query;
+        if (query && query.form == "designerHome") {
+            hashHistory.goBack();
+        } else {
+            hashHistory.push({ 
+                pathname: '/designerHome', 
+                query: { userId: this.state.id } 
+            })
+        }
+    }
+    onTouchImg = (index, attachment_list) => {
+        // console.log(dishPic);
+        let items = [];
+        attachment_list.length > 0 &&
+        attachment_list.map((value) => {
+            let item = {};
+            item.src = value.path;
+            item.w = parseInt(value.width) || 540;
+            item.h = parseInt(value.height) || 390;
+            items.push(item);
+        })
+        openPhotoSwipe(items, index)
+    }
     render() {
         return (
             <div className="WorksDetails" key="0">
@@ -72,7 +115,15 @@ export default class WorksDetails extends React.Component {
                     onLeftClick={() => hashHistory.goBack()}
                     // leftContent={<span style={{ fontSize: "15px" }}>返回</span>}
                     rightContent={<Button className="rechargeButton" style={{ "line-height": "26px", "font-size": "14px"}} onClick={() => { console.log("交流")  }}>交流</Button>}
-                ><img onError={(e) => { e.target.src = defaultAvatar }} src={this.state.avatarUrl ? this.state.avatarUrl : defaultAvatar} /><span className="avatar-name">{this.state.nick_name}</span></NavBar>
+                >
+                <p
+                    className="works-details-navbar-title"
+                    onClick={ this.clickDesignerTitle }
+                >
+                    <img onError={(e) => { e.target.src = defaultAvatar }} src={this.state.avatarUrl ? this.state.avatarUrl : defaultAvatar} />
+                    <span className="avatar-name">{this.state.nick_name}</span>
+                </p>
+                </NavBar>
                 <WingBlank>
                     <h1 className="works-title">{this.state.title}</h1>
                     <Flex className="works-base-info">
@@ -119,12 +170,14 @@ export default class WorksDetails extends React.Component {
                     <div className="attachment-box">
                         {
                             this.state.attachment_list.length > 0 && 
-                            this.state.attachment_list.map((value,index)=>(
+                            this.state.attachment_list.map((value, index, elem)=>(
                                 <img
                                     key={value.id}
                                     className="mb-img"
                                     src={value.path_thumb ? value.path_thumb : value.path}
                                     // src={value.path_thumb ? (value.path_thumb).split("!")[0] + '!209x150' : value.path}
+                                    onError={(e) => { e.target.src = zhanWei; }}
+                                    onClick={() => { this.onTouchImg(index, elem) }}
                                 />
                             ))
                         }
@@ -151,6 +204,7 @@ export default class WorksDetails extends React.Component {
                         onClick={this.handleComment}
                     ><i className="iconfont icon-icon-comment"></i>评论</Flex.Item>
                 </Flex>
+                <PhotoSwipeItem />
             </div>
         )
     }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { List, InputItem, NavBar, Tabs, PullToRefresh, ListView } from 'antd-mobile';
-import { Link } from 'react-router';
+import { Link, hashHistory } from 'react-router';
 import { createForm } from 'rc-form';
 import QueueAnim from 'rc-queue-anim';
 import { ItemPicLists, PersonalMsg } from './templateHomeCircle';
@@ -222,8 +222,13 @@ export default class HomeView extends React.Component {
             experience,
             works_count,
             comment_count,
-            // id,
-            id: 69590,
+            id,
+        });
+    }
+    clickSelectAddress = () => {
+        hashHistory.push({
+            pathname: '/address',
+            query: { form: 'Address' },
         });
     }
     render() {
@@ -247,8 +252,8 @@ export default class HomeView extends React.Component {
                             experience={obj.experience}
                             works_count={obj.works_count}
                             hits_count={obj.hits_count}
-                            // id={obj.id}
-                            id={69590}
+                            id={obj.id}
+                            // id={69590}
                         />
                         <div className="itemPicList">
                             <ItemPicLists 
@@ -276,7 +281,7 @@ export default class HomeView extends React.Component {
                                     </div>
                                 </Link>
                             ]}
-                        ><Link to="/address" className="index-address"><i className="iconfont icon-dingwei"></i>{this.props.HOCState.Address ? (this.props.HOCState.Address.currentLocation ? this.props.HOCState.Address.currentLocation : '未定位') : '未定位'}</Link></NavBar>
+                        ><span onClick={this.clickSelectAddress} className="index-address"><i className="iconfont icon-dingwei"></i>{this.props.HOCState.Address ? (this.props.HOCState.Address.currentLocation ? this.props.HOCState.Address.currentLocation : '未定位') : '未定位'}</span></NavBar>
                     </div>
                     <div className="hometabs">
                         <Tabs tabs={tabs}

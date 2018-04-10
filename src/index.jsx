@@ -13,6 +13,7 @@ import designerHome from './components/DesignerHome';
 import WorksCollection from './components/worksCollection';
 import { IndexWorksCollection } from './components/DesignerHome';
 import DesignerComment from './components/designerComment';
+import DesignerComment2 from './components/designerComment2';
 import WriterComment from './components/WriterComment';
 import PlaceOrder from './components/PlaceOrder';
 import { OrderPopup, PayMethod, PayModal} from './components/OrderPopup';
@@ -182,11 +183,14 @@ ReactDOM.render(
             <Route path="worksDetails" component={WorksDetails} />
             <Route component={HOCdesignerHome}>
                 <Route path="designerHome" component={designerHome}>
-                    <IndexRoute component={DesignerComment} />
+                    <IndexRoute component={IndexWorksCollection} />
                     <Route path="indexWorksCollection" component={IndexWorksCollection} />
                     <Route path="designerComment" component={DesignerComment} />
                 </Route>
-                <Route path="commentDetails" component={DesignerComment} />
+                {/* 所有留言列表，可以加载下一页的 */}
+                <Route path="commentlist" component={DesignerComment} />
+                {/* 单个留言详情 */}
+                <Route path="commentDetails" component={DesignerComment2} />
                 <Route path="designerWorksDetails" component={WorksDetails} />
                 {/* 先将作品提出来，写完了再嵌套到/designerHome */}
                 <Route path="worksCollection" component={WorksCollection} />

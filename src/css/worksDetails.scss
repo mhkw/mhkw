@@ -55,6 +55,8 @@
     white-space: pre-wrap;
     font-size: 14px;
     color: #555;
+    width: 100%;
+    overflow: hidden;
 }
 .attachment-box .mb-img{
     width: 100%;
@@ -70,7 +72,7 @@
     line-height: 1;
 }
 .designerComment .popup-comment-input-box{
-    bottom: 45px;
+    // bottom: 45px;
     z-index: 2;
 }
 .comment-item .comment-top .user-name{
@@ -84,4 +86,15 @@
 }
 .comment-reply-box .reply-line{
     line-height: 1.3;
+}
+.WorksDetails .works-details-navbar-title{
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+
 }

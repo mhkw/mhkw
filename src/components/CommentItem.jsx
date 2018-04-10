@@ -28,7 +28,7 @@ const CommentItem = (props) => {
         </div>
         <div className="context">
             <p className="text">{props.content}</p>
-            <span className="get-all">更多</span>
+            {/* <span className="get-all">更多</span> */}
         </div>
         <div className="dishPic">
             {/* {
@@ -104,7 +104,7 @@ const CommentItem = (props) => {
             onTouchEnd={(e) => { e.target.style.backgroundColor = "#f4f4f4" }}
             style={{ "display": props.commentrep_data.is_next_page > 0 ? "block" : "none" }}
             onClick={(e) => { props.clickMoreComment(props.id) }}
-        >查看更多评论...</div>
+            >查看更多评论...</div>
     
     </div>
 )}

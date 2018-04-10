@@ -6,7 +6,6 @@ import update from 'immutability-helper';
 
 import QueueAnim from 'rc-queue-anim';
 
-const tempNull = require('../images/tempNull2.png'); //空状态的图片
 
 import PhotoSwipeItem from './photoSwipeElement.jsx';
 import CommentItem from './CommentItem.jsx';
@@ -32,7 +31,7 @@ const imgUrl = {
     dishPic: [require("../images/banner01.jpg"), require("../images/banner02.jpg"), require("../images/banner03.jpg"), require("../images/avatar.png"), require("../images/homePic.png")]
 }
 
-export default class DesignerComment extends React.Component {
+export default class DesignerComment2 extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -418,8 +417,9 @@ export default class DesignerComment extends React.Component {
                     ) : null
                 }
                 {
-                    this.state.commentList.length > 0 ?
+                    this.state.commentList.length > 0 &&
                     this.state.commentList.map((value, index)=>(
+                        // console.log(value)
                         <CommentItem
                             key={value.id}
                             id={value.id}
@@ -442,17 +442,8 @@ export default class DesignerComment extends React.Component {
                             onTouchReply={this.onTouchReply}
                             clickMoreComment={this.clickMoreComment}
                         />
-                    )) :
-                    <img
-                        style={{
-                            "display": "block",
-                            "width": "142px",
-                            "height": "150px",
-                            "margin": "0px auto 0",
-                        }}
-                        src={tempNull}
-                    />
-                }
+                        ))
+        }
                 <div className="popup-comment-input-box-stone"
                     style={{
                         "height": this.state.location_form == "commentDetails" ? "45px" : "0px"
@@ -500,6 +491,6 @@ export default class DesignerComment extends React.Component {
     }
 }
 
-DesignerComment.contextTypes = {
+DesignerComment2.contextTypes = {
     router: React.PropTypes.object
 };

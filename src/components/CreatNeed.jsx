@@ -135,7 +135,12 @@ export default class CreatNeed extends React.Component {
             project_id: ""
         }, this.handleSendNeedMsg, false, "post");
     }
-
+    clickSelectAddress = () => {
+        hashHistory.push({
+            pathname: '/address',
+            query: { form: 'AddressNeed' },
+        });
+    }
     render(){
         return (
             <div className="needWrap">
@@ -177,9 +182,9 @@ export default class CreatNeed extends React.Component {
                     <List>
                         <Line border="line"></Line>
                         <Item
-                            onClick={() => {  }}
+                            onClick={this.clickSelectAddress }
                             arrow="horizontal"
-                            extra="杭州市 西湖区 转塘"
+                            extra={this.props.state.AddressNeed ? (this.props.state.AddressNeed.currentLocation ? this.props.state.AddressNeed.currentLocation : '未定位') : '未定位' }
                         >地点</Item>
                         {/* <Line border="line"></Line>
                         <Jiange name="jianGe"></Jiange>

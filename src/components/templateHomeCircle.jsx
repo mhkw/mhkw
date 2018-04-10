@@ -27,7 +27,7 @@ export const ItemPicLists = (props) => (
                 const onErrorImg = (e) => {
                     // console.log(e.target);
                     e.target.src = zhanWei;
-                    e.target.className = "zhan-wei";
+                    // e.target.className = "zhan-wei";
                 }
                 return <li onClick={() => { handleClickWorksDetails(value.id) }} >
                         <img 

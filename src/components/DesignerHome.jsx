@@ -23,7 +23,7 @@ export default class DesignerHome extends React.Component {
             huake_info: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis dicta voluptatibus voluptatum fuga amet eius modi! Repellat, labore fuga. In, atque dolores! Unde, placeat incidunt quaerat dolorem, asperiores praesentium ipsa dolor nulla ab alias delectus amet doloremque aperiam molestias quibusdam tenetur vero corporis id aliquam quae expedita tempora impedit non.",
             works_collect: "8",
             comment: "10",
-            tab_index: 1, //设计师主页展示作品集还是评论，就看这个状态
+            tab_index: 0, //设计师主页展示作品集还是评论，就看这个状态
             buttomBackgroundColor1: "#2068ab", //底部栏原始的背景颜色
             buttomBackgroundColor2: "#2068ab", //底部栏原始的背景颜色
             buttomBackgroundColor3: "#2068ab", //底部栏原始的背景颜色
@@ -36,9 +36,10 @@ export default class DesignerHome extends React.Component {
     }
     handleGo(index) {
         let path = index == 0 ? "/designerHome/indexWorksCollection" : "/designerHome/designerComment";
-        this.setState({
-            tab_index: index
-        })
+        // this.setState({
+        //     tab_index: index
+        // })
+        this.props.updateTabIndex(index);
         //类似tab切换
         // this.context.router.push({
         //     pathname: path,
@@ -113,7 +114,16 @@ export default class DesignerHome extends React.Component {
                     ></NavBar>
                     <div className="brief-box-out">
                     <div className="avatar-box"><img src={path ? path : defaultAvatar}/></div>
-                    <p className="nick-name"><span className="text">{nick_name}</span><i className={sex == "女" ? "iconfont icon-icccxingbie-female" : "iconfont icon-xingbie-male"}></i></p>
+                    <p className="nick-name">
+                        <span className="text">{nick_name}</span>
+                        {
+                            sex == '女' && <i className="iconfont icon-icccxingbie-female"></i>
+                        }
+                        {
+                            sex == '男' && <i className="iconfont icon-xingbie-male"></i>
+                        }
+                        {/* <i className={sex == "女" ? "iconfont icon-icccxingbie-female" : "iconfont icon-xingbie-male"}></i> */}
+                    </p>
                         {/* <Flex className="brief-more-flex">
                         <Flex.Item style={{ "flex": "2", "text-align": "right" }} className="ellipsis"><i className="iconfont icon-dizhi"></i><span>{txt_address}</span> </Flex.Item>
                         <Flex.Item style={{ "flex": "1.5" }} className="ellipsis"><i className="iconfont icon-shijian"></i><span>{experience}经验</span> </Flex.Item>
@@ -143,7 +153,7 @@ export default class DesignerHome extends React.Component {
                     </div>
                     <p className="huake-info-box">{signature_bbs}</p>
                     <Flex className="brief-comment-flex">
-                        <Flex.Item style={{ "flex": "1", "text-align": "right" }} className={this.state.tab_index == 0 ? "ellipsis active" : "ellipsis"}>
+                        <Flex.Item style={{ "flex": "1", "text-align": "right" }} className={this.props.tab_index == 0 ? "ellipsis active" : "ellipsis"}>
                             <span
                                 onClick={() => { this.handleGo(0) }}
                             >
@@ -152,7 +162,7 @@ export default class DesignerHome extends React.Component {
                             </span>
                         </Flex.Item>
                         <Flex.Item style={{ "flex": "0.2"}}></Flex.Item>
-                        <Flex.Item style={{ "flex": "1", "text-align": "left" }} className={this.state.tab_index == 1 ? "ellipsis active" : "ellipsis"}>
+                        <Flex.Item style={{ "flex": "1", "text-align": "left" }} className={this.props.tab_index == 1 ? "ellipsis active" : "ellipsis"}>
                             <span
                                 onClick={() => { this.handleGo(1) }}
                             >
@@ -253,7 +263,7 @@ export const IndexWorksCollection = (props) => {
                     "display": props.indexWorksList.length < 1 ? "block" : "none",
                     "width": "142px",
                     "height": "150px",
-                    "margin": "50px auto 0",
+                    "margin": "0px auto 0",
                 }}
                 src={tempNull} 
             />

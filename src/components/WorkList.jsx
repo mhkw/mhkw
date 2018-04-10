@@ -1,6 +1,8 @@
 import React from 'react'
-import { Tabs, Badge, NavBar, Icon, PullToRefresh, ListView } from 'antd-mobile';
+import { Tabs, Badge, NavBar, Icon, PullToRefresh, ListView, Toast } from 'antd-mobile';
 import { Link, hashHistory } from 'react-router';
+
+const zhanWei = require('../images/logoZhanWei.png');
 
 const loginUrl = {
     "selec": require('../images/selec.png'),
@@ -62,6 +64,7 @@ export default class WorkList extends React.Component {
             }
         };
         this.handleLoginSend = (res) => {
+            Toast.hide(); //隐藏弹窗
             console.log(res);
             if (res.success) {
                 realData = res.data.item_list;
@@ -101,11 +104,11 @@ export default class WorkList extends React.Component {
         this.getWorkList(148,0);
     }
     componentDidUpdate() {
-        if (this.state.useBodyScroll) {
-            document.body.style.overflow = 'auto';
-        } else {
-            document.body.style.overflow = 'hidden';
-        }
+        // if (this.state.useBodyScroll) {
+        //     document.body.style.overflow = 'auto';
+        // } else {
+        //     document.body.style.overflow = 'hidden';
+        // }
     }
     routerWillLeave(nextLocation) {  //离开页面
         pageIndex = 0;
@@ -132,11 +135,37 @@ export default class WorkList extends React.Component {
             offset: n,            //从第几个开始
             limit: 8            //每次请求数量
         }, this.handleLoginSend, false, "post");
+        if (n == 0) {
+            // 加载第一页，加一个弹窗正在加载中
+            Toast.loading('加载中...', 2);
+        }
     }
     getWorkKinds(){     //获取作品类别
         runPromise("get_menu_class", {
             type:246
         }, this.handleSend, false, "get");
+    }
+    handleClickWorksDetails = (works_id, designer) => {
+        // let { path_thumb, nick_name, id } = designer;
+        let { path_thumb, path, nick_name, sex, txt_address, experience, works_count, comment_count, id } = designer;
+        this.props.propsSetState('Designer', {
+            path_thumb,
+            nick_name,
+            id,
+            path,
+            sex,
+            txt_address,
+            experience,
+            works_count,
+            comment_count,
+        });
+        hashHistory.push({
+            pathname: '/worksDetails',
+            query: {
+                form: 'workList',
+                works_id,
+            },
+        });
     }
     render() {
         const row = (rowData, sectionID, rowID) => {
@@ -150,8 +179,10 @@ export default class WorkList extends React.Component {
                         backgroundColor:"#f5f5f5",
                         boxShadow:"0px 0px 10px #ccc",
                     }}>
-                        <div>
-                            <img src={obj.path_thumb ? obj.path_thumb : obj.path} style={{width:"100%",height:"5rem"}} />
+                        <div
+                            onClick={() => { this.handleClickWorksDetails(obj.id, obj.user_info) }}
+                        >
+                            <img onError={(e) => { e.target.src = zhanWei }} src={obj.path_thumb ? obj.path_thumb : obj.path} style={{width:"100%",height:"5rem"}} />
                             <div style={{height:"26px",overflow:"hidden"}}>
                                 <p className="exlips" style={{lineHeight:"24px",padding:"0 4px"}}>{obj.title}</p>
                             </div>
