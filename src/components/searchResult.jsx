@@ -838,7 +838,17 @@ export default class SearchResult extends React.Component {
                     </div>
                     <Tabs tabs={this.tabs()}
                         initialPage={this.props.state.tab}
-                        // onChange={(tab, index) => { console.log('onChange', index, tab); }}
+                        onChange={(tab, index) => { 
+                            this.setState({ tabnum: index })
+                            this.props.setState({ tab: index })
+                            if ((index == 0 && this.state.dataSource1._dataBlob.s1.length == 0) ||
+                                (index == 2 && this.state.dataSource3._dataBlob.s1.length == 0) ||
+                                (index == 3 && this.state.dataSource4._dataBlob.s1.length == 0)) {
+                                this.getWorkList(this.props.location.query.keyword, "1", index)
+                            } else if (index == 1 && this.state.dataSource2._dataBlob.s1.length == 0) {
+                                this.getWorkList(this.props.location.query.keyword, "8", index)
+                            }
+                        }}
                         onTabClick={(tab, index) => { 
                             this.setState({ tabnum: index })
                             this.props.setState({tab:index})
@@ -927,7 +937,7 @@ export default class SearchResult extends React.Component {
                                             overflow: "auto"
                                         }}
                                         onEndReached={this.onEndReached}
-                                        pageSize={5}
+                                        pageSize={8}
                                     />
                                 </div>
                             </div>
