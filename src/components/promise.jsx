@@ -74,6 +74,7 @@ const ajaxURLList = {
     add_circle: "hkw_newapi/add_circle", //发布帖子
     search: "hkw_newapi/search", //关键词搜索
     get_search_history: "hkw_newapi/get_search_history", //获取搜索记录
+    delete_search_history: "hkw_newapi/delete_search_history", //删除搜索记录
     activity: "hkw_newapi/activity", //活动
     get_user_history_coordinate: "hkw_newapi/get_user_history_coordinate", //常用地址列表
     delete_user_coordinate: "hkw_newapi/delete_user_coordinate", //删除常用地址

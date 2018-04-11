@@ -333,9 +333,17 @@
     width: 100%;
     background: #c9c9c9;
 }
-.searchIpt .am-tabs-tab-bar-wrap {
-    position: fixed;
-    top: 1.2rem;
-    z-index: 9999;
-    width: 100%;
+.searchIpt {
+    .am-tabs-tab-bar-wrap {
+        position: fixed;
+        top: 1.2rem;
+        z-index: 9999;
+        width: 100%;
+        border-top: 1px solid #cccccc;
+        border-bottom: 1px solid #cccccc;
+    }
+    .am-badge-text {
+        background-color: #cccccc;
+    }
 }
+

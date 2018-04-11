@@ -122,15 +122,6 @@ export default class DemandList extends React.Component {
         .catch((error) => {
             console.log(error.data);
         });
-        // runPromise('get_project_list', {
-        //     user_id:validate.getCookie('user_id') || 0,
-        //     sort:"add_time",
-        //     longitude:"0",
-        //     latitude:"0",
-        //     per_page:"5",
-        //     page:page,
-        //     keycode:""
-        // }, this.handleLoginSend, false, "get");
 
     }
     addHeart = (e, toId, rowID) => {    //点赞

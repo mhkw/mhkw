@@ -42,7 +42,8 @@ export default class HOC extends React.Component{
             price:"",
             ids:[],
             urls:[],
-            tab:0
+            tab:0,
+            keywords:""
         }
     }
     /**

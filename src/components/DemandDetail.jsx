@@ -94,7 +94,6 @@ export default class DemandDetail extends React.Component {
         }
     }
     componentDidMount() {
-        console.log(this.props.location.query.demandId);
         this.getProgectList(this.props.location.query.demandId);
     }
     getProgectList(id) {

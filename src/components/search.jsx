@@ -38,6 +38,14 @@ export default class Search extends React.Component {
                 })
             }
         }
+        this.handleDelSearch = (res) => {
+            if(res.success) {
+                this.setState({
+                    history: []
+                })
+                Toast.info('删除成功', 0.5);
+            }
+        }
     }
     
     componentDidMount() {
@@ -74,6 +82,9 @@ export default class Search extends React.Component {
         //     hashHistory.goBack()
         // }, 100);
     }
+    delHistoryList=()=>{
+        runPromise('delete_search_history', null, this.handleDelSearch, false, "get");
+    }
     set = (val) =>{
         this.setState({ value:val })
     }
@@ -92,6 +103,7 @@ export default class Search extends React.Component {
                             // onFocus={() => console.log('onFocus')}
                             // onBlur={() => console.log('onBlur')}
                             onCancel={(value) => {
+                                this.props.setState({ keywords:value}) 
                                 value.trim() == '' ? Toast.info('请输入搜索关键词', 2, null, false) : 
                                 hashHistory.push({
                                     pathname: "/searchResult",
@@ -125,22 +137,19 @@ export default class Search extends React.Component {
                                 {
                                     text: '确定',
                                     onPress: () => new Promise((resolve) => {
-                                        this.setState({
-                                            history:[]
-                                        })
-                                        Toast.info('删除成功', 0.5);
-                                        setTimeout(resolve, 200);
+                                        this.delHistoryList()
+                                        setTimeout(resolve, 20);                                        
                                     }),
                                 },
                             ])}></i>
                         </p>
-                        <WhiteSpace size="md" /> 
+                        <WhiteSpace size="md" />
                         <div className="historyLis">
                             <PlaceHolder block={this.state.history} set={this.set} />
                         </div> 
                     </div>
                     <div className="searchHot">
-                        <p><span>热门搜索</span> </p>
+                        <p><span>热门搜索</span></p>
                         <WhiteSpace size="md" /> 
                         <div className="">
                             <PlaceHolder block={this.state.hots} set={this.set} />
