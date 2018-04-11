@@ -1,5 +1,5 @@
 import React from 'react'
-import { List, InputItem, PullToRefresh, ListView, Carousel, WingBlank, Modal, TextareaItem, Toast } from 'antd-mobile';
+import { List, InputItem, PullToRefresh, ListView, Carousel, WingBlank, TextareaItem, Toast } from 'antd-mobile';
 import { Link, hashHistory } from 'react-router';
 import QueueAnim from 'rc-queue-anim';
 import { ItemPicLists, PersonalMsg } from './templateHomeCircle';
@@ -40,7 +40,6 @@ export default class LoginView extends React.Component {
             refreshing: false,
             isLoading: true,
             useBodyScroll: true,
-            modal:false,
             showReplyInput:false,       //输入框显示
             res: [],
             love_list:[],
@@ -165,17 +164,6 @@ export default class LoginView extends React.Component {
             page: page
         }, this.handleSend, false, "get");
     }
-    showModal = key => (e) => {
-        e.preventDefault(); // 修复 Android 上点击穿透
-        this.setState({
-            [key]: true,
-        });
-    }
-    onClose = key => () => {
-        this.setState({
-            [key]: false,
-        });
-    }
     onRefresh = () => {   //顶部下拉刷新数据
         pageIndex = 0;
         this.setState({ 
@@ -270,7 +258,6 @@ export default class LoginView extends React.Component {
                 }}
             />
         );
-        let index = this.state.res.length - 1;
         const row = (rowData, sectionID, rowID) => {
             const obj = rowData;
             return (

@@ -239,11 +239,3 @@ export const PersonalCenterMsg = (props) => (
     </ul>
 )
 
-// export { 
-//     ItemPicLists, 
-//     PersonalMsg, 
-//     Jiange, 
-//     Line, 
-//     AccountListDetails, 
-//     PersonalCenterMsg
-// };
