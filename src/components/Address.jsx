@@ -81,10 +81,17 @@ export default class Address extends React.Component {
     //选择地图上选点
     selectMapAddr = (e) => {
         console.log("选择地图上选点"); 
+
+        let HOCAddressPage = 'Address';
+        let query = this.props.location.query;
+        if (query && query.form) {
+            HOCAddressPage = query.form;
+        }
+
         if (this.bMap) {
             hashHistory.push({
                 pathname: '/baiduMap',
-                query: { form: 'address' }
+                query: { form: HOCAddressPage }
             });
         } else {
             Toast.info("请在手机上打开",1);

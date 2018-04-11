@@ -1,6 +1,6 @@
 import React from 'react';
 import { hashHistory, Link } from 'react-router';
-import { Toast, NavBar, Icon, Flex } from 'antd-mobile';
+import { Toast, NavBar, Icon, Flex, Popover, Modal, TextareaItem } from 'antd-mobile';
 import QueueAnim from 'rc-queue-anim';
 
 const defaultAvatar = require("../images/selec.png");
@@ -10,6 +10,7 @@ export default class DesignerHome extends React.Component {
     constructor(props) {
         super( props)
         this.state = {
+            id: 0, //设计师ID
             user_name: "",
             avatarUrl:require("../images/avatar.png"),
             sex: "女",
@@ -32,6 +33,52 @@ export default class DesignerHome extends React.Component {
             buttomBackgroundColorLast: "#00a0e9", //底部栏最后那个按钮原始的背景颜色
             touchButtomBackgroundColorLast: "#4ba8ff", //底部栏最后那个按钮按下去的背景颜色
             endButtomBackgroundColorLast: "#00a0e9", //底部栏最后那个按钮按下去的背景颜色
+            Popover_visible: false, //下拉框显示或隐藏的状态
+            showReportModal: false, //投诉Modal是否显示
+            reportText:'', //投诉的内容
+            is_black_TA: 0, //是否拉黑他了a
+            is_favorite: 0, //是否关注他
+        }
+        this.handleReport = (res) => {
+            if (res.success) {
+                // console.log(res);
+                this.setState({ showReportModal: false}); //关闭投诉弹窗
+                Toast.success(res.message, 1)
+            } else {
+                Toast.fail(res.message, 1)
+            }
+        }
+        this.handleUserBlack = (res) => {
+            if (res.success) {
+                // console.log(res);
+                this.setState({ is_black_TA: 1 });
+                Toast.success(res.message, 1)
+            } else {
+                Toast.fail(res.message, 1)
+            }
+        }
+        this.handleDeleteUserBlack = (res) => {
+            if (res.success) {
+                // console.log(res);
+                this.setState({ is_black_TA: 0 });
+                Toast.success(res.message, 1)
+            } else {
+                Toast.fail(res.message, 1)
+            }
+        }
+        this.handleAddFavorite = (res) => {
+            if (res.success) {
+                if (res.message.type == "add") {
+                    this.setState({ is_favorite: 1 });
+                    Toast.success("关注成功", 1)
+                }
+                if (res.message.type == "delete") {
+                    this.setState({ is_favorite: 0 });
+                    Toast.success("取消关注成功", 1)
+                }
+            } else {
+                Toast.fail(res.message, 1)
+            }
         }
     }
     handleGo(index) {
@@ -96,7 +143,98 @@ export default class DesignerHome extends React.Component {
             query: { form: 'designerHome' }
         });
     }
+    //点击右上角气泡时的效果
+    onPopoverSelect = (opt) => {
+        // console.log(opt.key);
+        this.setState({
+            Popover_visible: false,
+        });
+        switch (opt.key) {
+            case "1":
+                this.changeShowReportModal("true");
+                break;
+            case "2":
+                if (this.state.is_black_TA) {
+                    this.ajaxDeleteUserBlack() //移除黑名单
+                } else {
+                    this.alertUserBlackModal(); //拉黑
+                }
+                break;
+            case "3":
+                this.ajaxAddFavorite();
+                break;
+        }
+    };
+    handleVisibleChange = (Popover_visible) => {
+        console.log(Popover_visible);
+        
+        this.setState({
+            Popover_visible,
+        });
+    }
+    //修改是否显示投诉弹窗
+    changeShowReportModal = (boolean = false) => {
+        this.setState({
+            showReportModal: boolean
+        })
+    }
+    //确认投诉
+    ConfirmReport = () => {
+        let reportText = this.state.reportText;
+        if (reportText.length > 0) {
+            this.ajaxReport();
+        } else {
+            Toast.info("请输入内容",1);
+        }
+    }
+    ajaxReport = () => {
+        let reportText = this.state.reportText;
+        //投诉某个人
+        runPromise('user_report', {
+            "user_id_to": this.state.id,
+            "content": reportText,
+        }, this.handleReport);
+    }
+    //点击拉黑
+    alertUserBlackModal = () => {
+        Modal.alert('确定拉黑此用户?', '屏蔽此用户后你将不会收到TA发送给你的私信、留言，TA也无法评论回复你的创作，TA将从粉丝列表自动移除并且不能再次关注你。', [
+            { text: '取消', onPress: () => {} },
+            { text: '确定', onPress: () => this.ajaxUserBlack() },
+        ])
+    }
+    //aja拉黑某个人
+    ajaxUserBlack = () => {
+        runPromise('add_user_black', {
+            "to_user_id": this.state.id,
+        }, this.handleUserBlack);
+    }
+    //aja将某个人移出黑名单
+    ajaxDeleteUserBlack = () => {
+        runPromise('delete_user_black', {
+            "to_user_id": this.state.id,
+        }, this.handleDeleteUserBlack);
+    }
+    //点击关注
+    //如果已经关注了则取消关注，后端自动判断是关注还行取消关注
+    ajaxAddFavorite = () => {
+        runPromise('add_favorite', {
+            "id": this.state.id,
+            type: "user",
+        }, this.handleAddFavorite);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.designer) {
+            let { is_black_TA, id, is_favorite } = nextProps.designer;
+            this.setState({
+                is_black_TA,
+                id,
+                is_favorite,
+            });
+        }
+    }
     render() {
+        
         let { path, nick_name, sex, txt_address, experience, works_count, signature, signature_bbs, comment_count } = this.props.designer;
         return (
             // <QueueAnim className="designer-home-anim"
@@ -110,7 +248,15 @@ export default class DesignerHome extends React.Component {
                         mode="light"
                         icon={<Icon type="left" size="lg" style={{ "color": "#a3a3a3" }} />}
                         onLeftClick={() => hashHistory.goBack()}
-                        rightContent={<Icon key="1" type="ellipsis" style={{ "color": "#5f5f5f" }}  />}
+                        // rightContent={<Icon key="1" type="ellipsis" style={{ "color": "#5f5f5f" }} />}
+                    rightContent={
+                        <DesignerPopover 
+                            Popover_visible={this.state.Popover_visible} 
+                            onPopoverSelect={this.onPopoverSelect}
+                            is_black_TA={this.state.is_black_TA}
+                            is_favorite={this.state.is_favorite}
+                        />
+                    }
                     ></NavBar>
                     <div className="brief-box-out">
                     <div className="avatar-box"><img src={path ? path : defaultAvatar}/></div>
@@ -211,11 +357,22 @@ export default class DesignerHome extends React.Component {
                         onClick={this.handleStartOrder}
                         >立即下单</Flex.Item>
                     </Flex>
+                    <UserReportModal
+                        showReportModal={this.state.showReportModal}
+                        changeShowReportModal={this.changeShowReportModal}  
+                        ConfirmReport={this.ConfirmReport}
+                        reportText={this.state.reportText}
+                        setState={this.setState.bind(this)}
+                    />
                 </div>
             // </QueueAnim>
         )
     }
 }
+
+DesignerHome.contextTypes = {
+    router: React.PropTypes.object
+};
 
 export const IndexWorksCollection = (props) => {
     let oldBackgroundColor = "#fff";
@@ -271,6 +428,46 @@ export const IndexWorksCollection = (props) => {
     )
 }
 
+const UserReportModal = (props) => (
+    <Modal
+        title={"请输入投诉内容"}
+        className="report-modal"
+        visible={props.showReportModal}
+        transparent
+        maskClosable={false}
+        closable={true}
+        onClose={() => { props.changeShowReportModal(false) }}
+        footer={[
+            { text: '取消', onPress: () => { props.changeShowReportModal(false) } },
+            { text: '确定', onPress: () => { props.ConfirmReport(); } }
+        ]}
+    >
+        <TextareaItem
+            className="report-textarea"
+            count={200}
+            rows={3}
+            onBlur={(val) => { props.setState({ reportText: val }) }}
+            // ref={el => this.commentTextarea = el }
+        />
+    </Modal>
+)
+
+//设计师右上角的气泡，点击显示更多操作。
+const DesignerPopover = (props) => (
+    <Popover
+        mask
+        visible={props.Popover_visible}
+        overlay={[
+            (<Popover.Item key="1" icon={<i className="iconfont icon-tousu"></i> }>投诉</Popover.Item>),
+            (<Popover.Item key="2" icon={<i className="iconfont icon-heimingdan"></i>}>{props.is_black_TA ? "已拉黑" : "拉黑"}</Popover.Item>),
+            (<Popover.Item key="3" icon={<i className={props.is_favorite ? "iconfont designer icon-xin-1" : "iconfont icon-Pingjia"}></i>}>{props.is_favorite ? "已关注" : "关注"}</Popover.Item>),
+        ]}
+        onSelect={props.onPopoverSelect}
+    >
+        <Icon key="1" type="ellipsis" style={{ "color": "#5f5f5f" }} />
+    </Popover>
+)
+
 const WorksItem = (props) => (
     <div key={props.id} onClick={() => { props.handleClickWorksDetails(props.id) }} style={{ display: "inline-block", width: "50%", boxSizing: "border-box", padding: "5px" }}>
         <div className="items" style={{
@@ -289,7 +486,3 @@ const WorksItem = (props) => (
         </div>
     </div>
 )
-
-DesignerHome.contextTypes = {
-    router: React.PropTypes.object
-};

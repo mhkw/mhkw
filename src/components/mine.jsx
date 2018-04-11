@@ -75,6 +75,13 @@ export default class Mine extends React.Component {
             query: { form: 'mine' }
         });
     }
+    //点击常用地址
+    clickCommonAddress = () => {
+        hashHistory.push({
+            pathname: '/commonAddress',
+            query: { form: 'mine' }
+        });
+    }
     render () {
         return (
             <div className="mineWrap">
@@ -131,7 +138,7 @@ export default class Mine extends React.Component {
                             </Badge>
                             <span style={{ marginLeft: 12 }}>我的收藏</span>
                         </List.Item>
-                        <List.Item extra="" arrow="horizontal" className="ListItemBorder amlistitem">
+                        <List.Item extra="" arrow="horizontal" className="ListItemBorder amlistitem" onClick={this.clickCommonAddress}>
                             <Badge>
                                 <span className="icon-wodeshouhuodizhi iconfont" />
                             </Badge>

@@ -22,6 +22,13 @@ export default class HOC extends React.Component{
                 lat: "", //纬度
                 currentLocation: "", //定位当前位置的地址
             },
+            AddressCommon: { //个人中心常用地址,临时存储新增或修改的地址
+                address: "", //百度地图address字段
+                city: "", //通过城市列表选择的城市或者地图定位的城市
+                lon: "", //经度
+                lat: "", //纬度
+                currentLocation: "", //定位当前位置的地址
+            },
             Designer: {}, //设计师，拿到设计师常规数据后直接放进去吧
             Home: {       //主页
                 currentIdx: 0,
@@ -57,7 +64,7 @@ export default class HOC extends React.Component{
         return this.props.router.location.action === 'POP';
     }
     render() {
-        // console.log('HOC::' + this.state.Address.address)
+        // console.log('HOC::')
         return (
             <div className="hoc-max-box">
                 {this.props.children &&

@@ -91,3 +91,53 @@
     text-overflow:ellipsis;
     white-space: nowrap;
 }
+
+// common address start
+.common-address{
+    background-color: #f0f0f0;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+.common-address .common .title{
+    font-size: 16px;
+    margin-bottom: 5px;
+    padding-left: 15px;
+}
+
+.common-addr-list .am-list-item .am-list-line{
+    padding-right: 15px;
+}
+.common-addr-list .am-list-extra{
+    margin-left: 0.3rem;
+}
+.common-addr-list .am-list-extra .iconfont{
+    font-size: 20px;
+}
+.history-list.common-addr-list .am-list-extra .icon-shanchu{
+    padding-right: 0;
+}
+.common-addr-list .am-list-thumb{
+    font-size: 14px;
+    line-height: 20px;
+    // width: 60px;
+}
+.common-addr-list.first .am-list-thumb{
+    width: 60px;
+    margin-right: 5px;
+}
+.common-addr-list .am-list-thumb .iconfont{
+    font-size: 20px;
+    margin-right: 5px;
+}
+.common-addr-list .am-list-item .am-list-line .am-list-content{
+    font-size: 14px;
+}
+.common-address .am-navbar-right{
+    color: #000;
+}
+.common-address .am-navbar-right .icon-dituzhaofang{
+    font-size: 20px;
+    margin-right: 5px;
+}
+// common address end
