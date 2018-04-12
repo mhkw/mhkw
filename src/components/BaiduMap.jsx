@@ -36,19 +36,45 @@ export default class BaiduMap extends React.Component {
         this.closeFrame();
         hashHistory.goBack();
     }
+    //修改或新增某个常用地址
+    ajaxChangeCommonAddr = (address_type, address, currentLocation, longitude, latitude, set_cur_city) => {
+        runPromise("change_user_coordinate", {
+            user_id: validate.getCookie('user_id'),
+            address_type,
+            long_lat_address: currentLocation,
+            long_lat_address_jd: address,
+            longitude,
+            latitude,
+            is_default: 0,
+            set_cur_city,
+        }, ()=>{});
+    }
     //完成地图选点
     complete = () => {
         console.log(this.state.address);
         //传递给HOC高阶组件
         let { city, address, lon, lat, currentLocation } = this.state;
-        this.props.propsSetState('Address', {
+
+        let HOCAddressPage = 'Address';
+        let query = this.props.location.query;
+        if (query && query.form) {
+            HOCAddressPage = query.form;
+        }
+
+        this.props.propsSetState(HOCAddressPage, {
             city,
             address,
             lon, //经度
             lat, //纬度
             currentLocation,
-        })
-        this.addHistoryAddress(this.state); //添加到历史位置。注意了，此时把整个state都传进去了。
+        });
+        if (HOCAddressPage == "AddressCommon") {
+            //此时选点是用于个人中心新增或修改地址
+            let address_type = query.address_type;
+            this.ajaxChangeCommonAddr(address_type, address, currentLocation, lon, lat, city);
+        } else {
+            this.addHistoryAddress(this.state); //添加到历史位置。注意了，此时把整个state都传进去了。
+        }
         this.bMap.close(); //关闭地图
         this.closeFrame(); //关闭地图浮动层页面
         hashHistory.goBack();

@@ -52,6 +52,7 @@ import ChangePassword from './components/ChangePassword';
 import Feedback from './components/Feedback';
 import AboutUs from './components/AboutUs';
 import Activity from './components/Activity';
+import CommonAddress from './components/CommonAddress';
 
 import './css/font/iconfont.css'
 
@@ -222,6 +223,7 @@ ReactDOM.render(
             <Route path="changePassword" component={ChangePassword} />
             <Route path="feedback" component={Feedback} />
             <Route path="aboutUs" component={AboutUs} />
+            <Route path="commonAddress" component={CommonAddress} />
         </Route>
     </Router>
     , document.getElementById('container'));

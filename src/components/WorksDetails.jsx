@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavBar, Icon, Toast, Button, Flex, WingBlank  } from 'antd-mobile';
+import { NavBar, Icon, Toast, Button, Flex, WingBlank, Popover, Modal, TextareaItem  } from 'antd-mobile';
 import { Link, hashHistory } from 'react-router';
 
 const zhanWei = require('../images/logoZhanWei.png');
@@ -44,6 +44,8 @@ export default class WorksDetails extends React.Component {
             buttomBackgroundColor3: "#2068ab", //底部栏原始的背景颜色
             touchButtomBackgroundColor: "#4ba8ff", //底部栏按下去的背景颜色
             endButtomBackgroundColor: "#2068ab", //底部栏按下去的背景颜色
+            reportText: '', //投诉的内容
+            is_favorite: 0, //是否关注他
 
         }
         this.handleGetWorks = (res) => {
@@ -65,13 +67,15 @@ export default class WorksDetails extends React.Component {
         }
     }
     componentWillMount() {
-        let { id, path_thumb, nick_name } = this.props.designer;
+        let { id, path_thumb, nick_name, is_favorite } = this.props.designer;
         let { works_id, form} = this.props.location.query;
+        console.log(is_favorite, nick_name)
         this.setState({
             id,
             nick_name,
             avatarUrl: path_thumb,
             works_id,
+            is_favorite,
         })
     }
     componentDidMount() {

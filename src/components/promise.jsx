@@ -76,6 +76,14 @@ const ajaxURLList = {
     get_search_history: "hkw_newapi/get_search_history", //获取搜索记录
     delete_search_history: "hkw_newapi/delete_search_history", //删除搜索记录
     activity: "hkw_newapi/activity", //活动
+    get_user_history_coordinate: "hkw_newapi/get_user_history_coordinate", //常用地址列表
+    delete_user_coordinate: "hkw_newapi/delete_user_coordinate", //删除常用地址
+    change_user_coordinate: "hkw_newapi/change_user_coordinate", //修改或新增某个常用地址
+    user_report: "hkw_newapi/user_report", //投诉某个人
+    add_user_black: "hkw_newapi/add_user_black", //将某个人添加黑名单
+    delete_user_black: "hkw_newapi/delete_user_black", //将某个人移出黑名单
+    add_favorite: "hkw_newapi/add_favorite", //添加关注，如果已经关注了则取消关注，后端自动判断是关注还行取消关注
+
 }
 
 function get_user_list_ex(params) {

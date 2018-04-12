@@ -196,4 +196,14 @@ html,body,#container{
     border-bottom: 1px solid #e8e8e8;
     height: 55px;
 }
+
+.report-modal.am-modal-transparent .am-modal-content .am-modal-body{
+    padding: 0px;
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.designer.icon-xin-1{
+    color: #2bc9ff;
+}
 // placeOrder end
