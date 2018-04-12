@@ -116,6 +116,13 @@ export default class Mine extends React.Component {
             query: { form: 'mine' }
         });
     }
+    //点击收藏
+    clickCollect = () => {
+        hashHistory.push({
+            pathname: '/collect',
+            query: { form: 'mine' }
+        });
+    }
     render () {
         return (
             <div className="mineWrap">
@@ -166,7 +173,7 @@ export default class Mine extends React.Component {
                             </Badge>
                             <span style={{ marginLeft: 12 }}>我的动态</span>
                         </List.Item>
-                        <List.Item extra="52" className="ListItemBorder amlistitem">
+                        <List.Item extra="" arrow="horizontal" className="ListItemBorder amlistitem" onClick={this.clickCollect}>
                             <Badge>
                                 <span className="icon-wodeshoucang iconfont" />
                             </Badge>
