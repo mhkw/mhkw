@@ -849,17 +849,6 @@ export default class SearchResult extends React.Component {
                                 this.getWorkList(this.props.location.query.keyword, "8", index)
                             }
                         }}
-                        onTabClick={(tab, index) => { 
-                            this.setState({ tabnum: index })
-                            this.props.setState({tab:index})
-                            if ((index == 0 && this.state.dataSource1._dataBlob.s1.length == 0) || 
-                                (index == 2 && this.state.dataSource3._dataBlob.s1.length == 0) || 
-                                (index == 3 && this.state.dataSource4._dataBlob.s1.length == 0) ){
-                                this.getWorkList(this.props.location.query.keyword,"1", index) 
-                            } else if (index == 1 && this.state.dataSource2._dataBlob.s1.length == 0){
-                                this.getWorkList(this.props.location.query.keyword, "8", index) 
-                            }
-                        }}
                     >
                         <div className="homeWrap" style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
                             <div className="homeWrapMain">
@@ -884,7 +873,7 @@ export default class SearchResult extends React.Component {
                                     />}
                                     onEndReached={()=>{this.onEndReached()}}
                                     pageSize={8}
-                                    scrollRenderAheadDistance={500}
+                                    scrollRenderAheadDistance={100}
                                 />
                             </div>
                         </div>
@@ -910,7 +899,7 @@ export default class SearchResult extends React.Component {
                                 />}
                                 onEndReached={() => { this.onEndReached() }}
                                 pageSize={8}
-                                scrollRenderAheadDistance={500}
+                                scrollRenderAheadDistance={100}
                             />
                         </div>
                         <div className="homeWrap" style={{ alignItems: 'center', justifyContent: 'center',  backgroundColor: '#fff' }}>
@@ -938,6 +927,7 @@ export default class SearchResult extends React.Component {
                                         }}
                                         onEndReached={this.onEndReached}
                                         pageSize={8}
+                                        scrollRenderAheadDistance={100}                                        
                                     />
                                 </div>
                             </div>

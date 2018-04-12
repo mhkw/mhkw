@@ -36,6 +36,7 @@ import WorkList from './components/WorkList';
 import CreatNeed from './components/CreatNeed';
 import CreatWork from './components/CreatWork';
 import CreatCard from './components/CreatCard';
+import Collect from './components/Collect';
 import SearchResult from './components/SearchResult';
 import Category from './components/Category';
 import Test from './components/page1';
@@ -175,6 +176,7 @@ ReactDOM.render(
             <Route path="workList" component={WorkList} />
             <Route path="creatNeed" component={CreatNeed} />
             <Route path="creatWork" component={CreatWork} />
+            <Route path="collect" component={Collect} />
             <Route path="creatCard" component={CreatCard} />
             <Route path="Searchresult" component={SearchResult} />
             <Route path="category" component={Category} />

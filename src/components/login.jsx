@@ -33,6 +33,7 @@ export default class LoginView extends React.Component {
                 validate.setCookie('user_id', res.data.id);
                 validate.setCookie('user_phone', res.data.mobile);
                 validate.setCookie('user_name', res.data.nick_name);
+                localStorage.setItem('en_user_id', res.en_user_id);
             }else{
                 if(res.message == "图形验证码不对") {
                     Toast.info("图形验证码不正确", 2, null, false);
@@ -47,12 +48,12 @@ export default class LoginView extends React.Component {
         }
     }
     componentDidMount() {
-        if(validate.getCookie('user_id')){
-            hashHistory.push({
-                pathname: '/',
-                query: { form: 'promise' }
-            });
-        };
+        // if(validate.getCookie('user_id')){
+        //     hashHistory.push({
+        //         pathname: '/',
+        //         query: { form: 'promise' }
+        //     });
+        // };
     }
     showModal = key => (e) => {   //弹窗提示输入验证码
         e.preventDefault();       // 修复 Android 上点击穿透
@@ -107,13 +108,57 @@ export default class LoginView extends React.Component {
         },200)
     }
     onLogin() {       //确认登陆
-
         runPromise("login", {
             username: this.state.value,
             password: this.state.keywords,
             code: this.state.code
         }, this.handleSend, false, "post");
         
+    }
+    loginWx(idx){
+        if(idx == 1){
+            var wx = api.require('wx');
+            wx.auth(function (ret, err) {
+                if (ret.status) {
+                    console.log(JSON.stringify(ret));
+                } else {
+                    console.log(err.code);
+                    //数字类型；
+                    //错误码：
+                    //-1（未知错误），
+                    //0（成功，用户同意）
+                    //1 (用户取消)
+                    //2 (用户拒绝授权)
+                    //3 (当前设备未安装微信客户端)
+                }
+            });
+        }else if (idx == 2){
+            var qq = api.require('qq');
+            qq.login(function (ret, err) {
+                if (ret.status) {
+                    console.log(JSON.stringify(ret));
+                } else {
+                    console.log(err.msg);
+                }
+            });
+        }else if(idx == 3){
+            var weibo = api.require('weibo');
+            weibo.auth(function (ret, err) {
+                if (ret.status) {
+                    alert(JSON.stringify(ret));
+                } else {
+                    console.log(err.code);
+                    //数字类型；错误码
+                    //取值范围：
+                    //-1（apiKey 或 registUrl 值非法）
+                    //1（用户取消）
+                    //2 （发送失败）
+                    //3 （授权失败）
+                    //4 （不支持的请求）
+                    //5 （未知错误）
+                }
+            });
+        }
     }
     render() {
         return (
@@ -211,13 +256,16 @@ export default class LoginView extends React.Component {
                         <div className="loginThreeBottom">
                             <ul className="fn-clear">
                                 <li className="wx">
-                                    <a href="https://www.huakewang.com/wxopenapi/auth_redirect"><i className="iconfont icon-weixin"></i> 微信</a>
+                                    {/* <a href="https://www.huakewang.com/wxopenapi/auth_redirect"><i className="iconfont icon-weixin"></i> 微信</a> */}
+                                    <a onClick={()=>{this.loginWx(1)}}><i className="iconfont icon-weixin"></i> 微信</a>
                                 </li>
                                 <li className="qq">
-                                    <a href="https://www.huakewang.com/main/qq_oauth.html"><i className="iconfont icon-qq"></i> QQ</a>
+                                    {/* <a href="https://www.huakewang.com/main/qq_oauth.html"><i className="iconfont icon-qq"></i> QQ</a> */}
+                                    <a onClick={() => { this.loginWx(2) }}><i className="iconfont icon-qq"></i> QQ</a>
                                 </li>
                                 <li className="wb">
-                                    <a href="https://www.huakewang.com/main/sina_oauth.html"><i className="iconfont icon-weibo"></i> 微博</a>
+                                    {/* <a href="https://www.huakewang.com/main/sina_oauth.html"><i className="iconfont icon-weibo"></i> 微博</a> */}
+                                    <a onClick={() => { this.loginWx(3) }}><i className="iconfont icon-weibo"></i> 微博</a>
                                 </li>
                             </ul>
                         </div>
