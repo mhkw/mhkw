@@ -7,6 +7,7 @@ export default class Contacts extends React.Component {
     constructor(props){
         super(props)
         this.state = {
+            location_form: '',
             contactsList: [],
             showInputModal: false, //编辑或新增联系人的弹窗，是否打开
             // InputModalData: null, //编辑或新增联系人的弹窗，里面的内容，每次关闭弹窗时都设为null
@@ -45,6 +46,11 @@ export default class Contacts extends React.Component {
     }
     componentDidMount() {
         this.ajaxGetCustomers();
+        if (this.props.location.query && this.props.location.query.form) {
+            this.setState({
+                location_form: this.props.location.query.form
+            })
+        }
     }
     shouldComponentUpdate() {
         return this.props.router.location.action === 'POP';
@@ -62,8 +68,16 @@ export default class Contacts extends React.Component {
         //     query: { form: 'contacts' },
         //     state: { customer: value  }
         // });
-        this.props.setSelectedCustomer(value);
-        hashHistory.goBack();
+        let { location_form } = this.state;
+        if (location_form == "CreateOffer") {
+            this.props.setSelectedCustomer(value);
+            hashHistory.goBack();
+        }
+        if (location_form == "mine") {
+            if (value.yunLinkPhone) {
+                this.callPhone(value.yunLinkPhone);
+            }
+        }
     }
     //编辑联系人
     handleEdit() {
@@ -146,6 +160,18 @@ export default class Contacts extends React.Component {
             return true;
         }
     }
+    //原生APP，打电话
+    callPhone(phone) {
+        if (window.api) {
+            //APP处理
+            window.api.call({
+                type: 'tel_prompt',
+                number: phone
+            });
+        } else {
+            //H5页面处理
+        }
+    }
     render() {
         return (
             <QueueAnim 
@@ -165,7 +191,7 @@ export default class Contacts extends React.Component {
                             [<i className="iconfont icon-tianjiajiahaowubiankuang" style={{ color: "#A8A8A8", marginRight: "3px" }}></i>,
                             <span onClick={() => { this.openModal() }} style={{ color: "#000", fontSize: "14px" }}>新增</span>]
                         }
-                    >联系人</NavBar>
+                    >{this.state.location_form == "CreateOffer" ? "选择联系人" : "我的联系人"}</NavBar>
                     <div style={{
                         backgroundColor: '#F5F5F9',
                         height: "3px",

@@ -44,13 +44,16 @@ export default class WorksDetails extends React.Component {
             buttomBackgroundColor3: "#2068ab", //底部栏原始的背景颜色
             touchButtomBackgroundColor: "#4ba8ff", //底部栏按下去的背景颜色
             endButtomBackgroundColor: "#2068ab", //底部栏按下去的背景颜色
+            Popover_visible: false, //下拉框显示或隐藏的状态
+            showReportModal: false, //投诉Modal是否显示
             reportText: '', //投诉的内容
-            is_favorite: 0, //是否关注他
+            is_favorite: 0, //是否关注了作品（收藏）
+            islove: 0, //是否点赞了作品
 
         }
         this.handleGetWorks = (res) => {
             if (res.success) {
-                let { batch_video_urls, content, attachment_list, hits, comment_count, love_count, add_time_format, title } = res.data;
+                let { batch_video_urls, content, attachment_list, hits, comment_count, love_count, add_time_format, title, islove, is_favorite } = res.data;
                 this.setState({
                     batch_video_urls,
                     content,
@@ -60,22 +63,64 @@ export default class WorksDetails extends React.Component {
                     love_count,
                     add_time_format,
                     title,
+                    islove,
+                    is_favorite,
                 });
             } else {
                 Toast.fail(res.message, 1.5);
             }
         }
+        this.handleReport = (res) => {
+            if (res.success) {
+                // console.log(res);
+                this.setState({ showReportModal: false }); //关闭投诉弹窗
+                Toast.success(res.message, 1)
+            } else {
+                Toast.fail(res.message, 1)
+            }
+        }
+        this.handleAddFavorite = (res) => {
+            if (res.success) {
+                if (res.message.type == "add") {
+                    this.setState({ is_favorite: 1 });
+                    Toast.success("收藏成功", 1)
+                }
+                if (res.message.type == "delete") {
+                    this.setState({ is_favorite: 0 });
+                    Toast.success("取消收藏成功", 1)
+                }
+            } else {
+                Toast.fail(res.message, 1)
+            }
+        }
+        this.handleAddLove = (res) =>{
+            if (res.success) {
+                let { count, type } = res.message;
+                if (type == "add") {
+                    Toast.success("点赞成功", 1)
+                }
+                if (type == "delete") {
+                    Toast.success("取消点赞成功", 1)
+                }
+                this.setState({
+                    love_count: count,
+                    islove: type == "add" ? 1 : 0
+                })
+            } else {
+                Toast.fail(res.message, 1)
+            }
+        }
+
     }
     componentWillMount() {
-        let { id, path_thumb, nick_name, is_favorite } = this.props.designer;
+        let { id, path_thumb, nick_name } = this.props.designer;
         let { works_id, form} = this.props.location.query;
-        console.log(is_favorite, nick_name)
+        console.log(nick_name)
         this.setState({
             id,
             nick_name,
             avatarUrl: path_thumb,
             works_id,
-            is_favorite,
         })
     }
     componentDidMount() {
@@ -110,6 +155,64 @@ export default class WorksDetails extends React.Component {
         })
         openPhotoSwipe(items, index)
     }
+    //点击右上角气泡时的效果
+    onPopoverSelect = (opt) => {
+        // console.log(opt.key);
+        this.setState({
+            Popover_visible: false,
+        });
+        switch (opt.key) {
+            case "1":
+                this.changeShowReportModal("true");
+                break;
+            case "2":
+                this.ajaxAddFavorite();
+                break;
+            case "3":
+                this.ajaxAddLove();
+                break;
+        }
+    }
+    //修改是否显示投诉弹窗
+    changeShowReportModal = (boolean = false) => {
+        this.setState({
+            showReportModal: boolean
+        })
+    }
+    //确认投诉
+    ConfirmReport = () => {
+        let reportText = this.state.reportText;
+        if (reportText.length > 0) {
+            this.ajaxReport();
+        } else {
+            Toast.info("请输入内容", 1);
+        }
+    }
+    //ajax发送投诉内容
+    ajaxReport = () => {
+        let reportText = this.state.reportText;
+        //投诉某个人
+        runPromise('user_report', {
+            "user_id_to": this.state.id,
+            "content": reportText,
+        }, this.handleReport);
+    }
+    //点击关注,也就是：收藏，个人中心可见
+    //如果已经关注了则取消关注，后端自动判断是关注还行取消关注
+    ajaxAddFavorite = () => {
+        runPromise('add_favorite', {
+            "id": this.state.works_id,
+            type: "works",
+        }, this.handleAddFavorite);
+    }
+    //ajax发送点赞
+    ajaxAddLove = () => {
+        runPromise("add_love", {
+            id: this.state.works_id,
+            user_id: validate.getCookie('user_id'),
+            model: "works",
+        }, this.handleAddLove);
+    }
     render() {
         return (
             <div className="WorksDetails" key="0">
@@ -118,7 +221,15 @@ export default class WorksDetails extends React.Component {
                     icon={<Icon type="left" size="lg" color="#333" />}
                     onLeftClick={() => hashHistory.goBack()}
                     // leftContent={<span style={{ fontSize: "15px" }}>返回</span>}
-                    rightContent={<Button className="rechargeButton" style={{ "line-height": "26px", "font-size": "14px"}} onClick={() => { console.log("交流")  }}>交流</Button>}
+                    // rightContent={<Button className="rechargeButton" style={{ "line-height": "26px", "font-size": "14px"}} onClick={() => { console.log("交流")  }}>交流</Button>}
+                    rightContent={
+                        <DesignerPopover
+                            Popover_visible={this.state.Popover_visible}
+                            onPopoverSelect={this.onPopoverSelect}
+                            is_favorite={this.state.is_favorite}
+                            islove={this.state.islove}
+                        />
+                    }
                 >
                 <p
                     className="works-details-navbar-title"
@@ -208,8 +319,55 @@ export default class WorksDetails extends React.Component {
                         onClick={this.handleComment}
                     ><i className="iconfont icon-icon-comment"></i>评论</Flex.Item>
                 </Flex>
+                <UserReportModal
+                    showReportModal={this.state.showReportModal}
+                    changeShowReportModal={this.changeShowReportModal}
+                    ConfirmReport={this.ConfirmReport}
+                    reportText={this.state.reportText}
+                    setState={this.setState.bind(this)}
+                />
                 <PhotoSwipeItem />
             </div>
         )
     }
 }
+
+//设计师右上角的气泡，点击显示更多操作。
+const DesignerPopover = (props) => (
+    <Popover
+        mask
+        visible={props.Popover_visible}
+        overlay={[
+            (<Popover.Item key="1" icon={<i className="iconfont icon-tousu"></i>}>投诉</Popover.Item>),
+            (<Popover.Item key="2" icon={<i className={props.is_favorite ? "iconfont designer icon-xin-1" : "iconfont icon-Pingjia"}></i>}>{props.is_favorite ? "已收藏" : "收藏"}</Popover.Item>),
+            (<Popover.Item key="3" icon={<i className={props.islove ? "iconfont work icon-xingxing_xuanzhong" : "iconfont icon-xingxingxianmiao"}></i>}>{props.islove ? "已点赞" : "点赞"}</Popover.Item>),
+        ]}
+        onSelect={props.onPopoverSelect}
+    >
+        <Icon key="1" type="ellipsis" style={{ "color": "#5f5f5f" }} />
+    </Popover>
+)
+
+const UserReportModal = (props) => (
+    <Modal
+        title={"请输入投诉内容"}
+        className="report-modal"
+        visible={props.showReportModal}
+        transparent
+        maskClosable={false}
+        closable={true}
+        onClose={() => { props.changeShowReportModal(false) }}
+        footer={[
+            { text: '取消', onPress: () => { props.changeShowReportModal(false) } },
+            { text: '确定', onPress: () => { props.ConfirmReport(); } }
+        ]}
+    >
+        <TextareaItem
+            className="report-textarea"
+            count={200}
+            rows={3}
+            onBlur={(val) => { props.setState({ reportText: val }) }}
+        // ref={el => this.commentTextarea = el }
+        />
+    </Modal>
+)

@@ -1,0 +1,64 @@
+.black-list-page{
+    background-color: #f2f2f2;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+.black-list-main {
+    background-color: #fff;
+    margin-top: 10px;
+}
+.black-list-main .black-item{
+    height: 60px;
+    overflow: hidden;
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+}
+.black-list-main .black-item:last-child{
+    border-bottom: none;
+}
+.black-list-main .black-img{
+    width: 56px;
+    height: 56px;
+    border-radius: 100%;
+}
+.black-item .flex-item-middle{
+    -webkit-box-flex: 3;
+    -webkit-flex: 3;
+    -ms-flex: 3;
+    flex: 3;
+    margin-left: 0px;
+}
+.black-item .flex-item-right{
+    -webkit-box-flex: 0.7;
+    -webkit-flex: 0.7;
+    -ms-flex: 0.7;
+    flex: 0.7;
+}
+.black-item .remove-black-list{
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 16px;
+    // color: #108ee9;
+    background-color: #eee;
+    border-radius: 100%;
+}
+.black-item .black-p-title{
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.black-item .black-p-middle{
+    font-size: 14px;
+    color: #999;
+}
+.black-list-main .fans-bottom{
+    padding: 5px 0;
+    text-align: center;
+    border: 1px solid #0b83d8;
+    border-radius: 20px;
+    color: #0b83d8;
+
+}

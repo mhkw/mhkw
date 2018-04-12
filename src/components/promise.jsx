@@ -83,6 +83,8 @@ const ajaxURLList = {
     add_user_black: "hkw_newapi/add_user_black", //将某个人添加黑名单
     delete_user_black: "hkw_newapi/delete_user_black", //将某个人移出黑名单
     add_favorite: "hkw_newapi/add_favorite", //添加关注，如果已经关注了则取消关注，后端自动判断是关注还行取消关注
+    get_my_user_black_list: "hkw_newapi/get_my_user_black_list", //黑名单列表
+    get_favoriter_favorite_list: "hkw_newapi/get_favoriter_favorite_list", //我的粉丝列表
 
 }
 
@@ -140,6 +142,10 @@ export default function runPromise(ajaxName, param, handle, mustLogin = false, m
     }
     
     let serializeParam = { "user_id": cookie_user_id };
+    let en_user_id = localStorage.getItem("en_user_id");
+    if (en_user_id) {
+        serializeParam = { "user_id": cookie_user_id, en_user_id };
+    }
     // let serializeParam = {};
     if (method == "post") {
         Object.assign(serializeParam, param);

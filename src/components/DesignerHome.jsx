@@ -164,7 +164,7 @@ export default class DesignerHome extends React.Component {
                 this.ajaxAddFavorite();
                 break;
         }
-    };
+    }
     handleVisibleChange = (Popover_visible) => {
         console.log(Popover_visible);
         
@@ -249,14 +249,14 @@ export default class DesignerHome extends React.Component {
                         icon={<Icon type="left" size="lg" style={{ "color": "#a3a3a3" }} />}
                         onLeftClick={() => hashHistory.goBack()}
                         // rightContent={<Icon key="1" type="ellipsis" style={{ "color": "#5f5f5f" }} />}
-                    rightContent={
-                        <DesignerPopover 
-                            Popover_visible={this.state.Popover_visible} 
-                            onPopoverSelect={this.onPopoverSelect}
-                            is_black_TA={this.state.is_black_TA}
-                            is_favorite={this.state.is_favorite}
-                        />
-                    }
+                        rightContent={
+                            <DesignerPopover 
+                                Popover_visible={this.state.Popover_visible} 
+                                onPopoverSelect={this.onPopoverSelect}
+                                is_black_TA={this.state.is_black_TA}
+                                is_favorite={this.state.is_favorite}
+                            />
+                        }
                     ></NavBar>
                     <div className="brief-box-out">
                     <div className="avatar-box"><img src={path ? path : defaultAvatar}/></div>

@@ -82,6 +82,40 @@ export default class Mine extends React.Component {
             query: { form: 'mine' }
         });
     }
+    //点击常用地址
+    clickMyContacts = () => {
+        hashHistory.push({
+            pathname: '/myContacts',
+            query: { form: 'mine' }
+        });
+    }
+    //原生APP，打电话, 联系客服，这个客户电话是常量
+    callPhone() {
+        const phone = "057186803103";
+        if (window.api) {
+            //APP处理
+            window.api.call({
+                type: 'tel_prompt',
+                number: phone
+            });
+        } else {
+            //H5页面处理
+        }
+    }
+    //点击黑名单
+    clickUserBlackList = () => {
+        hashHistory.push({
+            pathname: '/userBlackList',
+            query: { form: 'mine' }
+        });
+    }
+    //点击粉丝
+    clickUserFansList = () => {
+        hashHistory.push({
+            pathname: '/userFansList',
+            query: { form: 'mine' }
+        });
+    }
     render () {
         return (
             <div className="mineWrap">
@@ -144,12 +178,32 @@ export default class Mine extends React.Component {
                             </Badge>
                             <span style={{ marginLeft: 12 }}>我的常用地址</span>
                         </List.Item>
+                        <Jiange name={this.state.bgStyle}></Jiange>
+                        <List.Item extra="" arrow="horizontal" className="ListItemBorder amlistitem" onClick={this.clickMyContacts}>
+                            <Badge>
+                                <span className="icon-geren3 iconfont" />
+                            </Badge>
+                            <span style={{ marginLeft: 12 }}>联系人</span>
+                        </List.Item>
+                        <List.Item extra="" arrow="horizontal" className="ListItemBorder amlistitem" onClick={this.clickUserFansList}>
+                            <Badge>
+                                <span className="icon-fensi iconfont" style={{ "font-weight": "bold"}} />
+                            </Badge>
+                            <span style={{ marginLeft: 12 }}>粉丝</span>
+                        </List.Item>
+                        <List.Item extra="" arrow="horizontal" className="ListItemBorder amlistitem" onClick={this.clickUserBlackList}>
+                            <Badge>
+                                <span className="icon-heimingdan iconfont" />
+                            </Badge>
+                            <span style={{ marginLeft: 12 }}>黑名单</span>
+                        </List.Item>
 
                         <Jiange name={this.state.bgStyle}></Jiange>
                         <Line border={this.state.border}></Line>
                         <List.Item 
                             extra="0571-86803103" 
                             className="ListItemLarge"
+                            onClick={this.callPhone}
                         >
                             <Badge>
                                 <span className="iconfont icon-wenhao" />
@@ -157,7 +211,7 @@ export default class Mine extends React.Component {
                             <span style={{ marginLeft: 12 }}>联系客服</span>
                         </List.Item>
                         <Line border={this.state.border}></Line>
-                        
+                        <div className="bottom" style={{"height":"60px", "background-color":"#f7f7f7"}}></div>
                     </List>
                 </div>
                 <div className="navPlus" >

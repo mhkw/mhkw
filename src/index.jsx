@@ -53,6 +53,8 @@ import Feedback from './components/Feedback';
 import AboutUs from './components/AboutUs';
 import Activity from './components/Activity';
 import CommonAddress from './components/CommonAddress';
+import UserBlackList from './components/UserBlackList'; 
+import UserFansList from './components/UserFansList';
 
 import './css/font/iconfont.css'
 
@@ -217,6 +219,7 @@ ReactDOM.render(
                 <Route path="confirmOffer" component={ConfirmOffer} />
                 <Route path="contacts" component={Contacts} />
             </Route>
+            <Route path="myContacts" component={Contacts} />            
             <Route path="TempTest" component={TempTest} />
             <Route path="withdraw" component={Withdraw} />
             <Route path="settings" component={Settings} />
@@ -224,6 +227,8 @@ ReactDOM.render(
             <Route path="feedback" component={Feedback} />
             <Route path="aboutUs" component={AboutUs} />
             <Route path="commonAddress" component={CommonAddress} />
+            <Route path="userBlackList" component={UserBlackList} />
+            <Route path="userFansList" component={UserFansList} />
         </Route>
     </Router>
     , document.getElementById('container'));
