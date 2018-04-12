@@ -33,6 +33,7 @@ export default class LoginView extends React.Component {
                 validate.setCookie('user_id', res.data.id);
                 validate.setCookie('user_phone', res.data.mobile);
                 validate.setCookie('user_name', res.data.nick_name);
+                localStorage.setItem('en_user_id', res.en_user_id);
             }else{
                 if(res.message == "图形验证码不对") {
                     Toast.info("图形验证码不正确", 2, null, false);
@@ -47,12 +48,12 @@ export default class LoginView extends React.Component {
         }
     }
     componentDidMount() {
-        if(validate.getCookie('user_id')){
-            hashHistory.push({
-                pathname: '/',
-                query: { form: 'promise' }
-            });
-        };
+        // if(validate.getCookie('user_id')){
+        //     hashHistory.push({
+        //         pathname: '/',
+        //         query: { form: 'promise' }
+        //     });
+        // };
     }
     showModal = key => (e) => {   //弹窗提示输入验证码
         e.preventDefault();       // 修复 Android 上点击穿透

@@ -56,7 +56,6 @@ export const PersonalMsg = (props) => (
                 </span>
                 <span className="fn-right personalMsg">
                 <i className="iconfont icon-dingwei"></i>
-                {/* {props.distance}km */}
                     {((props.distance - 0) / 1000).toFixed(2) > 200 || ((props.distance - 0) / 1000).toFixed(2) == 0 ?
                         props.txt_address == "" ?
                             "[未知]" : props.txt_address.split(" ").length > 1 ?
