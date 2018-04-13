@@ -94,6 +94,7 @@ const ajaxURLList = {
     change_privacy_set: "hkw_newapi/change_privacy_set", //设置隐私设置的某一项，不包括关闭个人主页, 个人设置页面
     change_user_info: "hkw_newapi/change_user_info", //设置隐私设置，设置我的主页是否显示, 个人设置页面
 
+    get_my_notice_list: "hkw_newapi/get_my_notice_list", //我的动态
 }
 
 function get_user_list_ex(params) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { hashHistory } from 'react-router';
-import { Tabs, SearchBar, Badge, ListView, Toast, NavBar, Icon, PullToRefresh, TextareaItem } from 'antd-mobile';
+import { Tabs, SearchBar, Badge, ListView, Toast, NavBar, Icon, PullToRefresh, TextareaItem, ActivityIndicator } from 'antd-mobile';
 import QueueAnim from 'rc-queue-anim';
 import { ItemPicLists, PersonalMsg } from './templateHomeCircle';
 import axios from "axios";
@@ -54,6 +54,8 @@ export default class Collect extends React.Component {
             imgHeight: 176,
             tabnum : "",
             size:0,
+            animating1:false,
+            animating2:false,
             page:1,
             page1:1,
             height1:"",
@@ -90,7 +92,8 @@ export default class Collect extends React.Component {
                     hasMore: res.data.is_next_page ? true : false,
                     isLoading: res.data.is_next_page ? true : false,
                     page: ++this.state.page,
-                    height1: hei
+                    height1: hei,
+                    animating1:false
                 });
                 setTimeout(() => {
                     this.setState({
@@ -123,7 +126,8 @@ export default class Collect extends React.Component {
                     hasMore: res.data.is_next_page  ? true : false,
                     isLoading: res.data.is_next_page ? true : false,
                     page1: ++this.state.page1,
-                    height2: hei
+                    height2: hei,
+                    animating2:false
                 });
                 setTimeout(() => {
                     this.setState({
@@ -149,7 +153,7 @@ export default class Collect extends React.Component {
             this.props.route,
             this.routerWillLeave
         )
-        this.getWorkList(1, 0)
+        this.getWorkList(1, this.props.state.tabnum == 1 ? this.props.state.tabnum:0)
     }
     shouldComponentUpdate() {
         return this.props.router.location.action === 'POP';
@@ -185,8 +189,10 @@ export default class Collect extends React.Component {
     };
     getWorkList = (page,idx) => {
         if(idx == 0) {
+            this.setState({animating1:true})
             this.getUserSearch("user",page)
         } else if (idx == 1) {
+            this.setState({animating2:true})
             this.getWorksSearch("works", page)
         }
     }
@@ -399,9 +405,10 @@ export default class Collect extends React.Component {
                         >我的收藏</NavBar>
                     </div>
                     <Tabs tabs={this.tabs()}
-                        initialPage={this.props.state.tab}
+                        initialPage={this.props.state.tabnum}
                         onChange={(tab, index) => { 
                             this.setState({ tabnum: index })
+                            this.props.setState({ tabnum: index })
                             if (index == 0 && this.state.dataSource1._dataBlob.s1.length == 0  ) {
                                 this.getWorkList(1,0)
                             } else if (index == 1 && this.state.dataSource2._dataBlob.s1.length == 0) {
@@ -462,6 +469,20 @@ export default class Collect extends React.Component {
                             />
                         </div>
                     </Tabs>
+                    <div className="toast-example">
+                        <ActivityIndicator
+                            toast
+                            text="Loading..."
+                            animating={this.state.animating1}
+                        />
+                    </div>
+                    <div className="toast-example">
+                        <ActivityIndicator
+                            toast
+                            text="Loading..."
+                            animating={this.state.animating2}
+                        />
+                    </div>
                 </div>
             </QueueAnim>
         );

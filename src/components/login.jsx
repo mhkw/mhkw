@@ -19,10 +19,10 @@ export default class LoginView extends React.Component {
             error: false,
             modal: false,
             animating:false,
-            // value: '15657185156',
-            // keywords:'luolei251537',
-            value: '17683993335',
-            keywords: 'luolei1992',
+            value: '13958054563',
+            keywords:'215188',
+            // value: '17683993335',
+            // keywords: 'luolei1992',
             code:"",
             codeNum:2
         };
@@ -33,7 +33,7 @@ export default class LoginView extends React.Component {
                 validate.setCookie('user_id', res.data.id);
                 validate.setCookie('user_phone', res.data.mobile);
                 validate.setCookie('user_name', res.data.nick_name);
-                localStorage.setItem('en_user_id', res.en_user_id);
+                localStorage.setItem('en_user_id', res.data.en_user_id);
             }else{
                 if(res.message == "图形验证码不对") {
                     Toast.info("图形验证码不正确", 2, null, false);
