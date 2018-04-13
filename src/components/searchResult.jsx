@@ -1,6 +1,6 @@
 import React from 'react';
 import { hashHistory } from 'react-router';
-import { Tabs, SearchBar, Badge, ListView, Toast, NavBar, Icon, PullToRefresh, TextareaItem } from 'antd-mobile';
+import { Tabs, SearchBar, Badge, ListView, Toast, NavBar, Icon, PullToRefresh, TextareaItem, ActivityIndicator } from 'antd-mobile';
 import QueueAnim from 'rc-queue-anim';
 import { ItemPicLists, PersonalMsg } from './templateHomeCircle';
 import axios from "axios";
@@ -59,7 +59,11 @@ export default class SearchResult extends React.Component {
             useBodyScroll:false,
             searchResult:{},
             imgHeight: 176,
-            tabnum : "",
+            tabnum: "",
+            animating1: false,
+            animating2: false,
+            animating3: false,
+            animating4: false,
             size:0,
             page:1,
             page1:1,
@@ -100,7 +104,8 @@ export default class SearchResult extends React.Component {
                     hasMore: res.data.total_pages > this.state.page ? true : false,
                     isLoading: res.data.total_pages > this.state.page ? true : false,
                     page: ++this.state.page,
-                    height1: hei
+                    height1: hei,
+                    animating1: false
                 });
                 setTimeout(() => {
                     this.setState({
@@ -128,7 +133,8 @@ export default class SearchResult extends React.Component {
                     hasMore: res.data.total_count > this.state.size ? true : false,
                     isLoading: res.data.total_count > this.state.size ? true : false,
                     size: this.state.size + 8,
-                    height2: hei
+                    height2: hei,
+                    animating2: false
                 });
                 setTimeout(() => {
                     this.setState({
@@ -160,6 +166,7 @@ export default class SearchResult extends React.Component {
                     page1: ++this.state.page1,
                     height3: hei,
                     res: this.state.dataSource3.cloneWithRows(this.rData3)._dataBlob.s1,
+                    animating3: false
                 });
                 setTimeout(() => {
                     this.setState({
@@ -189,6 +196,7 @@ export default class SearchResult extends React.Component {
                     page2: ++this.state.page2,
                     height4: hei,
                     res1: this.state.dataSource4.cloneWithRows(this.rData4)._dataBlob.s1,
+                    animating4: false
                 });
                 setTimeout(() => {
                     this.setState({
@@ -333,12 +341,16 @@ export default class SearchResult extends React.Component {
     };
     getWorkList = (keywords,page,idx) => {
         if(idx == 0) {
+            this.setState({ animating1: true })
             this.getUserSearch(keywords,page)
         } else if (idx == 1) {
+            this.setState({ animating2: true })
             this.getWorksSearch(keywords, page)
         } else if (idx == 2) {
+            this.setState({animating3:true})
             this.getNoticeList(keywords, page)
         }else if(idx == 3){
+            this.setState({animating4:true})
             this.getProgectList(keywords, page)
         }
     }
@@ -984,6 +996,34 @@ export default class SearchResult extends React.Component {
                             } : {}}
                             onTouchStart={this.onTouchSend}
                         >发送</span>
+                    </div>
+                    <div className="toast-example">
+                        <ActivityIndicator
+                            toast
+                            text="Loading..."
+                            animating={this.state.animating1}
+                        />
+                    </div>
+                    <div className="toast-example">
+                        <ActivityIndicator
+                            toast
+                            text="Loading..."
+                            animating={this.state.animating3}
+                        />
+                    </div>
+                    <div className="toast-example">
+                        <ActivityIndicator
+                            toast
+                            text="Loading..."
+                            animating={this.state.animating2}
+                        />
+                    </div>
+                    <div className="toast-example">
+                        <ActivityIndicator
+                            toast
+                            text="Loading..."
+                            animating={this.state.animating4}
+                        />
                     </div>
                 </div>
             </QueueAnim>

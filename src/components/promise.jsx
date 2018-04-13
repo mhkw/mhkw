@@ -85,7 +85,7 @@ const ajaxURLList = {
     add_favorite: "hkw_newapi/add_favorite", //添加关注，如果已经关注了则取消关注，后端自动判断是关注还行取消关注
     get_my_user_black_list: "hkw_newapi/get_my_user_black_list", //黑名单列表
     get_favoriter_favorite_list: "hkw_newapi/get_favoriter_favorite_list", //我的粉丝列表
-
+    get_my_notice_list: "hkw_newapi/get_my_notice_list", //我的动态
 }
 
 function get_user_list_ex(params) {
