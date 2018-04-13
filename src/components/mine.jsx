@@ -123,6 +123,20 @@ export default class Mine extends React.Component {
             query: { form: 'mine' }
         });
     }
+    //账户设置
+    clickSetUp = () => {
+        hashHistory.push({
+            pathname: '/setUp',
+            query: { form: 'mine' }
+        });
+    }
+    //点击头像
+    clickPersonAvatar = () => {
+        hashHistory.push({
+            pathname: '/perfectInfo',
+            query: { form: 'mine' }
+        });
+    }
     render () {
         return (
             <div className="mineWrap">
@@ -136,7 +150,7 @@ export default class Mine extends React.Component {
                     </p>
                 </div>
                 <div className="minePic">
-                    <div className="minePicTou">
+                    <div className="minePicTou" onClick={this.clickPersonAvatar}>
                         <img src={this.state.personCenter.path_thumb || urls[0]} alt=""/>
                         <div className="minePicStages">
                             <span>37%</span>
@@ -185,6 +199,7 @@ export default class Mine extends React.Component {
                             </Badge>
                             <span style={{ marginLeft: 12 }}>我的常用地址</span>
                         </List.Item>
+
                         <Jiange name={this.state.bgStyle}></Jiange>
                         <List.Item extra="" arrow="horizontal" className="ListItemBorder amlistitem" onClick={this.clickMyContacts}>
                             <Badge>
@@ -203,6 +218,12 @@ export default class Mine extends React.Component {
                                 <span className="icon-heimingdan iconfont" />
                             </Badge>
                             <span style={{ marginLeft: 12 }}>黑名单</span>
+                        </List.Item>
+                        <List.Item extra="" arrow="horizontal" className="ListItemBorder amlistitem" onClick={this.clickSetUp}>
+                            <Badge>
+                                <span className="icon-shezhi1 iconfont" />
+                            </Badge>
+                            <span style={{ marginLeft: 12 }}>个人设置</span>
                         </List.Item>
 
                         <Jiange name={this.state.bgStyle}></Jiange>

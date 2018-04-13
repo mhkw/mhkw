@@ -56,6 +56,8 @@ import Activity from './components/Activity';
 import CommonAddress from './components/CommonAddress';
 import UserBlackList from './components/UserBlackList'; 
 import UserFansList from './components/UserFansList';
+import SetUp from './components/SetUp';
+import PerfectInfo from './components/PerfectInfo';
 
 import './css/font/iconfont.css'
 
@@ -231,6 +233,8 @@ ReactDOM.render(
             <Route path="commonAddress" component={CommonAddress} />
             <Route path="userBlackList" component={UserBlackList} />
             <Route path="userFansList" component={UserFansList} />
+            <Route path="setUp" component={SetUp} />
+            <Route path="perfectInfo" component={PerfectInfo} />
         </Route>
     </Router>
     , document.getElementById('container'));
