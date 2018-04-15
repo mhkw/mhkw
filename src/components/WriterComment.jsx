@@ -36,7 +36,7 @@ export default class WriterComment extends React.Component {
                 })
             } else {
                 Toast.hide();
-                Toast.fail(req.message, 1);
+                Toast.fail(res.message, 1);
             }
         }
         this.handleAddComment = (res) => {

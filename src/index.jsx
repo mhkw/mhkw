@@ -59,6 +59,7 @@ import UserBlackList from './components/UserBlackList';
 import UserFansList from './components/UserFansList';
 import SetUp from './components/SetUp';
 import PerfectInfo from './components/PerfectInfo';
+import UploadAvatar from './components/UploadAvatar';
 
 import './css/font/iconfont.css'
 
@@ -237,6 +238,7 @@ ReactDOM.render(
             <Route path="userFansList" component={UserFansList} />
             <Route path="setUp" component={SetUp} />
             <Route path="perfectInfo" component={PerfectInfo} />
+            <Route path="uploadAvatar" component={UploadAvatar} />
         </Route>
     </Router>
     , document.getElementById('container'));

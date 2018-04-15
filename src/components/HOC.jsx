@@ -33,6 +33,7 @@ export default class HOC extends React.Component{
             Home: {       //主页
                 currentIdx: 0,
             },
+            UploadAvatar: {}, // 上传的图片对象，图片对象属性名为img，记得及时手动清除
             fcategoryId:"",
             categoryId:"",
             category:"",
