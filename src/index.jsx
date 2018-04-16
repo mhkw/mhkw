@@ -60,6 +60,12 @@ import UserFansList from './components/UserFansList';
 import SetUp from './components/SetUp';
 import PerfectInfo from './components/PerfectInfo';
 import UploadAvatar from './components/UploadAvatar';
+import DesignerAuth from './components/DesignerAuth';
+import HOCdesignerAuth from './components/HOCdesignerAuth';
+import AuthSelf from './components/AuthSelf';
+import AuthMotto from './components/AuthMotto';
+import AuthSkill from './components/AuthSkill';
+import AuthWorks from './components/AuthWorks';
 
 import './css/font/iconfont.css'
 
@@ -239,6 +245,13 @@ ReactDOM.render(
             <Route path="setUp" component={SetUp} />
             <Route path="perfectInfo" component={PerfectInfo} />
             <Route path="uploadAvatar" component={UploadAvatar} />
+            <Route component={HOCdesignerAuth}>
+                <Route path="designerAuth" component={DesignerAuth} />
+                <Route path="authSelf" component={AuthSelf} />
+                <Route path="authMotto" component={AuthMotto} />
+                <Route path="authSkill" component={AuthSkill} />
+                <Route path="authWorks" component={AuthWorks} />
+            </Route>
         </Route>
     </Router>
     , document.getElementById('container'));

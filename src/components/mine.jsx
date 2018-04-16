@@ -137,6 +137,13 @@ export default class Mine extends React.Component {
             query: { form: 'mine' }
         });
     }
+    //点击设计师认证
+    clickDesignerAuth = () => {
+        hashHistory.push({
+            pathname: '/designerAuth',
+            query: { form: 'mine' }
+        });
+    }
     render () {
         return (
             <div className="mineWrap">
@@ -169,7 +176,7 @@ export default class Mine extends React.Component {
                         <Line border={this.state.border}></Line>
                         <Jiange name={this.state.bgStyle}></Jiange>
                         <Line border={this.state.border}></Line>                        
-                        <List.Item extra="" arrow="horizontal" className="ListItemLarge ListItemBorder">
+                        <List.Item extra="" arrow="horizontal" className="ListItemLarge ListItemBorder" onClick={this.clickDesignerAuth}>
                             <Badge>
                                 <span 
                                     className="icon-personfill2 iconfont desingerIcon" 
