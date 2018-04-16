@@ -2,7 +2,8 @@ import React from "react";
 import { hashHistory, Link } from "react-router";
 import { Toast, NavBar, Icon, InputItem, List, Modal, WhiteSpace, WingBlank, Tag, Accordion, Radio, Picker  } from "antd-mobile";
 
-import { district } from 'antd-mobile-demo-data';
+// import { district } from 'antd-mobile-demo-data';
+import { cityData } from '../js/cityData';
 
 //经验数据
 const experienceData = [
@@ -169,7 +170,7 @@ export default class AuthSelf extends React.Component {
                     >院校名称</InputItem>
 
                     <Picker 
-                        data={district}
+                        data={cityData}
                         title="请选择所在位置"
                         extra="请选择(可选)"
                         onOk={e => console.log('ok', e)}
