@@ -85,6 +85,15 @@ const ajaxURLList = {
     add_favorite: "hkw_newapi/add_favorite", //添加关注，如果已经关注了则取消关注，后端自动判断是关注还行取消关注
     get_my_user_black_list: "hkw_newapi/get_my_user_black_list", //黑名单列表
     get_favoriter_favorite_list: "hkw_newapi/get_favoriter_favorite_list", //我的粉丝列表
+    change_self_important_info: "hkw_newapi/change_self_important_info", //修改个人重要信息，包括手机号和邮箱地址
+    get_validate_code_by_email: "hkw_newapi/get_validate_code_by_email", //获取邮件验证码
+    get_user_base_info: "hkw_newapi/get_user_base_info", //获取个人基本信息，用来查看邮箱，手机，隐私设置关闭个人主页
+    get_notice_set_list: "hkw_newapi/get_notice_set_list", //获取通知设置列表 ,个人设置页面
+    get_privacy_set_list: "hkw_newapi/get_privacy_set_list", //获取隐私设置列表 ,个人设置页面
+    change_notice_set: "hkw_newapi/change_notice_set", //设置通知设置的某一项, 个人设置页面
+    change_privacy_set: "hkw_newapi/change_privacy_set", //设置隐私设置的某一项，不包括关闭个人主页, 个人设置页面
+    change_user_info: "hkw_newapi/change_user_info", //设置隐私设置，设置我的主页是否显示, 个人设置页面
+
     get_my_notice_list: "hkw_newapi/get_my_notice_list", //我的动态
 }
 
@@ -143,7 +152,7 @@ export default function runPromise(ajaxName, param, handle, mustLogin = false, m
     
     let serializeParam = { "user_id": cookie_user_id };
     let en_user_id = localStorage.getItem("en_user_id");
-    if (en_user_id) {
+    if (en_user_id && en_user_id != "undefined") {
         serializeParam = { "user_id": cookie_user_id, en_user_id };
     }
     // let serializeParam = {};

@@ -213,6 +213,16 @@ export default class WorksDetails extends React.Component {
             model: "works",
         }, this.handleAddLove);
     }
+    //删掉popover气泡的DOM, 这是BUG
+    componentWillUnmount() {
+        let popoverArrayDOM = document.querySelectorAll(".am-popover-mask");
+
+        for (let i = 0; i < popoverArrayDOM.length; i++) {
+            const popover = popoverArrayDOM[i];
+            let popoverRoot = popover.parentNode.parentNode;
+            popoverRoot.parentNode.removeChild(popoverRoot);
+        }
+    }
     render() {
         return (
             <div className="WorksDetails" key="0">

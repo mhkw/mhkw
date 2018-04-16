@@ -60,5 +60,36 @@
     border: 1px solid #0b83d8;
     border-radius: 20px;
     color: #0b83d8;
-
 }
+// SetUp page start
+.set-up-page{
+    background-color: #f0f0f0;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+.account-settings .am-list-header{
+    font-size: 16px;
+    color: #333;
+}
+.account-settings .settings-thumb{
+    font-size: 16px;
+}
+.account-settings .am-list-item{
+    border-bottom: 1px solid #eee;
+}
+
+.account-settings .am-list-item .am-list-line .am-list-extra{
+    -webkit-flex-basis: 20%;
+    -ms-flex-preferred-size: 20%;
+    flex-basis: 20%;
+}
+.account-settings .am-list-extra .icon-bianji{
+    font-size: 18px;
+    color: #0b83d8;
+}
+.set-up-modal .self-important-info{
+    border: 1px solid #ccc;
+    margin: 10px 0;
+}
+// SetUp page end

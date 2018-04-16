@@ -1,0 +1,30 @@
+.perfect-info-page{
+    background-color: #f0f0f0;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+.perfect-info-page .avatar-list .perfect-info-avatar{
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+}
+.perfect-info-main .am-list-item{
+    border-bottom: 1px solid #ddd;
+}
+.perfect-info-more .am-list-item{
+    border-bottom: 1px solid #ddd;
+}
+.perfect-info-more .info-thumb{
+    font-size: 17px;
+}
+.avatar-list .avatar-input{
+    position: relative;
+}
+.avatar-list .avatar-input .img-input{
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    opacity: 0;
+    z-index: 2;
+}

@@ -233,6 +233,16 @@ export default class DesignerHome extends React.Component {
             });
         }
     }
+    //删掉popover气泡的DOM, 这是BUG
+    componentWillUnmount() {
+        let popoverArrayDOM = document.querySelectorAll(".am-popover-mask");
+        
+        for (let i = 0; i < popoverArrayDOM.length; i++) {
+            const popover = popoverArrayDOM[i];
+            let popoverRoot =  popover.parentNode.parentNode;
+            popoverRoot.parentNode.removeChild(popoverRoot);
+        }
+    }
     render() {
         
         let { path, nick_name, sex, txt_address, experience, works_count, signature, signature_bbs, comment_count } = this.props.designer;
