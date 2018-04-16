@@ -123,11 +123,12 @@ export default class Mine extends React.Component {
             query: { form: 'mine' }
         });
     }
-<<<<<<< HEAD
     clickNotice =()=>{
         hashHistory.push({
             pathname: '/myNotice',
-=======
+            query: { form: 'mine' }
+        });
+    }
     //账户设置
     clickSetUp = () => {
         hashHistory.push({
@@ -139,7 +140,6 @@ export default class Mine extends React.Component {
     clickPersonAvatar = () => {
         hashHistory.push({
             pathname: '/perfectInfo',
->>>>>>> c634e1408a626371c1458deee8ff4b2664533d84
             query: { form: 'mine' }
         });
     }
