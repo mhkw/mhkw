@@ -313,26 +313,17 @@ export default class LoginView extends React.Component {
                 <div key={rowID}>
                     <div className="items">
                         <div className="itemsTop">
-                            <div className="itemsTopPic fn-left" onClick={() => {
-                                hashHistory.push({
-                                    pathname: '/designerHome',
-                                    query: { userId: obj.uid }
-                                })
-                            }}>
+                            <div className="itemsTopPic fn-left">
                                 <img src={obj.path_thumb ? obj.path_thumb : loginUrl.selec} alt="" style={{width:"0.8rem",height:"0.8rem"}}/>
                             </div>
                             <div className="itemsTopRight" style={{marginLeft:"1rem"}}>
-                                <p onClick={() => {
-                                    hashHistory.push({
-                                        pathname: '/designerHome',
-                                        query: { userId: obj.uid }
-                                    })
-                                }} style={{lineHeight:"0.8rem"}}>
-                                    <span className="fn-left" style={{ fontSize: '16px' }}>{obj.nick_name}
-                                        {obj.sex == '女' ? <i className="iconfont icon-xingbienv_f" style={{ color: '#F46353', fontWeight: "800", fontSize: "12px" }} /> : obj.sex == '男' ? <i className="iconfont icon-xingbienanxuanzhong" style={{ color: '#4DA7E0', fontWeight: "800", fontSize: "12px" }} /> : ""}
-                                    </span>
-                                    {obj.type == "works" ? <span className="fn-right personalMsg">发布了作品</span>:""}
-                                    
+                                <p style={{lineHeight:"0.8rem"}}>
+                                    {
+                                        obj.action == "publish" ? <span className="fn-right personalMsg">发布了作品</span>:
+                                        obj.action == "comment" ? <span className="fn-right personalMsg">评论了您的作品</span> : 
+                                        obj.action == "guestbook" ? <span className="fn-right personalMsg">给你留言</span> : 
+                                        obj.action == "collect" ? <span className="fn-right personalMsg">收藏了你的作品</span> : ""
+                                    }
                                 </p>
                             </div>
                         </div>

@@ -123,6 +123,12 @@ export default class Mine extends React.Component {
             query: { form: 'mine' }
         });
     }
+    clickNotice =()=>{
+        hashHistory.push({
+            pathname: '/myNotice',
+            query: { form: 'mine' }
+        });
+    }
     render () {
         return (
             <div className="mineWrap">
@@ -167,7 +173,7 @@ export default class Mine extends React.Component {
                         <Jiange name={this.state.bgStyle}></Jiange>
                         <Line border={this.state.border}></Line>
 
-                        <List.Item extra="" arrow="horizontal" className="ListItemBorder amlistitem">
+                        <List.Item extra="" arrow="horizontal" className="ListItemBorder amlistitem" onClick={this.clickNotice}>
                             <Badge>
                                 <span className="iconfont icon-shijian1" />
                             </Badge>
