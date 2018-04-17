@@ -1,6 +1,7 @@
 import React from "react";
 import { hashHistory, Link } from "react-router";
 import { Toast, NavBar, Icon, InputItem, List, Modal, WhiteSpace, Switch  } from "antd-mobile";
+import { Motion, spring } from 'react-motion';
 
 const loadingGif = require('../images/loading.gif'); //图形验证码加载中的GIG动图
 
@@ -342,141 +343,145 @@ export default class SetUp extends React.Component {
     }
     render() {
         return (
-            <div className="set-up-page" key="1">
-                <NavBar
-                    className="new-nav-bar"
-                    mode="light"
-                    icon={<Icon type="left" size="lg" style={{ "color": "#a3a3a3" }} />}
-                    onLeftClick={() => hashHistory.goBack()}
-                >个人设置</NavBar>
-                <List renderHeader={() => '账号设置：'} className="account-settings">
-                    <List.Item
-                        thumb={<span className="settings-thumb">邮箱</span>}
-                        extra={<i className="iconfont icon-bianji"></i>}
-                        onClick={this.clickEmail}
-                    >{this.state.email}</List.Item>
-                    <List.Item
-                        thumb={<span className="settings-thumb">手机</span>}
-                        extra={<i className="iconfont icon-bianji"></i>}
-                        onClick={this.clickPhone}
-                    >{this.state.phone}</List.Item>
-                    <List.Item arrow="horizontal" onClick={this.changePassword}>修改密码</List.Item>
-                </List>
-                <List renderHeader={() => '通知设置：'} className="account-settings">
-                    <List.Item
-                        extra={<Switch
-                            checked={this.state.user != "0" ? true : false}
-                            onClick={(change) => { this.ajaxChangeNoticeSet("user", change) }}
-                        />}
-                    >有人收藏了我</List.Item>
-                    <List.Item
-                        extra={<Switch
-                            checked={this.state.gustbook != "0" ? true : false}
-                            onClick={(change) => { this.ajaxChangeNoticeSet("gustbook", change) }}
-                        />}
-                    >有人给我留言</List.Item>
-                    <List.Item
-                        extra={<Switch
-                            checked={this.state.comment != "0" ? true : false}
-                            onClick={(change) => { this.ajaxChangeNoticeSet("comment", change) }}
-                        />}
-                    >有人评论了我的作品</List.Item>
-                    <List.Item
-                        extra={<Switch
-                            checked={this.state.work != "0" ? true : false}
-                            onClick={(change) => { this.ajaxChangeNoticeSet("work", change) }}
-                        />}
-                    >有人收藏了我的作品</List.Item>
-                    <List.Item
-                        extra={<Switch
-                            checked={this.state.project != "0" ? true : false}
-                            onClick={(change) => { this.ajaxChangeNoticeSet("project", change) }}
-                        />}
-                    >有人收藏了我的需求</List.Item>
-                    <List.Item
-                        extra={<Switch
-                            checked={this.state.visit_home_page != "0" ? true : false}
-                            onClick={(change) => { this.ajaxChangeNoticeSet("visit_home_page", change) }}
-                        />}
-                    >有人访问了我的主页</List.Item>
-                </List>
-                <List renderHeader={() => '隐私设置：'} className="account-settings">
-                    <List.Item
-                        extra={<Switch
-                            checked={this.state.show_love_users != "0" ? false : true}
-                            onClick={(change) => { this.ajaxChangePrivacySet("show_love_users", change) }}
-                        />}
-                    >隐藏我喜欢的设计师</List.Item>
-                    <List.Item
-                        extra={<Switch
-                            checked={this.state.show_love_works != "0" ? false : true}
-                            onClick={(change) => { this.ajaxChangePrivacySet("show_love_works", change) }}
-                        />}
-                    >隐藏我喜欢的作品</List.Item>
-                    <List.Item
-                        extra={<Switch
-                            checked={this.state.display != "3" ? false : true}
-                            onClick={(change) => { this.ajaxChangeUserInfo(change) }}
-                        />}
-                    >关闭个人主页</List.Item>
-                </List>
-                <Modal
-                    className="Confirm-order-modal set-up-modal"
-                    visible={this.state.showConfirmOrder}
-                    transparent
-                    maskClosable={false}
-                    closable={true}
-                    onClose={() => { this.changeShowConfirmOrder(false), this.setState({ confirmOrderPhone: "" }) }}
-                    title={this.state.ModalType == "phone" ? "修改手机" : "修改邮箱"}
-                    footer={[
-                        { text: '取消', onPress: () => { this.changeShowConfirmOrder(false), this.setState({confirmOrderPhone: ""}) } },
-                        { text: '确定', onPress: () => { this.state.ModalType == "phone" ? this.ConfirmOrder() : this.ConfirmEmail() } }
-                    ]}
-                >
-                    <InputItem
-                        className="self-important-info"
-                        type="text"
-                        maxLength={20}
-                        placeholder={this.state.ModalType == "phone" ? "新手机" : "新邮箱"}
-                        value={this.state.confirmOrderPhone}
-                        onChange={(value) => { this.setState({ confirmOrderPhone: value}) }}
-                    ></InputItem>
-                    <div className="verification-phone-box" style={{ "margin-bottom": "0.3rem", "display": this.state.ModalType != "phone" ? "none" : null }}>
-                        {/* <input type="text" value="" className="verification-code h5offerInput"/> */}
-                        <InputItem
-                            className="verification-code h5offerInput"
-                            type="text"
-                            placeholder="图形验证码"
-                            maxLength={4}
-                            value={this.state.picCode}
-                            onChange={this.onChangeYzm}
-                        ></InputItem>
-                        <span className="code allow codeH5offerSheet">
-                            <img
-                                className="codePouup"
-                                src={'https://www.huakewang.com/index.php/verifycode/index/' + this.state.codeNum}
-                                onClick={(e) => { this.numPlus(e) }}
-                            />
-                        </span>
+            <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
+                {interpolatingStyle => 
+                    <div className="set-up-page" style={{ ...interpolatingStyle, position: "relative" }}>
+                        <NavBar
+                            className="new-nav-bar"
+                            mode="light"
+                            icon={<Icon type="left" size="lg" style={{ "color": "#a3a3a3" }} />}
+                            onLeftClick={() => hashHistory.goBack()}
+                        >个人设置</NavBar>
+                        <List renderHeader={() => '账号设置：'} className="account-settings">
+                            <List.Item
+                                thumb={<span className="settings-thumb">邮箱</span>}
+                                extra={<i className="iconfont icon-bianji"></i>}
+                                onClick={this.clickEmail}
+                            >{this.state.email}</List.Item>
+                            <List.Item
+                                thumb={<span className="settings-thumb">手机</span>}
+                                extra={<i className="iconfont icon-bianji"></i>}
+                                onClick={this.clickPhone}
+                            >{this.state.phone}</List.Item>
+                            <List.Item arrow="horizontal" onClick={this.changePassword}>修改密码</List.Item>
+                        </List>
+                        <List renderHeader={() => '通知设置：'} className="account-settings">
+                            <List.Item
+                                extra={<Switch
+                                    checked={this.state.user != "0" ? true : false}
+                                    onClick={(change) => { this.ajaxChangeNoticeSet("user", change) }}
+                                />}
+                            >有人收藏了我</List.Item>
+                            <List.Item
+                                extra={<Switch
+                                    checked={this.state.gustbook != "0" ? true : false}
+                                    onClick={(change) => { this.ajaxChangeNoticeSet("gustbook", change) }}
+                                />}
+                            >有人给我留言</List.Item>
+                            <List.Item
+                                extra={<Switch
+                                    checked={this.state.comment != "0" ? true : false}
+                                    onClick={(change) => { this.ajaxChangeNoticeSet("comment", change) }}
+                                />}
+                            >有人评论了我的作品</List.Item>
+                            <List.Item
+                                extra={<Switch
+                                    checked={this.state.work != "0" ? true : false}
+                                    onClick={(change) => { this.ajaxChangeNoticeSet("work", change) }}
+                                />}
+                            >有人收藏了我的作品</List.Item>
+                            <List.Item
+                                extra={<Switch
+                                    checked={this.state.project != "0" ? true : false}
+                                    onClick={(change) => { this.ajaxChangeNoticeSet("project", change) }}
+                                />}
+                            >有人收藏了我的需求</List.Item>
+                            <List.Item
+                                extra={<Switch
+                                    checked={this.state.visit_home_page != "0" ? true : false}
+                                    onClick={(change) => { this.ajaxChangeNoticeSet("visit_home_page", change) }}
+                                />}
+                            >有人访问了我的主页</List.Item>
+                        </List>
+                        <List renderHeader={() => '隐私设置：'} className="account-settings">
+                            <List.Item
+                                extra={<Switch
+                                    checked={this.state.show_love_users != "0" ? false : true}
+                                    onClick={(change) => { this.ajaxChangePrivacySet("show_love_users", change) }}
+                                />}
+                            >隐藏我喜欢的设计师</List.Item>
+                            <List.Item
+                                extra={<Switch
+                                    checked={this.state.show_love_works != "0" ? false : true}
+                                    onClick={(change) => { this.ajaxChangePrivacySet("show_love_works", change) }}
+                                />}
+                            >隐藏我喜欢的作品</List.Item>
+                            <List.Item
+                                extra={<Switch
+                                    checked={this.state.display != "3" ? false : true}
+                                    onClick={(change) => { this.ajaxChangeUserInfo(change) }}
+                                />}
+                            >关闭个人主页</List.Item>
+                        </List>
+                        <Modal
+                            className="Confirm-order-modal set-up-modal"
+                            visible={this.state.showConfirmOrder}
+                            transparent
+                            maskClosable={false}
+                            closable={true}
+                            onClose={() => { this.changeShowConfirmOrder(false), this.setState({ confirmOrderPhone: "" }) }}
+                            title={this.state.ModalType == "phone" ? "修改手机" : "修改邮箱"}
+                            footer={[
+                                { text: '取消', onPress: () => { this.changeShowConfirmOrder(false), this.setState({confirmOrderPhone: ""}) } },
+                                { text: '确定', onPress: () => { this.state.ModalType == "phone" ? this.ConfirmOrder() : this.ConfirmEmail() } }
+                            ]}
+                        >
+                            <InputItem
+                                className="self-important-info"
+                                type="text"
+                                maxLength={20}
+                                placeholder={this.state.ModalType == "phone" ? "新手机" : "新邮箱"}
+                                value={this.state.confirmOrderPhone}
+                                onChange={(value) => { this.setState({ confirmOrderPhone: value}) }}
+                            ></InputItem>
+                            <div className="verification-phone-box" style={{ "margin-bottom": "0.3rem", "display": this.state.ModalType != "phone" ? "none" : null }}>
+                                {/* <input type="text" value="" className="verification-code h5offerInput"/> */}
+                                <InputItem
+                                    className="verification-code h5offerInput"
+                                    type="text"
+                                    placeholder="图形验证码"
+                                    maxLength={4}
+                                    value={this.state.picCode}
+                                    onChange={this.onChangeYzm}
+                                ></InputItem>
+                                <span className="code allow codeH5offerSheet">
+                                    <img
+                                        className="codePouup"
+                                        src={'https://www.huakewang.com/index.php/verifycode/index/' + this.state.codeNum}
+                                        onClick={(e) => { this.numPlus(e) }}
+                                    />
+                                </span>
+                            </div>
+                            <div className="verification-phone-box">
+                                {/* <input type="number" value="" className="verification-code"/> */}
+                                <InputItem
+                                    className="verification-code"
+                                    type="tel"
+                                    pattern="[0-9]*"
+                                    placeholder={this.state.ModalType == "phone" ? "短信验证码" : "邮箱验证码"}
+                                    maxLength={4}
+                                    value={this.state.SMSCode}
+                                    onChange={this.onChangeSMSCode}
+                                ></InputItem>
+                                <span
+                                    className="code allow h5offerSpan"
+                                    onClick={this.state.ModalType == "phone" ? this.handleSMSCode : this.handleEmailCode}
+                                >{this.state.SMSCodeTxt}</span>
+                            </div>
+                        </Modal>
                     </div>
-                    <div className="verification-phone-box">
-                        {/* <input type="number" value="" className="verification-code"/> */}
-                        <InputItem
-                            className="verification-code"
-                            type="tel"
-                            pattern="[0-9]*"
-                            placeholder={this.state.ModalType == "phone" ? "短信验证码" : "邮箱验证码"}
-                            maxLength={4}
-                            value={this.state.SMSCode}
-                            onChange={this.onChangeSMSCode}
-                        ></InputItem>
-                        <span
-                            className="code allow h5offerSpan"
-                            onClick={this.state.ModalType == "phone" ? this.handleSMSCode : this.handleEmailCode}
-                        >{this.state.SMSCodeTxt}</span>
-                    </div>
-                </Modal>
-            </div>
+                }
+            </Motion>
         )
     } 
 }

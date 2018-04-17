@@ -2,7 +2,7 @@ import React from 'react';
 import { NavBar, Icon, Toast, Button, Modal, InputItem } from 'antd-mobile';
 import { hashHistory } from 'react-router';
 import { Line, AccountListDetails } from './templateHomeCircle';
-import QueueAnim from 'rc-queue-anim';
+import { Motion, spring } from 'react-motion';
 
 import { Qbutton } from "./TemplateView";
 
@@ -126,66 +126,63 @@ export default class Account extends React.Component {
     }
     render() {
         return(
-            <QueueAnim className="demo-content" leaveReverse
-                animConfig={[
-                    { opacity: [1, 0], translateX: [0, 50] }
-                ]}>
-                {this.state.show ? [
-                <div className="accountWrap" key="0">
-                    <NavBar
-                        mode="light"
-                        icon={<Icon type="left" size="lg" color="#333" />}
-                        onLeftClick={() => hashHistory.goBack()}
-                        rightContent={<Button className="rechargeButton" onClick={() => { this.setState({ showPayInputModal: true }) }}>充值</Button>}
-                    >收支明细</NavBar>
-                    <Line border={this.state.border}></Line>
-                    <div className="accountWrapTop">
-                        <p>余额: {this.state.blance}元 &nbsp;&nbsp;{this.state.frozenCash == 0 ? null : '待解冻: '+this.state.frozenCash+'元'}</p>
-                    </div>
-                    <div className="accountWrapMid">
-                        <span>{this.state.blance}</span> <Qbutton onClick={() => { this.hasAdmin() }}>提现</Qbutton>
-                    </div>
-                    <p className="getPayTitle">
-                        <span className="fn-left" ></span> 收支明细 <span className="fn-right"></span>
-                    </p>
-                    <div className="accountListDetails">
-                        <AccountListDetails item_list={this.state.financialList.item_list} blance={ this.state.blance }></AccountListDetails>
-                    </div>
-                    <Modal
-                        visible={this.state.showPayInputModal}
-                        transparent
-                        maskClosable={false}
-                        onClose={() => { this.setState({ showPayInputModal: false}) }}
-                        title="充值金额"
-                        footer={[
-                            { text: '取消', onPress: () => { this.setState({ showPayInputModal: false, payRecharge: '' }) }},
-                            { text: '确定', onPress: () => { this.clickRecharge() }}
-                        ]}
-                    >
-                        <InputItem
-                            className="recharge-input"
-                            type="text"
-                            pattern="[0-9]*"
-                            placeholder=""
-                            maxLength="12"
-                            value={this.state.payRecharge}
-                            onChange={(val) => { val = val.trim(); this.setState({ payRecharge: val }) }}
-                            clear
+            <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
+                {interpolatingStyle => 
+                    <div className="accountWrap" style={{ ...interpolatingStyle, position: "relative" }}>
+                        <NavBar
+                            mode="light"
+                            icon={<Icon type="left" size="lg" color="#333" />}
+                            onLeftClick={() => hashHistory.goBack()}
+                            rightContent={<Button className="rechargeButton" onClick={() => { this.setState({ showPayInputModal: true }) }}>充值</Button>}
+                        >收支明细</NavBar>
+                        <Line border={this.state.border}></Line>
+                        <div className="accountWrapTop">
+                            <p>余额: {this.state.blance}元 &nbsp;&nbsp;{this.state.frozenCash == 0 ? null : '待解冻: '+this.state.frozenCash+'元'}</p>
+                        </div>
+                        <div className="accountWrapMid">
+                            <span>{this.state.blance}</span> <Qbutton onClick={() => { this.hasAdmin() }}>提现</Qbutton>
+                        </div>
+                        <p className="getPayTitle">
+                            <span className="fn-left" ></span> 收支明细 <span className="fn-right"></span>
+                        </p>
+                        <div className="accountListDetails">
+                            <AccountListDetails item_list={this.state.financialList.item_list} blance={ this.state.blance }></AccountListDetails>
+                        </div>
+                        <Modal
+                            visible={this.state.showPayInputModal}
+                            transparent
+                            maskClosable={false}
+                            onClose={() => { this.setState({ showPayInputModal: false}) }}
+                            title="充值金额"
+                            footer={[
+                                { text: '取消', onPress: () => { this.setState({ showPayInputModal: false, payRecharge: '' }) }},
+                                { text: '确定', onPress: () => { this.clickRecharge() }}
+                            ]}
                         >
-                        </InputItem>
-                    </Modal>
-                    {this.props.children && React.cloneElement(this.props.children, { 
-                        paySuccessCallback: this.paySuccessCallback,
-                        payFailCallback: this.payFailCallback, 
-                        setShowModal: this.setShowModal, 
-                        showModal: this.state.showPayModal, 
-                        payment: this.state.payRecharge,
-                        pay_model: 'other',
-                        model_id: '', 
-                    })}
-                </div>
-                ] : null}
-            </QueueAnim>
+                            <InputItem
+                                className="recharge-input"
+                                type="text"
+                                pattern="[0-9]*"
+                                placeholder=""
+                                maxLength="12"
+                                value={this.state.payRecharge}
+                                onChange={(val) => { val = val.trim(); this.setState({ payRecharge: val }) }}
+                                clear
+                            >
+                            </InputItem>
+                        </Modal>
+                        {this.props.children && React.cloneElement(this.props.children, { 
+                            paySuccessCallback: this.paySuccessCallback,
+                            payFailCallback: this.payFailCallback, 
+                            setShowModal: this.setShowModal, 
+                            showModal: this.state.showPayModal, 
+                            payment: this.state.payRecharge,
+                            pay_model: 'other',
+                            model_id: '', 
+                        })}
+                    </div>
+                }
+            </Motion>
         )
     }
 }

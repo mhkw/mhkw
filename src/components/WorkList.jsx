@@ -1,6 +1,7 @@
 import React from 'react'
 import { Tabs, Badge, NavBar, Icon, PullToRefresh, ListView, Toast } from 'antd-mobile';
 import { Link, hashHistory } from 'react-router';
+import { Motion, spring } from 'react-motion';
 
 const zhanWei = require('../images/logoZhanWei.png');
 
@@ -192,54 +193,58 @@ export default class WorkList extends React.Component {
             );
         };
         return (
-            <div>
-                <div className="forgetNav" key="1">
-                    <NavBar
-                        mode="light"
-                        icon={<Icon type="left" size="lg" color="#707070" />}
-                        onLeftClick={() => hashHistory.goBack()}
-                    // rightContent={[
-                    //     <Icon key="0" type="search" style={{ marginRight: '16px' }} />,
-                    //     <i key="1" type="ellipsis" className="iconfont icon-shijian2" />,
-                    // ]}
-                    >作品</NavBar>
-                </div>
-                <div style={{ height: "1.2rem" }}></div>
-                <Tabs tabs={this.state.tabs}
-                    onTabClick={(tab, index) => { 
-                        this.getWorkList(this.state.ids[index], 0); 
-                        this.setState({ 
-                            typeId: this.state.ids[index],
-                            size : 0
-                        }) 
-                        pageIndex = 0;
-                        document.querySelector(".am-list-body").scrollIntoView(true)
-                    }}
-                >
-                </Tabs>
-                <div className="homeWrap" style={{ width: "100%",padding:"0 5px",boxSizing:"border-box" }}>
-                    <ListView
-                        key={this.state.useBodyScroll}
-                        ref={el => this.lv = el}
-                        dataSource={this.state.dataSource}
-                        renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center' }}>
-                            {this.state.isLoading ? '加载中...' : '加载完成'}
-                        </div>)}
-                        style={{
-                            height: this.state.height,
-                            overflow: "auto"
-                        }}
-                        renderRow={row}
-                        useBodyScroll={this.state.useBodyScroll}
-                        pullToRefresh={<PullToRefresh
-                            refreshing={this.state.refreshing}
-                            onRefresh={this.onRefresh}
-                        />}
-                        onEndReached={this.onEndReached}
-                        pageSize={9}
-                    />
-                </div>
-            </div>
+            <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
+                {interpolatingStyle => 
+                    <div  style={{ ...interpolatingStyle, position: "relative" }}>
+                        <div className="forgetNav" key="1">
+                            <NavBar
+                                mode="light"
+                                icon={<Icon type="left" size="lg" color="#707070" />}
+                                onLeftClick={() => hashHistory.goBack()}
+                            // rightContent={[
+                            //     <Icon key="0" type="search" style={{ marginRight: '16px' }} />,
+                            //     <i key="1" type="ellipsis" className="iconfont icon-shijian2" />,
+                            // ]}
+                            >作品</NavBar>
+                        </div>
+                        <div style={{ height: "1.2rem" }}></div>
+                        <Tabs tabs={this.state.tabs}
+                            onTabClick={(tab, index) => { 
+                                this.getWorkList(this.state.ids[index], 0); 
+                                this.setState({ 
+                                    typeId: this.state.ids[index],
+                                    size : 0
+                                }) 
+                                pageIndex = 0;
+                                document.querySelector(".am-list-body").scrollIntoView(true)
+                            }}
+                        >
+                        </Tabs>
+                        <div className="homeWrap" style={{ width: "100%",padding:"0 5px",boxSizing:"border-box" }}>
+                            <ListView
+                                key={this.state.useBodyScroll}
+                                ref={el => this.lv = el}
+                                dataSource={this.state.dataSource}
+                                renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center' }}>
+                                    {this.state.isLoading ? '加载中...' : '加载完成'}
+                                </div>)}
+                                style={{
+                                    height: this.state.height,
+                                    overflow: "auto"
+                                }}
+                                renderRow={row}
+                                useBodyScroll={this.state.useBodyScroll}
+                                pullToRefresh={<PullToRefresh
+                                    refreshing={this.state.refreshing}
+                                    onRefresh={this.onRefresh}
+                                />}
+                                onEndReached={this.onEndReached}
+                                pageSize={9}
+                            />
+                        </div>
+                    </div>
+                }
+            </Motion>
         )
     }
 }

@@ -6,6 +6,7 @@ import { ItemPicLists, PersonalMsg } from './templateHomeCircle';
 import axios from "axios";
 import qs from "qs"
 import update from 'immutability-helper';
+import { Motion, spring } from 'react-motion';
 
 let realData1 = [];
 let realData2 = [];
@@ -391,100 +392,102 @@ export default class Collect extends React.Component {
         };
 
         return (
-            <QueueAnim>
-                <div className="searchIpt">
-                    <div className="forgetNav" key="1">
-                        <NavBar
-                            mode="light"
-                            icon={<Icon type="left" size="lg" color="#707070" />}
-                            onLeftClick={() => hashHistory.goBack()}
-                            className="top"
-                        // rightContent={
-                        //     <span onClick={(e) => { this.checkNeedMsg() }}>确定</span>
-                        // }
-                        >我的收藏</NavBar>
-                    </div>
-                    <Tabs tabs={this.tabs()}
-                        initialPage={this.props.state.tabnum}
-                        onChange={(tab, index) => { 
-                            this.setState({ tabnum: index })
-                            this.props.setState({ tabnum: index })
-                            if (index == 0 && this.state.dataSource1._dataBlob.s1.length == 0  ) {
-                                this.getWorkList(1,0)
-                            } else if (index == 1 && this.state.dataSource2._dataBlob.s1.length == 0) {
-                                this.getWorkList(1, 1)
-                            } 
-                        }}
-                    >
-                        <div className="homeWrap" style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
-                            <div className="homeWrapMain">
-                                <div style={{ height: "2.4rem" }}></div>                            
+            <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
+                {interpolatingStyle => 
+                    <div className="searchIpt" style={{ ...interpolatingStyle, position: "relative" }}>
+                        <div className="forgetNav" key="1">
+                            <NavBar
+                                mode="light"
+                                icon={<Icon type="left" size="lg" color="#707070" />}
+                                onLeftClick={() => hashHistory.goBack()}
+                                className="top"
+                            // rightContent={
+                            //     <span onClick={(e) => { this.checkNeedMsg() }}>确定</span>
+                            // }
+                            >我的收藏</NavBar>
+                        </div>
+                        <Tabs tabs={this.tabs()}
+                            initialPage={this.props.state.tabnum}
+                            onChange={(tab, index) => { 
+                                this.setState({ tabnum: index })
+                                this.props.setState({ tabnum: index })
+                                if (index == 0 && this.state.dataSource1._dataBlob.s1.length == 0  ) {
+                                    this.getWorkList(1,0)
+                                } else if (index == 1 && this.state.dataSource2._dataBlob.s1.length == 0) {
+                                    this.getWorkList(1, 1)
+                                } 
+                            }}
+                        >
+                            <div className="homeWrap" style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
+                                <div className="homeWrapMain">
+                                    <div style={{ height: "2.4rem" }}></div>                            
+                                    <ListView
+                                        key={this.state.useBodyScroll}
+                                        ref={el => this.lv1 = el}
+                                        dataSource={this.state.dataSource1}
+                                        renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center' }}>
+                                            {this.state.isLoading ? '加载中...' : '加载完成'}
+                                        </div>)}
+                                        style={{
+                                            height: this.state.height1,
+                                            width:"100%",
+                                            overflow: "auto"
+                                        }}
+                                        renderRow={row1}
+                                        useBodyScroll={this.state.useBodyScroll}
+                                        pullToRefresh={<PullToRefresh
+                                            refreshing={this.state.refreshing}
+                                            onRefresh={this.onRefresh}
+                                        />}
+                                        onEndReached={()=>{this.onEndReached()}}
+                                        pageSize={8}
+                                        scrollRenderAheadDistance={100}
+                                    />
+                                </div>
+                            </div>
+                            <div className="homeWrap" style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff', width: "100%", padding: "0 5px", boxSizing: "border-box" }}>
+                                <div style={{ height: "2.4rem" }}></div> 
                                 <ListView
                                     key={this.state.useBodyScroll}
-                                    ref={el => this.lv1 = el}
-                                    dataSource={this.state.dataSource1}
+                                    ref={el => this.lv2 = el}
+                                    dataSource={this.state.dataSource2}
                                     renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center' }}>
                                         {this.state.isLoading ? '加载中...' : '加载完成'}
                                     </div>)}
                                     style={{
-                                        height: this.state.height1,
-                                        width:"100%",
+                                        height: this.state.height2,
+                                        width: "100%",
                                         overflow: "auto"
                                     }}
-                                    renderRow={row1}
+                                    renderRow={row2}
                                     useBodyScroll={this.state.useBodyScroll}
                                     pullToRefresh={<PullToRefresh
                                         refreshing={this.state.refreshing}
                                         onRefresh={this.onRefresh}
                                     />}
-                                    onEndReached={()=>{this.onEndReached()}}
+                                    onEndReached={() => { this.onEndReached() }}
                                     pageSize={8}
                                     scrollRenderAheadDistance={100}
                                 />
                             </div>
-                        </div>
-                        <div className="homeWrap" style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff', width: "100%", padding: "0 5px", boxSizing: "border-box" }}>
-                            <div style={{ height: "2.4rem" }}></div> 
-                            <ListView
-                                key={this.state.useBodyScroll}
-                                ref={el => this.lv2 = el}
-                                dataSource={this.state.dataSource2}
-                                renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center' }}>
-                                    {this.state.isLoading ? '加载中...' : '加载完成'}
-                                </div>)}
-                                style={{
-                                    height: this.state.height2,
-                                    width: "100%",
-                                    overflow: "auto"
-                                }}
-                                renderRow={row2}
-                                useBodyScroll={this.state.useBodyScroll}
-                                pullToRefresh={<PullToRefresh
-                                    refreshing={this.state.refreshing}
-                                    onRefresh={this.onRefresh}
-                                />}
-                                onEndReached={() => { this.onEndReached() }}
-                                pageSize={8}
-                                scrollRenderAheadDistance={100}
+                        </Tabs>
+                        <div className="toast-example">
+                            <ActivityIndicator
+                                toast
+                                text="Loading..."
+                                animating={this.state.animating1}
                             />
                         </div>
-                    </Tabs>
-                    <div className="toast-example">
-                        <ActivityIndicator
-                            toast
-                            text="Loading..."
-                            animating={this.state.animating1}
-                        />
+                        <div className="toast-example">
+                            <ActivityIndicator
+                                toast
+                                text="Loading..."
+                                animating={this.state.animating2}
+                            />
+                        </div>
                     </div>
-                    <div className="toast-example">
-                        <ActivityIndicator
-                            toast
-                            text="Loading..."
-                            animating={this.state.animating2}
-                        />
-                    </div>
-                </div>
-            </QueueAnim>
+                }
+            </Motion>
         );
     }
 }

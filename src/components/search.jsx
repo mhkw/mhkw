@@ -1,7 +1,6 @@
 import React from 'react';
 import { SearchBar, Flex, WhiteSpace, Button, Toast, Modal } from 'antd-mobile';
 import { hashHistory } from 'react-router';
-import QueueAnim from 'rc-queue-anim';
 
 import "../css/easy-animation.scss";
 
@@ -90,73 +89,71 @@ export default class Search extends React.Component {
     }
     render() {
         return (
-            <QueueAnim>
-                <div className={"searchIpt"}>
-                    <div className="searchPD">
-                        <span className="iconfont icon-jiantou" onClick={() => { hashHistory.goBack()} }></span>
-                        <SearchBar
-                            ref={ref => this.autoFocusInst = ref}
-                            value={this.state.value}
-                            placeholder={this.state.valplaceholder}
-                            onSubmit={(value) => {console.log(value);}}
-                            // onClear={value => console.log(value, 'onClear')}
-                            // onFocus={() => console.log('onFocus')}
-                            // onBlur={() => console.log('onBlur')}
-                            onCancel={(value) => {
-                                this.props.setState({ keywords:value}) 
-                                value.trim() == '' ? Toast.info('请输入搜索关键词', 2, null, false) : 
-                                hashHistory.push({
-                                    pathname: "/searchResult",
-                                    query:{
-                                        keyword:value,
-                                        tab:this.state.tab
-                                    }
-                                })
-                            }}
-                            onChange={this.onChange}
-                            cancelText="确定"
-                            showCancelButton={false}
-                        />
-                    </div>
-                    
-                    <div className="search">
-                        <h3>搜索指定内容</h3>
-                        <ul>
-                            <li onClick={() => { this.changePlceholder(0)}}>设计师</li> <span>|</span>
-                            <li onClick={() => { this.changePlceholder(1) }}>作品</li> <span>|</span>
-                            <li onClick={() => { this.changePlceholder(2) }}>帖子</li> <span>|</span>
-                            <li onClick={() => { this.changePlceholder(3) }}>需求</li>
-                        </ul>
-                    </div>
-
-                    <div className="searchHistory" style={{display:this.state.history.length>0?"block":"none"}}>
-                        <p>
-                            <span>历史搜索</span> 
-                            <i className="iconfont icon-shanchu fn-right" onClick={() => alert('确认删除搜索记录吗?', '', [
-                                { text: '取消', onPress: () => console.log('cancel') },
-                                {
-                                    text: '确定',
-                                    onPress: () => new Promise((resolve) => {
-                                        this.delHistoryList()
-                                        setTimeout(resolve, 20);                                        
-                                    }),
-                                },
-                            ])}></i>
-                        </p>
-                        <WhiteSpace size="md" />
-                        <div className="historyLis">
-                            <PlaceHolder block={this.state.history} set={this.set} />
-                        </div> 
-                    </div>
-                    <div className="searchHot">
-                        <p><span>热门搜索</span></p>
-                        <WhiteSpace size="md" /> 
-                        <div className="">
-                            <PlaceHolder block={this.state.hots} set={this.set} />
-                        </div> 
-                    </div>
+            <div className={"searchIpt"}>
+                <div className="searchPD">
+                    <span className="iconfont icon-jiantou" onClick={() => { hashHistory.goBack()} }></span>
+                    <SearchBar
+                        ref={ref => this.autoFocusInst = ref}
+                        value={this.state.value}
+                        placeholder={this.state.valplaceholder}
+                        onSubmit={(value) => {console.log(value);}}
+                        // onClear={value => console.log(value, 'onClear')}
+                        // onFocus={() => console.log('onFocus')}
+                        // onBlur={() => console.log('onBlur')}
+                        onCancel={(value) => {
+                            this.props.setState({ keywords:value}) 
+                            value.trim() == '' ? Toast.info('请输入搜索关键词', 2, null, false) : 
+                            hashHistory.push({
+                                pathname: "/searchResult",
+                                query:{
+                                    keyword:value,
+                                    tab:this.state.tab
+                                }
+                            })
+                        }}
+                        onChange={this.onChange}
+                        cancelText="确定"
+                        showCancelButton={false}
+                    />
                 </div>
-            </QueueAnim>
+                
+                <div className="search">
+                    <h3>搜索指定内容</h3>
+                    <ul>
+                        <li onClick={() => { this.changePlceholder(0)}}>设计师</li> <span>|</span>
+                        <li onClick={() => { this.changePlceholder(1) }}>作品</li> <span>|</span>
+                        <li onClick={() => { this.changePlceholder(2) }}>帖子</li> <span>|</span>
+                        <li onClick={() => { this.changePlceholder(3) }}>需求</li>
+                    </ul>
+                </div>
+
+                <div className="searchHistory" style={{display:this.state.history.length>0?"block":"none"}}>
+                    <p>
+                        <span>历史搜索</span> 
+                        <i className="iconfont icon-shanchu fn-right" onClick={() => alert('确认删除搜索记录吗?', '', [
+                            { text: '取消', onPress: () => console.log('cancel') },
+                            {
+                                text: '确定',
+                                onPress: () => new Promise((resolve) => {
+                                    this.delHistoryList()
+                                    setTimeout(resolve, 20);                                        
+                                }),
+                            },
+                        ])}></i>
+                    </p>
+                    <WhiteSpace size="md" />
+                    <div className="historyLis">
+                        <PlaceHolder block={this.state.history} set={this.set} />
+                    </div> 
+                </div>
+                <div className="searchHot">
+                    <p><span>热门搜索</span></p>
+                    <WhiteSpace size="md" /> 
+                    <div className="">
+                        <PlaceHolder block={this.state.hots} set={this.set} />
+                    </div> 
+                </div>
+            </div>
         );
     }
 }

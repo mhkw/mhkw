@@ -622,6 +622,12 @@
 .createServer .serverStep .finish .triangle-right{
     border-left-color: #199bd8;
 }
+.am-navbar-left {
+    padding-left: 0;
+}
+.orderListWrap .am-navbar-left {
+    padding-left: 15px;
+}
 
 @import './designerHome.scss';
 @import './comment.scss';

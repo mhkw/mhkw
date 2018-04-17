@@ -5,6 +5,7 @@ import QueueAnim from 'rc-queue-anim';
 import { ItemPicLists, PersonalMsg } from './templateHomeCircle';
 import axios from "axios";
 import update from 'immutability-helper';
+import { Motion, spring } from 'react-motion';
 
 let realData1 = [];
 let realData2 = [];
@@ -835,198 +836,200 @@ export default class SearchResult extends React.Component {
         };
 
         return (
-            <QueueAnim>
-                <div className="searchIpt">
-                    <div className="forgetNav" key="1">
-                        <NavBar
-                            mode="light"
-                            icon={<Icon type="left" size="lg" color="#707070" />}
-                            onLeftClick={() => hashHistory.goBack()}
-                            className="top"
-                        // rightContent={
-                        //     <span onClick={(e) => { this.checkNeedMsg() }}>确定</span>
-                        // }
-                        >搜索结果</NavBar>
-                    </div>
-                    <Tabs tabs={this.tabs()}
-                        initialPage={this.props.state.tab}
-                        onChange={(tab, index) => { 
-                            this.setState({ tabnum: index })
-                            this.props.setState({ tab: index })
-                            if ((index == 0 && this.state.dataSource1._dataBlob.s1.length == 0) ||
-                                (index == 2 && this.state.dataSource3._dataBlob.s1.length == 0) ||
-                                (index == 3 && this.state.dataSource4._dataBlob.s1.length == 0)) {
-                                this.getWorkList(this.props.location.query.keyword, "1", index)
-                            } else if (index == 1 && this.state.dataSource2._dataBlob.s1.length == 0) {
-                                this.getWorkList(this.props.location.query.keyword, "8", index)
-                            }
-                        }}
-                    >
-                        <div className="homeWrap" style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
-                            <div className="homeWrapMain">
-                                <div style={{ height: "2.4rem" }}></div>                            
-                                <ListView
-                                    key={this.state.useBodyScroll}
-                                    ref={el => this.lv1 = el}
-                                    dataSource={this.state.dataSource1}
-                                    renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center' }}>
-                                        {this.state.isLoading ? '加载中...' : '加载完成'}
-                                    </div>)}
-                                    style={{
-                                        height: this.state.height1,
-                                        width:"100%",
-                                        overflow: "auto"
-                                    }}
-                                    renderRow={row1}
-                                    useBodyScroll={this.state.useBodyScroll}
-                                    pullToRefresh={<PullToRefresh
-                                        refreshing={this.state.refreshing}
-                                        onRefresh={this.onRefresh}
-                                    />}
-                                    onEndReached={()=>{this.onEndReached()}}
-                                    pageSize={8}
-                                    scrollRenderAheadDistance={100}
-                                />
-                            </div>
+            <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
+                {interpolatingStyle => 
+                    <div className="searchIpt" style={{ ...interpolatingStyle, position: "relative" }}>
+                        <div className="forgetNav" key="1">
+                            <NavBar
+                                mode="light"
+                                icon={<Icon type="left" size="lg" color="#707070" />}
+                                onLeftClick={() => hashHistory.goBack()}
+                                className="top"
+                            // rightContent={
+                            //     <span onClick={(e) => { this.checkNeedMsg() }}>确定</span>
+                            // }
+                            >搜索结果</NavBar>
                         </div>
-                        <div className="homeWrap" style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff', width: "100%", padding: "0 5px", boxSizing: "border-box" }}>
-                            <div style={{ height: "2.4rem" }}></div> 
-                            <ListView
-                                key={this.state.useBodyScroll}
-                                ref={el => this.lv2 = el}
-                                dataSource={this.state.dataSource2}
-                                renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center' }}>
-                                    {this.state.isLoading ? '加载中...' : '加载完成'}
-                                </div>)}
-                                style={{
-                                    height: this.state.height2,
-                                    width: "100%",
-                                    overflow: "auto"
-                                }}
-                                renderRow={row2}
-                                useBodyScroll={this.state.useBodyScroll}
-                                pullToRefresh={<PullToRefresh
-                                    refreshing={this.state.refreshing}
-                                    onRefresh={this.onRefresh}
-                                />}
-                                onEndReached={() => { this.onEndReached() }}
-                                pageSize={8}
-                                scrollRenderAheadDistance={100}
-                            />
-                        </div>
-                        <div className="homeWrap" style={{ alignItems: 'center', justifyContent: 'center',  backgroundColor: '#fff' }}>
-                            <div className="lanternLis">
-                                <div className="homeWrapMain" id="hkCircle">
-                                    <div style={{ height: "2.4rem" }}></div> 
+                        <Tabs tabs={this.tabs()}
+                            initialPage={this.props.state.tab}
+                            onChange={(tab, index) => { 
+                                this.setState({ tabnum: index })
+                                this.props.setState({ tab: index })
+                                if ((index == 0 && this.state.dataSource1._dataBlob.s1.length == 0) ||
+                                    (index == 2 && this.state.dataSource3._dataBlob.s1.length == 0) ||
+                                    (index == 3 && this.state.dataSource4._dataBlob.s1.length == 0)) {
+                                    this.getWorkList(this.props.location.query.keyword, "1", index)
+                                } else if (index == 1 && this.state.dataSource2._dataBlob.s1.length == 0) {
+                                    this.getWorkList(this.props.location.query.keyword, "8", index)
+                                }
+                            }}
+                        >
+                            <div className="homeWrap" style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
+                                <div className="homeWrapMain">
+                                    <div style={{ height: "2.4rem" }}></div>                            
                                     <ListView
-                                        key={1}
-                                        ref={el => this.lv = el}
-                                        dataSource={this.state.dataSource3}
+                                        key={this.state.useBodyScroll}
+                                        ref={el => this.lv1 = el}
+                                        dataSource={this.state.dataSource1}
                                         renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center' }}>
                                             {this.state.isLoading ? '加载中...' : '加载完成'}
                                         </div>)}
-                                        renderRow={row3}
-                                        renderSeparator={separator}
-                                        useBodyScroll={false}
+                                        style={{
+                                            height: this.state.height1,
+                                            width:"100%",
+                                            overflow: "auto"
+                                        }}
+                                        renderRow={row1}
+                                        useBodyScroll={this.state.useBodyScroll}
                                         pullToRefresh={<PullToRefresh
                                             refreshing={this.state.refreshing}
                                             onRefresh={this.onRefresh}
                                         />}
-                                        style={{
-                                            height: this.state.height3,
-                                            width: "100%",
-                                            overflow: "auto"
-                                        }}
-                                        onEndReached={this.onEndReached}
+                                        onEndReached={()=>{this.onEndReached()}}
                                         pageSize={8}
-                                        scrollRenderAheadDistance={100}                                        
+                                        scrollRenderAheadDistance={100}
                                     />
                                 </div>
                             </div>
-                        </div>
-                        <div className="homeWrap" style={{ alignItems: 'center', justifyContent: 'center',  backgroundColor: '#fff' }}>
-                            <div className="mainwrap homeWrapMain">
+                            <div className="homeWrap" style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff', width: "100%", padding: "0 5px", boxSizing: "border-box" }}>
                                 <div style={{ height: "2.4rem" }}></div> 
                                 <ListView
                                     key={this.state.useBodyScroll}
-                                    ref={el => this.lv = el}
-                                    dataSource={this.state.dataSource4}
+                                    ref={el => this.lv2 = el}
+                                    dataSource={this.state.dataSource2}
                                     renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center' }}>
                                         {this.state.isLoading ? '加载中...' : '加载完成'}
                                     </div>)}
                                     style={{
-                                        height: this.state.height4,
-                                        overflow: "auto",
-                                        width:"100%"
+                                        height: this.state.height2,
+                                        width: "100%",
+                                        overflow: "auto"
                                     }}
-                                    renderRow={row4}
-                                    renderSeparator={separator}
+                                    renderRow={row2}
                                     useBodyScroll={this.state.useBodyScroll}
                                     pullToRefresh={<PullToRefresh
                                         refreshing={this.state.refreshing}
                                         onRefresh={this.onRefresh}
                                     />}
-                                    onEndReached={this.onEndReached}
+                                    onEndReached={() => { this.onEndReached() }}
                                     pageSize={8}
+                                    scrollRenderAheadDistance={100}
                                 />
                             </div>
+                            <div className="homeWrap" style={{ alignItems: 'center', justifyContent: 'center',  backgroundColor: '#fff' }}>
+                                <div className="lanternLis">
+                                    <div className="homeWrapMain" id="hkCircle">
+                                        <div style={{ height: "2.4rem" }}></div> 
+                                        <ListView
+                                            key={1}
+                                            ref={el => this.lv = el}
+                                            dataSource={this.state.dataSource3}
+                                            renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center' }}>
+                                                {this.state.isLoading ? '加载中...' : '加载完成'}
+                                            </div>)}
+                                            renderRow={row3}
+                                            renderSeparator={separator}
+                                            useBodyScroll={false}
+                                            pullToRefresh={<PullToRefresh
+                                                refreshing={this.state.refreshing}
+                                                onRefresh={this.onRefresh}
+                                            />}
+                                            style={{
+                                                height: this.state.height3,
+                                                width: "100%",
+                                                overflow: "auto"
+                                            }}
+                                            onEndReached={this.onEndReached}
+                                            pageSize={8}
+                                            scrollRenderAheadDistance={100}                                        
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="homeWrap" style={{ alignItems: 'center', justifyContent: 'center',  backgroundColor: '#fff' }}>
+                                <div className="mainwrap homeWrapMain">
+                                    <div style={{ height: "2.4rem" }}></div> 
+                                    <ListView
+                                        key={this.state.useBodyScroll}
+                                        ref={el => this.lv = el}
+                                        dataSource={this.state.dataSource4}
+                                        renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center' }}>
+                                            {this.state.isLoading ? '加载中...' : '加载完成'}
+                                        </div>)}
+                                        style={{
+                                            height: this.state.height4,
+                                            overflow: "auto",
+                                            width:"100%"
+                                        }}
+                                        renderRow={row4}
+                                        renderSeparator={separator}
+                                        useBodyScroll={this.state.useBodyScroll}
+                                        pullToRefresh={<PullToRefresh
+                                            refreshing={this.state.refreshing}
+                                            onRefresh={this.onRefresh}
+                                        />}
+                                        onEndReached={this.onEndReached}
+                                        pageSize={8}
+                                    />
+                                </div>
+                            </div>
+                        </Tabs>
+                        <div className="popup-comment-input-box "
+                            // style={{ "display": this.state.showReplyInput ? "block" : "none" }}
+                            style={{ "visibility": this.state.showReplyInput ? "visible" : "hidden" }}
+                        >
+                            <TextareaItem
+                                id="abc"
+                                className="comment-input"
+                                autoHeight
+                                ref={(temp) => { this.textarea = temp; }}
+                                placeholder={this.state.placeholderWords}
+                                maxLength="100"
+                                value={this.state.content}
+                                onChange={this.onChangeReplyInput}
+                                onBlur={() => { this.setState({ showReplyInput: false }) }}
+                                onFocus={() => { this.setState({ showReplyInput: true }) }}
+                            />
+                            <span className="send-btn  demand-send-btn" ref="abcd"
+                                style={this.state.sendBtnStatus ? {
+                                    "border": "1px solid #0e80d2",
+                                    "background-color": "#409ad6",
+                                    "color": "#fff",
+                                } : {}}
+                                onTouchStart={this.onTouchSend}
+                            >发送</span>
                         </div>
-                    </Tabs>
-                    <div className="popup-comment-input-box "
-                        // style={{ "display": this.state.showReplyInput ? "block" : "none" }}
-                        style={{ "visibility": this.state.showReplyInput ? "visible" : "hidden" }}
-                    >
-                        <TextareaItem
-                            id="abc"
-                            className="comment-input"
-                            autoHeight
-                            ref={(temp) => { this.textarea = temp; }}
-                            placeholder={this.state.placeholderWords}
-                            maxLength="100"
-                            value={this.state.content}
-                            onChange={this.onChangeReplyInput}
-                            onBlur={() => { this.setState({ showReplyInput: false }) }}
-                            onFocus={() => { this.setState({ showReplyInput: true }) }}
-                        />
-                        <span className="send-btn  demand-send-btn" ref="abcd"
-                            style={this.state.sendBtnStatus ? {
-                                "border": "1px solid #0e80d2",
-                                "background-color": "#409ad6",
-                                "color": "#fff",
-                            } : {}}
-                            onTouchStart={this.onTouchSend}
-                        >发送</span>
+                        <div className="toast-example">
+                            <ActivityIndicator
+                                toast
+                                text="Loading..."
+                                animating={this.state.animating1}
+                            />
+                        </div>
+                        <div className="toast-example">
+                            <ActivityIndicator
+                                toast
+                                text="Loading..."
+                                animating={this.state.animating3}
+                            />
+                        </div>
+                        <div className="toast-example">
+                            <ActivityIndicator
+                                toast
+                                text="Loading..."
+                                animating={this.state.animating2}
+                            />
+                        </div>
+                        <div className="toast-example">
+                            <ActivityIndicator
+                                toast
+                                text="Loading..."
+                                animating={this.state.animating4}
+                            />
+                        </div>
                     </div>
-                    <div className="toast-example">
-                        <ActivityIndicator
-                            toast
-                            text="Loading..."
-                            animating={this.state.animating1}
-                        />
-                    </div>
-                    <div className="toast-example">
-                        <ActivityIndicator
-                            toast
-                            text="Loading..."
-                            animating={this.state.animating3}
-                        />
-                    </div>
-                    <div className="toast-example">
-                        <ActivityIndicator
-                            toast
-                            text="Loading..."
-                            animating={this.state.animating2}
-                        />
-                    </div>
-                    <div className="toast-example">
-                        <ActivityIndicator
-                            toast
-                            text="Loading..."
-                            animating={this.state.animating4}
-                        />
-                    </div>
-                </div>
-            </QueueAnim>
+                }
+            </Motion>
         );
     }
 }

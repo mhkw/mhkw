@@ -1,16 +1,11 @@
 import React from 'react'
-import { List, InputItem, PullToRefresh, ListView, TextareaItem, Toast,NavBar,Icon  } from 'antd-mobile';
+import { List, InputItem, PullToRefresh, ListView, TextareaItem, Toast, NavBar, Icon } from 'antd-mobile';
 import { Link, hashHistory } from 'react-router';
 import QueueAnim from 'rc-queue-anim';
 import { ItemPicLists, PersonalMsg } from './templateHomeCircle';
 import axios from 'axios'
 import update from 'immutability-helper';
-
-import PhotoSwipeItem from './photoSwipeElement.jsx';
-import '../js/photoswipe/photoswipe.css';
-import '../js/photoswipe/default-skin/default-skin.css';
-import PhotoSwipe from '../js/photoswipe/photoswipe.min.js';
-import PhotoSwipeUI_Default from '../js/photoswipe/photoswipe-ui-default.min.js';
+import { Motion, spring } from 'react-motion';
 
 const loginUrl = {
     "banner01": require('../images/banner01.jpg'),
@@ -30,16 +25,7 @@ let realDataLength = realData.length;
 const NUM_ROWS = 7;
 let pageIndex = 0;
 
-let openPhotoSwipe = function (items, index) {
-    let pswpElement = document.querySelectorAll('.pswp')[0];
-    let options = {
-        index: index,
-        showAnimationDuration: 100,
-        hideAnimationDuration: 100
-    }
-    let gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
-    gallery.init();
-}
+
 export default class LoginView extends React.Component {
     constructor(props) {
         super(props);
@@ -186,32 +172,19 @@ export default class LoginView extends React.Component {
         // }, this.handleSend, false, "get");
         axios({
             method: "POST",
-            url: 'https://www.huakewang.com/hkw_newapi/get_my_notice_list/10/'+page,
+            url: 'https://www.huakewang.com/hkw_newapi/get_my_notice_list/10/' + page,
             withCredentials: true,
             crossDomain: true,
             data: {
-                user_id:validate.getCookie('user_id')
+                user_id: validate.getCookie('user_id')
             }
         })
-        .then((res) => {
-            this.handleSend(res.data);
-        })
-        .catch((error) => {
-            console.log(error.data);
-        });
-    }
-    onTouchImg = (index) => {
-        console.log(size);
-        let items = [];
-        let resultFile = this.props.state.files;
-        resultFile.map((value, idx) => {
-            let item = {};
-            item.w = size[idx].w;
-            item.h = size[idx].h;
-            item.src = value.url;
-            items.push(item);
-        })
-        openPhotoSwipe(items, index);
+            .then((res) => {
+                this.handleSend(res.data);
+            })
+            .catch((error) => {
+                console.log(error.data);
+            });
     }
     onRefresh = () => {   //顶部下拉刷新数据
         pageIndex = 0;
@@ -289,14 +262,6 @@ export default class LoginView extends React.Component {
             }, this.addcommentlis, true, "post");
         }
     }
-    //点击帖子
-    clickPost = () => {
-        // this.onRefresh();
-        // // console.log("点击帖子");
-        // this.setState({
-        //     refreshing: true
-        // });
-    }
     render() {
         const separator = (sectionID, rowID) => (   //这个是每个元素之间的间距
             <div
@@ -314,15 +279,15 @@ export default class LoginView extends React.Component {
                     <div className="items">
                         <div className="itemsTop">
                             <div className="itemsTopPic fn-left">
-                                <img src={obj.path_thumb ? obj.path_thumb : loginUrl.selec} alt="" style={{width:"0.8rem",height:"0.8rem"}}/>
+                                <img src={obj.path_thumb ? obj.path_thumb : loginUrl.selec} alt="" style={{ width: "0.8rem", height: "0.8rem" }} />
                             </div>
-                            <div className="itemsTopRight" style={{marginLeft:"1rem"}}>
-                                <p style={{lineHeight:"0.8rem"}}>
+                            <div className="itemsTopRight" style={{ marginLeft: "1rem" }}>
+                                <p style={{ lineHeight: "0.8rem" }}>
                                     {
-                                        obj.action == "publish" ? <span className="fn-right personalMsg">发布了作品</span>:
-                                        obj.action == "comment" ? <span className="fn-right personalMsg">评论了您的作品</span> : 
-                                        obj.action == "guestbook" ? <span className="fn-right personalMsg">给你留言</span> : 
-                                        obj.action == "collect" ? <span className="fn-right personalMsg">收藏了你的作品</span> : ""
+                                        obj.action == "publish" ? <span className="fn-right personalMsg">发布了作品</span> :
+                                            obj.action == "comment" ? <span className="fn-right personalMsg">评论了您的作品</span> :
+                                                obj.action == "guestbook" ? <span className="fn-right personalMsg">给你留言</span> :
+                                                    obj.action == "collect" ? <span className="fn-right personalMsg">收藏了你的作品</span> : ""
                                     }
                                 </p>
                             </div>
@@ -348,69 +313,71 @@ export default class LoginView extends React.Component {
         };
 
         return (
-            <div className="homeWrap">
-                <div className="lanternLis">
-                    <div className="forgetNav" key="1">
-                        <NavBar
-                            mode="light"
-                            icon={<Icon type="left" size="lg" color="#707070" />}
-                            onLeftClick={() => hashHistory.goBack()}
-                            className="top"
-                        // rightContent={
-                        //     <span onClick={(e) => { this.checkNeedMsg() }}>确定</span>
-                        // }
-                        >我的动态</NavBar>
-                    </div>
-                </div>
-                <div className="homeWrapMain" id="hkCircle">
-                    <div style={{ height: "1.2rem" }}></div>                                            
-                    <ListView
-                        key={this.state.useBodyScroll ? '0' : '1'}
-                        ref={el => this.lv = el}
-                        dataSource={this.state.dataSource}
-                        renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center', marginBottom: "1.4rem" }}>
-                            {this.state.isLoading ? '加载中...' : '加载完成'}
-                        </div>)}
-                        renderRow={row}
-                        renderSeparator={separator}
-                        useBodyScroll={this.state.useBodyScroll}
-                        pullToRefresh={<PullToRefresh
-                            refreshing={this.state.refreshing}
-                            onRefresh={this.onRefresh}
-                        />}
-                        onEndReached={this.onEndReached}
-                        pageSize={5}
-                    />
-                </div>
+            <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
+                {interpolatingStyle => 
+                    <div className="homeWrap" style={{ ...interpolatingStyle, position: "relative" }}>
+                        <div className="lanternLis">
+                            <div className="forgetNav" key="1">
+                                <NavBar
+                                    mode="light"
+                                    icon={<Icon type="left" size="lg" color="#707070" />}
+                                    onLeftClick={() => hashHistory.goBack()}
+                                    className="top"
+                                // rightContent={
+                                //     <span onClick={(e) => { this.checkNeedMsg() }}>确定</span>
+                                // }
+                                >我的动态</NavBar>
+                            </div>
+                        </div>
+                        <div className="homeWrapMain" id="hkCircle">
+                            <div style={{ height: "1.2rem" }}></div>
+                            <ListView
+                                key={this.state.useBodyScroll ? '0' : '1'}
+                                ref={el => this.lv = el}
+                                dataSource={this.state.dataSource}
+                                renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center', marginBottom: "1.4rem" }}>
+                                    {this.state.isLoading ? '加载中...' : '加载完成'}
+                                </div>)}
+                                renderRow={row}
+                                renderSeparator={separator}
+                                useBodyScroll={this.state.useBodyScroll}
+                                pullToRefresh={<PullToRefresh
+                                    refreshing={this.state.refreshing}
+                                    onRefresh={this.onRefresh}
+                                />}
+                                onEndReached={this.onEndReached}
+                                pageSize={5}
+                            />
+                        </div>
 
-                <div className="popup-comment-input-box circle-popup-comment-input-box "
-                    // style={{ "display": this.state.showReplyInput ? "block" : "none" }}
-                    style={{ "visibility": this.state.showReplyInput ? "visible" : "hidden" }}
-                >
-                    <TextareaItem
-                        id="abc"
-                        className="comment-input"
-                        autoHeight
-                        ref={(temp) => { this.textarea = temp; }}
-                        placeholder={this.state.placeholderWords}
-                        maxLength="100"
-                        value={this.state.content}
-                        onChange={this.onChangeReplyInput}
-                        onBlur={() => { this.setState({ showReplyInput: false }) }}
-                        onFocus={() => { this.setState({ showReplyInput: true }) }}
-                    />
-                    <span className="send-btn  demand-send-btn" ref="abcd"
-                        style={this.state.sendBtnStatus ? {
-                            "border": "1px solid #0e80d2",
-                            "background-color": "#409ad6",
-                            "color": "#fff",
-                        } : {}}
-                        onTouchStart={this.onTouchSend}
-                    >发送</span>
-                </div>
-                <PhotoSwipeItem />
-            </div>
+                        <div className="popup-comment-input-box circle-popup-comment-input-box "
+                            // style={{ "display": this.state.showReplyInput ? "block" : "none" }}
+                            style={{ "visibility": this.state.showReplyInput ? "visible" : "hidden" }}
+                        >
+                            <TextareaItem
+                                id="abc"
+                                className="comment-input"
+                                autoHeight
+                                ref={(temp) => { this.textarea = temp; }}
+                                placeholder={this.state.placeholderWords}
+                                maxLength="100"
+                                value={this.state.content}
+                                onChange={this.onChangeReplyInput}
+                                onBlur={() => { this.setState({ showReplyInput: false }) }}
+                                onFocus={() => { this.setState({ showReplyInput: true }) }}
+                            />
+                            <span className="send-btn  demand-send-btn" ref="abcd"
+                                style={this.state.sendBtnStatus ? {
+                                    "border": "1px solid #0e80d2",
+                                    "background-color": "#409ad6",
+                                    "color": "#fff",
+                                } : {}}
+                                onTouchStart={this.onTouchSend}
+                            >发送</span>
+                        </div>
+                    </div>
+                }
+            </Motion>
         );
     }
 }
-
