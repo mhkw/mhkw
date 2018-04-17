@@ -1,6 +1,6 @@
 import React from "react";
 import { hashHistory, Link } from "react-router";
-import { Toast, NavBar, Icon, InputItem, List, Modal, WhiteSpace, WingBlank, Tag } from "antd-mobile";
+import { Toast, NavBar, Icon, InputItem, List, Modal, WhiteSpace, WingBlank, Tag, Button } from "antd-mobile";
 
 export default class AuthSkill extends React.Component {
     constructor(props) {

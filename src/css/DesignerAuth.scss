@@ -38,3 +38,41 @@
     vertical-align: middle;
     padding: 5px 0;
 }
+.auth-self-page .am-list-item .am-list-line .am-list-extra{
+    -webkit-flex-basis: 60%;
+    -ms-flex-preferred-size: 60%;
+    flex-basis: 60%;
+}
+.auth-self-page .tag-container-title{
+    font-size: 17px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+.auth-self-page .tag-container{
+    padding: 5px;
+}
+.tag-container .self-label{
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    color: #108ee9;
+}
+.tag-container .am-tag.self-label::before{
+    border: 1PX solid #108ee9;
+}
+.tag-container .icon-shanchuguanbicha{
+    position: absolute;
+    top: -9px;
+    left: -10px;
+    color: #108ee9;
+}
+
+.designer-auth-page .am-list-item .am-list-line .am-list-extra{
+    -webkit-flex-basis: 20%;
+    -ms-flex-preferred-size: 20%;
+    flex-basis: 20%;
+}
+.designer-auth-page .am-list-item .am-list-line .am-list-brief{
+    white-space: initial;
+}

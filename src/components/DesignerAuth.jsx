@@ -7,6 +7,16 @@ const defaultAvatar = 'https://huakewang.b0.upaiyun.com/2016/06/23/2016062320074
 export default class DesignerAuth extends React.Component {
     constructor(props) {
         super(props)
+        this.state = {
+            emptySelf: false, //个人信息
+            emptyMotto: false, //关于我，一句话介绍,座右铭，格言
+            emptySkill: false, //擅长技能
+            emptyWorks: false, //项目案例
+            nick_name: '', 
+            customLabelsArray: sessionStorage.getItem("customLabelsArray") ? JSON.parse(sessionStorage.getItem("customLabelsArray")) : [], //标签数组
+            signature_bbs: '', //一句话介绍
+            content: '',  //详细介绍
+        }
     }
     //点击进入个人信息页面
     gotoSelf = () => {
@@ -36,6 +46,47 @@ export default class DesignerAuth extends React.Component {
             query: { form: 'DesignerAuth' }
         });
     }
+    getSelfInfo = (props) => {
+        //设置个人信息
+        if (props.Self && props.Self.real_name) {
+            let { customLabels, nick_name } = props.Self;
+            let customLabelsArray = [];
+            if (customLabels.length > 0) {
+                customLabelsArray = customLabels.split(";");
+            }
+            this.setState({ nick_name, customLabelsArray })
+            sessionStorage.setItem("customLabelsArray", JSON.stringify(customLabelsArray))
+
+            this.setState({ emptySelf: false });
+        }else{
+            this.setState({ emptySelf: true});
+        }
+
+        //设置关于我
+        if (props.Self && props.Self.signature_bbs) {
+            let { signature_bbs, content } = props.Self;
+            this.setState({ signature_bbs, content });
+            this.setState({ emptyMotto: false });
+        } else {
+            this.setState({ emptyMotto: true });
+        }
+
+        //设置擅长技能
+        if (props.Skill && props.Skill.real_name) {
+
+            this.setState({ emptySkill: false });
+        } else {
+            this.setState({ emptySkill: true });
+        }
+
+        //设置项目案例
+    }
+    componentWillMount() {
+        this.getSelfInfo(this.props);
+    }
+    componentWillReceiveProps(nextProps) {
+        this.getSelfInfo(nextProps);
+    }
     render() {
         let extraElement = <i className="iconfont icon-bianji"></i>;
         let extraElementEmpty = <span className="extra-edit">未设置</span>;
@@ -48,25 +99,34 @@ export default class DesignerAuth extends React.Component {
                     onLeftClick={() => hashHistory.goBack()}
                 >设计师认证</NavBar>
                 <List renderHeader={<span className="render-header">个人信息</span>} className="auth-self">
-                    <List.Item multipleLine arrow="horizontal" onClick={this.gotoSelf} extra={extraElementEmpty}>
-                    晓风残月
+                    <List.Item multipleLine arrow="horizontal" onClick={this.gotoSelf} extra={this.state.emptySelf ? extraElementEmpty : extraElement}>
+                    {this.state.nick_name}
                         <List.Item.Brief>
-                            <Tag>标签1</Tag>
+                            {/* <Tag>标签1</Tag>
                             <Tag>标签2</Tag>
-                            <Tag>标签3</Tag>
+                            <Tag>标签3</Tag> */}
+                            <div className="tag-container">
+                                {
+                                    this.state.customLabelsArray.length > 0 &&
+                                    this.state.customLabelsArray.map((value, index) => {
+                                        return index < 4 ?  <Tag key={index} className="self-label" >{value}</Tag> : null
+                                    })
+
+                                }
+                            </div>
                         </List.Item.Brief>
                     </List.Item>
                 </List>
                 <List renderHeader={<span className="render-header">关于我</span>} className="auth-motto">
-                    <List.Item multipleLine wrap arrow="horizontal" onClick={this.gotoMotto} extra={extraElementEmpty}>
-                        座右铭
+                    <List.Item multipleLine wrap arrow="horizontal" onClick={this.gotoMotto} extra={this.state.emptyMotto ? extraElementEmpty : extraElement}>
+                        {this.state.signature_bbs ? this.state.signature_bbs : "座右铭"}
                         <List.Item.Brief>
-                            我的介绍
+                            {this.state.content ? this.state.content : "我的介绍"}
                         </List.Item.Brief>
                     </List.Item>
                 </List>
                 <List renderHeader={<span className="render-header">擅长技能</span>} className="auth-skill">
-                    <List.Item multipleLine arrow="horizontal" onClick={this.gotoSkill} extra={extraElement}>
+                    <List.Item multipleLine arrow="horizontal" onClick={this.gotoSkill} extra={this.state.emptySkill ? extraElementEmpty : extraElement}>
                             <Tag>标签1</Tag>
                             <Tag>标签2</Tag>
                             <Tag>标签3</Tag>
