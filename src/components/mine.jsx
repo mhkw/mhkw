@@ -145,6 +145,8 @@ export default class Mine extends React.Component {
     }
     //点击设计师认证
     clickDesignerAuth = () => {
+        console.log("ads");
+        
         hashHistory.push({
             pathname: '/designerAuth',
             query: { form: 'mine' }

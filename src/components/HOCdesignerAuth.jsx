@@ -37,7 +37,8 @@ export default class HOCdesignerAuth extends React.Component {
                     data.sex = "女"
                 }
                 Toast.success(res.message, 1);
-                this.setState({ Self: data })
+                let newSelf = { ...this.state.Self, ...data};
+                this.setState({ Self: newSelf })
             } else {
                 Toast.fail(res.message, 1);
             }
