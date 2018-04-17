@@ -55,6 +55,7 @@ export default class LoginView extends React.Component {
         //     });
         // };
     }
+    
     showModal = key => (e) => {   //弹窗提示输入验证码
         e.preventDefault();       // 修复 Android 上点击穿透
         if (this.state.value.replace(/(^\s*)|(\s*$)/g, '') == "" || this.state.keywords.replace(/(^\s*)|(\s*$)/g, '') == "" ) {
@@ -116,48 +117,50 @@ export default class LoginView extends React.Component {
         
     }
     loginWx(idx){
-        if(idx == 1){
-            var wx = api.require('wx');
-            wx.auth(function (ret, err) {
-                if (ret.status) {
-                    console.log(JSON.stringify(ret));
-                } else {
-                    console.log(err.code);
-                    //数字类型；
-                    //错误码：
-                    //-1（未知错误），
-                    //0（成功，用户同意）
-                    //1 (用户取消)
-                    //2 (用户拒绝授权)
-                    //3 (当前设备未安装微信客户端)
-                }
-            });
-        }else if (idx == 2){
-            var qq = api.require('qq');
-            qq.login(function (ret, err) {
-                if (ret.status) {
-                    console.log(JSON.stringify(ret));
-                } else {
-                    console.log(err.msg);
-                }
-            });
-        }else if(idx == 3){
-            var weibo = api.require('weibo');
-            weibo.auth(function (ret, err) {
-                if (ret.status) {
-                    alert(JSON.stringify(ret));
-                } else {
-                    console.log(err.code);
-                    //数字类型；错误码
-                    //取值范围：
-                    //-1（apiKey 或 registUrl 值非法）
-                    //1（用户取消）
-                    //2 （发送失败）
-                    //3 （授权失败）
-                    //4 （不支持的请求）
-                    //5 （未知错误）
-                }
-            });
+        if(window.api){
+            if (idx == 1) {
+                var wx = api.require('wx');
+                wx.auth(function (ret, err) {
+                    if (ret.status) {
+                        console.log(JSON.stringify(ret));
+                    } else {
+                        console.log(err.code);
+                        //数字类型；
+                        //错误码：
+                        //-1（未知错误），
+                        //0（成功，用户同意）
+                        //1 (用户取消)
+                        //2 (用户拒绝授权)
+                        //3 (当前设备未安装微信客户端)
+                    }
+                });
+            } else if (idx == 2) {
+                var qq = api.require('qq');
+                qq.login(function (ret, err) {
+                    if (ret.status) {
+                        console.log(JSON.stringify(ret));
+                    } else {
+                        console.log(err.msg);
+                    }
+                });
+            } else if (idx == 3) {
+                var weibo = api.require('weibo');
+                weibo.auth(function (ret, err) {
+                    if (ret.status) {
+                        alert(JSON.stringify(ret));
+                    } else {
+                        console.log(err.code);
+                        // 数字类型；错误码
+                        // 取值范围：
+                        // -1（apiKey 或 registUrl 值非法）
+                        // 1（用户取消）
+                        // 2 （发送失败）
+                        // 3 （授权失败）
+                        // 4 （不支持的请求）
+                        // 5 （未知错误）
+                    }
+                });
+            }
         }
     }
     render() {

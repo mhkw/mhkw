@@ -97,7 +97,7 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   position: relative;
-  height: 90%;
+  height: 88%;
   width: 100%;
 }
 
@@ -3036,4 +3036,54 @@ html:not([data-scale]) .am-button.confirm-offer-button::before {
   position: absolute;
   opacity: 0;
   z-index: 2;
+}
+
+.designer-auth-page {
+  background-color: #f2f2f2;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.designer-auth-page .render-header {
+  font-size: 17px;
+}
+
+.designer-auth-page .info-thumb {
+  font-size: 17px;
+}
+
+.designer-auth-page .am-list-item {
+  border-bottom: 1px solid #ddd;
+}
+
+.designer-auth-page .right-header {
+  float: right;
+}
+
+.designer-auth-page .add-works .am-list-content {
+  text-align: center;
+  color: #278bce;
+}
+
+.designer-auth-page .add-works .icon-tianjia {
+  color: #278bce;
+  margin-right: 5px;
+  font-size: 18px;
+}
+
+.designer-auth-page .extra-edit {
+  color: #ff0000;
+}
+
+.designer-auth-page .icon-bianji {
+  margin-right: 5px;
+  color: #278bce;
+}
+
+.auth-works-list .am-list-thumb img {
+  width: 72px;
+  height: 52px;
+  vertical-align: middle;
+  padding: 5px 0;
 }
