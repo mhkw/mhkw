@@ -17,6 +17,7 @@ const loginUrl = {
     "essay": require('../images/essay_draw_new.png'),
     "selec": require('../images/selec.png'),
 }
+const defaultAvatar = require("../images/logoZhanWei.png");
 
 let realData = [];
 let index = realData.length - 1;
@@ -300,7 +301,7 @@ export default class LoginView extends React.Component {
                                         return idx < 6 ? <li>
                                             <a href="javascript:;">
                                                 {/* <img src={value.path_thumb} alt="" style={{ height: "100%" }} onClick={(index, fs) => this.onTouchImg(index,rowID)} /> */}
-                                                <img src={value.path_thumb} alt="" style={{ height: "100%" }} />
+                                                <img src={value.path_thumb} alt="" style={{ height: "100%" }} onError={(e) => { e.target.src = defaultAvatar }} />
                                             </a>
                                         </li> : ""
                                     }) : ""
