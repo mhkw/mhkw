@@ -3,7 +3,7 @@ import { NavBar, Icon, SegmentedControl, WingBlank, Tabs, Modal, InputItem, Toas
 import { hashHistory } from 'react-router';
 import { Line,Jiange } from './templateHomeCircle';
 import { OrderItemList } from "./TemplateView";
-import QueueAnim from 'rc-queue-anim';
+import { Motion, spring } from 'react-motion';
 
 // require("../css/person.scss");
 const urls = [require('../images/touxiang.png')];
@@ -322,184 +322,184 @@ export default class Account extends React.Component {
     }
     render() {
         return(
-            <QueueAnim className="demo-content" type={['right', 'right']}>
-                {this.state.show ? [
-                <div className="orderListWrap" key="0">
-                    <NavBar
-                        mode="light"
-                        icon={<i className="icon-leftarrow iconfont" style={{color:"#333",fontSize:"28px",marginTop:"4px"}}/>}
-                        style={{ borderBottom:"1px solid #C7C7C7"}}
-                        onLeftClick={()=>{
-                            this.setState({
-                                show: !this.state.show
-                            })
-                            setTimeout(() => {
-                                hashHistory.goBack()
-                            }, 150)
-                        }}
-                    >
-                        <WingBlank 
-                            size="lg" 
-                            className="sc-example"
+            <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
+                {interpolatingStyle => 
+                    <div className="orderListWrap" style={{ ...interpolatingStyle, position: "relative" }}>
+                        <NavBar
+                            mode="light"
+                            icon={<i className="icon-leftarrow iconfont" style={{color:"#333",fontSize:"28px",marginTop:"4px"}}/>}
+                            style={{ borderBottom:"1px solid #C7C7C7"}}
+                            onLeftClick={()=>{
+                                this.setState({
+                                    show: !this.state.show
+                                })
+                                setTimeout(() => {
+                                    hashHistory.goBack()
+                                }, 150)
+                            }}
                         >
-                            <SegmentedControl
-                                values={['作为需求方', '作为服务方']}
-                                tintColor={'#606060'}
-                                style={{ height: '28px', width: '250px' }}
-                                onChange={this.onChangeControl}
-                                selectedIndex={this.state.selectedSegmentIndex}
-                            />
-                        </WingBlank>
-                    </NavBar>
-                    <Jiange name="jianGe"></Jiange>
-                    <Tabs tabs={tabsLabel}
-                        initialPage={0}
-                        // onChange={(tab, index) => { console.log('onChange', index, tab); }}
-                        // onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
-                    >
-                        <div className="orderItemList" >
-                            <div className="orderItem">
-                                <div className="orderItemLis">
-                                    <ul>
-                                        {
-                                            this.state.item_list_ing.length ? (
-                                                this.state.item_list_ing.map((val, index) => (
-                                                    <div>
-                                                        <OrderItemList 
-                                                            {...val} 
-                                                            is_quoter={this.state.selectedSegmentIndex}
-                                                            changeShowConfirmOrder={this.changeShowConfirmOrder}
-                                                            changeShowScoreModal={this.changeShowScoreModal}
-                                                            remindOrder={this.remindOrder}
-                                                            setState={this.setState.bind(this)} 
-                                                        />
-                                                        <Jiange name="jianGe"></Jiange>
-                                                    </div>
-                                                ))
-                                            ) : (
-                                                <img src={tempNull} />
-                                            )
-                                        }
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="orderItemList" >
-                            <div className="orderItem">
-                                <div className="orderItemLis">
-                                    <ul>
-                                        {
-                                            this.state.item_list_end.length ? (
-                                                this.state.item_list_end.map((val, index) => (
-                                                    <div>
-                                                        <OrderItemList 
-                                                            {...val} 
-                                                            is_quoter={this.state.selectedSegmentIndex}
-                                                            changeShowConfirmOrder={this.changeShowConfirmOrder}
-                                                            changeShowScoreModal={this.changeShowScoreModal}
-                                                            remindOrder={this.remindOrder}
-                                                            setState={this.setState.bind(this)}  
-                                                        />
-                                                        <Jiange name="jianGe"></Jiange>
-                                                    </div>
-                                                ))
-                                            ) : (
-                                                <img src={tempNull} />
-                                            )
-                                        }
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </Tabs>
-                    <Modal
-                        className="Confirm-order-modal"
-                        visible={this.state.showConfirmOrder}
-                        transparent
-                        maskClosable={false}
-                        closable={true}
-                        onClose={() => { this.changeShowConfirmOrder(false) }}
-                        title={
-                            <div style={{ marginTop:'10px' ,textAlign: 'left', lineHeight: '20px', fontSize: '14px' }}>
-                                <p>请确认是否收到设计师的提交成果！付款后，资金将直接从您的账户转到设计师的账户！</p>
-                                <p style={{ "margin-top":"15px","font-size": "16px", "color": "#090909"}}>验证手机号：{this.state.confirmOrderPhone}</p>
-                            </div>
-                        }
-                        footer={[
-                            { text: '取消', onPress: () => { this.changeShowConfirmOrder(false) } },
-                            { text: '确定', onPress: () => { this.ConfirmOrder(); } }
-                        ]}
-                    >
-                        <div className="verification-phone-box" style={{"margin-bottom": "0.3rem"}}>
-                            {/* <input type="text" value="" className="verification-code h5offerInput"/> */}
-                            <InputItem
-                                className="verification-code h5offerInput"
-                                type="text"
-                                placeholder="图形验证码"
-                                maxLength={4}
-                                value={this.state.picCode}
-                                onChange={this.onChangeYzm}
-                            ></InputItem>
-                            <span className="code allow codeH5offerSheet">
-                                <img 
-                                    className="codePouup" 
-                                    src={'https://www.huakewang.com/index.php/verifycode/index/' + this.state.codeNum}
-                                    onClick={(e) => { this.numPlus(e) }}
+                            <WingBlank 
+                                size="lg" 
+                                className="sc-example"
+                            >
+                                <SegmentedControl
+                                    values={['作为需求方', '作为服务方']}
+                                    tintColor={'#606060'}
+                                    style={{ height: '28px', width: '250px' }}
+                                    onChange={this.onChangeControl}
+                                    selectedIndex={this.state.selectedSegmentIndex}
                                 />
-                            </span>
-                        </div>
-                        <div className="verification-phone-box">
-                            {/* <input type="number" value="" className="verification-code"/> */}
-                            <InputItem
-                                className="verification-code"
-                                type="tel"
-                                pattern="[0-9]*"
-                                placeholder="短信验证码"
-                                maxLength={4}
-                                value={this.state.SMSCode}
-                                onChange={this.onChangeSMSCode}
-                            ></InputItem>
-                            <span 
-                                className="code allow h5offerSpan"
-                                onClick={this.handleSMSCode}
-                            >{this.state.SMSCodeTxt}</span>
-                        </div>
-                    </Modal>
-                    <Modal
-                        className="score-modal"
-                        visible={this.state.showScoreModal}
-                        transparent
-                        maskClosable={false}
-                        closable={true}
-                        onClose={() => { this.changeShowScoreModal(false) }}
-                        footer={[
-                            { text: '取消', onPress: () => { this.changeShowScoreModal(false) } },
-                            { text: '确定', onPress: () => { this.ConfirmScore(); } }
-                        ]}
-                    >
-                        <div className="info">
-                            <span className="scoreTitle">评分</span>
-                            <i onClick={() => { !this.state.selectedScoreEnd ? this.setState({selectedScore: 1}) : null }} className={ this.state.selectedScore > 0 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing" } ></i>
-                            <i onClick={() => { !this.state.selectedScoreEnd ? this.setState({selectedScore: 2}) : null }} className={ this.state.selectedScore > 1 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing" } ></i>
-                            <i onClick={() => { !this.state.selectedScoreEnd ? this.setState({selectedScore: 3}) : null }} className={ this.state.selectedScore > 2 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing" } ></i>
-                            <i onClick={() => { !this.state.selectedScoreEnd ? this.setState({selectedScore: 4}) : null }} className={ this.state.selectedScore > 3 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing" } ></i>
-                            <i onClick={() => { !this.state.selectedScoreEnd ? this.setState({selectedScore: 5}) : null }} className={ this.state.selectedScore > 4 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing" } ></i>
-                        </div>
-                        <TextareaItem
-                            className="comment"
-                            title="评价"
-                            count={200}
-                            autoHeight 
-                            disabled={this.state.selectedScoreEnd}
-                            // value={this.state.selectedScoreComment}
-                            // onChange={(val) => { this.setState({ selectedScoreComment: val}) }}
-                            // ref={el => this.commentTextarea = el }
-                            onBlur={(val) => { this.setState({ selectedScoreComment: val }) }}
-                        />
-                    </Modal>
-                </div>
-                ] : null}
-            </QueueAnim>
+                            </WingBlank>
+                        </NavBar>
+                        <Jiange name="jianGe"></Jiange>
+                        <Tabs tabs={tabsLabel}
+                            initialPage={0}
+                            // onChange={(tab, index) => { console.log('onChange', index, tab); }}
+                            // onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
+                        >
+                            <div className="orderItemList" >
+                                <div className="orderItem">
+                                    <div className="orderItemLis">
+                                        <ul>
+                                            {
+                                                this.state.item_list_ing.length ? (
+                                                    this.state.item_list_ing.map((val, index) => (
+                                                        <div>
+                                                            <OrderItemList 
+                                                                {...val} 
+                                                                is_quoter={this.state.selectedSegmentIndex}
+                                                                changeShowConfirmOrder={this.changeShowConfirmOrder}
+                                                                changeShowScoreModal={this.changeShowScoreModal}
+                                                                remindOrder={this.remindOrder}
+                                                                setState={this.setState.bind(this)} 
+                                                            />
+                                                            <Jiange name="jianGe"></Jiange>
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <img src={tempNull} />
+                                                )
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="orderItemList" >
+                                <div className="orderItem">
+                                    <div className="orderItemLis">
+                                        <ul>
+                                            {
+                                                this.state.item_list_end.length ? (
+                                                    this.state.item_list_end.map((val, index) => (
+                                                        <div>
+                                                            <OrderItemList 
+                                                                {...val} 
+                                                                is_quoter={this.state.selectedSegmentIndex}
+                                                                changeShowConfirmOrder={this.changeShowConfirmOrder}
+                                                                changeShowScoreModal={this.changeShowScoreModal}
+                                                                remindOrder={this.remindOrder}
+                                                                setState={this.setState.bind(this)}  
+                                                            />
+                                                            <Jiange name="jianGe"></Jiange>
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <img src={tempNull} />
+                                                )
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </Tabs>
+                        <Modal
+                            className="Confirm-order-modal"
+                            visible={this.state.showConfirmOrder}
+                            transparent
+                            maskClosable={false}
+                            closable={true}
+                            onClose={() => { this.changeShowConfirmOrder(false) }}
+                            title={
+                                <div style={{ marginTop:'10px' ,textAlign: 'left', lineHeight: '20px', fontSize: '14px' }}>
+                                    <p>请确认是否收到设计师的提交成果！付款后，资金将直接从您的账户转到设计师的账户！</p>
+                                    <p style={{ "margin-top":"15px","font-size": "16px", "color": "#090909"}}>验证手机号：{this.state.confirmOrderPhone}</p>
+                                </div>
+                            }
+                            footer={[
+                                { text: '取消', onPress: () => { this.changeShowConfirmOrder(false) } },
+                                { text: '确定', onPress: () => { this.ConfirmOrder(); } }
+                            ]}
+                        >
+                            <div className="verification-phone-box" style={{"margin-bottom": "0.3rem"}}>
+                                {/* <input type="text" value="" className="verification-code h5offerInput"/> */}
+                                <InputItem
+                                    className="verification-code h5offerInput"
+                                    type="text"
+                                    placeholder="图形验证码"
+                                    maxLength={4}
+                                    value={this.state.picCode}
+                                    onChange={this.onChangeYzm}
+                                ></InputItem>
+                                <span className="code allow codeH5offerSheet">
+                                    <img 
+                                        className="codePouup" 
+                                        src={'https://www.huakewang.com/index.php/verifycode/index/' + this.state.codeNum}
+                                        onClick={(e) => { this.numPlus(e) }}
+                                    />
+                                </span>
+                            </div>
+                            <div className="verification-phone-box">
+                                {/* <input type="number" value="" className="verification-code"/> */}
+                                <InputItem
+                                    className="verification-code"
+                                    type="tel"
+                                    pattern="[0-9]*"
+                                    placeholder="短信验证码"
+                                    maxLength={4}
+                                    value={this.state.SMSCode}
+                                    onChange={this.onChangeSMSCode}
+                                ></InputItem>
+                                <span 
+                                    className="code allow h5offerSpan"
+                                    onClick={this.handleSMSCode}
+                                >{this.state.SMSCodeTxt}</span>
+                            </div>
+                        </Modal>
+                        <Modal
+                            className="score-modal"
+                            visible={this.state.showScoreModal}
+                            transparent
+                            maskClosable={false}
+                            closable={true}
+                            onClose={() => { this.changeShowScoreModal(false) }}
+                            footer={[
+                                { text: '取消', onPress: () => { this.changeShowScoreModal(false) } },
+                                { text: '确定', onPress: () => { this.ConfirmScore(); } }
+                            ]}
+                        >
+                            <div className="info">
+                                <span className="scoreTitle">评分</span>
+                                <i onClick={() => { !this.state.selectedScoreEnd ? this.setState({selectedScore: 1}) : null }} className={ this.state.selectedScore > 0 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing" } ></i>
+                                <i onClick={() => { !this.state.selectedScoreEnd ? this.setState({selectedScore: 2}) : null }} className={ this.state.selectedScore > 1 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing" } ></i>
+                                <i onClick={() => { !this.state.selectedScoreEnd ? this.setState({selectedScore: 3}) : null }} className={ this.state.selectedScore > 2 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing" } ></i>
+                                <i onClick={() => { !this.state.selectedScoreEnd ? this.setState({selectedScore: 4}) : null }} className={ this.state.selectedScore > 3 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing" } ></i>
+                                <i onClick={() => { !this.state.selectedScoreEnd ? this.setState({selectedScore: 5}) : null }} className={ this.state.selectedScore > 4 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing" } ></i>
+                            </div>
+                            <TextareaItem
+                                className="comment"
+                                title="评价"
+                                count={200}
+                                autoHeight 
+                                disabled={this.state.selectedScoreEnd}
+                                // value={this.state.selectedScoreComment}
+                                // onChange={(val) => { this.setState({ selectedScoreComment: val}) }}
+                                // ref={el => this.commentTextarea = el }
+                                onBlur={(val) => { this.setState({ selectedScoreComment: val }) }}
+                            />
+                        </Modal>
+                    </div>
+                }
+            </Motion>
         )
     }
 }

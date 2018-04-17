@@ -3,7 +3,7 @@ import { NavBar, Icon, SegmentedControl, WingBlank, Tabs, Modal, InputItem, Toas
 import { hashHistory } from 'react-router';
 import { Line,Jiange } from './templateHomeCircle';
 import { QuoteItemList } from "./TemplateView";
-import QueueAnim from 'rc-queue-anim';
+import { Motion, spring } from 'react-motion';
 
 // require("../css/person.scss");
 const urls = [require('../images/touxiang.png')];
@@ -190,59 +190,43 @@ export default class Account2 extends React.Component {
     }
     render() {
         return(
-            <QueueAnim className="demo-content" type={['right', 'right']}>
-                {this.state.show ? [
-                <div className="orderListWrap" key="0">
-                    <NavBar
-                        mode="light"
-                        icon={<i className="icon-leftarrow iconfont" style={{color:"#333",fontSize:"28px",marginTop:"4px"}}/>}
-                        style={{ borderBottom:"1px solid #C7C7C7"}}
-                        onLeftClick={()=>{
-                            this.setState({
-                                show: !this.state.show
-                            })
-                            setTimeout(() => {
-                                hashHistory.goBack()
-                            }, 150)
-                        }}
-                    >
-                        <WingBlank 
-                            size="lg" 
-                            className="sc-example"
+            <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
+                {interpolatingStyle => 
+                    <div className="orderListWrap" style={{ ...interpolatingStyle, position: "relative" }}>
+                        <NavBar
+                            mode="light"
+                            icon={<i className="icon-leftarrow iconfont" style={{color:"#333",fontSize:"28px",marginTop:"4px"}}/>}
+                            style={{ borderBottom:"1px solid #C7C7C7"}}
+                            onLeftClick={()=>{
+                                this.setState({
+                                    show: !this.state.show
+                                })
+                                setTimeout(() => {
+                                    hashHistory.goBack()
+                                }, 150)
+                            }}
                         >
-                            <SegmentedControl
-                                values={['收到的报价', '发出的报价']}
-                                tintColor={'#606060'}
-                                style={{ height: '28px', width: '250px' }}
-                                onChange={this.onChangeControl}
-                                selectedIndex={this.state.selectedSegmentIndex}
-                            />
-                        </WingBlank>
-                    </NavBar>
-                    <Jiange name="jianGe"></Jiange>
-                    <Tabs tabs={tabsLabel}
-                        initialPage={0}
-                        onChange={this.onChangeTabs}
-                        // onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
-                    >
-                        <OrderItem
-                            quote_status={""}
-                            state={this.state}
-                            changeShowConfirmOrder={this.changeShowConfirmOrder}
-                            agreeToPay={this.agreeToPay}
-                            refuseQuote={this.refuseQuote}
-                            setState={this.setState.bind(this)}
-                        />
-                        <OrderItem
-                            quote_status={1}
-                            state={this.state}
-                            changeShowConfirmOrder={this.changeShowConfirmOrder}
-                            agreeToPay={this.agreeToPay}
-                            refuseQuote={this.refuseQuote}
-                            setState={this.setState.bind(this)}
-                        />
+                            <WingBlank 
+                                size="lg" 
+                                className="sc-example"
+                            >
+                                <SegmentedControl
+                                    values={['收到的报价', '发出的报价']}
+                                    tintColor={'#606060'}
+                                    style={{ height: '28px', width: '250px' }}
+                                    onChange={this.onChangeControl}
+                                    selectedIndex={this.state.selectedSegmentIndex}
+                                />
+                            </WingBlank>
+                        </NavBar>
+                        <Jiange name="jianGe"></Jiange>
+                        <Tabs tabs={tabsLabel}
+                            initialPage={0}
+                            onChange={this.onChangeTabs}
+                            // onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
+                        >
                             <OrderItem
-                                quote_status={2}
+                                quote_status={""}
                                 state={this.state}
                                 changeShowConfirmOrder={this.changeShowConfirmOrder}
                                 agreeToPay={this.agreeToPay}
@@ -250,42 +234,58 @@ export default class Account2 extends React.Component {
                                 setState={this.setState.bind(this)}
                             />
                             <OrderItem
-                                quote_status={3}
+                                quote_status={1}
                                 state={this.state}
                                 changeShowConfirmOrder={this.changeShowConfirmOrder}
                                 agreeToPay={this.agreeToPay}
                                 refuseQuote={this.refuseQuote}
                                 setState={this.setState.bind(this)}
                             />
-                            <OrderItem
-                                quote_status={4}
-                                state={this.state}
-                                changeShowConfirmOrder={this.changeShowConfirmOrder}
-                                agreeToPay={this.agreeToPay}
-                                refuseQuote={this.refuseQuote}
-                                setState={this.setState.bind(this)}
-                            />
-                            <OrderItem
-                                quote_status={5}
-                                state={this.state}
-                                changeShowConfirmOrder={this.changeShowConfirmOrder}
-                                agreeToPay={this.agreeToPay}
-                                refuseQuote={this.refuseQuote}
-                                setState={this.setState.bind(this)}
-                            />
-                    </Tabs>
-                        {this.props.children && React.cloneElement(this.props.children, { 
-                            paySuccessCallback: this.paySuccessCallback, 
-                            payFailCallback: this.payFailCallback, 
-                            setShowModal: this.setShowModal, 
-                            showModal: this.state.showPayModal, 
-                            pay_model: 'project', 
-                            model_id: this.state.payModel_id, 
-                            payment: this.state.payTotalAmount 
-                        })}
-                </div>
-                ] : null}
-            </QueueAnim>
+                                <OrderItem
+                                    quote_status={2}
+                                    state={this.state}
+                                    changeShowConfirmOrder={this.changeShowConfirmOrder}
+                                    agreeToPay={this.agreeToPay}
+                                    refuseQuote={this.refuseQuote}
+                                    setState={this.setState.bind(this)}
+                                />
+                                <OrderItem
+                                    quote_status={3}
+                                    state={this.state}
+                                    changeShowConfirmOrder={this.changeShowConfirmOrder}
+                                    agreeToPay={this.agreeToPay}
+                                    refuseQuote={this.refuseQuote}
+                                    setState={this.setState.bind(this)}
+                                />
+                                <OrderItem
+                                    quote_status={4}
+                                    state={this.state}
+                                    changeShowConfirmOrder={this.changeShowConfirmOrder}
+                                    agreeToPay={this.agreeToPay}
+                                    refuseQuote={this.refuseQuote}
+                                    setState={this.setState.bind(this)}
+                                />
+                                <OrderItem
+                                    quote_status={5}
+                                    state={this.state}
+                                    changeShowConfirmOrder={this.changeShowConfirmOrder}
+                                    agreeToPay={this.agreeToPay}
+                                    refuseQuote={this.refuseQuote}
+                                    setState={this.setState.bind(this)}
+                                />
+                        </Tabs>
+                            {this.props.children && React.cloneElement(this.props.children, { 
+                                paySuccessCallback: this.paySuccessCallback, 
+                                payFailCallback: this.payFailCallback, 
+                                setShowModal: this.setShowModal, 
+                                showModal: this.state.showPayModal, 
+                                pay_model: 'project', 
+                                model_id: this.state.payModel_id, 
+                                payment: this.state.payTotalAmount 
+                            })}
+                    </div>
+                }
+            </Motion>
         )
     }
 }

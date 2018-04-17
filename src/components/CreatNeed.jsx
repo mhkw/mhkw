@@ -2,6 +2,7 @@ import React from 'react'
 import { hashHistory } from 'react-router'
 import { NavBar, ImagePicker, List, Icon, TextareaItem, WingBlank, Modal,Button,Toast} from 'antd-mobile'
 import { Line, Jiange } from './templateHomeCircle';
+import { Motion, spring } from 'react-motion';
 
 import PhotoSwipeItem from './photoSwipeElement.jsx';
 import '../js/photoswipe/photoswipe.css';
@@ -143,103 +144,107 @@ export default class CreatNeed extends React.Component {
     }
     render(){
         return (
-            <div className="needWrap">
-                <div className="forgetNav" key="1">
-                    <NavBar
-                        mode="light"
-                        icon={<Icon type="left" size="lg" color="#707070" />}
-                        onLeftClick={() => hashHistory.goBack()}
-                        rightContent={
-                            <span onClick={(e) => { this.checkNeedMsg()}}>确定</span>
-                        }
-                    >发布需求</NavBar>
-                </div>
-                <div style={{ height: "1.2rem" }}></div>
-                <div className="needDes" style={{paddingRight:"12px"}}>
-                    <TextareaItem
-                        placeholder="请填写您的需求..."
-                        ref={el => this.autoFocusInst = el}
-                        autoHeight
-                        rows={5}
-                        count={200}
-                        value={this.state.content}
-                        onChange={(value) => { this.setState({ content: value });}}
-                    />
-                </div>
-                <div className="needPics">
-                    <WingBlank>
-                        <ImagePicker
-                            files={this.state.files}
-                            onChange={this.onSelectPic}
-                            onImageClick={(index, fs) => this.onTouchImg(index)}
-                            selectable={this.state.files.length < 20}
-                            accept="image/gif,image/jpeg,image/jpg,image/png"
-                            multiple={true}
-                        />
-                    </WingBlank>
-                </div>
-                <div className="needLists">
-                    <List>
-                        <Line border="line"></Line>
-                        <Item
-                            onClick={this.clickSelectAddress }
-                            arrow="horizontal"
-                            extra={this.props.state.AddressNeed ? (this.props.state.AddressNeed.currentLocation ? this.props.state.AddressNeed.currentLocation : '未定位') : '未定位' }
-                        >地点</Item>
-                        {/* <Line border="line"></Line>
-                        <Jiange name="jianGe"></Jiange>
-                        <Line border="line"></Line>
-                        <Item
-                            onClick={() => { hashHistory.push({ pathname:"/category"}) }}
-                            arrow="horizontal"
-                            extra={this.props.location.query.category}
-                        >领域</Item> */}
-                        <Line border="line"></Line>
-                        <Jiange name="jianGe"></Jiange>
-                        <Line border="line"></Line>
-                        <Item
-                            arrow="horizontal"
-                            extra={<input className="needTitle" type="text" 
-                                value={this.state.needTitle} 
-                                onChange={(e) => { this.setState({ needTitle: e.currentTarget.value }) }} />}
-                        >标题</Item>
-                        <Line border="line"></Line>
-                        <Jiange name="jianGe"></Jiange>
-                        <Line border="line"></Line>
-                        <Item
-                            extra={this.state.price}
-                            onClick={this.showModal('modal1')}
-                            arrow="horizontal"
-                        >预算</Item>
-                        <Line border="line"></Line>
-                    </List>
-                </div>
-                <Modal
-                    visible={this.state.modal1}
-                    transparent
-                    maskClosable={false}
-                    onClose={this.onClose('modal1')}
-                    title={<p>选择您的预算 <i className="iconfont icon-chuyidong1-copy fn-right" onClick={(e) => { 
-                        this.onClose('modal1')(e)}}></i>
-                    </p>}
-                    className="modalNeedPrice"
-                >
-                    <ul className="needPriceLists">
-                        <Line border="line"></Line>
-                        <li onClick={(e)=>{this.setState({ price: e.currentTarget.innerHTML});this.onClose('modal1')();}}>当面商谈</li>
-                        <Line border="line"></Line>
-                        <li onClick={(e)=>{this.setState({price:e.currentTarget.innerHTML});this.onClose('modal1')()}}>一万元以内</li>
-                        <Line border="line"></Line>
-                        <li onClick={(e)=>{this.setState({price:e.currentTarget.innerHTML});this.onClose('modal1')()}}>五万元以内</li>
-                        <Line border="line"></Line>
-                        <li onClick={(e)=>{this.setState({price:e.currentTarget.innerHTML});this.onClose('modal1')()}}>十万以内</li>
-                        <Line border="line"></Line>
-                        <li onClick={(e)=>{this.setState({price:e.currentTarget.innerHTML});this.onClose('modal1')()}}>十五万以内</li>
-                        <Line border="line"></Line>
-                    </ul>
-                </Modal>
-                <PhotoSwipeItem />
-            </div>
+            <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
+                {interpolatingStyle => 
+                    <div className="needWrap"  style={{ ...interpolatingStyle, position: "relative" }}>
+                        <div className="forgetNav" key="1">
+                            <NavBar
+                                mode="light"
+                                icon={<Icon type="left" size="lg" color="#707070" />}
+                                onLeftClick={() => hashHistory.goBack()}
+                                rightContent={
+                                    <span onClick={(e) => { this.checkNeedMsg()}}>确定</span>
+                                }
+                            >发布需求</NavBar>
+                        </div>
+                        <div style={{ height: "1.2rem" }}></div>
+                        <div className="needDes" style={{paddingRight:"12px"}}>
+                            <TextareaItem
+                                placeholder="请填写您的需求..."
+                                ref={el => this.autoFocusInst = el}
+                                autoHeight
+                                rows={5}
+                                count={200}
+                                value={this.state.content}
+                                onChange={(value) => { this.setState({ content: value });}}
+                            />
+                        </div>
+                        <div className="needPics">
+                            <WingBlank>
+                                <ImagePicker
+                                    files={this.state.files}
+                                    onChange={this.onSelectPic}
+                                    onImageClick={(index, fs) => this.onTouchImg(index)}
+                                    selectable={this.state.files.length < 20}
+                                    accept="image/gif,image/jpeg,image/jpg,image/png"
+                                    multiple={true}
+                                />
+                            </WingBlank>
+                        </div>
+                        <div className="needLists">
+                            <List>
+                                <Line border="line"></Line>
+                                <Item
+                                    onClick={this.clickSelectAddress }
+                                    arrow="horizontal"
+                                    extra={this.props.state.AddressNeed ? (this.props.state.AddressNeed.currentLocation ? this.props.state.AddressNeed.currentLocation : '未定位') : '未定位' }
+                                >地点</Item>
+                                {/* <Line border="line"></Line>
+                                <Jiange name="jianGe"></Jiange>
+                                <Line border="line"></Line>
+                                <Item
+                                    onClick={() => { hashHistory.push({ pathname:"/category"}) }}
+                                    arrow="horizontal"
+                                    extra={this.props.location.query.category}
+                                >领域</Item> */}
+                                <Line border="line"></Line>
+                                <Jiange name="jianGe"></Jiange>
+                                <Line border="line"></Line>
+                                <Item
+                                    arrow="horizontal"
+                                    extra={<input className="needTitle" type="text" 
+                                        value={this.state.needTitle} 
+                                        onChange={(e) => { this.setState({ needTitle: e.currentTarget.value }) }} />}
+                                >标题</Item>
+                                <Line border="line"></Line>
+                                <Jiange name="jianGe"></Jiange>
+                                <Line border="line"></Line>
+                                <Item
+                                    extra={this.state.price}
+                                    onClick={this.showModal('modal1')}
+                                    arrow="horizontal"
+                                >预算</Item>
+                                <Line border="line"></Line>
+                            </List>
+                        </div>
+                        <Modal
+                            visible={this.state.modal1}
+                            transparent
+                            maskClosable={false}
+                            onClose={this.onClose('modal1')}
+                            title={<p>选择您的预算 <i className="iconfont icon-chuyidong1-copy fn-right" onClick={(e) => { 
+                                this.onClose('modal1')(e)}}></i>
+                            </p>}
+                            className="modalNeedPrice"
+                        >
+                            <ul className="needPriceLists">
+                                <Line border="line"></Line>
+                                <li onClick={(e)=>{this.setState({ price: e.currentTarget.innerHTML});this.onClose('modal1')();}}>当面商谈</li>
+                                <Line border="line"></Line>
+                                <li onClick={(e)=>{this.setState({price:e.currentTarget.innerHTML});this.onClose('modal1')()}}>一万元以内</li>
+                                <Line border="line"></Line>
+                                <li onClick={(e)=>{this.setState({price:e.currentTarget.innerHTML});this.onClose('modal1')()}}>五万元以内</li>
+                                <Line border="line"></Line>
+                                <li onClick={(e)=>{this.setState({price:e.currentTarget.innerHTML});this.onClose('modal1')()}}>十万以内</li>
+                                <Line border="line"></Line>
+                                <li onClick={(e)=>{this.setState({price:e.currentTarget.innerHTML});this.onClose('modal1')()}}>十五万以内</li>
+                                <Line border="line"></Line>
+                            </ul>
+                        </Modal>
+                        <PhotoSwipeItem />
+                    </div>
+                }
+            </Motion>
         )
     }
 }

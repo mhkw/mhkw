@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavBar, Icon, Toast, List, Button, SwipeAction, Modal, InputItem} from 'antd-mobile';
 import { hashHistory } from 'react-router';
-import QueueAnim from 'rc-queue-anim';
+import { Motion, spring } from 'react-motion';
 
 export default class Contacts extends React.Component {
     constructor(props){
@@ -174,141 +174,139 @@ export default class Contacts extends React.Component {
     }
     render() {
         return (
-            <QueueAnim 
-                className="demo-content" 
-                leaveReverse
-                animConfig={[
-                    { opacity: [1, 0], translateX: [0, 50] }
-                ]}>
-                <div className="contacts-page" key="0">
-                    <NavBar
-                        className="add-server-nav-bar"
-                        mode="light"
-                        icon={<Icon type="left" />}
-                        onLeftClick={() => hashHistory.goBack()}
-                        leftContent={<span style={{ fontSize: "15px" }}>返回</span>}
-                        rightContent={
-                            [<i className="iconfont icon-tianjiajiahaowubiankuang" style={{ color: "#A8A8A8", marginRight: "3px" }}></i>,
-                            <span onClick={() => { this.openModal() }} style={{ color: "#000", fontSize: "14px" }}>新增</span>]
-                        }
-                    >{this.state.location_form == "CreateOffer" ? "选择联系人" : "我的联系人"}</NavBar>
-                    <div style={{
-                        backgroundColor: '#F5F5F9',
-                        height: "3px",
-                        borderTop: '1px solid #ECECED',
-                        borderBottom: '1px solid #ECECED',
-                    }}></div>
-                    <List className="contacts-list">
-                    {
-                        this.state.contactsList.map((value,index)=>(
-                            <SwipeAction
-                                className="contacts-swipe"
-                                autoClose
-                                right={[
-                                    {
-                                        text: '编辑',
-                                        onPress: () => this.openModal(value),
-                                        style: { backgroundColor: '#56B949',fontSize: '16px', color: 'white', padding: '0 8px' },
-                                    },
-                                    {
-                                        text: '删除',
-                                        onPress: () => this.handleDelete(value.customer_id, value.yunLinkName),
-                                        style: { backgroundColor: '#F4333C',fontSize: '16px', color: 'white', padding: '0 8px' },
-                                    },
-                                ]}
-                                onOpen={() => console.log('global open')}
-                                onClose={() => console.log('global close')}
-                            >
-                                <List.Item
-                                    key={value.id}
-                                    arrow="horizontal"
-                                    onClick={() => this.handleClickItem(value)}
+            
+            <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
+                {interpolatingStyle => 
+                    <div className="contacts-page" style={{ ...interpolatingStyle, position: "relative" }}>
+                        <NavBar
+                            className="add-server-nav-bar"
+                            mode="light"
+                            icon={<Icon type="left" />}
+                            onLeftClick={() => hashHistory.goBack()}
+                            leftContent={<span style={{ fontSize: "15px" }}>返回</span>}
+                            rightContent={
+                                [<i className="iconfont icon-tianjiajiahaowubiankuang" style={{ color: "#A8A8A8", marginRight: "3px" }}></i>,
+                                <span onClick={() => { this.openModal() }} style={{ color: "#000", fontSize: "14px" }}>新增</span>]
+                            }
+                        >{this.state.location_form == "CreateOffer" ? "选择联系人" : "我的联系人"}</NavBar>
+                        <div style={{
+                            backgroundColor: '#F5F5F9',
+                            height: "3px",
+                            borderTop: '1px solid #ECECED',
+                            borderBottom: '1px solid #ECECED',
+                        }}></div>
+                        <List className="contacts-list">
+                        {
+                            this.state.contactsList.map((value,index)=>(
+                                <SwipeAction
+                                    className="contacts-swipe"
+                                    autoClose
+                                    right={[
+                                        {
+                                            text: '编辑',
+                                            onPress: () => this.openModal(value),
+                                            style: { backgroundColor: '#56B949',fontSize: '16px', color: 'white', padding: '0 8px' },
+                                        },
+                                        {
+                                            text: '删除',
+                                            onPress: () => this.handleDelete(value.customer_id, value.yunLinkName),
+                                            style: { backgroundColor: '#F4333C',fontSize: '16px', color: 'white', padding: '0 8px' },
+                                        },
+                                    ]}
+                                    onOpen={() => console.log('global open')}
+                                    onClose={() => console.log('global close')}
                                 >
-                                    {value.yunLinkName + '/' + value.yunLinkCompany}<List.Item.Brief> <i className="iconfont icon-dianhua"></i> {value.yunLinkPhone}</List.Item.Brief>
-                                </List.Item>
-                            </SwipeAction>
-                        ))
-                    }
-                    </List>
-                    <Modal
-                        className="contacts-modal"
-                        visible={this.state.showInputModal}
-                        transparent
-                        maskClosable={false}
-                        onClose={() => { this.setState({ 
-                            showInputModal: false, 
-                            yunLinkName: '', //联系人弹窗，名字
-                            yunLinkPhone: '', //联系人弹窗，手机号 
-                            yunLinkCompany: '', //联系人弹窗，公司
-                            yunLinkEmail: '', //联系人弹窗，邮箱
-                            }) 
-                        }}
-                        // title={this.state.yunLinkName ? `编辑：${this.state.yunLinkName}` : "新增联系人"}
-                        title="新增联系人"
-                        footer={[
-                            { text: '取消', onPress: () => { this.setState({ 
+                                    <List.Item
+                                        key={value.id}
+                                        arrow="horizontal"
+                                        onClick={() => this.handleClickItem(value)}
+                                    >
+                                        {value.yunLinkName + '/' + value.yunLinkCompany}<List.Item.Brief> <i className="iconfont icon-dianhua"></i> {value.yunLinkPhone}</List.Item.Brief>
+                                    </List.Item>
+                                </SwipeAction>
+                            ))
+                        }
+                        </List>
+                        <Modal
+                            className="contacts-modal"
+                            visible={this.state.showInputModal}
+                            transparent
+                            maskClosable={false}
+                            onClose={() => { this.setState({ 
                                 showInputModal: false, 
                                 yunLinkName: '', //联系人弹窗，名字
                                 yunLinkPhone: '', //联系人弹窗，手机号 
                                 yunLinkCompany: '', //联系人弹窗，公司
-                                yunLinkEmail: '', //联系人弹窗，邮箱 
+                                yunLinkEmail: '', //联系人弹窗，邮箱
                                 }) 
-                            }},
-                            { text: '确定', onPress: () => { this.handleEdit() } }
-                        ]}
-                    >
-                        <InputItem
-                            className="recharge-input one"
-                            type="string"
-                            placeholder="请输入联系人"
-                            maxLength="15"
-                            value={this.state.yunLinkName}
-                            onChange={(val) => { val = val.trim(); this.setState({ yunLinkName: val }) }}
-                            onBlur={(val) => { this.testName(val) }}
-                            clear
+                            }}
+                            // title={this.state.yunLinkName ? `编辑：${this.state.yunLinkName}` : "新增联系人"}
+                            title="新增联系人"
+                            footer={[
+                                { text: '取消', onPress: () => { this.setState({ 
+                                    showInputModal: false, 
+                                    yunLinkName: '', //联系人弹窗，名字
+                                    yunLinkPhone: '', //联系人弹窗，手机号 
+                                    yunLinkCompany: '', //联系人弹窗，公司
+                                    yunLinkEmail: '', //联系人弹窗，邮箱 
+                                    }) 
+                                }},
+                                { text: '确定', onPress: () => { this.handleEdit() } }
+                            ]}
                         >
-                            <i className="iconfont icon-lianxiren"></i>
-                        </InputItem>
-                        <InputItem
-                            className="recharge-input"
-                            type="tel"
-                            pattern="[0-9]*"
-                            placeholder="请输入手机号"
-                            maxLength="15"
-                            value={this.state.yunLinkPhone}
-                            onChange={(val) => { val = val.trim(); this.setState({ yunLinkPhone: val }) }}
-                            onBlur={(val) => { this.testPhone(val) }}
-                            clear
-                        >
-                            <i className="iconfont icon-dianhua"></i>
-                        </InputItem>
-                        <InputItem
-                            className="recharge-input"
-                            type="text"
-                            placeholder="请输入企业名称"
-                            maxLength="20"
-                            value={this.state.yunLinkCompany}
-                            onChange={(val) => { val = val.trim(); this.setState({ yunLinkCompany: val }) }}
-                            onBlur={(val) => { this.testCompany(val) }}
-                            clear
-                        >
-                            <i className="iconfont icon-gongsixinxi"></i>
-                        </InputItem>
-                        <InputItem
-                            className="recharge-input four"
-                            type="text"
-                            placeholder="请输入邮箱"
-                            maxLength="20"
-                            value={this.state.yunLinkEmail}
-                            onChange={(val) => { val = val.trim(); this.setState({ yunLinkEmail: val }) }}
-                            onBlur={(val) => { this.testEmail(val) }}
-                            clear
-                        >
-                            <i className="iconfont icon-duanxin"></i>
-                        </InputItem>
-                    </Modal>
-                </div>
-            </QueueAnim>
+                            <InputItem
+                                className="recharge-input one"
+                                type="string"
+                                placeholder="请输入联系人"
+                                maxLength="15"
+                                value={this.state.yunLinkName}
+                                onChange={(val) => { val = val.trim(); this.setState({ yunLinkName: val }) }}
+                                onBlur={(val) => { this.testName(val) }}
+                                clear
+                            >
+                                <i className="iconfont icon-lianxiren"></i>
+                            </InputItem>
+                            <InputItem
+                                className="recharge-input"
+                                type="tel"
+                                pattern="[0-9]*"
+                                placeholder="请输入手机号"
+                                maxLength="15"
+                                value={this.state.yunLinkPhone}
+                                onChange={(val) => { val = val.trim(); this.setState({ yunLinkPhone: val }) }}
+                                onBlur={(val) => { this.testPhone(val) }}
+                                clear
+                            >
+                                <i className="iconfont icon-dianhua"></i>
+                            </InputItem>
+                            <InputItem
+                                className="recharge-input"
+                                type="text"
+                                placeholder="请输入企业名称"
+                                maxLength="20"
+                                value={this.state.yunLinkCompany}
+                                onChange={(val) => { val = val.trim(); this.setState({ yunLinkCompany: val }) }}
+                                onBlur={(val) => { this.testCompany(val) }}
+                                clear
+                            >
+                                <i className="iconfont icon-gongsixinxi"></i>
+                            </InputItem>
+                            <InputItem
+                                className="recharge-input four"
+                                type="text"
+                                placeholder="请输入邮箱"
+                                maxLength="20"
+                                value={this.state.yunLinkEmail}
+                                onChange={(val) => { val = val.trim(); this.setState({ yunLinkEmail: val }) }}
+                                onBlur={(val) => { this.testEmail(val) }}
+                                clear
+                            >
+                                <i className="iconfont icon-duanxin"></i>
+                            </InputItem>
+                        </Modal>
+                    </div>
+                }
+            </Motion>
         )
     }
 }

@@ -4,7 +4,6 @@ import { province as provinceData } from './cityData';
 import { StickyContainer, Sticky } from 'react-sticky';
 
 import { hashHistory } from 'react-router';
-import QueueAnim from 'rc-queue-anim';
 
 const { Item } = List;
 
@@ -156,13 +155,7 @@ export default class ListViewDemo extends React.Component {
     render() {
         return (
             <div style={{ paddingTop: '0', position: 'relative' }} >
-
-                {/* <QueueAnim animConfig={[ */}
-                    {/* { opacity: [1, 0], translateX: [0, 50] }, */}
-                {/* ]}> */}
-                <StageSelectCity propsSetState={this.props.propsSetState} onSearch={this.onSearch} key="1" />
-                {/* </QueueAnim > */}
-                
+                <StageSelectCity propsSetState={this.props.propsSetState} onSearch={this.onSearch} key="1" />                        
                 <ListView.IndexedList
                     dataSource={this.state.dataSource}
                     useBodyScroll
@@ -176,7 +169,7 @@ export default class ListViewDemo extends React.Component {
                     renderSectionHeader={sectionData => (
                         <Sticky>
                             {({
-                              style,
+                            style,
                             }) => (
                                 <div
                                     className="sticky"
@@ -206,7 +199,6 @@ export default class ListViewDemo extends React.Component {
                     delayActivityIndicator={<div style={{ padding: 25, textAlign: 'center' }}>rendering...</div>}
                 />
             </div>
-
         );
     }
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { hashHistory } from 'react-router'
 import { NavBar, ImagePicker, List, Icon, TextareaItem, WingBlank, Modal,Button,Toast} from 'antd-mobile'
 import { Line, Jiange } from './templateHomeCircle';
+import { Motion, spring } from 'react-motion';
 
 import PhotoSwipeItem from './photoSwipeElement.jsx';
 import '../js/photoswipe/photoswipe.css';
@@ -112,45 +113,49 @@ export default class CreatCard extends React.Component {
 
     render(){
         return (
-            <div className="needWrap">
-                <div className="forgetNav" key="1">
-                    <NavBar
-                        mode="light"
-                        icon={<Icon type="left" size="lg" color="#707070" />}
-                        onLeftClick={() => hashHistory.goBack()}
-                        rightContent={
-                            <span onClick={(e) => { this.checkNeedMsg()}}>确定</span>
-                        }
-                    >发布帖子</NavBar>
-                </div>
-                <div style={{ height: "1.2rem" }}></div>
-                <div className="cicleCard">
-                    <div className="needDes">
-                        <TextareaItem
-                            placeholder="请填写帖子内容..."
-                            ref={el => this.autoFocusInst = el}
-                            autoHeight
-                            rows={5}
-                            count={200}
-                            value={this.state.content}
-                            onChange={(value) => { this.setState({ content: value }); }}
-                        />
+            <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
+                {interpolatingStyle => 
+                    <div className="needWrap"  style={{ ...interpolatingStyle, position: "relative" }}>
+                        <div className="forgetNav" key="1">
+                            <NavBar
+                                mode="light"
+                                icon={<Icon type="left" size="lg" color="#707070" />}
+                                onLeftClick={() => hashHistory.goBack()}
+                                rightContent={
+                                    <span onClick={(e) => { this.checkNeedMsg()}}>确定</span>
+                                }
+                            >发布帖子</NavBar>
+                        </div>
+                        <div style={{ height: "1.2rem" }}></div>
+                        <div className="cicleCard">
+                            <div className="needDes">
+                                <TextareaItem
+                                    placeholder="请填写帖子内容..."
+                                    ref={el => this.autoFocusInst = el}
+                                    autoHeight
+                                    rows={5}
+                                    count={200}
+                                    value={this.state.content}
+                                    onChange={(value) => { this.setState({ content: value }); }}
+                                />
+                            </div>
+                            <div className="needPics">
+                                <WingBlank size="lg" />
+                                    <ImagePicker
+                                        files={this.state.files}
+                                        onChange={this.onSelectPic}
+                                        onImageClick={(index, fs) => this.onTouchImg(index)}
+                                        selectable={this.state.files.length < 20}
+                                        accept="image/gif,image/jpeg,image/jpg,image/png"
+                                        multiple={true}
+                                    />
+                                <WingBlank size="lg" />
+                            </div>
+                        </div>
+                        <PhotoSwipeItem />
                     </div>
-                    <div className="needPics">
-                        <WingBlank size="lg" />
-                            <ImagePicker
-                                files={this.state.files}
-                                onChange={this.onSelectPic}
-                                onImageClick={(index, fs) => this.onTouchImg(index)}
-                                selectable={this.state.files.length < 20}
-                                accept="image/gif,image/jpeg,image/jpg,image/png"
-                                multiple={true}
-                            />
-                        <WingBlank size="lg" />
-                    </div>
-                </div>
-                <PhotoSwipeItem />
-            </div>
+                }
+            </Motion>
         )
     }
 }

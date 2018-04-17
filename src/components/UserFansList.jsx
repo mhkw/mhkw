@@ -2,6 +2,7 @@ import React from 'react';
 import { hashHistory } from 'react-router';
 import { Toast, NavBar, Icon, Flex, WingBlank, Modal } from 'antd-mobile';
 import update from 'immutability-helper';
+import { Motion, spring } from 'react-motion';
 
 const avatar = require('../images/selec.png');
 
@@ -70,46 +71,50 @@ export default class UserFansList extends React.Component {
     }
     render() {
         return (
-            <div key="1" className="black-list-page">
-                <NavBar
-                    className="NewNavBar"
-                    mode="light"
-                    icon={<Icon type="left" size="lg" style={{ "color": "#a3a3a3" }} />}
-                    onLeftClick={() => hashHistory.goBack()}
-                >我的粉丝</NavBar>
-                <div className="black-list-main">
-                    <WingBlank size="md">
-                        {
-                            this.state.black_list.length > 0 &&
-                            this.state.black_list.map(({ user_info }, index) => (
-                                <Flex className="black-item" key={user_info.id}>
-                                    <Flex.Item className="flex-item-left">
-                                        <img className="black-img" src={user_info.path_thumb} onError={(e) => { e.target.src = avatar }} />
-                                    </Flex.Item>
-                                    <Flex.Item className="flex-item-middle">
-                                        <p className="black-p-title ellipsis">{user_info.nick_name}</p>
-                                        <p className="black-p-middle ellipsis">{`${user_info.job_name} | ${user_info.experience} | ${user_info.works_count}件作品`}</p>
-                                        {/* <p className="bottom ellipsis">{value.add_time_format}</p> */}
-                                    </Flex.Item>
-                                    <Flex.Item className="flex-item-right">
-                                        {/* <Button
-                                            type="ghost"
-                                            // className="remove-black-list"
-                                            size="small"
-                                            style={{ color: 'blur' }}
-                                            onClick={this.removeBlackList}
-                                        ></Button> */}
-                                        <div 
-                                            className="fans-bottom"
-                                            onClick={() => { this.removeBlackList(user_info.id) }}
-                                        >{user_info.MyIsFavorite ? '已关注' : '关注'}</div>
-                                    </Flex.Item>
-                                </Flex>
-                            ))
-                        }
-                    </WingBlank>
-                </div>
-            </div>
+            <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
+                {interpolatingStyle => 
+                    <div style={{ ...interpolatingStyle }} className="black-list-page">
+                        <NavBar
+                            className="NewNavBar"
+                            mode="light"
+                            icon={<Icon type="left" size="lg" style={{ "color": "#a3a3a3" }} />}
+                            onLeftClick={() => hashHistory.goBack()}
+                        >我的粉丝</NavBar>
+                        <div className="black-list-main">
+                            <WingBlank size="md">
+                                {
+                                    this.state.black_list.length > 0 &&
+                                    this.state.black_list.map(({ user_info }, index) => (
+                                        <Flex className="black-item" key={user_info.id}>
+                                            <Flex.Item className="flex-item-left">
+                                                <img className="black-img" src={user_info.path_thumb} onError={(e) => { e.target.src = avatar }} />
+                                            </Flex.Item>
+                                            <Flex.Item className="flex-item-middle">
+                                                <p className="black-p-title ellipsis">{user_info.nick_name}</p>
+                                                <p className="black-p-middle ellipsis">{`${user_info.job_name} | ${user_info.experience} | ${user_info.works_count}件作品`}</p>
+                                                {/* <p className="bottom ellipsis">{value.add_time_format}</p> */}
+                                            </Flex.Item>
+                                            <Flex.Item className="flex-item-right">
+                                                {/* <Button
+                                                    type="ghost"
+                                                    // className="remove-black-list"
+                                                    size="small"
+                                                    style={{ color: 'blur' }}
+                                                    onClick={this.removeBlackList}
+                                                ></Button> */}
+                                                <div 
+                                                    className="fans-bottom"
+                                                    onClick={() => { this.removeBlackList(user_info.id) }}
+                                                >{user_info.MyIsFavorite ? '已关注' : '关注'}</div>
+                                            </Flex.Item>
+                                        </Flex>
+                                    ))
+                                }
+                            </WingBlank>
+                        </div>
+                    </div>
+                }
+            </Motion>
         )
     }
 }

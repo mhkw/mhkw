@@ -1,9 +1,10 @@
 import React from 'react'
-import { List, InputItem, PullToRefresh, ListView, Toast, Button, NavBar, Icon } from 'antd-mobile';
+import { List, InputItem, PullToRefresh, ListView, Toast, Button, NavBar, Icon,ActivityIndicator } from 'antd-mobile';
 import { Link,hashHistory} from 'react-router';
 import axios from 'axios';
 import QueueAnim from 'rc-queue-anim';
 import update from 'immutability-helper';
+import { Motion, spring } from 'react-motion';
 
 let realData = [];
 let index = realData.length - 1;
@@ -21,6 +22,7 @@ export default class DemandList extends React.Component {
             rowHasChanged: (row1, row2) => row1 !== row2,
         });
         this.state = {
+            animating:false,
             dataSource: dataSource.cloneWithRows(JSON.parse(sessionStorage.getItem("demandData")) ? JSON.parse(sessionStorage.getItem("demandData")) : []),
             useBodyScroll:false,
             refreshing: false,
@@ -80,7 +82,8 @@ export default class DemandList extends React.Component {
                 });
                 setTimeout(() => {
                     this.setState({
-                        refreshing: false
+                        refreshing: false,
+                        animating:false
                     })
                 }, 300);
             } else {
@@ -108,6 +111,7 @@ export default class DemandList extends React.Component {
         pageIndex = 0;        
     }
     getProgectList(page,type = "add_time") {  
+        this.setState({animating:true})
         axios({
             method: "POST",
             url: 'https://www.huakewang.com/hkw_newapi/get_project_list/0/'+type+'/0/0/10/'+page,
@@ -270,48 +274,56 @@ export default class DemandList extends React.Component {
             );
         };
         return (
-            <QueueAnim 
-                animConfig={[
-                    { opacity: [1, 0], translateX: [0, 150] }
-                ]}>
-                    <div className="forgetNav" key="1">
-                        <NavBar
-                            mode="light"
-                            icon={<Icon type="left" size="lg" color="#707070" />}
-                            onLeftClick={() => hashHistory.goBack()}
-                            // rightContent={[
-                            //     <Icon key="0" type="search" style={{ marginRight: '16px' }} />,
-                            //     <i key="1" type="ellipsis" className="iconfont icon-shijian2" />,
-                            // ]}
-                        >项目</NavBar>
-                    </div>
-                    <div style={{height:"1.2rem"}}></div>
-                    <div className="homeWrap">
-                        <div className="mainwrap homeWrapMain">
-                            <ListView
-                                key={this.state.useBodyScroll}
-                                ref={el => this.lv = el}
-                                dataSource={this.state.dataSource}
-                                renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center' }}>
-                                    {this.state.isLoading ? '加载中...' : '加载完成'}
-                                </div>)}
-                                style={{
-                                    height: this.state.height,
-                                    overflow: "auto"
-                                }}
-                                renderRow={row}
-                                renderSeparator={separator}
-                                useBodyScroll={this.state.useBodyScroll}
-                                pullToRefresh={<PullToRefresh
-                                    refreshing={this.state.refreshing}
-                                    onRefresh={this.onRefresh}
-                                />}
-                                onEndReached={this.onEndReached}
-                                pageSize={9}
+            <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
+                {interpolatingStyle =>
+                    <div style={{ ...interpolatingStyle, position: "relative" }}>
+                        <div className="forgetNav">
+                            <NavBar
+                                mode="light"
+                                icon={<Icon type="left" size="lg" color="#707070" />}
+                                onLeftClick={() => hashHistory.goBack()}
+                                // rightContent={[
+                                //     <Icon key="0" type="search" style={{ marginRight: '16px' }} />,
+                                //     <i key="1" type="ellipsis" className="iconfont icon-shijian2" />,
+                                // ]}
+                            >项目</NavBar>
+                        </div>
+                        <div style={{height:"1.2rem"}}></div>
+                        <div className="homeWrap">
+                            <div className="mainwrap homeWrapMain">
+                                <ListView
+                                    key={this.state.useBodyScroll}
+                                    ref={el => this.lv = el}
+                                    dataSource={this.state.dataSource}
+                                    renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center' }}>
+                                        {this.state.isLoading ? '加载中...' : '加载完成'}
+                                    </div>)}
+                                    style={{
+                                        height: this.state.height,
+                                        overflow: "auto"
+                                    }}
+                                    renderRow={row}
+                                    renderSeparator={separator}
+                                    useBodyScroll={this.state.useBodyScroll}
+                                    pullToRefresh={<PullToRefresh
+                                        refreshing={this.state.refreshing}
+                                        onRefresh={this.onRefresh}
+                                    />}
+                                    onEndReached={this.onEndReached}
+                                    pageSize={9}
+                                />
+                            </div>
+                        </div>
+                        <div className="toast-example">
+                            <ActivityIndicator
+                                toast
+                                text="加载中..."
+                                animating={this.state.animating}
                             />
                         </div>
                     </div>
-            </QueueAnim>
+                }
+            </Motion>
         );
     }
 }

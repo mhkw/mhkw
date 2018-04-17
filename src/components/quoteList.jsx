@@ -2,7 +2,7 @@ import React from 'react';
 import { NavBar, Icon } from 'antd-mobile';
 import { hashHistory } from 'react-router';
 import { Line, AccountListDetails } from './templateHomeCircle';
-import QueueAnim from 'rc-queue-anim';
+import { Motion, spring } from 'react-motion';
 
 // require("../css/person.scss");
 
@@ -30,22 +30,18 @@ export default class Account extends React.Component {
     }
     render() {
         return(
-            <QueueAnim className="demo-content" leaveReverse
-                animConfig={[
-                    { opacity: [1, 0], translateX: [0, 50] },
-                    { opacity: [1, 0], translateX: [0, -50] }
-                ]}>
-                {this.state.show ? [
-                <div className="accountWrap" key="0">
-                    <NavBar
-                        mode="light"
-                        icon={<Icon type="left" size="lg" color="#333" />}
-                        onLeftClick={() => hashHistory.goBack()}
-                    >收支明细</NavBar>
-                    
-                </div>
-                ] : null}
-            </QueueAnim>
+            <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
+                {interpolatingStyle => 
+                    <div className="accountWrap" style={{ ...interpolatingStyle, position: "relative" }}>
+                        <NavBar
+                            mode="light"
+                            icon={<Icon type="left" size="lg" color="#333" />}
+                            onLeftClick={() => hashHistory.goBack()}
+                        >收支明细</NavBar>
+                        
+                    </div>
+                }
+            </Motion>
         )
     }
 }
