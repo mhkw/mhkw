@@ -2,7 +2,7 @@ import React from "react";
 import { hashHistory, Link } from "react-router";
 import { Toast, NavBar, Icon, InputItem, List, WhiteSpace, Button, Accordion, Radio  } from "antd-mobile";
 
-const defaultAvatar = [require('../images/selec.png')]
+const defaultAvatar = require("../images/selec.png");
 
 export default class PerfectInfo extends React.Component {
     constructor(props){
