@@ -3,8 +3,6 @@ import { hashHistory, Link } from "react-router";
 import { Toast, NavBar, Icon, InputItem, List, Modal, WhiteSpace, WingBlank, Tag  } from "antd-mobile";
 import { Motion, spring } from 'react-motion';
 
-const defaultAvatar = 'https://huakewang.b0.upaiyun.com/2016/06/23/20160623200741283631.png!540x720';
-
 export default class DesignerAuth extends React.Component {
     constructor(props) {
         super(props)
@@ -17,6 +15,7 @@ export default class DesignerAuth extends React.Component {
             customLabelsArray: sessionStorage.getItem("customLabelsArray") ? JSON.parse(sessionStorage.getItem("customLabelsArray")) : [], //标签数组
             signature_bbs: '', //一句话介绍
             content: '',  //详细介绍
+            keywords: [], //我的擅长技能,
         }
     }
     //点击进入个人信息页面
@@ -40,6 +39,13 @@ export default class DesignerAuth extends React.Component {
             query: { form: 'DesignerAuth' }
         });
     }
+    //点击添加作品
+    gotoNewWork = () => {
+        hashHistory.push({
+            pathname: '/creatWork',
+            query: { form: 'DesignerAuth' }
+        });
+    }
     //点击进入项目案例页面
     gotoWorks = () => {
         hashHistory.push({
@@ -52,7 +58,7 @@ export default class DesignerAuth extends React.Component {
         if (props.Self && props.Self.real_name) {
             let { customLabels, nick_name } = props.Self;
             let customLabelsArray = [];
-            if (customLabels.length > 0) {
+            if (customLabels && customLabels.length > 0) {
                 customLabelsArray = customLabels.split(";");
             }
             this.setState({ nick_name, customLabelsArray })
@@ -73,8 +79,9 @@ export default class DesignerAuth extends React.Component {
         }
 
         //设置擅长技能
-        if (props.Skill && props.Skill.real_name) {
-
+        if (props.Self && props.Self.keywords) {
+            let { keywords } = props.Self;
+            this.setState({ keywords });
             this.setState({ emptySkill: false });
         } else {
             this.setState({ emptySkill: true });
@@ -127,34 +134,35 @@ export default class DesignerAuth extends React.Component {
                         </List>
                         <List renderHeader={<span className="render-header">擅长技能</span>} className="auth-skill">
                             <List.Item multipleLine arrow="horizontal" onClick={this.gotoSkill} extra={this.state.emptySkill ? extraElementEmpty : extraElement}>
-                                <Tag>标签1</Tag>
-                                <Tag>标签2</Tag>
-                                <Tag>标签3</Tag>
+                                <List.Item.Brief>
+                                    <div className="tag-container">
+                                        {
+                                            this.state.keywords.length > 0 &&
+                                            this.state.keywords.map((value, index) => {
+                                                return index < 7 ? <Tag key={index} className="self-label" >{value}</Tag> : null
+                                            })
+
+                                        }
+                                    </div>
+                                </List.Item.Brief>
                             </List.Item>
                         </List>
                         <List renderHeader={[<span className="render-header">项目案例</span>, <span className="right-header">至少添加6个作品才能通过审核</span>]} className="auth-works">
-                            <List.Item className="add-works" multipleLine arrow="horizontal" onClick={this.gotoWorks} >
+                            <List.Item className="add-works" multipleLine arrow="horizontal" onClick={this.gotoNewWork} >
                                 <i className="iconfont icon-tianjia"></i>添加作品
-                    </List.Item>
-                            <List.Item
-                                className="auth-works-list"
-                                multipleLine
-                                arrow="horizontal"
-                                thumb={defaultAvatar}
-                                onClick={this.gotoWorks}
-                            >
-                                添加作品
-                    </List.Item>
-                            <List.Item
-                                className="auth-works-list"
-                                multipleLine
-                                arrow="horizontal"
-                                thumb={defaultAvatar}
-                                onClick={this.gotoWorks}
-                            >
-                                添加作品2
-                    </List.Item>
+                            </List.Item>
                         </List>
+                        {this.props.children &&
+                            React.cloneElement(
+                                this.props.children,
+                                {
+                                    state: this.state,
+                                    setState: this.setState.bind(this),
+                                    Works: this.props.Works,
+                                    propsSetState: this.props.propsSetState,
+                                }
+                            )
+                        }
                     </div>
                 }
             </Motion>

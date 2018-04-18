@@ -10,12 +10,27 @@ export default class HOCdesignerAuth extends React.Component {
         this.state = {
             Self: {}, //个人信息
             Motto: {}, //关于我，一句话介绍,座右铭，格言
-            Skill: {}, //擅长技能
-            Works: {}, //项目案例
+            Skill: [], //擅长技能,技能树
+            Works: [], //项目案例
+            is_next_page: 0, //是否有更多作品
         }
         this.handleGetSelfInfo = (res) => {
             if (res.success) {
-                this.setState({ Self: res.data})
+                this.setState({ Self: res.data});
+                //传递设计师数据到HOC高阶组件里去
+                let { path_thumb, path, nick_name, sex, txt_address, experience, works_count,id } = res.data;
+                this.props.propsSetState('Designer', {
+                    path_thumb,
+                    nick_name,
+                    id,
+                    path,
+                    sex,
+                    txt_address,
+                    experience,
+                    works_count,
+                    comment_count: 0,
+                });
+
             } else {
                 Toast.fail(res.message, 1);
             }
@@ -50,6 +65,30 @@ export default class HOCdesignerAuth extends React.Component {
                 Toast.fail(res.message, 1);
             }
         }
+        this.handleGetDesignerTree = (res) => {
+            if (res.success) {
+                this.setState({ Skill: res.data })
+            } else {
+                Toast.fail(res.message, 1);
+            }
+        }
+        this.handleChangeDesignerTree = (res) => {
+            if (res.success) {
+                Toast.success(res.message, 1);
+            } else {
+                Toast.fail(res.message, 1);
+            }
+        }
+        this.handleGetWorksListBySelf = (res) => {
+            if (res.success) {
+                this.setState({ 
+                    Works: res.data.item_list,
+                    is_next_page: res.data.is_next_page,
+                })
+            } else {
+                Toast.fail(res.message, 1);
+            }
+        }
     }
 
     /**
@@ -72,6 +111,8 @@ export default class HOCdesignerAuth extends React.Component {
     }
     componentDidMount() {
         this.ajaxGetSelfInfo();
+        this.ajaxGetDesignerTree();
+        this.ajaxGetWorksListBySelf();
     }
     //ajax获取个人信息
     ajaxGetSelfInfo = () => {
@@ -95,8 +136,25 @@ export default class HOCdesignerAuth extends React.Component {
         }
         runPromise('change_user_info', data, this.handleChangeUserInfo,true,"post", data);
     }
+    //修改用户一句话介绍和详细介绍
     ajaxChangeMotto = (data) => {
         runPromise('change_user_info', data, this.handleChangeMotto);
+    }
+    //获取所有的的擅长技能
+    ajaxGetDesignerTree = () => {
+        runPromise("get_designer_tree", null, this.handleGetDesignerTree, true, "get");
+    }
+    //修改用户的擅长技能
+    ajaxChangeDesignerTree = (keywords) => {
+        runPromise('change_user_info', { keywords: keywords.join(",") }, this.handleChangeDesignerTree);
+    }
+    //获取我的作品列表
+    ajaxGetWorksListBySelf = (per_page = 20, page = 1) => {
+        runPromise("get_works_list_by_self", {
+            user_id: validate.getCookie("user_id"),
+            per_page,
+            page,
+        }, this.handleGetWorksListBySelf, true, "get");
     }
     render() {
         return (
@@ -109,6 +167,7 @@ export default class HOCdesignerAuth extends React.Component {
                             setState: this.setState.bind(this),
                             propsSetState: this.propsSetState,
                             HOCState: this.props.state,
+                            designer: this.props.designer,
                             Self: this.state.Self, //个人信息
                             Motto: this.state.Motto, //关于我，一句话介绍,座右铭，格言
                             Skill: this.state.Skill, //擅长技能
@@ -116,6 +175,9 @@ export default class HOCdesignerAuth extends React.Component {
                             ajaxChangeCustomLabels: this.ajaxChangeCustomLabels,
                             ajaxChangeUserInfo: this.ajaxChangeUserInfo,
                             ajaxChangeMotto: this.ajaxChangeMotto,
+                            ajaxChangeDesignerTree: this.ajaxChangeDesignerTree,
+                            is_next_page: this.state.is_next_page, //是否有更多作品
+
                         }
                     )
                 }

@@ -115,7 +115,7 @@ export default class WorksDetails extends React.Component {
     componentWillMount() {
         let { id, path_thumb, nick_name } = this.props.designer;
         let { works_id, form} = this.props.location.query;
-        console.log(nick_name)
+        // console.log(nick_name)
         this.setState({
             id,
             nick_name,

@@ -152,7 +152,7 @@ export default class AuthSelf extends React.Component {
     addLabel = (value) => {
         console.log(value);
         let { customLabels, customLabelsArray } = this.state;
-        if (customLabels.length > 0) {
+        if (customLabels && customLabels.length > 0) {
             customLabels += ";" + value;
         } else {
             customLabels += value;
@@ -199,7 +199,7 @@ export default class AuthSelf extends React.Component {
             let educationPickerValue = [education];
 
             let customLabelsArray = [];
-            if (customLabels.length > 0) {
+            if (customLabels && customLabels.length > 0) {
                 customLabelsArray = customLabels.split(";");
             }
             

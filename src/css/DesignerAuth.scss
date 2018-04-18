@@ -53,9 +53,9 @@
     padding: 5px;
 }
 .tag-container .self-label{
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
+    margin-left: 0;
+    margin-right: 5px;
+    margin-bottom: 5px;
     color: #108ee9;
 }
 .tag-container .am-tag.self-label::before{
@@ -75,4 +75,51 @@
 }
 .designer-auth-page .am-list-item .am-list-line .am-list-brief{
     white-space: initial;
+}
+.auth-skill-page .new-nav-bar{
+    border-bottom: 1px solid #ddd;
+}
+.auth-skill-page .auth-skill .am-list-body{
+    margin: 0 10px;
+    border-bottom: 1px solid #ddd;
+}
+.auth-skill .skill-label{
+    // margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    // color: #108ee9;
+    padding: 0 10px;
+    height: 30px;
+    line-height: 30px;
+}
+.auth-skill .skill-label.am-tag-active{
+    background-color: #00A0E9;
+    color: #fff;
+}
+.auth-skill .am-list-header{
+    font-size: 16px;
+    color: #000;
+}
+.designer-auth-page .auth-works{
+    border-bottom: 1px solid #ddd;
+}
+.auth-works-list.am-list-item .am-list-line .am-list-extra{
+    -webkit-flex-basis: 15%;
+    -ms-flex-preferred-size: 15%;
+    flex-basis: 15%;
+}
+.user-works-page .new-nav-bar{
+    border-bottom: 1px solid #ddd;
+}
+.user-works-view-more{
+    width: 2rem;
+    height: 1rem;
+    line-height: 1rem;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: .3rem;
+    margin-bottom: .3rem;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
 }

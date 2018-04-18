@@ -200,6 +200,7 @@ export default class Contacts extends React.Component {
                             this.state.contactsList.map((value,index)=>(
                                 <SwipeAction
                                     className="contacts-swipe"
+                                    key={value.id}
                                     autoClose
                                     right={[
                                         {
@@ -213,12 +214,13 @@ export default class Contacts extends React.Component {
                                             style: { backgroundColor: '#F4333C',fontSize: '16px', color: 'white', padding: '0 8px' },
                                         },
                                     ]}
-                                    onOpen={() => console.log('global open')}
-                                    onClose={() => console.log('global close')}
+                                    // onOpen={() => null}
+                                    // onClose={() => null}
                                 >
                                     <List.Item
                                         key={value.id}
-                                        arrow="horizontal"
+                                        // arrow="horizontal"
+                                        extra={<i style={{"font-size": "20px"}} className="iconfont icon-jiantou2"></i>}
                                         onClick={() => this.handleClickItem(value)}
                                     >
                                         {value.yunLinkName + '/' + value.yunLinkCompany}<List.Item.Brief> <i className="iconfont icon-dianhua"></i> {value.yunLinkPhone}</List.Item.Brief>

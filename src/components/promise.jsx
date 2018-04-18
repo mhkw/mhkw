@@ -93,6 +93,7 @@ const ajaxURLList = {
     change_notice_set: "hkw_newapi/change_notice_set", //设置通知设置的某一项, 个人设置页面
     change_privacy_set: "hkw_newapi/change_privacy_set", //设置隐私设置的某一项，不包括关闭个人主页, 个人设置页面
     change_user_info: "hkw_newapi/change_user_info", //设置隐私设置，设置我的主页是否显示, 个人设置页面
+    get_works_list_by_self: "hkw_newapi/get_works_list_by_self", //获取我的作品列表
 
     get_my_notice_list: "hkw_newapi/get_my_notice_list", //我的动态
 }
