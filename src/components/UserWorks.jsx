@@ -25,11 +25,13 @@ export default class UserWorks extends React.Component {
     }
     //修改作品
     changeWorks = (id) => {
-        console.log(id);
-    }
-    //修改作品
-    deleteWorks = (id) => {
-        console.log(id);
+        hashHistory.push({
+            pathname: '/creatWork',
+            query: { 
+                form: 'UserWorks',
+                works_id: id,
+             }
+        });
     }
     //加载更多
     clickNextMoreClick = () => {
@@ -39,7 +41,7 @@ export default class UserWorks extends React.Component {
     clickDeleteWorks = (id, title) => {
         Modal.alert('删除作品?', title, [
             { text: '取消', onPress: () => { } },
-            { text: '删除', onPress: () => this.deleteWorks(id) },
+            { text: '删除', onPress: () => this.props.ajaxDeleteWorks(id) },
         ])
     }
     getSelfInfo = (props) => {

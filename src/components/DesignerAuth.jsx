@@ -160,6 +160,7 @@ export default class DesignerAuth extends React.Component {
                                     setState: this.setState.bind(this),
                                     Works: this.props.Works,
                                     propsSetState: this.props.propsSetState,
+                                    ajaxDeleteWorks: this.props.ajaxDeleteWorks,
                                 }
                             )
                         }

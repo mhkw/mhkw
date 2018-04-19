@@ -89,6 +89,27 @@ export default class HOCdesignerAuth extends React.Component {
                 Toast.fail(res.message, 1);
             }
         }
+        this.handleDeleteWorks = (res, work_id) => {
+            if (res.success) {
+                Toast.success(res.message,1,()=>{
+                    let Works = this.state.Works;
+                    let WorksIndex = 0; //选中的地址的索引
+
+                    for (let i = 0; i < Works.length; i++) {
+                        const work = Works[i];
+                        if (work.id == work_id) {
+                            WorksIndex = i;
+                            break;
+                        }
+                    }
+
+                    const newWorks = update(Works, { $splice: [[WorksIndex, 1]] });
+                    this.setState({ Works: newWorks });
+                })
+            } else {
+                Toast.fail(res.message, 1);
+            }
+        }
     }
 
     /**
@@ -156,6 +177,12 @@ export default class HOCdesignerAuth extends React.Component {
             page,
         }, this.handleGetWorksListBySelf, true, "get");
     }
+    //删除某个作品
+    ajaxDeleteWorks = (work_id) => {
+        runPromise('delete_work_info', {
+            work_id
+        }, this.handleDeleteWorks, true, "post", work_id);
+    }
     render() {
         return (
             <div className="hoc-designer-auth">
@@ -177,7 +204,7 @@ export default class HOCdesignerAuth extends React.Component {
                             ajaxChangeMotto: this.ajaxChangeMotto,
                             ajaxChangeDesignerTree: this.ajaxChangeDesignerTree,
                             is_next_page: this.state.is_next_page, //是否有更多作品
-
+                            ajaxDeleteWorks: this.ajaxDeleteWorks, //删除某个作品
                         }
                     )
                 }

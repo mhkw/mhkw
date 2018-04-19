@@ -30,6 +30,7 @@ export default class Category extends React.Component {
             animating:true
         })
         runPromise("get_menu_class", {num:148}, this.getPicsLis, false, "get");
+        this.initSelectedCategory();
     }
     changeCategory=(e,val,id,fid)=>{
         // let lis = document.querySelectorAll('.categoryPubLisBg');
@@ -51,7 +52,19 @@ export default class Category extends React.Component {
         if (e.currentTarget.innerHTML == val) {
             e.currentTarget.classList.add("categoryPubLisBg")
         }
-        this.setState({ fcategoryId: fid,categoryId:id,category:val})
+        this.setState({ fcategoryId: fid, categoryId: id, category: val });
+        this.props.setState({ fcategoryId: fid,categoryId:id,category:val});
+    }
+    //默认选中某个值
+    initSelectedCategory = () => {
+        let categoryId = this.props.state.categoryId;
+        let lis = document.querySelectorAll('.categoryPubLis');
+        for (let a = 0; a < lis.length; a++) {
+            lis[a].classList.remove("categoryPubLisBg");
+            if (lis[a].getAttribute("id") == categoryId) {
+                lis[a].classList.add("categoryPubLisBg");
+            }
+        }
     }
 
     render() {
@@ -67,9 +80,10 @@ export default class Category extends React.Component {
                                 rightContent={
                                     <span onClick={() => {
                                         this.state.category != ""?
-                                        hashHistory.push({
-                                            pathname:"/creatWork"
-                                        }) : Toast.info('请选择领域', 2, null, false);
+                                        // hashHistory.push({
+                                        //     pathname:"/creatWork"
+                                        // }) : Toast.info('请选择领域', 2, null, false);
+                                        hashHistory.goBack() : Toast.info('请选择领域', 1, null, false);
                                         this.props.setState({ categoryId: this.state.categoryId, fcategoryId: this.state.fcategoryId, category: this.state.category })                                
                                     }}>确定</span>
                                 }
@@ -79,12 +93,13 @@ export default class Category extends React.Component {
                         <div className="categoryWrap">
                             {
                                 this.state.categoryList.map((value) => {
-                                    return <div className="categoryPub">
+                                    return <div className="categoryPub" key={value.id} id={value.id}>
                                         <h3>{value.menu_name}</h3>
                                         {
                                             value.subMenuList.map((val) => {
                                                 return <CategoryPub 
                                                     text={val.menu_name} 
+                                                    key={val.id}
                                                     id={val.id}
                                                     className="categoryPubLis "
                                                     changeCategory={(e)=>{this.changeCategory(e,val.menu_name,val.id,value.id)}}
@@ -96,13 +111,13 @@ export default class Category extends React.Component {
                             }
                             
                         </div>
-                        <div className="toast-example">
+                        {/* <div className="toast-example">
                             <ActivityIndicator
                                 toast
                                 text="加载中..."
                                 animating={this.state.animating}
                             />
-                        </div>
+                        </div> */}
                     </div>
                 }
             </Motion>
