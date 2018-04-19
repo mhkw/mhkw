@@ -87,7 +87,7 @@ export default class Collect extends React.Component {
                 } else {
                     this.rData1 = [...this.rData1, ...this.genData(pageIndex1++, realDataLength1, realData1)];
                 }
-                const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight * 2;
+                const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight * 2 -25;
                 this.setState({
                     dataSource1: this.state.dataSource1.cloneWithRows(this.rData1),
                     hasMore: res.data.is_next_page ? true : false,
@@ -121,7 +121,7 @@ export default class Collect extends React.Component {
                 } else {
                     this.rData2 = [...this.rData2, ...this.genData(pageIndex2++, realDataLength2, realData2)];
                 }
-                const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight * 2;
+                const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight * 2-25;
                 this.setState({
                     dataSource2: this.state.dataSource2.cloneWithRows(this.rData2),
                     hasMore: res.data.is_next_page  ? true : false,

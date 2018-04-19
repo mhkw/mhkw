@@ -26,7 +26,7 @@
             text-align: center;
             width: 7.52rem;
             position: absolute;
-            top: 50%;
+            top: 42%;
             left: 50%;
             transform: translate(-50%,-50%);
             -ms-transform:translate(-50%,-50%); 	/* IE 9 */
@@ -66,7 +66,7 @@
             -moz-transform:translate(-50%); 	/* Firefox */
             -webkit-transform:translate(-50%); /* Safari 和 Chrome */
             -o-transform:translate(-50%); 
-            bottom: .4rem;
+            bottom: 2.4rem;
             font-size: 32px;
             display: inline-block;
             color: #F2683F;
@@ -81,16 +81,26 @@
     box-sizing: border-box;
 }
 //login
+.hoc-max-box{
+    position: relative;
+    height: 100%;
+}
+.fullScreen  {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+}
 .loginWrap {
     background-color: #fff;
-    padding: 0 1rem;
+    padding: 1.6rem 1rem 0 1rem;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    position: relative;
-    height: 88%;
+    position: fixed;
+    height: 100%;
     width: 100%;
     .loginIn {
+        height: 85%;
         .loginCenter {
             .loginLogo {
                 text-align: center;
@@ -124,7 +134,7 @@
                     height: .933333rem;
                     line-height: .533333rem;
                     margin: .4rem 0 0  0;
-                    border-bottom: 1PX solid #CBCBCB;
+                    border-bottom: 1PX solid #ddd;
                     position: relative;
                 }
                 .am-list-item.am-input-item.yzm input {
@@ -214,12 +224,14 @@
     transform: translateY(-50%);
 }
 .loginThree {
-    padding: 0 .933333rem;
+    // padding: 0 .933333rem;
     text-align: center;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     z-index: 100;
+    // position: relative;
+    width: 100%;
     .loginThreeLine {
         color: #C4C4C4;
         margin-bottom: .4rem;
@@ -289,12 +301,21 @@
 }
 
 .forgetNav {
-    position: fixed;
+    position: absolute;
     top: 0;
     height:1.2rem;
     width: 100%;
-    border-bottom:1px solid #E3E3E3;
     z-index:100;
+}
+.forgetNav::after{
+    content: "";
+    display: block;
+    height: 1px;
+    width: 100%;
+    background-color: #ddd;
+}
+.searchPD::after{
+    display: none;
 }
 .homeWrap {
     .am-wingblank.am-wingblank-lg {
@@ -329,7 +350,6 @@
         height: 4rem;
         width: 100%;
         font-size: 16px;
-        padding-top: 20px;
         a {
             color: #fff;        
         }
@@ -455,6 +475,7 @@
     }
     .searchPD {
         padding-left: .266667rem;
+        box-sizing: border-box;
         background-color: #efeff4;
         &>span {
             float: left;
@@ -462,7 +483,7 @@
         }
     }
     .search {
-        margin-top: 1rem;
+        // margin-top: 1rem;
         text-align: center;
         padding: 0 .8rem;
         font-size: 16px;
@@ -627,6 +648,9 @@
 }
 .orderListWrap .am-navbar-left {
     padding-left: 15px;
+}
+.forgetCssBg .am-navbar-light {
+    background-color: #F8F8F8;
 }
 
 @import './designerHome.scss';

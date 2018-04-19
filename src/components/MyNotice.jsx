@@ -37,11 +37,12 @@ export default class LoginView extends React.Component {
             data: [loginUrl.banner01, loginUrl.banner02, loginUrl.banner03],
             page: "1",
             imgHeight: 176,
+            height:"",
             slideIndex: 0,
             dataSource: dataSource.cloneWithRows(JSON.parse(sessionStorage.getItem("mynotice")) ? JSON.parse(sessionStorage.getItem("mynotice")) : []),
             refreshing: false,
             isLoading: true,
-            useBodyScroll: true,
+            useBodyScroll: false,
             showReplyInput: false,       //输入框显示
             res: [],
             love_list: [],
@@ -73,11 +74,13 @@ export default class LoginView extends React.Component {
                 } else {
                     this.rData = [...this.rData, ...this.genData(pageIndex++, realDataLength, realData)];
                 }
+                const hei = document.documentElement.clientHeight - ReactDOM.findDOMNode(this.lv).parentNode.offsetTop - 25;                
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(this.rData),
                     hasMore: res.data.is_next_page ? true : false,
                     isLoading: res.data.is_next_page ? true : false,
                     page: ++this.state.page,
+                    height: hei,
                     res: this.state.dataSource.cloneWithRows(this.rData)._dataBlob.s1,
                 });
                 setTimeout(() => {
@@ -92,7 +95,6 @@ export default class LoginView extends React.Component {
                 } else {
                     Toast.info(res.message, 2, null, false);
                 }
-                console.log(res);
             }
         }
         this.addheartlis = (res, para) => {   //点赞
@@ -146,11 +148,11 @@ export default class LoginView extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.state.useBodyScroll) {
-            document.body.style.overflow = 'auto';
-        } else {
-            document.body.style.overflow = 'hidden';
-        }
+        // if (this.state.useBodyScroll) {
+        //     document.body.style.overflow = 'auto';
+        // } else {
+        //     document.body.style.overflow = 'hidden';
+        // }
     }
     shouldComponentUpdate() {
         return (this.props.router.location.action === 'POP');
@@ -339,6 +341,10 @@ export default class LoginView extends React.Component {
                                 renderFooter={() => (<div style={{ padding: "0 10px", textAlign: 'center', marginBottom: "1.4rem" }}>
                                     {this.state.isLoading ? '加载中...' : '加载完成'}
                                 </div>)}
+                                style={{
+                                    height: this.state.height,
+                                    overflow: "auto"
+                                }}
                                 renderRow={row}
                                 renderSeparator={separator}
                                 useBodyScroll={this.state.useBodyScroll}

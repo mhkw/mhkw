@@ -1,7 +1,7 @@
 import React from 'react'
 import { List, InputItem, Toast, Button, WhiteSpace, Modal, NavBar, Icon } from 'antd-mobile';
 import { Link,hashHistory} from 'react-router';
-import QueueAnim from 'rc-queue-anim';
+import { Motion, spring } from 'react-motion';
 
 import '../css/font/iconfont.css'
 
@@ -156,117 +156,105 @@ export default class ForgetView extends React.Component {
     }
     render() {
         return (
-            <QueueAnim className="topMargin"
-                animConfig={[
-                    { opacity: [1, 0], translateX: [0, 150] }
-                ]}>
-                {this.state.show ? [ 
-                    <div className="forgetNav">
-                        <NavBar
-                            mode="light"
-                            icon={<Icon type="left" size="md" color="#707070" />}
-                            onLeftClick={() => hashHistory.goBack()}
-                        >找回密码</NavBar>
-                    </div>,
-                    <WhiteSpace size="lg" />,
-                    <WhiteSpace size="lg" />,
-                    <div className="loginWrap" key="1">
-                        <div className="loginIn">
-                            <div className="loginCenter">
-                                <div className="loginIpt">
-                                    <List>
-                                        <InputItem
-                                            type="text"
-                                            placeholder="请输入手机号"
-                                            maxLength={11}
-                                            error={this.state.hasError}
-                                            onErrorClick={() => {
-                                                this.onErrorClick(validate.CheckPhone(this.state.value).errorMessage);
-                                            }}
-                                            onChange={this.onChange}
-                                            value={this.state.value}
-                                        ><i className="phone iconfont icon-shouji1"></i></InputItem>
-                                        
-                                        <InputItem className="yzm"
-                                            type="number"
-                                            maxLength={4}
-                                            onChange={this.onchangeMessage}
-                                            value={this.state.message}
-                                            placeholder="短信验证码"
-                                        ><i className="pwd iconfont icon-shoujiyanzhengma"></i>
-                                            <Button 
-                                                type="ghost" 
-                                                inline size="small" 
-                                                className="getCode"
-                                                onClick={this.showModal('modal')}
-                                            >{this.state.text}</Button>
-                                        </InputItem>
-
-                                        <InputItem
-                                            type="password"
-                                            placeholder="请输入新密码"
-                                            error={this.state.error}
-                                            maxLength={18}
-                                            value={this.state.keywords}
-                                            onErrorClick={() => {
-                                                this.onErrorClick(validate.CheckKeywords(this.state.keywords).errorMessage);
-                                            }}
-                                            onChange={this.onChangeKeyword}
-                                        ><i className="pwd iconfont icon-icon-test"></i></InputItem>
-                                    </List>
-                                </div>
-                                <div>
-                                    <Button type="primary" onClick={() => {this.onRegister();}}>确认并登陆</Button>
-                                    <Modal
-                                        visible={this.state.modal}
-                                        transparent
-                                        maskClosable={false}
-                                        closable={true}
-                                        onClose={this.onClose('modal')}
-                                        title={
-                                            <div style={{ textAlign: 'left', lineHeight: '24px', fontSize: '16px' }}>
-                                                <p>输入图形验证码</p>
-                                                <p>证明你不是机器人</p>
-                                            </div>
-                                        }
-                                        footer={[
-                                            { text: '取消', onPress: () => { this.onClose('modal')(); } },
-                                            { text: '确定', onPress: () => { this.onPicCode() } }
-                                        ]}
-                                    >
-                                        <div className="pressYzmWrap">
+            <Motion defaultStyle={{ left: 300 }} style={{ left: spring(0, { stiffness: 300, damping: 28 }) }}>
+                {interpolatingStyle => 
+                    <div>
+                        <div className="forgetNav forgetCssBg">
+                            <NavBar
+                                mode="light"
+                                icon={<Icon type="left" size="lg" color="#707070" />}
+                                onLeftClick={() => hashHistory.goBack()}
+                            >找回密码</NavBar>
+                        </div>
+                        <WhiteSpace size="lg" />
+                        <WhiteSpace size="lg" />
+                        <div style={{height:"1.2rem"}}></div>
+                        <div className="loginWrap" key="1">
+                            <div className="loginIn">
+                                <div className="loginCenter">
+                                    <div className="loginIpt">
+                                        <List>
                                             <InputItem
-                                                className="pressYzm fn-left"
                                                 type="text"
-                                                placeholder="图形验证码"
+                                                placeholder="请输入手机号"
+                                                maxLength={11}
+                                                error={this.state.hasError}
+                                                onErrorClick={() => {
+                                                    this.onErrorClick(validate.CheckPhone(this.state.value).errorMessage);
+                                                }}
+                                                onChange={this.onChange}
+                                                value={this.state.value}
+                                            ><i className="phone iconfont icon-shouji1"></i></InputItem>
+
+                                            <InputItem className="yzm"
+                                                type="number"
                                                 maxLength={4}
-                                                onChange={this.onChangeYzm}
-                                            ></InputItem>
-                                            <img
-                                                src={'https://www.huakewang.com/index.php/verifycode/index/' + this.state.codeNum}
-                                                className="fn-right"
-                                                onClick={(e) => { this.numPlus(e) }}
-                                            />
-                                        </div>
-                                    </Modal>
+                                                onChange={this.onchangeMessage}
+                                                value={this.state.message}
+                                                placeholder="短信验证码"
+                                            ><i className="pwd iconfont icon-shoujiyanzhengma"></i>
+                                                <Button
+                                                    type="ghost"
+                                                    inline size="small"
+                                                    className="getCode"
+                                                    onClick={this.showModal('modal')}
+                                                >{this.state.text}</Button>
+                                            </InputItem>
+
+                                            <InputItem
+                                                type="password"
+                                                placeholder="请输入新密码"
+                                                error={this.state.error}
+                                                maxLength={18}
+                                                value={this.state.keywords}
+                                                onErrorClick={() => {
+                                                    this.onErrorClick(validate.CheckKeywords(this.state.keywords).errorMessage);
+                                                }}
+                                                onChange={this.onChangeKeyword}
+                                            ><i className="pwd iconfont icon-icon-test"></i></InputItem>
+                                        </List>
+                                    </div>
+                                    <div>
+                                        <Button type="primary" onClick={() => { this.onRegister(); }}>确认并登陆</Button>
+                                        <Modal
+                                            visible={this.state.modal}
+                                            transparent
+                                            maskClosable={false}
+                                            closable={true}
+                                            onClose={this.onClose('modal')}
+                                            title={
+                                                <div style={{ textAlign: 'left', lineHeight: '24px', fontSize: '16px' }}>
+                                                    <p>输入图形验证码</p>
+                                                    <p>证明你不是机器人</p>
+                                                </div>
+                                            }
+                                            footer={[
+                                                { text: '取消', onPress: () => { this.onClose('modal')(); } },
+                                                { text: '确定', onPress: () => { this.onPicCode() } }
+                                            ]}
+                                        >
+                                            <div className="pressYzmWrap">
+                                                <InputItem
+                                                    className="pressYzm fn-left"
+                                                    type="text"
+                                                    placeholder="图形验证码"
+                                                    maxLength={4}
+                                                    onChange={this.onChangeYzm}
+                                                ></InputItem>
+                                                <img
+                                                    src={'https://www.huakewang.com/index.php/verifycode/index/' + this.state.codeNum}
+                                                    className="fn-right"
+                                                    onClick={(e) => { this.numPlus(e) }}
+                                                />
+                                            </div>
+                                        </Modal>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>,
-                    // <div className="loginThree">
-                    //     <div className="loginThreeLine">
-                    //         <span className="fn-left"></span> 其他登陆方式 <span className="fn-right"></span>
-                    //     </div>
-                    //     <div className="loginThreeBottom">
-                    //         <ul className="fn-clear">
-                    //             <li className="wx"><i className="iconfont icon-weixin"></i> 微信</li>
-                    //             <li className="qq"><i className="iconfont icon-qq"></i> QQ</li>
-                    //             <li className="wb"><i className="iconfont icon-weibo"></i> 微博</li>
-                    //         </ul>
-                    //     </div>
-                    // </div>
-                    ] : null}
-            </QueueAnim>
+                    </div>
+                    }
+            </Motion>
         );
     }
 }

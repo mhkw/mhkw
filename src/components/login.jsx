@@ -1,7 +1,7 @@
 import React from 'react'
 import { List, InputItem, Toast, Button, Modal, ActivityIndicator } from 'antd-mobile';
 import { Link, hashHistory } from 'react-router';
-import QueueAnim from 'rc-queue-anim';
+import { Motion, spring } from 'react-motion';
 
 import '../css/font/iconfont.css'
 
@@ -121,6 +121,8 @@ export default class LoginView extends React.Component {
             if (idx == 1) {
                 var wx = api.require('wx');
                 wx.auth(function (ret, err) {
+                    alert(JSON.stringify(ret))
+                    alert(JSON.stringify(err))
                     if (ret.status) {
                         console.log(JSON.stringify(ret));
                     } else {
@@ -137,6 +139,8 @@ export default class LoginView extends React.Component {
             } else if (idx == 2) {
                 var qq = api.require('qq');
                 qq.login(function (ret, err) {
+                    alert(JSON.stringify(ret))                    
+                    alert(JSON.stringify(err))                    
                     if (ret.status) {
                         console.log(JSON.stringify(ret));
                     } else {
@@ -146,6 +150,8 @@ export default class LoginView extends React.Component {
             } else if (idx == 3) {
                 var weibo = api.require('weibo');
                 weibo.auth(function (ret, err) {
+                    alert(JSON.stringify(ret))                                        
+                    alert(JSON.stringify(err))                                        
                     if (ret.status) {
                         alert(JSON.stringify(ret));
                     } else {
@@ -165,116 +171,116 @@ export default class LoginView extends React.Component {
     }
     render() {
         return (
-            <QueueAnim className="topMargin" animConfig={[
-                { opacity: [1, 0], translateX: [0, 50] }
-            ]}>
-                {this.state.show ? [
-                    <div className="loginWrap" key="1">
-                        <div className="loginIn">
-                            <div className="loginCenter">
-                                <div className="loginLogo" onClick={()=>{hashHistory.push({pathname:'/'})}}>
-                                    <img src={loginUrl[0]} alt="" />
-                                </div>
-                                <div className="loginIpt">
-                                    <List>
-                                        <InputItem
-                                            type="number"
-                                            placeholder="请输入手机号"
-                                            error={this.state.hasError}
-                                            maxLength={11}
-                                            value={this.state.value}
-                                            onErrorClick={()=>{
-                                                this.onErrorClick(validate.CheckPhone(this.state.value).errorMessage);
-                                            }}
-                                            onChange={this.onChange}
-                                        ><i className="phone iconfont icon-shouji1"></i></InputItem>
-
-                                        <InputItem
-                                            type="password"
-                                            placeholder="请输入密码"
-                                            error={this.state.error}        
-                                            value={this.state.keywords}                                                                                       
-                                            maxLength={18}
-                                            onErrorClick={() => {
-                                                this.onErrorClick(validate.CheckKeywords(this.state.keywords).errorMessage);
-                                            }}
-                                            onChange={this.onChangeKeyword}
-                                        ><i className="pwd iconfont icon-icon-test"></i></InputItem>
-                                    </List>
-                                </div>
-                                <div>
-                                    <Button type="primary"
-                                        className="loginBtn"
-                                        onClick={this.showModal('modal')}
-                                    >登 陆</Button>
-                                    <Modal
-                                        visible={this.state.modal}
-                                        transparent
-                                        maskClosable={false}
-                                        closable={true}
-                                        onClose={this.onClose('modal')}
-                                        title={
-                                            <div style={{textAlign:'left',lineHeight:'24px',fontSize:'16px'}}>
-                                                <p>输入图形验证码</p>
-                                                <p>证明你不是机器人</p>
-                                            </div>
-                                        }
-                                        footer={[
-                                            { text: '取消', onPress: () => { this.onClose('modal')(); } },
-                                            { text: '确定', onPress: () => { this.onLogin(); }}
-                                        ]}
-                                    >
-                                        <div className="pressYzmWrap">
+            <Motion defaultStyle={{ left: 300 }} style={{ left: spring(0, { stiffness: 300, damping: 28 }) }}>
+                {interpolatingStyle => 
+                    <div className="fullScreen">
+                        <div className="loginWrap">
+                            <div className="loginIn">
+                                <div className="loginCenter">
+                                    <div className="loginLogo" onClick={() => { hashHistory.push({ pathname: '/' }) }}>
+                                        <img src={loginUrl[0]} alt="" />
+                                    </div>
+                                    <div className="loginIpt">
+                                        <List>
                                             <InputItem
-                                                className="pressYzm fn-left"
-                                                type="text"
-                                                placeholder="图形验证码"
-                                                maxLength={4}
-                                                onChange={this.onChangeYzm}
-                                            ></InputItem>
-                                            <img 
-                                                src={'https://www.huakewang.com/index.php/verifycode/index/'+this.state.codeNum} 
-                                                className="fn-right" 
-                                                onClick={(e) => { this.numPlus(e)}}
-                                            />
-                                        </div>
-                                    </Modal>
-                                </div>
-                                <div className="noAccount fn-clear">
-                                    <Link className="fn-left" to='/forget'>忘记密码？</Link>
-                                    <Link className="fn-right" to='/register'>注册/手机号登录</Link>
-                                </div>
-                                {/* <ActivityIndicator
+                                                type="number"
+                                                placeholder="请输入手机号"
+                                                error={this.state.hasError}
+                                                maxLength={11}
+                                                value={this.state.value}
+                                                onErrorClick={() => {
+                                                    this.onErrorClick(validate.CheckPhone(this.state.value).errorMessage);
+                                                }}
+                                                onChange={this.onChange}
+                                            ><i className="phone iconfont icon-shouji1"></i></InputItem>
+
+                                            <InputItem
+                                                type="password"
+                                                placeholder="请输入密码"
+                                                error={this.state.error}
+                                                value={this.state.keywords}
+                                                maxLength={18}
+                                                onErrorClick={() => {
+                                                    this.onErrorClick(validate.CheckKeywords(this.state.keywords).errorMessage);
+                                                }}
+                                                onChange={this.onChangeKeyword}
+                                            ><i className="pwd iconfont icon-icon-test"></i></InputItem>
+                                        </List>
+                                    </div>
+                                    <div>
+                                        <Button type="primary"
+                                            className="loginBtn"
+                                            onClick={this.showModal('modal')}
+                                        >登 陆</Button>
+                                        <Modal
+                                            visible={this.state.modal}
+                                            transparent
+                                            maskClosable={false}
+                                            closable={true}
+                                            onClose={this.onClose('modal')}
+                                            title={
+                                                <div style={{ textAlign: 'left', lineHeight: '24px', fontSize: '16px' }}>
+                                                    <p>输入图形验证码</p>
+                                                    <p>证明你不是机器人</p>
+                                                </div>
+                                            }
+                                            footer={[
+                                                { text: '取消', onPress: () => { this.onClose('modal')(); } },
+                                                { text: '确定', onPress: () => { this.onLogin(); } }
+                                            ]}
+                                        >
+                                            <div className="pressYzmWrap">
+                                                <InputItem
+                                                    className="pressYzm fn-left"
+                                                    type="text"
+                                                    placeholder="图形验证码"
+                                                    maxLength={4}
+                                                    onChange={this.onChangeYzm}
+                                                ></InputItem>
+                                                <img
+                                                    src={'https://www.huakewang.com/index.php/verifycode/index/' + this.state.codeNum}
+                                                    className="fn-right"
+                                                    onClick={(e) => { this.numPlus(e) }}
+                                                />
+                                            </div>
+                                        </Modal>
+                                    </div>
+                                    <div className="noAccount fn-clear">
+                                        <Link className="fn-left" to='/forget'>忘记密码？</Link>
+                                        <Link className="fn-right" to='/register'>注册/手机号登录</Link>
+                                    </div>
+                                    {/* <ActivityIndicator
                                     toast
                                     text="登陆中..."
                                     animating={this.state.animating}
                                 /> */}
+                                </div>
+                            </div>
+                            <div className="loginThree">
+                                <div className="loginThreeLine">
+                                    <span className="fn-left"></span> 其他登陆方式 <span className="fn-right"></span>
+                                </div>
+                                <div className="loginThreeBottom">
+                                    <ul className="fn-clear">
+                                        <li className="wx">
+                                            {/* <a href="https://www.huakewang.com/wxopenapi/auth_redirect"><i className="iconfont icon-weixin"></i> 微信</a> */}
+                                            <a onClick={() => { this.loginWx(1) }}><i className="iconfont icon-weixin"></i> 微信</a>
+                                        </li>
+                                        <li className="qq">
+                                            {/* <a href="https://www.huakewang.com/main/qq_oauth.html"><i className="iconfont icon-qq"></i> QQ</a> */}
+                                            <a onClick={() => { this.loginWx(2) }}><i className="iconfont icon-qq"></i> QQ</a>
+                                        </li>
+                                        <li className="wb">
+                                            {/* <a href="https://www.huakewang.com/main/sina_oauth.html"><i className="iconfont icon-weibo"></i> 微博</a> */}
+                                            <a onClick={() => { this.loginWx(3) }}><i className="iconfont icon-weibo"></i> 微博</a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>,
-                    <div className="loginThree">
-                        <div className="loginThreeLine">
-                            <span className="fn-left"></span> 其他登陆方式 <span className="fn-right"></span>
-                        </div>
-                        <div className="loginThreeBottom">
-                            <ul className="fn-clear">
-                                <li className="wx">
-                                    {/* <a href="https://www.huakewang.com/wxopenapi/auth_redirect"><i className="iconfont icon-weixin"></i> 微信</a> */}
-                                    <a onClick={()=>{this.loginWx(1)}}><i className="iconfont icon-weixin"></i> 微信</a>
-                                </li>
-                                <li className="qq">
-                                    {/* <a href="https://www.huakewang.com/main/qq_oauth.html"><i className="iconfont icon-qq"></i> QQ</a> */}
-                                    <a onClick={() => { this.loginWx(2) }}><i className="iconfont icon-qq"></i> QQ</a>
-                                </li>
-                                <li className="wb">
-                                    {/* <a href="https://www.huakewang.com/main/sina_oauth.html"><i className="iconfont icon-weibo"></i> 微博</a> */}
-                                    <a onClick={() => { this.loginWx(3) }}><i className="iconfont icon-weibo"></i> 微博</a>
-                                </li>
-                            </ul>
-                        </div>
                     </div>
-                ] : null}
-            </QueueAnim >
+                }
+            </Motion>
         );
     }
 }
