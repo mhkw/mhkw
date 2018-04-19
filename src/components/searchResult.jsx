@@ -99,7 +99,7 @@ export default class SearchResult extends React.Component {
                 } else {
                     this.rData1 = [...this.rData1, ...this.genData(pageIndex1++, realDataLength1, realData1)];
                 }
-                const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight * 2;
+                const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight * 2 -25;
                 this.setState({
                     dataSource1: this.state.dataSource1.cloneWithRows(this.rData1),
                     hasMore: res.data.total_pages > this.state.page ? true : false,
@@ -128,7 +128,7 @@ export default class SearchResult extends React.Component {
                 } else {
                     this.rData2 = [...this.rData2, ...this.genData(pageIndex2++, realDataLength2, realData2)];
                 }
-                const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight * 2;
+                const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight * 2 - 25;
                 this.setState({
                     dataSource2: this.state.dataSource2.cloneWithRows(this.rData2),
                     hasMore: res.data.total_count > this.state.size ? true : false,
@@ -159,7 +159,7 @@ export default class SearchResult extends React.Component {
                 } else {
                     this.rData3 = [...this.rData3, ...this.genData(pageIndex3++, realDataLength3, realData3)];
                 }
-                const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight * 2;
+                const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight * 2 - 25;
                 this.setState({
                     dataSource3: this.state.dataSource3.cloneWithRows(this.rData3),
                     hasMore: res.data.is_next_page ? true : false,
@@ -189,7 +189,7 @@ export default class SearchResult extends React.Component {
                     this.rData4 = [...this.rData4, ...this.genData(pageIndex4++, realDataLength4, realData4)];
                 }
 
-                const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight * 2;
+                const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight * 2 -25;
                 this.setState({
                     dataSource4: this.state.dataSource4.cloneWithRows(this.rData4),
                     hasMore: res.data.total_pages > pageIndex4 ? true : false,

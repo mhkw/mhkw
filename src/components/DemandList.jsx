@@ -22,7 +22,7 @@ export default class DemandList extends React.Component {
             rowHasChanged: (row1, row2) => row1 !== row2,
         });
         this.state = {
-            animating:false,
+            animating:true,
             dataSource: dataSource.cloneWithRows(JSON.parse(sessionStorage.getItem("demandData")) ? JSON.parse(sessionStorage.getItem("demandData")) : []),
             useBodyScroll:false,
             refreshing: false,
@@ -71,7 +71,7 @@ export default class DemandList extends React.Component {
                     this.rData = [...this.rData, ...this.genData(pageIndex++, realDataLength, realData)];
                 }
 
-                const hei = document.documentElement.clientHeight - ReactDOM.findDOMNode(this.lv).parentNode.offsetTop;
+                const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(this.rData),
                     hasMore: res.data.total_pages > pageIndex ? true : false,
@@ -101,17 +101,16 @@ export default class DemandList extends React.Component {
         this.getProgectList(1);
     }
     componentDidUpdate() {
-        if (this.state.useBodyScroll) {
-            document.body.style.overflow = 'auto';
-        } else {
-            document.body.style.overflow = 'hidden';
-        }
+        // if (this.state.useBodyScroll) {
+        //     document.body.style.overflow = 'auto';
+        // } else {
+        //     document.body.style.overflow = 'hidden';
+        // }
     }
     routerWillLeave(nextLocation) {  //离开页面
-        pageIndex = 0;        
+        pageIndex = 0;
     }
     getProgectList(page,type = "add_time") {  
-        this.setState({animating:true})
         axios({
             method: "POST",
             url: 'https://www.huakewang.com/hkw_newapi/get_project_list/0/'+type+'/0/0/10/'+page,
@@ -276,10 +275,11 @@ export default class DemandList extends React.Component {
         return (
             <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
                 {interpolatingStyle =>
-                    <div style={{ ...interpolatingStyle, position: "relative" }}>
+                    <div style={{ ...interpolatingStyle, position: "relative",height:this.state.height }}>
                         <div className="forgetNav">
                             <NavBar
                                 mode="light"
+                                className="top"
                                 icon={<Icon type="left" size="lg" color="#707070" />}
                                 onLeftClick={() => hashHistory.goBack()}
                                 // rightContent={[

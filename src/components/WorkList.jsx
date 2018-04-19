@@ -77,7 +77,7 @@ export default class WorkList extends React.Component {
                 } else {
                     this.rData = [...this.rData, ...this.genData(pageIndex++, realDataLength, realData)];
                 }
-                const hei = document.documentElement.clientHeight - ReactDOM.findDOMNode(this.lv).parentNode.offsetTop;
+                const hei = document.documentElement.clientHeight - ReactDOM.findDOMNode(this.lv).parentNode.offsetTop - 25;
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(this.rData),
                     hasMore: res.data.total_count > this.state.size ? true : false,

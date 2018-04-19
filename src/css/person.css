@@ -1,7 +1,6 @@
 .mineWrap {
   height: 100%;
   width: 100%;
-  position: fixed;
   background-color: #F7F7F7;
 }
 
@@ -375,7 +374,7 @@
 }
 
 .searchIpt .am-tabs-tab-bar-wrap {
-  position: fixed;
+  position: absolute;
   top: 1.2rem;
   z-index: 9999;
   width: 100%;
