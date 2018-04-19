@@ -29,6 +29,13 @@ export default class HOC extends React.Component{
                 lat: "", //纬度
                 currentLocation: "", //定位当前位置的地址
             },
+            AddressAuthSelf: {      //设计师认证，设计师地址
+                address: "", //百度地图address字段
+                city: "", //通过城市列表选择的城市或者地图定位的城市
+                lon: "", //经度
+                lat: "", //纬度
+                currentLocation: "", //定位当前位置的地址
+            },
             Designer: {}, //设计师，拿到设计师常规数据后直接放进去吧
             Home: {       //主页
                 currentIdx: 0,

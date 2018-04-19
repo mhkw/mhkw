@@ -145,9 +145,17 @@ export default class Mine extends React.Component {
     }
     //点击设计师认证
     clickDesignerAuth = () => {
+        // console.log("ads");
+        
         hashHistory.push({
             pathname: '/designerAuth',
             query: { form: 'mine' }
+        });
+    }
+    clickWorks = () => {
+        hashHistory.push({
+            pathname: '/userWorks',
+            query: { form: 'allWorks' }
         });
     }
     render () {
@@ -194,6 +202,12 @@ export default class Mine extends React.Component {
                         <Jiange name={this.state.bgStyle}></Jiange>
                         <Line border={this.state.border}></Line>
 
+                        <List.Item extra="" arrow="horizontal" className="ListItemBorder amlistitem" onClick={this.clickWorks}>
+                            <Badge>
+                                <span className="iconfont icon-sheji" />
+                            </Badge>
+                            <span style={{ marginLeft: 12 }}>我的作品</span>
+                        </List.Item>
                         <List.Item extra="" arrow="horizontal" className="ListItemBorder amlistitem" onClick={this.clickNotice}>
                             <Badge>
                                 <span className="iconfont icon-shijian1" />

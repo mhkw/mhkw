@@ -100,6 +100,11 @@ export default class BaiduMap extends React.Component {
      * 使用API打开一个Frame页面，这个页面可以悬浮在window页面之上。
      */
     componentDidMount() {
+        //判断是不是移动端，不是的话，直接回退
+        if (!UserIsPhone) {
+            hashHistory.goBack();
+            return;
+        }
         //打开地图
         this.open();
 

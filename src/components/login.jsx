@@ -19,10 +19,10 @@ export default class LoginView extends React.Component {
             error: false,
             modal: false,
             animating:false,
-            value: '13958054563',
-            keywords:'215188',
-            // value: '17683993335',
-            // keywords: 'luolei1992',
+            // value: '13958054563',
+            // keywords:'215188',
+            value: '17683993335',
+            keywords: 'luolei1992',
             code:"",
             codeNum:2
         };
@@ -169,7 +169,7 @@ export default class LoginView extends React.Component {
             }
         }
     }
-    render() {
+    render() {        
         return (
             <Motion defaultStyle={{ left: 300 }} style={{ left: spring(0, { stiffness: 300, damping: 28 }) }}>
                 {interpolatingStyle => 

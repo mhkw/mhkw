@@ -66,6 +66,7 @@ import AuthSelf from './components/AuthSelf';
 import AuthMotto from './components/AuthMotto';
 import AuthSkill from './components/AuthSkill';
 import AuthWorks from './components/AuthWorks';
+import UserWorks from './components/UserWorks';
 
 import './css/font/iconfont.css'
 
@@ -246,11 +247,15 @@ ReactDOM.render(
             <Route path="perfectInfo" component={PerfectInfo} />
             <Route path="uploadAvatar" component={UploadAvatar} />
             <Route component={HOCdesignerAuth}>
-                <Route path="designerAuth" component={DesignerAuth} />
+                <Route path="designerAuth" component={DesignerAuth} >
+                    <IndexRoute component={UserWorks} />
+                    <Route path="userWorks" component={UserWorks} />
+                </Route>
                 <Route path="authSelf" component={AuthSelf} />
                 <Route path="authMotto" component={AuthMotto} />
                 <Route path="authSkill" component={AuthSkill} />
                 <Route path="authWorks" component={AuthWorks} />
+                <Route path="userWorks" component={UserWorks} />
             </Route>
         </Route>
     </Router>
