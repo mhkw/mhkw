@@ -1,6 +1,7 @@
 import React from "react";
 import { hashHistory, Link } from "react-router";
 import { Toast, NavBar, Icon, InputItem, List, Modal, WhiteSpace, WingBlank, Tag, Button } from "antd-mobile";
+import BScroll from 'better-scroll'
 
 export default class AuthSkill extends React.Component {
     constructor(props) {
@@ -8,6 +9,7 @@ export default class AuthSkill extends React.Component {
         this.state = {
             designer_tree: [], //技能树
             keywords: [], //设计师选择的技能
+            height: ""
         }
     }
     clickSave = () => {
@@ -29,6 +31,13 @@ export default class AuthSkill extends React.Component {
             let { keywords } = props.Self;
             this.setState({ designer_tree, keywords });
         }
+    }
+    componentDidMount(){
+        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        this.setState({
+            height: hei
+        })
     }
     componentWillMount() {
         this.getSelfInfo(this.props);
@@ -53,29 +62,33 @@ export default class AuthSkill extends React.Component {
         return (
             <div className="auth-skill-page" key="1">
                 <NavBar
-                    className="new-nav-bar"
+                    className="new-nav-bar top"
                     mode="light"
                     icon={<Icon type="left" size="lg" style={{ "color": "#a3a3a3" }} />}
                     onLeftClick={() => hashHistory.goBack()}
                     rightContent={<Button className="rechargeButton" onClick={this.clickSave}>保存</Button>}
                 >擅长技能</NavBar>
-                {
-                    this.state.designer_tree.length > 0 &&
-                    this.state.designer_tree.map((value, index)=>(
-                        <List key={value.id} renderHeader={value.category_name} className="auth-skill">
-                            {
-                                value.keyword.split(",").map((val, eq)=>{
-                                    return val.length > 0 ? 
-                                        <Tag 
-                                            className="skill-label"
-                                            selected={!!~this.state.keywords.indexOf(val)}
-                                            onChange={(selected) => { this.changeKeywords(selected, val) }}
-                                        >{val}</Tag> : null
-                                })
-                            }
-                        </List>
-                    ))
-                }
+                <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
+                    <div>
+                        {
+                            this.state.designer_tree.length > 0 &&
+                            this.state.designer_tree.map((value, index) => (
+                                <List key={value.id} renderHeader={value.category_name} className="auth-skill">
+                                    {
+                                        value.keyword.split(",").map((val, eq) => {
+                                            return val.length > 0 ?
+                                                <Tag
+                                                    className="skill-label"
+                                                    selected={!!~this.state.keywords.indexOf(val)}
+                                                    onChange={(selected) => { this.changeKeywords(selected, val) }}
+                                                >{val}</Tag> : null
+                                        })
+                                    }
+                                </List>
+                            ))
+                        }
+                    </div>
+                </div>
             </div>
         )
     }

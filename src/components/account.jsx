@@ -3,10 +3,10 @@ import { NavBar, Icon, Toast, Button, Modal, InputItem } from 'antd-mobile';
 import { hashHistory } from 'react-router';
 import { Line, AccountListDetails } from './templateHomeCircle';
 import { Motion, spring } from 'react-motion';
+import BScroll from 'better-scroll'
 
 import { Qbutton } from "./TemplateView";
 
-// require("../css/person.scss");
 
 export default class Account extends React.Component {
     constructor(props) {
@@ -14,6 +14,7 @@ export default class Account extends React.Component {
         this.state = {
             border:"line",
             show:true,
+            height:"",
             blance:0,
             frozenCash:0,
             realName:false,
@@ -55,6 +56,11 @@ export default class Account extends React.Component {
         }
     }
     componentDidMount(){
+        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        this.setState({
+            height: hei
+        })
         runPromise('get_blance', {
             user_id:validate.getCookie('user_id')
         }, this.handleBlance, true, "post");
@@ -130,23 +136,28 @@ export default class Account extends React.Component {
                 {interpolatingStyle => 
                     <div className="accountWrap" style={{ ...interpolatingStyle, position: "relative" }}>
                         <NavBar
+                            className="top"
                             mode="light"
                             icon={<Icon type="left" size="lg" color="#333" />}
                             onLeftClick={() => hashHistory.goBack()}
                             rightContent={<Button className="rechargeButton" onClick={() => { this.setState({ showPayInputModal: true }) }}>充值</Button>}
                         >收支明细</NavBar>
                         <Line border={this.state.border}></Line>
-                        <div className="accountWrapTop">
-                            <p>余额: {this.state.blance}元 &nbsp;&nbsp;{this.state.frozenCash == 0 ? null : '待解冻: '+this.state.frozenCash+'元'}</p>
-                        </div>
-                        <div className="accountWrapMid">
-                            <span>{this.state.blance}</span> <Qbutton onClick={() => { this.hasAdmin() }}>提现</Qbutton>
-                        </div>
-                        <p className="getPayTitle">
-                            <span className="fn-left" ></span> 收支明细 <span className="fn-right"></span>
-                        </p>
-                        <div className="accountListDetails">
-                            <AccountListDetails item_list={this.state.financialList.item_list} blance={ this.state.blance }></AccountListDetails>
+                        <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
+                            <div>
+                                <div className="accountWrapTop">
+                                    <p>余额: {this.state.blance}元 &nbsp;&nbsp;{this.state.frozenCash == 0 ? null : '待解冻: ' + this.state.frozenCash + '元'}</p>
+                                </div>
+                                <div className="accountWrapMid">
+                                    <span>{this.state.blance}</span> <Qbutton onClick={() => { this.hasAdmin() }}>提现</Qbutton>
+                                </div>
+                                <p className="getPayTitle">
+                                    <span className="fn-left" ></span> 收支明细 <span className="fn-right"></span>
+                                </p>
+                                <div className="accountListDetails">
+                                    <AccountListDetails item_list={this.state.financialList.item_list} blance={this.state.blance}></AccountListDetails>
+                                </div>
+                            </div>
                         </div>
                         <Modal
                             visible={this.state.showPayInputModal}

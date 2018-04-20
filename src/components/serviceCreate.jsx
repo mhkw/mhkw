@@ -2,6 +2,7 @@ import React from 'react'
 import { NavBar, Icon, Button, WingBlank, Checkbox, Stepper, Modal, Toast } from 'antd-mobile';
 import { hashHistory, Link } from 'react-router';
 import { Motion, spring } from 'react-motion';
+import BScroll from 'better-scroll'
 
 import update from 'immutability-helper';
 
@@ -38,6 +39,7 @@ export default class ServerCreate extends React.Component {
             checkPrice: 0, //用户已经选中了几个服务模板的价格总计
             checkedServerList: [],
             serverList: [],
+            height:"",
             // serverList: [{
             //     id: "1",
             //     server_name: "PS简单处理图片",
@@ -78,6 +80,11 @@ export default class ServerCreate extends React.Component {
         }
     }
     componentDidMount() {
+        const hei = document.documentElement.clientHeight - document.querySelector('.serverStep').offsetHeight - document.querySelector('.top').offsetHeight - 25;
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        this.setState({
+            height: hei
+        })
         const maskDOM = document.getElementsByClassName("am-modal-mask");
         if (maskDOM.length) {
             maskDOM[0].style.display = "none";
@@ -165,7 +172,7 @@ export default class ServerCreate extends React.Component {
                 {interpolatingStyle => 
                     <div className="createServer" style={{ ...interpolatingStyle, position: "relative" }}>
                         <NavBar
-                            className="create-server-nav-bar"
+                            className="create-server-nav-bar top"
                             mode="light"
                             icon={<Icon type="left" />}
                             onLeftClick={() => hashHistory.goBack()}
@@ -188,61 +195,65 @@ export default class ServerCreate extends React.Component {
                                 <li className={this.state.progress > 2 ? "finish" : null}>生成报价并分享<div className="triangle-right"></div></li>
                             </ul>
                         </div>
-                        
-                        <div className="serverContent" style={{"display": this.state.serverList.length > 0 ? "none" : "block" }}>
-                            <h3>您需要先添加一个服务</h3>
-                            <p>我的服务包含了线上服务和线下服务，由您和客户自行商定</p>
-                        </div>
-                        {
-                            this.state.serverList.map((val, index) => {
-                                return (
-                                    <ServerItem
-                                        index={index}
-                                        id={val.id}
-                                        onChangeisChecked={this.onChangeisChecked}
-                                        title={val.server_name}
-                                        describe={val.describe}
-                                        unit_price={val.unit_price}
-                                        unit={val.unit}
-                                        number={val.number}
-                                        onChangeThisNumber={this.onChangeThisNumber}
-                                        isChecked={val.isChecked}
-                                    ></ServerItem>
-                                )
-                            })
-                        }
-                        <div className="serverButton">
-                            <Button 
-                                type="ghost"
-                                icon={<i className="iconfont icon-tianjiajiahaowubiankuang"></i>}
-                                size="large"
-                                style={{ margin: "0 2.3rem", color: "#009AE8", border:"1px solid #009AE8",height:"1.2rem"}}
-                                activeStyle={{ backgroundColor: "#259EEF", color: "#fff",border:"1px solid #259EEF"}}
-                            >
-                                <Link to="/addServer">添加服务内容</Link>
-                            </Button>
-                        </div>
-                        <Modal
-                            wrapClassName="server-button-modal"
-                            popup
-                            visible={this.state.showModal}
-                            // onClose={() => { this.setState({ showModal: false}) }}
-                            animationType="slide-up"
-                            maskClosable={false}
-                            transparent={true}
-                        >
-                        <div className="create-server-popup">
-                            <div className="txt-div">
-                                    <span className="left">共<span className="num">{this.state.checkNum}</span>项服务</span>
-                                    <span className="right">合计:<span className="price">{this.state.checkPrice + "元"}</span></span>
+                        <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
+                            <div>
+                                <div className="serverContent" style={{ "display": this.state.serverList.length > 0 ? "none" : "block" }}>
+                                    <h3>您需要先添加一个服务</h3>
+                                    <p>我的服务包含了线上服务和线下服务，由您和客户自行商定</p>
+                                </div>
+                                {
+                                    this.state.serverList.map((val, index) => {
+                                        return (
+                                            <ServerItem
+                                                index={index}
+                                                id={val.id}
+                                                onChangeisChecked={this.onChangeisChecked}
+                                                title={val.server_name}
+                                                describe={val.describe}
+                                                unit_price={val.unit_price}
+                                                unit={val.unit}
+                                                number={val.number}
+                                                onChangeThisNumber={this.onChangeThisNumber}
+                                                isChecked={val.isChecked}
+                                            ></ServerItem>
+                                        )
+                                    })
+                                }
+                                <div className="serverButton" style={{paddingBottom:"15px"}}>
+                                    <Button
+                                        type="ghost"
+                                        icon={<i className="iconfont icon-tianjiajiahaowubiankuang"></i>}
+                                        size="large"
+                                        style={{ margin: "0 2.3rem", color: "#009AE8", border: "1px solid #009AE8", height: "1.2rem" }}
+                                        activeStyle={{ backgroundColor: "#259EEF", color: "#fff", border: "1px solid #259EEF" }}
+                                    >
+                                        <Link to="/addServer">添加服务内容</Link>
+                                    </Button>
+                                </div>
+                                <Modal
+                                    wrapClassName="server-button-modal"
+                                    popup
+                                    visible={this.state.showModal}
+                                    // onClose={() => { this.setState({ showModal: false}) }}
+                                    animationType="slide-up"
+                                    maskClosable={false}
+                                    transparent={true}
+                                >
+                                    <div className="create-server-popup">
+                                        <div className="txt-div">
+                                            <span className="left">共<span className="num">{this.state.checkNum}</span>项服务</span>
+                                            <span className="right">合计:<span className="price">{this.state.checkPrice + "元"}</span></span>
+                                        </div>
+                                        <Button
+                                            onClick={this.onClickCreateServer}
+                                            className="create-server-button"
+                                            activeClassName="create-server-button-active"
+                                        >创建报价</Button>
+                                    </div>
+                                </Modal>
                             </div>
-                            <Button
-                                onClick={this.onClickCreateServer}
-                                className="create-server-button"
-                                activeClassName="create-server-button-active"
-                            >创建报价</Button>
                         </div>
-                        </Modal>
+                        
                     </div>
                 }
             </Motion>

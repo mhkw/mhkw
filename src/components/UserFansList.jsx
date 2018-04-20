@@ -3,6 +3,7 @@ import { hashHistory } from 'react-router';
 import { Toast, NavBar, Icon, Flex, WingBlank, Modal } from 'antd-mobile';
 import update from 'immutability-helper';
 import { Motion, spring } from 'react-motion';
+import BScroll from 'better-scroll'
 
 const avatar = require('../images/selec.png');
 
@@ -11,6 +12,7 @@ export default class UserFansList extends React.Component {
         super(props)
         this.state = {
             black_list: [], //黑名单列表
+            height:""
         }
         this.handleBlackList = (res) => {
             if (res.success) {
@@ -50,6 +52,11 @@ export default class UserFansList extends React.Component {
         }
     }
     componentDidMount() {
+        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 35;
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        this.setState({
+            height: hei
+        })
         this.ajaxBlackList();
     }
     //获取粉丝列表
@@ -75,12 +82,12 @@ export default class UserFansList extends React.Component {
                 {interpolatingStyle => 
                     <div style={{ ...interpolatingStyle }} className="black-list-page">
                         <NavBar
-                            className="NewNavBar"
+                            className="NewNavBar top"
                             mode="light"
                             icon={<Icon type="left" size="lg" style={{ "color": "#a3a3a3" }} />}
                             onLeftClick={() => hashHistory.goBack()}
                         >我的粉丝</NavBar>
-                        <div className="black-list-main">
+                        <div className="black-list-main wrapper" style={{ overflow: "hidden", height: this.state.height }}>
                             <WingBlank size="md">
                                 {
                                     this.state.black_list.length > 0 &&

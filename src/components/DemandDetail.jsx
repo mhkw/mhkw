@@ -2,7 +2,7 @@ import React from 'react'
 import { List, InputItem, PullToRefresh, ListView, Toast, Button, NavBar, Icon, TextareaItem } from 'antd-mobile';
 import { Link, hashHistory } from 'react-router';
 import axios from 'axios';
-import QueueAnim from 'rc-queue-anim';
+import BScroll from 'better-scroll'
 
 import '../css/font/iconfont.css'
 
@@ -47,6 +47,7 @@ export default class DemandDetail extends React.Component {
             placeholderWords:"",
             comment_id:"",
             rep_user_id:"",
+            height:"",
             replay_name:""
         };
         this.handleLoginSend = (res) => {
@@ -94,6 +95,11 @@ export default class DemandDetail extends React.Component {
         }
     }
     componentDidMount() {
+        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        this.setState({
+            height: hei
+        })
         this.getProgectList(this.props.location.query.demandId);
     }
     getProgectList(id) {
@@ -105,12 +111,12 @@ export default class DemandDetail extends React.Component {
                 user_id: validate.getCookie('user_id')
             }
         })
-            .then((res) => {
-                this.handleLoginSend(res.data);
-            })
-            .catch((error) => {
-                console.log(error.data);
-            });
+        .then((res) => {
+            this.handleLoginSend(res.data);
+        })
+        .catch((error) => {
+            console.log(error.data);
+        });
     }
     onTouchImg = (index) => {
         let items = [];
@@ -175,12 +181,10 @@ export default class DemandDetail extends React.Component {
         let obj = this.state.demandDetail;
         let files = this.state.files;
         return (
-            <QueueAnim
-                animConfig={[
-                    { opacity: [1, 0], translateX: [0, 0] }
-                ]}>
-                <div className="forgetNav" key="1">
+            <div>
+                <div className="forgetNav" style={{position:"relative"}}>
                     <NavBar
+                        className="top"
                         mode="light"
                         icon={<Icon type="left" size="lg" color="#707070" />}
                         onLeftClick={() => hashHistory.goBack()}
@@ -190,68 +194,69 @@ export default class DemandDetail extends React.Component {
                     // ]}
                     >需求详细</NavBar>
                 </div>
-                <div style={{ height: "1.2rem" }}></div>
-                <div className="mainWrap" style={{ padding: "20px" }}>
-                    <p>
-                        找：
+                <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
+                    <div>
+                        <div className="mainWrap" style={{ padding: "20px" }}>
+                            <p>
+                                找：
                         <span className="fn-right" style={{ color: "#949494", fontSize: "12px" }}>
-                            <i className="iconfont icon-location"></i>
-                            {((obj.distance - 0) / 1000).toFixed(2) > 200 || ((obj.distance - 0) / 1000).toFixed(2) == 0 ? 
-                                obj.long_lat_address == ""?
-                                "[未知]" : obj.long_lat_address.split(" ").length > 1 ? 
-                                obj.long_lat_address.split(" ").slice(1).join(" ") : obj.long_lat_address : ((obj.distance - 0) / 1000).toFixed(2) + 'km'}
-                        </span>
-                    </p>
-                    <div style={{ padding: "10px 0 10px 0", lineHeight: "18px" }}>
-                        <i style={{ color: "red" }}>预算：{obj.budget_price}</i>&nbsp;&nbsp;
+                                    <i className="iconfont icon-location"></i>
+                                    {((obj.distance - 0) / 1000).toFixed(2) > 200 || ((obj.distance - 0) / 1000).toFixed(2) == 0 ?
+                                        obj.long_lat_address == "" ?
+                                            "[未知]" : obj.long_lat_address.split(" ").length > 1 ?
+                                                obj.long_lat_address.split(" ").slice(1).join(" ") : obj.long_lat_address : ((obj.distance - 0) / 1000).toFixed(2) + 'km'}
+                                </span>
+                            </p>
+                            <div style={{ padding: "10px 0 10px 0", lineHeight: "18px" }}>
+                                <i style={{ color: "red" }}>预算：{obj.budget_price}</i>&nbsp;&nbsp;
                         {obj.content}
-                    </div>
-                    <div className="imgWrap">
-                        <ul style={{ overflow: "hidden" }}>
-                            {
-                                files.map((value, index) => {
-                                    return <li style={{ float: "left", margin: "4px 7px" }} onClick={() => { this.onTouchImg(index) }}>
-                                        <img src={value.path_thumb} style={{ width: "2.6rem", height: "2.6rem" }} />
-                                    </li>
-                                })
-                            }
-                        </ul>
-                    </div>
-                    <div style={{ float: "left", paddingTop: "4px", color: "#949494" }}>
-                        <i className="iconfont icon-shijian2"></i>&nbsp;{obj.add_time_format}&nbsp;&nbsp;&nbsp;
+                            </div>
+                            <div className="imgWrap">
+                                <ul style={{ overflow: "hidden" }}>
+                                    {
+                                        files.map((value, index) => {
+                                            return <li style={{ float: "left", margin: "4px 7px" }} onClick={() => { this.onTouchImg(index) }}>
+                                                <img src={value.path_thumb} style={{ width: "2.6rem", height: "2.6rem" }} />
+                                            </li>
+                                        })
+                                    }
+                                </ul>
+                            </div>
+                            <div style={{ float: "left", paddingTop: "4px", color: "#949494" }}>
+                                <i className="iconfont icon-shijian2"></i>&nbsp;{obj.add_time_format}&nbsp;&nbsp;&nbsp;
                         <i className="iconfont icon-yanjing" style={{ color: "#ccc" }}></i>&nbsp;{obj.hits}
-                    </div>
-                    <div style={{ overflow: "hidden" }}>
-                        <div style={{ float: "right", color: "#949494" }}>
-                            <div style={{ display: "inline-block", paddingTop: "4px" }}>
-                                <i className="iconfont icon-Pingjia" onClick={(e) => { this.addHeart(e, obj.id); }}
-                                    style={{
-                                        fontSize: "14px",
-                                        verticalAlign: "middle",
-                                        color: obj.islove ? "#F95231" : "",
-                                        position: "relative",
-                                        top: "1px"
-                                    }}
-                                ></i><span style={{ marginLeft: "3px" }}>{obj.love_count}</span>&nbsp;&nbsp;&nbsp;
                             </div>
-                            <div style={{ display: "inline-block", paddingTop: "4px" }}
-                                onClick={(e) => {
-                                    this.toggleInput(obj.user_id, obj.id);
-                                    this.setState({ placeholderWords: "给" + obj.user_info.nick_name + "留言：" })
-                                }}>
-                                <i className="iconfont icon-liuyan"
-                                    style={{
-                                        fontSize: "14px",
-                                        verticalAlign: "middle",
-                                        position: "relative",
-                                        top: "1px"
-                                    }}
-                                ></i> <span>{obj.comment_count}</span>
+                            <div style={{ overflow: "hidden" }}>
+                                <div style={{ float: "right", color: "#949494" }}>
+                                    <div style={{ display: "inline-block", paddingTop: "4px" }}>
+                                        <i className="iconfont icon-Pingjia" onClick={(e) => { this.addHeart(e, obj.id); }}
+                                            style={{
+                                                fontSize: "14px",
+                                                verticalAlign: "middle",
+                                                color: obj.islove ? "#F95231" : "",
+                                                position: "relative",
+                                                top: "1px"
+                                            }}
+                                        ></i><span style={{ marginLeft: "3px" }}>{obj.love_count}</span>&nbsp;&nbsp;&nbsp;
                             </div>
-                        </div>
-                    </div>
-                    <div className="itemsBtm">
-                        {/* <div className="loveList" style={{ backgroundColor: "#f0f0f0", lineHeight: "0.75rem", display: obj.love_list.length > 0 ? "block" : "none" }}>
+                                    <div style={{ display: "inline-block", paddingTop: "4px" }}
+                                        onClick={(e) => {
+                                            this.toggleInput(obj.user_id, obj.id);
+                                            this.setState({ placeholderWords: "给" + obj.user_info.nick_name + "留言：" })
+                                        }}>
+                                        <i className="iconfont icon-liuyan"
+                                            style={{
+                                                fontSize: "14px",
+                                                verticalAlign: "middle",
+                                                position: "relative",
+                                                top: "1px"
+                                            }}
+                                        ></i> <span>{obj.comment_count}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="itemsBtm">
+                                {/* <div className="loveList" style={{ backgroundColor: "#f0f0f0", lineHeight: "0.75rem", display: obj.love_list.length > 0 ? "block" : "none" }}>
                             <i className="iconfont icon-Pingjia" style={{ position: "relative", top: "2px", margin: "0 5px" }}></i>
                             <ul style={{ display: "inline-block" }}>
                                 {
@@ -268,84 +273,86 @@ export default class DemandDetail extends React.Component {
                                 } 觉得很赞
                             </ul>
                         </div> */}
-                        <div className="commentList" style={{
-                            marginTop: "8px", display: obj.comment_data.comment_list.length > 0 ? "block" : "none"
-                        }}>
-                            <ul id="demandCommentList">
-                                {
-                                    obj.comment_data.comment_list.map((value, idx) => {
-                                        return <div>
-                                            <li onClick={() => {
-                                                this.setState({
-                                                    placeholderWords: "回复：" + value.nick_name,
-                                                    showReplyInput: true,
-                                                    replySendStatus: false,
-                                                    comment_id: value.id,
-                                                    rep_user_id: value.user_id_from,
-                                                    replay_name: value.nick_name
-                                                }, () => {
-                                                    this.textarea.focus();
-                                                })
-                                            }}>
-                                                <span >{value.nick_name}: </span>
-                                                {value.content ? value.content : value.comment_content}
-                                            </li>
-                                            {
-                                                value.commentrep_data && value.commentrep_data.commentrep_list.length > 0 ?
-                                                    value.commentrep_data.commentrep_list.map((val) => {
-                                                        return val.content ? <li onClick={() => {
-                                                            this.setState({
-                                                                placeholderWords: "回复：" + val.nick_name,
-                                                                showReplyInput: true,
-                                                                replySendStatus: false,
-                                                                comment_id: val.comment_id,
-                                                                rep_user_id: val.user_id,
-                                                                replay_name: val.nick_name
-                                                            }, () => {
-                                                                this.textarea.focus();
-                                                            })
-                                                        }}>
-                                                            {
-                                                                val.nick_name_to ? <span>{val.nick_name}回复:{val.nick_name_to} </span> :
-                                                                    <span>{val.nick_name}: </span>
-                                                            }
-                                                            {val.content ? val.content : val.comment_content}
-                                                        </li> : ""
-                                                    }) : ""
-                                            }
-                                        </div>
-                                    })
-                                }
-                            </ul>
+                                <div className="commentList" style={{
+                                    marginTop: "8px", display: obj.comment_data.comment_list.length > 0 ? "block" : "none"
+                                }}>
+                                    <ul id="demandCommentList">
+                                        {
+                                            obj.comment_data.comment_list.map((value, idx) => {
+                                                return <div>
+                                                    <li onClick={() => {
+                                                        this.setState({
+                                                            placeholderWords: "回复：" + value.nick_name,
+                                                            showReplyInput: true,
+                                                            replySendStatus: false,
+                                                            comment_id: value.id,
+                                                            rep_user_id: value.user_id_from,
+                                                            replay_name: value.nick_name
+                                                        }, () => {
+                                                            this.textarea.focus();
+                                                        })
+                                                    }}>
+                                                        <span >{value.nick_name}: </span>
+                                                        {value.content ? value.content : value.comment_content}
+                                                    </li>
+                                                    {
+                                                        value.commentrep_data && value.commentrep_data.commentrep_list.length > 0 ?
+                                                            value.commentrep_data.commentrep_list.map((val) => {
+                                                                return val.content ? <li onClick={() => {
+                                                                    this.setState({
+                                                                        placeholderWords: "回复：" + val.nick_name,
+                                                                        showReplyInput: true,
+                                                                        replySendStatus: false,
+                                                                        comment_id: val.comment_id,
+                                                                        rep_user_id: val.user_id,
+                                                                        replay_name: val.nick_name
+                                                                    }, () => {
+                                                                        this.textarea.focus();
+                                                                    })
+                                                                }}>
+                                                                    {
+                                                                        val.nick_name_to ? <span>{val.nick_name}回复:{val.nick_name_to} </span> :
+                                                                            <span>{val.nick_name}: </span>
+                                                                    }
+                                                                    {val.content ? val.content : val.comment_content}
+                                                                </li> : ""
+                                                            }) : ""
+                                                    }
+                                                </div>
+                                            })
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="popup-comment-input-box demand-popup-comment-input-box"
+                            style={{ "visibility": this.state.showReplyInput ? "visible" : "hidden" }}
+                        >
+                            <TextareaItem
+                                id="abc"
+                                className="comment-input"
+                                autoHeight
+                                ref={(temp) => { this.textarea = temp; }}
+                                placeholder={this.state.placeholderWords}
+                                maxLength="100"
+                                value={this.state.content}
+                                onChange={this.onChangeReplyInput}
+                                onBlur={() => { this.setState({ showReplyInput: false }) }}
+                                onFocus={() => { this.setState({ showReplyInput: true }) }}
+                            />
+                            <span className="send-btn demand-send-btn" ref="abcd"
+                                style={this.state.sendBtnStatus ? {
+                                    "border": "1px solid #0e80d2",
+                                    "background-color": "#409ad6",
+                                    "color": "#fff",
+                                } : {}}
+                                onTouchStart={this.onTouchSend}
+                            >发送</span>
                         </div>
                     </div>
                 </div>
-                <div className="popup-comment-input-box demand-popup-comment-input-box"
-                    style={{ "visibility": this.state.showReplyInput ? "visible" : "hidden" }}
-                >
-                    <TextareaItem
-                        id="abc"
-                        className="comment-input"
-                        autoHeight
-                        ref={(temp) => { this.textarea = temp; }}
-                        placeholder={this.state.placeholderWords}
-                        maxLength="100"
-                        value={this.state.content}
-                        onChange={this.onChangeReplyInput}
-                        onBlur={() => { this.setState({ showReplyInput: false }) }}
-                        onFocus={() => { this.setState({ showReplyInput: true }) }}
-                    />
-                    <span className="send-btn demand-send-btn" ref="abcd"
-                        style={this.state.sendBtnStatus ? {
-                            "border": "1px solid #0e80d2",
-                            "background-color": "#409ad6",
-                            "color": "#fff",
-                        } : {}}
-                        onTouchStart={this.onTouchSend}
-                    >发送</span>
-                </div>
                 <PhotoSwipeItem />
-            </QueueAnim>
+            </div>
         );
     }
 }

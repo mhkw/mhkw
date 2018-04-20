@@ -2,6 +2,7 @@ import React from 'react';
 import { hashHistory, Link } from 'react-router';
 import { Toast, NavBar, Icon, SegmentedControl, Flex, WingBlank   } from 'antd-mobile';
 import { Motion, spring } from 'react-motion';
+import BScroll from 'better-scroll'
 
 const zhanWei = require('../images/logoZhanWei.png');
 const temp = require('../images/avatar.png');
@@ -11,6 +12,7 @@ export default class Activity extends React.Component {
         super(props)
         this.state = {
             activity_list: sessionStorage.getItem("activity_list") ? JSON.parse(sessionStorage.getItem("activity_list")) : [],
+            height:""
         }
         this.handleGetActivity = (res) => {
             if (res.success) {
@@ -25,9 +27,13 @@ export default class Activity extends React.Component {
     }
     clickControl = (e) => {
         let index = e.nativeEvent.selectedSegmentIndex;
-        console.log(index);
     }
     componentDidMount() {
+        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 68;
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        this.setState({
+            height: hei
+        })
         this.getActivity();
     }
     getActivity = () => {
@@ -42,18 +48,19 @@ export default class Activity extends React.Component {
                 {interpolatingStyle => 
                     <div className="activity-page" style={{ ...interpolatingStyle, position: "relative" }}>
                         <NavBar
-                            className="NewNavBar"
+                            className="NewNavBar top"
                             mode="light"
                             icon={<Icon type="left" size="lg" style={{ "color": "#a3a3a3" }} />}
                             onLeftClick={() => hashHistory.goBack()}
                         >活动</NavBar>
                         <SegmentedControl
-                            style={{"margin" : "0.2rem 1rem"}}
+                            style={{"margin" : "8px 1rem"}}
                             values={['全部', '进行中', '已结束']}
                             tintColor={'#33a3ff'}
                             onChange={this.clickControl}
                         />
-                        <div className="activity-page-box">
+
+                        <div className="activity-page-box wrapper" style={{ overflow: "hidden", height: this.state.height }}>
                             <WingBlank size="md">
                                 {
                                     this.state.activity_list.length > 0 &&

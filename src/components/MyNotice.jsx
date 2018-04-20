@@ -74,7 +74,7 @@ export default class LoginView extends React.Component {
                 } else {
                     this.rData = [...this.rData, ...this.genData(pageIndex++, realDataLength, realData)];
                 }
-                const hei = document.documentElement.clientHeight - ReactDOM.findDOMNode(this.lv).parentNode.offsetTop - 25;                
+                const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;                
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(this.rData),
                     hasMore: res.data.is_next_page ? true : false,
@@ -320,7 +320,7 @@ export default class LoginView extends React.Component {
                 {interpolatingStyle => 
                     <div className="homeWrap" style={{ ...interpolatingStyle, position: "relative" }}>
                         <div className="lanternLis">
-                            <div className="forgetNav" key="1">
+                            <div className="forgetNav top" key="1">
                                 <NavBar
                                     mode="light"
                                     icon={<Icon type="left" size="lg" color="#707070" />}

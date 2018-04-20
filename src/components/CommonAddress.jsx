@@ -3,6 +3,7 @@ import { hashHistory, Link } from "react-router";
 import { Toast, NavBar, Icon, InputItem, List, Modal, WhiteSpace } from "antd-mobile";
 import update from 'immutability-helper';
 import { Motion, spring } from 'react-motion';
+import BScroll from 'better-scroll'
 
 //首先判断用户是不是移动端，（是否存在api这个接口）
 let UserIsPhone = false;
@@ -23,6 +24,7 @@ export default class CommonAddress extends React.Component {
             commonAddress: [], //常用地址列表
             homeAddressIndex: -1, //家庭地址索引
             companyAddressIndex: -1, //公司地址索引
+            height:""
         }
         this.handleUserHistoryCoordinate = (res) => {
             if (res.success) {
@@ -66,6 +68,11 @@ export default class CommonAddress extends React.Component {
         }
     }
     componentDidMount() {
+        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        this.setState({
+            height: hei
+        })
         this.getUserHistoryCoordinate();
     }
     //获取用户常用地址列表
@@ -115,22 +122,23 @@ export default class CommonAddress extends React.Component {
                 {interpolatingStyle => 
                     <div className="common-address" style={{ ...interpolatingStyle, position: "relative" }}>
                         <NavBar
-                            className="new-nav-bar"
+                            className="new-nav-bar top"
                             mode="light"
                             icon={<Icon type="left" size="lg" style={{ "color": "#a3a3a3" }} />}
                             onLeftClick={() => hashHistory.goBack()}
                             rightContent={<span onClick={() => { this.clickChangeCommonAddr("common") }} ><i className="iconfont icon-dituzhaofang"></i>新增</span>}
                         >常用地址</NavBar>
-                        <WhiteSpace size="lg" />
-                        <div className="common more-address-box">
-                            <p className="title">地址设置：</p>
-                            <List className="history-list common-addr-list first">
-                                {/* <List.Item
+                        <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
+                            <div className="common more-address-box">
+                                <WhiteSpace size="lg" />                            
+                                <p className="title">地址设置：</p>
+                                <List className="history-list common-addr-list first">
+                                    {/* <List.Item
                                     thumb={<i className="iconfont icon-dingwei"></i>}
                                     extra={<i onClick={this.deleteHistoryAddr} className="iconfont icon-shanchu"></i>}
                                     onClick={this.clickHistoryAddress}
                                 >杭州市西湖区</List.Item> */}
-                                {/* {
+                                    {/* {
                                     this.state.commonAddress.map((value, index) => {
                                         return  value.address_type == "home" ?
                                             (
@@ -156,31 +164,32 @@ export default class CommonAddress extends React.Component {
                                             ) : null
                                     })
                                 } */}
-                                <List.Item
-                                    key={0}
-                                    thumb={<span><i className="iconfont icon-fangzi"></i>家</span>}
-                                    extra={<i onClick={() => { this.clickChangeCommonAddr("home") }} className="iconfont icon-dituzhaofang"></i>}
-                                >{this.state.homeAddressIndex > 0 ? this.state.commonAddress[this.state.homeAddressIndex].long_lat_address : '请选择家庭地址'}</List.Item>
-                                <List.Item
-                                    key={1}
-                                    thumb={<span><i className="iconfont icon-iconset0190"></i>公司</span>}
-                                    extra={<i onClick={() => { this.clickChangeCommonAddr("company") }} className="iconfont icon-dituzhaofang"></i>}
-                                >{this.state.companyAddressIndex > 0 ? this.state.commonAddress[this.state.companyAddressIndex].long_lat_address : '请选择公司地址'}</List.Item>
-                            </List>
-                            <WhiteSpace size="lg" />
-                            <p className="title">常用地址列表：</p>
-                            <List className="history-list common-addr-list">
-                                {
-                                    this.state.commonAddress.map((value, index) => (
-                                        <List.Item
-                                            key={value.id}
-                                            thumb={<i className="iconfont icon-dingwei"></i>}
-                                            extra={<i onClick={(e) => { this.clickDeleteCommonAddr(e, value.id, value.long_lat_address) }} className="iconfont icon-shanchu"></i>}
+                                    <List.Item
+                                        key={0}
+                                        thumb={<span><i className="iconfont icon-fangzi"></i>家</span>}
+                                        extra={<i onClick={() => { this.clickChangeCommonAddr("home") }} className="iconfont icon-dituzhaofang"></i>}
+                                    >{this.state.homeAddressIndex > 0 ? this.state.commonAddress[this.state.homeAddressIndex].long_lat_address : '请选择家庭地址'}</List.Item>
+                                    <List.Item
+                                        key={1}
+                                        thumb={<span><i className="iconfont icon-iconset0190"></i>公司</span>}
+                                        extra={<i onClick={() => { this.clickChangeCommonAddr("company") }} className="iconfont icon-dituzhaofang"></i>}
+                                    >{this.state.companyAddressIndex > 0 ? this.state.commonAddress[this.state.companyAddressIndex].long_lat_address : '请选择公司地址'}</List.Item>
+                                </List>
+                                <WhiteSpace size="lg" />
+                                <p className="title">常用地址列表：</p>
+                                <List className="history-list common-addr-list">
+                                    {
+                                        this.state.commonAddress.map((value, index) => (
+                                            <List.Item
+                                                key={value.id}
+                                                thumb={<i className="iconfont icon-dingwei"></i>}
+                                                extra={<i onClick={(e) => { this.clickDeleteCommonAddr(e, value.id, value.long_lat_address) }} className="iconfont icon-shanchu"></i>}
                                             // onClick={() => { this.clickHistoryAddress(value) }}
-                                        >{value.long_lat_address}</List.Item>
-                                    ))
-                                }
-                            </List>
+                                            >{value.long_lat_address}</List.Item>
+                                        ))
+                                    }
+                                </List>
+                            </div>
                         </div>
                     </div>
                 }
