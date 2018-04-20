@@ -42,7 +42,8 @@ const ajaxURLList = {
     get_self_info:"hkw_newapi/get_self_info",       //获取个人信息
     get_user_info:"hkw_newapi/get_user_info",       //获取个人信息需登陆
     get_frozen_cash:"payapi/get_frozen_cash",       //获取冻结资金
-    get_real_name_auth:"hkw_newapi/get_real_name_auth",       //获取实名认证状态
+    get_real_name_auth: "hkw_newapi/get_real_name_auth",       //获取实名认证状态
+    send_real_name_auth: "hkw_newapi/send_real_name_auth",       //发送实名认证数据
     get_financial_list:"payapi/get_financial_list",           //获取交易记录
     add_service_template: "quoteApi/add_service_template", //报价-新增服务模板
     get_self_service_template_list: "quoteApi/get_self_service_template_list", // 报价-获取自己的服务报价模板列表
@@ -97,6 +98,7 @@ const ajaxURLList = {
     get_works_info_by_self: "hkw_newapi/get_works_info_by_self", //获取我的某个作品信息
     change_work_info: "hkw_newapi/change_work_info", //用户修改某个作品
     delete_work_info: "hkw_newapi/delete_work_info", //用户删除某个作品
+    submit_user_auth: "hkw_newapi/submit_user_auth", //提交设计师认证
 
     get_my_notice_list: "hkw_newapi/get_my_notice_list", //我的动态
 }

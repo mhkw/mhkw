@@ -130,7 +130,8 @@ export default class UserWorks extends React.Component {
                                 <List.Item
                                     className="auth-works-list"
                                     extra={<i style={{ "font-size": "20px" }} className="iconfont icon-jiantou2"></i>}
-                                    thumb={value.path_thumb ? value.path_thumb : defaultAvatar}
+                                    // thumb={value.path_thumb ? value.path_thumb : defaultAvatar}
+                                    thumb={<img src={value.path_thumb ? value.path_thumb : defaultAvatar} onError={(e) => { e.target.src = defaultAvatar  }} />}
                                     onClick={() => { this.gotoWorks(value.id) }}
                                 >
                                     {value.title}
