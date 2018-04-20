@@ -2,6 +2,7 @@ import React from "react";
 import { hashHistory, Link } from "react-router";
 import { Toast, NavBar, Icon, InputItem, List, Modal, WhiteSpace, Switch  } from "antd-mobile";
 import { Motion, spring } from 'react-motion';
+import BScroll from 'better-scroll'
 
 const loadingGif = require('../images/loading.gif'); //图形验证码加载中的GIG动图
 
@@ -27,6 +28,7 @@ export default class SetUp extends React.Component {
             show_love_users: '1',
             show_love_works: '1',
             display: '0', //是否关闭个人主页,3为关闭
+            height:"",
         }
         //获取到个人基本信息后的执行函数
         this.handleUserBaseInfo = (res) => {
@@ -289,6 +291,11 @@ export default class SetUp extends React.Component {
         }, this.handleMsgSend, false, "post");
     }
     componentDidMount() {
+        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        this.setState({
+            height: hei
+        })
         this.ajaxGetUserBaseInfo();
         this.ajaxGetNoticeSetList();
         this.ajaxGetPrivacySetList();
@@ -347,82 +354,87 @@ export default class SetUp extends React.Component {
                 {interpolatingStyle => 
                     <div className="set-up-page" style={{ ...interpolatingStyle, position: "relative" }}>
                         <NavBar
-                            className="new-nav-bar"
+                            className="new-nav-bar top"
                             mode="light"
                             icon={<Icon type="left" size="lg" style={{ "color": "#a3a3a3" }} />}
                             onLeftClick={() => hashHistory.goBack()}
                         >个人设置</NavBar>
-                        <List renderHeader={() => '账号设置：'} className="account-settings">
-                            <List.Item
-                                thumb={<span className="settings-thumb">邮箱</span>}
-                                extra={<i className="iconfont icon-bianji"></i>}
-                                onClick={this.clickEmail}
-                            >{this.state.email}</List.Item>
-                            <List.Item
-                                thumb={<span className="settings-thumb">手机</span>}
-                                extra={<i className="iconfont icon-bianji"></i>}
-                                onClick={this.clickPhone}
-                            >{this.state.phone}</List.Item>
-                            <List.Item arrow="horizontal" onClick={this.changePassword}>修改密码</List.Item>
-                        </List>
-                        <List renderHeader={() => '通知设置：'} className="account-settings">
-                            <List.Item
-                                extra={<Switch
-                                    checked={this.state.user != "0" ? true : false}
-                                    onClick={(change) => { this.ajaxChangeNoticeSet("user", change) }}
-                                />}
-                            >有人收藏了我</List.Item>
-                            <List.Item
-                                extra={<Switch
-                                    checked={this.state.gustbook != "0" ? true : false}
-                                    onClick={(change) => { this.ajaxChangeNoticeSet("gustbook", change) }}
-                                />}
-                            >有人给我留言</List.Item>
-                            <List.Item
-                                extra={<Switch
-                                    checked={this.state.comment != "0" ? true : false}
-                                    onClick={(change) => { this.ajaxChangeNoticeSet("comment", change) }}
-                                />}
-                            >有人评论了我的作品</List.Item>
-                            <List.Item
-                                extra={<Switch
-                                    checked={this.state.work != "0" ? true : false}
-                                    onClick={(change) => { this.ajaxChangeNoticeSet("work", change) }}
-                                />}
-                            >有人收藏了我的作品</List.Item>
-                            <List.Item
-                                extra={<Switch
-                                    checked={this.state.project != "0" ? true : false}
-                                    onClick={(change) => { this.ajaxChangeNoticeSet("project", change) }}
-                                />}
-                            >有人收藏了我的需求</List.Item>
-                            <List.Item
-                                extra={<Switch
-                                    checked={this.state.visit_home_page != "0" ? true : false}
-                                    onClick={(change) => { this.ajaxChangeNoticeSet("visit_home_page", change) }}
-                                />}
-                            >有人访问了我的主页</List.Item>
-                        </List>
-                        <List renderHeader={() => '隐私设置：'} className="account-settings">
-                            <List.Item
-                                extra={<Switch
-                                    checked={this.state.show_love_users != "0" ? false : true}
-                                    onClick={(change) => { this.ajaxChangePrivacySet("show_love_users", change) }}
-                                />}
-                            >隐藏我喜欢的设计师</List.Item>
-                            <List.Item
-                                extra={<Switch
-                                    checked={this.state.show_love_works != "0" ? false : true}
-                                    onClick={(change) => { this.ajaxChangePrivacySet("show_love_works", change) }}
-                                />}
-                            >隐藏我喜欢的作品</List.Item>
-                            <List.Item
-                                extra={<Switch
-                                    checked={this.state.display != "3" ? false : true}
-                                    onClick={(change) => { this.ajaxChangeUserInfo(change) }}
-                                />}
-                            >关闭个人主页</List.Item>
-                        </List>
+                        <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
+                            <div>
+                                <List renderHeader={() => '账号设置：'} className="account-settings">
+                                    <List.Item
+                                        thumb={<span className="settings-thumb">邮箱</span>}
+                                        extra={<i className="iconfont icon-bianji"></i>}
+                                        onClick={this.clickEmail}
+                                    >{this.state.email}</List.Item>
+                                    <List.Item
+                                        thumb={<span className="settings-thumb">手机</span>}
+                                        extra={<i className="iconfont icon-bianji"></i>}
+                                        onClick={this.clickPhone}
+                                    >{this.state.phone}</List.Item>
+                                    <List.Item arrow="horizontal" onClick={this.changePassword}>修改密码</List.Item>
+                                </List>
+                                <List renderHeader={() => '通知设置：'} className="account-settings">
+                                    <List.Item
+                                        extra={<Switch
+                                            checked={this.state.user != "0" ? true : false}
+                                            onClick={(change) => { this.ajaxChangeNoticeSet("user", change) }}
+                                        />}
+                                    >有人收藏了我</List.Item>
+                                    <List.Item
+                                        extra={<Switch
+                                            checked={this.state.gustbook != "0" ? true : false}
+                                            onClick={(change) => { this.ajaxChangeNoticeSet("gustbook", change) }}
+                                        />}
+                                    >有人给我留言</List.Item>
+                                    <List.Item
+                                        extra={<Switch
+                                            checked={this.state.comment != "0" ? true : false}
+                                            onClick={(change) => { this.ajaxChangeNoticeSet("comment", change) }}
+                                        />}
+                                    >有人评论了我的作品</List.Item>
+                                    <List.Item
+                                        extra={<Switch
+                                            checked={this.state.work != "0" ? true : false}
+                                            onClick={(change) => { this.ajaxChangeNoticeSet("work", change) }}
+                                        />}
+                                    >有人收藏了我的作品</List.Item>
+                                    <List.Item
+                                        extra={<Switch
+                                            checked={this.state.project != "0" ? true : false}
+                                            onClick={(change) => { this.ajaxChangeNoticeSet("project", change) }}
+                                        />}
+                                    >有人收藏了我的需求</List.Item>
+                                    <List.Item
+                                        extra={<Switch
+                                            checked={this.state.visit_home_page != "0" ? true : false}
+                                            onClick={(change) => { this.ajaxChangeNoticeSet("visit_home_page", change) }}
+                                        />}
+                                    >有人访问了我的主页</List.Item>
+                                </List>
+                                <List renderHeader={() => '隐私设置：'} className="account-settings">
+                                    <List.Item
+                                        extra={<Switch
+                                            checked={this.state.show_love_users != "0" ? false : true}
+                                            onClick={(change) => { this.ajaxChangePrivacySet("show_love_users", change) }}
+                                        />}
+                                    >隐藏我喜欢的设计师</List.Item>
+                                    <List.Item
+                                        extra={<Switch
+                                            checked={this.state.show_love_works != "0" ? false : true}
+                                            onClick={(change) => { this.ajaxChangePrivacySet("show_love_works", change) }}
+                                        />}
+                                    >隐藏我喜欢的作品</List.Item>
+                                    <List.Item
+                                        extra={<Switch
+                                            checked={this.state.display != "3" ? false : true}
+                                            onClick={(change) => { this.ajaxChangeUserInfo(change) }}
+                                        />}
+                                    >关闭个人主页</List.Item>
+                                </List>
+
+                            </div>
+                        </div>
                         <Modal
                             className="Confirm-order-modal set-up-modal"
                             visible={this.state.showConfirmOrder}

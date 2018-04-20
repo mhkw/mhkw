@@ -21,6 +21,7 @@ npm-debug.log
 .module-cache
 .*.sw*
 dist
+webpack.config.build.js
 /src/css/common.css
 /src/css/common.css.map
 /src/css/index.css

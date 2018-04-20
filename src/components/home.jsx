@@ -138,7 +138,9 @@ export default class HomeView extends React.Component {
     // shouldComponentUpdate(){
     //     // return (this.props.router.location.action === 'POP')
     // }
-
+    routerWillLeave(nextLocation) {
+        document.body.style.overflow = 'inherit';
+    }
     componentWillMount() {
         if (this.props.HOCState.Home.currentIdx) {
             this.setState({
@@ -147,6 +149,10 @@ export default class HomeView extends React.Component {
         }
     }
     componentDidMount() {
+        this.props.router.setRouteLeaveHook(
+            this.props.route,
+            this.routerWillLeave
+        )
         this.getWorkList(this.state.keyArray[this.state.currentIdx],1);
         if (!sessionStorage.getItem("designer_tree")) {
             runPromise("get_designer_tree", null, this.getPicsLis,false,"get");

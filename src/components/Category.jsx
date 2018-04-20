@@ -3,6 +3,7 @@ import { hashHistory } from 'react-router'
 import { NavBar, List, Icon, Toast,ActivityIndicator} from 'antd-mobile'
 import { Line, Jiange, CategoryPub} from './templateHomeCircle';
 import { Motion, spring } from 'react-motion';
+import BScroll from 'better-scroll'
 
 export default class Category extends React.Component {
     constructor(props) {
@@ -12,7 +13,8 @@ export default class Category extends React.Component {
             categoryId:"",
             fcategoryId:"",
             category:"",
-            animating:false
+            animating:false,
+            height:""
         };
         this.getPicsLis=(res)=>{
             console.log(res);
@@ -26,8 +28,11 @@ export default class Category extends React.Component {
         }
     }
     componentDidMount() {
+        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;  
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true}) 
         this.setState({ 
-            animating:true
+            animating:true,
+            height:hei
         })
         runPromise("get_menu_class", {num:148}, this.getPicsLis, false, "get");
         this.initSelectedCategory();
@@ -72,7 +77,7 @@ export default class Category extends React.Component {
             <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
                 {interpolatingStyle => 
                     <div className="needWrap" style={{ ...interpolatingStyle, position: "relative" }}>
-                        <div className="forgetNav">
+                        <div className="forgetNav top">
                             <NavBar
                                 mode="light"
                                 icon={<Icon type="left" size="lg" color="#707070" />}
@@ -90,26 +95,27 @@ export default class Category extends React.Component {
                             >选择领域</NavBar>
                         </div>
                         <div style={{ height: "1.2rem" }}></div>
-                        <div className="categoryWrap">
-                            {
-                                this.state.categoryList.map((value) => {
-                                    return <div className="categoryPub" key={value.id} id={value.id}>
-                                        <h3>{value.menu_name}</h3>
-                                        {
-                                            value.subMenuList.map((val) => {
-                                                return <CategoryPub 
-                                                    text={val.menu_name} 
-                                                    key={val.id}
-                                                    id={val.id}
-                                                    className="categoryPubLis "
-                                                    changeCategory={(e)=>{this.changeCategory(e,val.menu_name,val.id,value.id)}}
-                                                ></CategoryPub>
-                                            })
-                                        }
-                                    </div>
-                                })
-                            }
-                            
+                        <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
+                            <div className="categoryWrap" >
+                                {
+                                    this.state.categoryList.map((value) => {
+                                        return <div className="categoryPub" key={value.id} id={value.id}>
+                                            <h3>{value.menu_name}</h3>
+                                            {
+                                                value.subMenuList.map((val) => {
+                                                    return <CategoryPub
+                                                        text={val.menu_name}
+                                                        key={val.id}
+                                                        id={val.id}
+                                                        className="categoryPubLis "
+                                                        changeCategory={(e) => { this.changeCategory(e, val.menu_name, val.id, value.id) }}
+                                                    ></CategoryPub>
+                                                })
+                                            }
+                                        </div>
+                                    })
+                                }
+                            </div>
                         </div>
                         {/* <div className="toast-example">
                             <ActivityIndicator

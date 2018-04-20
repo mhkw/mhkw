@@ -121,7 +121,7 @@
   padding-bottom: 0;
   color: #409ad6;
   margin-top: .2rem;
-  background-color: #eee;
+  background-color: #f4f4f4;
 }
 
 .comment-item .comment-like-box .iconfont {
@@ -140,7 +140,9 @@
 .comment-item .comment-reply-box {
   color: #555;
   padding: .133333rem;
-  background-color: #eee;
+  background-color: #f4f4f4;
+  z-index: 1;
+  position: relative;
 }
 
 .comment-reply-box .reply-line {
@@ -277,7 +279,6 @@
 
 .categoryWrap {
   padding: 0 .27rem;
-  overflow: hidden;
 }
 
 .categoryWrap .categoryPub {
@@ -319,6 +320,34 @@
   padding: .15rem 0;
 }
 
+.comment-item .comment-like-box {
+  font-size: 13px;
+  word-break: break-word;
+}
+
+.comment-item .comment-reply-box {
+  font-size: 13px;
+  word-break: break-word;
+}
+
+.comment-item .comment-reply-box.more {
+  text-align: center;
+  color: #409ad6;
+}
+
+.designer-comment.view-more {
+  width: 2rem;
+  height: 1rem;
+  line-height: 1rem;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: .3rem;
+  margin-bottom: .3rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
 .cicleCard {
   overflow: hidden;
 }
@@ -333,4 +362,8 @@
   box-sizing: border-box;
   border-radius: 5px;
   padding: 3px;
+}
+
+.pswp__ui .pswp__top-bar {
+  top: 25px;
 }

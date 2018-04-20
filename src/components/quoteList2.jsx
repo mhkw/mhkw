@@ -4,6 +4,7 @@ import { hashHistory } from 'react-router';
 import { Line,Jiange } from './templateHomeCircle';
 import { QuoteItemList } from "./TemplateView";
 import { Motion, spring } from 'react-motion';
+import BScroll from 'better-scroll'
 
 // require("../css/person.scss");
 const urls = [require('../images/touxiang.png')];
@@ -62,6 +63,7 @@ export default class Account2 extends React.Component {
             showPayModal: false,  //是否显示付款的弹窗
             payModel_id: 0,  //付款的模块ID
             payTotalAmount: 0,  //付款的支付总金额
+            height:""
         }
         this.handleSend = (res, quote_status) => {
             if (res.success) {
@@ -87,6 +89,11 @@ export default class Account2 extends React.Component {
         
     }
     componentDidMount(){
+        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 68.5;
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        this.setState({
+            height: hei
+        })
         this.getMainProjectList(0);  //收到的报价（甲方），全部
     }
     onChangeControl = (e) => {
@@ -195,6 +202,7 @@ export default class Account2 extends React.Component {
                     <div className="orderListWrap" style={{ ...interpolatingStyle, position: "relative" }}>
                         <NavBar
                             mode="light"
+                            className="top"
                             icon={<i className="icon-leftarrow iconfont" style={{color:"#333",fontSize:"28px",marginTop:"4px"}}/>}
                             style={{ borderBottom:"1px solid #C7C7C7"}}
                             onLeftClick={()=>{
@@ -219,70 +227,74 @@ export default class Account2 extends React.Component {
                                 />
                             </WingBlank>
                         </NavBar>
-                        <Jiange name="jianGe"></Jiange>
                         <Tabs tabs={tabsLabel}
                             initialPage={0}
                             onChange={this.onChangeTabs}
-                            // onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
+                        // onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
                         >
-                            <OrderItem
-                                quote_status={""}
-                                state={this.state}
-                                changeShowConfirmOrder={this.changeShowConfirmOrder}
-                                agreeToPay={this.agreeToPay}
-                                refuseQuote={this.refuseQuote}
-                                setState={this.setState.bind(this)}
-                            />
-                            <OrderItem
-                                quote_status={1}
-                                state={this.state}
-                                changeShowConfirmOrder={this.changeShowConfirmOrder}
-                                agreeToPay={this.agreeToPay}
-                                refuseQuote={this.refuseQuote}
-                                setState={this.setState.bind(this)}
-                            />
-                                <OrderItem
-                                    quote_status={2}
-                                    state={this.state}
-                                    changeShowConfirmOrder={this.changeShowConfirmOrder}
-                                    agreeToPay={this.agreeToPay}
-                                    refuseQuote={this.refuseQuote}
-                                    setState={this.setState.bind(this)}
-                                />
-                                <OrderItem
-                                    quote_status={3}
-                                    state={this.state}
-                                    changeShowConfirmOrder={this.changeShowConfirmOrder}
-                                    agreeToPay={this.agreeToPay}
-                                    refuseQuote={this.refuseQuote}
-                                    setState={this.setState.bind(this)}
-                                />
-                                <OrderItem
-                                    quote_status={4}
-                                    state={this.state}
-                                    changeShowConfirmOrder={this.changeShowConfirmOrder}
-                                    agreeToPay={this.agreeToPay}
-                                    refuseQuote={this.refuseQuote}
-                                    setState={this.setState.bind(this)}
-                                />
-                                <OrderItem
-                                    quote_status={5}
-                                    state={this.state}
-                                    changeShowConfirmOrder={this.changeShowConfirmOrder}
-                                    agreeToPay={this.agreeToPay}
-                                    refuseQuote={this.refuseQuote}
-                                    setState={this.setState.bind(this)}
-                                />
+                            <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
+                                <div>
+                                    <OrderItem
+                                        quote_status={""}
+                                        state={this.state}
+                                        changeShowConfirmOrder={this.changeShowConfirmOrder}
+                                        agreeToPay={this.agreeToPay}
+                                        refuseQuote={this.refuseQuote}
+                                        setState={this.setState.bind(this)}
+                                    />
+                                    <OrderItem
+                                        quote_status={1}
+                                        state={this.state}
+                                        changeShowConfirmOrder={this.changeShowConfirmOrder}
+                                        agreeToPay={this.agreeToPay}
+                                        refuseQuote={this.refuseQuote}
+                                        setState={this.setState.bind(this)}
+                                    />
+                                    <OrderItem
+                                        quote_status={2}
+                                        state={this.state}
+                                        changeShowConfirmOrder={this.changeShowConfirmOrder}
+                                        agreeToPay={this.agreeToPay}
+                                        refuseQuote={this.refuseQuote}
+                                        setState={this.setState.bind(this)}
+                                    />
+                                    <OrderItem
+                                        quote_status={3}
+                                        state={this.state}
+                                        changeShowConfirmOrder={this.changeShowConfirmOrder}
+                                        agreeToPay={this.agreeToPay}
+                                        refuseQuote={this.refuseQuote}
+                                        setState={this.setState.bind(this)}
+                                    />
+                                    <OrderItem
+                                        quote_status={4}
+                                        state={this.state}
+                                        changeShowConfirmOrder={this.changeShowConfirmOrder}
+                                        agreeToPay={this.agreeToPay}
+                                        refuseQuote={this.refuseQuote}
+                                        setState={this.setState.bind(this)}
+                                    />
+                                    <OrderItem
+                                        quote_status={5}
+                                        state={this.state}
+                                        changeShowConfirmOrder={this.changeShowConfirmOrder}
+                                        agreeToPay={this.agreeToPay}
+                                        refuseQuote={this.refuseQuote}
+                                        setState={this.setState.bind(this)}
+                                    />
+                                </div>
+                            </div>
                         </Tabs>
-                            {this.props.children && React.cloneElement(this.props.children, { 
-                                paySuccessCallback: this.paySuccessCallback, 
-                                payFailCallback: this.payFailCallback, 
-                                setShowModal: this.setShowModal, 
-                                showModal: this.state.showPayModal, 
-                                pay_model: 'project', 
-                                model_id: this.state.payModel_id, 
-                                payment: this.state.payTotalAmount 
-                            })}
+                    
+                        {this.props.children && React.cloneElement(this.props.children, { 
+                            paySuccessCallback: this.paySuccessCallback, 
+                            payFailCallback: this.payFailCallback, 
+                            setShowModal: this.setShowModal, 
+                            showModal: this.state.showPayModal, 
+                            pay_model: 'project', 
+                            model_id: this.state.payModel_id, 
+                            payment: this.state.payTotalAmount 
+                        })}
                     </div>
                 }
             </Motion>

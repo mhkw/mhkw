@@ -156,7 +156,7 @@ export default class LoginView extends React.Component {
     }
     routerWillLeave(nextLocation) {
         pageIndex = 0;
-        document.body.style.overflow = 'hidden';
+        document.body.style.overflow = 'inherit';
     }
     getNoticeList=(page)=>{
         runPromise("get_circle_list", {        //获取列表

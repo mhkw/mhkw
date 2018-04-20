@@ -2,6 +2,7 @@ import React from 'react';
 import { NavBar, Icon, Toast, List, Button, SwipeAction, Modal, InputItem} from 'antd-mobile';
 import { hashHistory } from 'react-router';
 import { Motion, spring } from 'react-motion';
+import BScroll from 'better-scroll'
 
 export default class Contacts extends React.Component {
     constructor(props){
@@ -45,6 +46,11 @@ export default class Contacts extends React.Component {
         }
     }
     componentDidMount() {
+        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 30;
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        this.setState({
+            height: hei
+        })
         this.ajaxGetCustomers();
         if (this.props.location.query && this.props.location.query.form) {
             this.setState({
@@ -179,7 +185,7 @@ export default class Contacts extends React.Component {
                 {interpolatingStyle => 
                     <div className="contacts-page" style={{ ...interpolatingStyle, position: "relative" }}>
                         <NavBar
-                            className="add-server-nav-bar"
+                            className="add-server-nav-bar top"
                             mode="light"
                             icon={<Icon type="left" />}
                             onLeftClick={() => hashHistory.goBack()}
@@ -195,40 +201,42 @@ export default class Contacts extends React.Component {
                             borderTop: '1px solid #ECECED',
                             borderBottom: '1px solid #ECECED',
                         }}></div>
-                        <List className="contacts-list">
-                        {
-                            this.state.contactsList.map((value,index)=>(
-                                <SwipeAction
-                                    className="contacts-swipe"
-                                    key={value.id}
-                                    autoClose
-                                    right={[
-                                        {
-                                            text: '编辑',
-                                            onPress: () => this.openModal(value),
-                                            style: { backgroundColor: '#56B949',fontSize: '16px', color: 'white', padding: '0 8px' },
-                                        },
-                                        {
-                                            text: '删除',
-                                            onPress: () => this.handleDelete(value.customer_id, value.yunLinkName),
-                                            style: { backgroundColor: '#F4333C',fontSize: '16px', color: 'white', padding: '0 8px' },
-                                        },
-                                    ]}
-                                    // onOpen={() => null}
-                                    // onClose={() => null}
-                                >
-                                    <List.Item
-                                        key={value.id}
-                                        // arrow="horizontal"
-                                        extra={<i style={{"font-size": "20px"}} className="iconfont icon-jiantou2"></i>}
-                                        onClick={() => this.handleClickItem(value)}
-                                    >
-                                        {value.yunLinkName + '/' + value.yunLinkCompany}<List.Item.Brief> <i className="iconfont icon-dianhua"></i> {value.yunLinkPhone}</List.Item.Brief>
-                                    </List.Item>
-                                </SwipeAction>
-                            ))
-                        }
-                        </List>
+                        <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
+                            <List className="contacts-list">
+                                {
+                                    this.state.contactsList.map((value, index) => (
+                                        <SwipeAction
+                                            className="contacts-swipe"
+                                            key={value.id}
+                                            autoClose
+                                            right={[
+                                                {
+                                                    text: '编辑',
+                                                    onPress: () => this.openModal(value),
+                                                    style: { backgroundColor: '#56B949', fontSize: '16px', color: 'white', padding: '0 8px' },
+                                                },
+                                                {
+                                                    text: '删除',
+                                                    onPress: () => this.handleDelete(value.customer_id, value.yunLinkName),
+                                                    style: { backgroundColor: '#F4333C', fontSize: '16px', color: 'white', padding: '0 8px' },
+                                                },
+                                            ]}
+                                        // onOpen={() => null}
+                                        // onClose={() => null}
+                                        >
+                                            <List.Item
+                                                key={value.id}
+                                                // arrow="horizontal"
+                                                extra={<i style={{ "font-size": "20px" }} className="iconfont icon-jiantou2"></i>}
+                                                onClick={() => this.handleClickItem(value)}
+                                            >
+                                                {value.yunLinkName + '/' + value.yunLinkCompany}<List.Item.Brief> <i className="iconfont icon-dianhua"></i> {value.yunLinkPhone}</List.Item.Brief>
+                                            </List.Item>
+                                        </SwipeAction>
+                                    ))
+                                }
+                            </List>
+                        </div>
                         <Modal
                             className="contacts-modal"
                             visible={this.state.showInputModal}

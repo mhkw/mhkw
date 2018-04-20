@@ -1,6 +1,8 @@
 import React from "react";
 import { hashHistory, Link } from "react-router";
 import { Toast, NavBar, Icon, InputItem, List, Modal, WhiteSpace, WingBlank, Tag, Button, SwipeAction } from "antd-mobile";
+import { Motion, spring } from 'react-motion';
+import BScroll from 'better-scroll'
 
 const defaultAvatar = require('../images/logoZhanWei.png');
 
@@ -11,6 +13,7 @@ export default class UserWorks extends React.Component {
             location_form: 'mine',
             Works: [], //作品列表
             is_next_page: 0, //作品列表是否还有下一页
+            height: ""
         }
     }
     //预览作品，跳到作品详情页面去
@@ -52,6 +55,13 @@ export default class UserWorks extends React.Component {
             this.setState({ Works, is_next_page });
         }
     }
+    componentDidMount(){
+        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true }) 
+        this.setState({
+            height: hei
+        })
+    }
     componentWillMount() {
         if (this.props.location.query && this.props.location.query.form) {
             this.setState({ location_form: this.props.location.query.form });
@@ -72,82 +82,89 @@ export default class UserWorks extends React.Component {
             e.target.style.backgroundColor = oldBackgroundColor;
         }
         return (
-            <div className="user-works-page" key="1">
-                {
-                    this.state.location_form == "allWorks" ? (
-                        <NavBar
-                            className="new-nav-bar"
-                            mode="light"
-                            icon={<Icon type="left" size="lg" style={{ "color": "#a3a3a3" }} />}
-                            onLeftClick={() => hashHistory.goBack()}
-                        >作品列表</NavBar>
-                    ) : null
-                }
-                
-                <List>
-                    {/* <List.Item
-                        className="auth-works-list"
-                        multipleLine
-                        arrow="horizontal"
-                        thumb={defaultAvatar}
-                        onClick={this.gotoWorks}
-                    >
-                        添加作品
-                            </List.Item>
-                    <List.Item
-                        className="auth-works-list"
-                        multipleLine
-                        arrow="horizontal"
-                        thumb={defaultAvatar}
-                        onClick={this.gotoWorks}
-                    >
-                        添加作品2
-                    </List.Item> */}
-                    {
-                        this.state.Works.length > 0 &&
-                        this.state.Works.map((value, index)=>(
-                            <SwipeAction
-                                className="works-swipe"
-                                autoClose
-                                right={[
-                                    {
-                                        text: '预览',
-                                        onPress: () => this.gotoWorks(value.id),
-                                        style: { backgroundColor: '#f8c301', fontSize: '16px', color: 'white', padding: '0 8px' },
-                                    },
-                                    {
-                                        text: '修改',
-                                        onPress: () => this.changeWorks(value.id),
-                                        style: { backgroundColor: '#56B949', fontSize: '16px', color: 'white', padding: '0 8px' },
-                                    },
-                                    {
-                                        text: '删除',
-                                        onPress: () => this.clickDeleteWorks(value.id, value.title),
-                                        style: { backgroundColor: '#F4333C', fontSize: '16px', color: 'white', padding: '0 8px' },
-                                    },
-                                ]}
+            <Motion defaultStyle={{ left: 300 }} style={{ left: spring(0, { stiffness: 300, damping: 28 }) }}>
+                {interpolatingStyle => 
+                    <div className="user-works-page" style={{ ...interpolatingStyle, position: "relative" }}>
+                        {
+                            this.state.location_form == "allWorks" ? (
+                                <NavBar
+                                    className="new-nav-bar top"
+                                    mode="light"
+                                    icon={<Icon type="left" size="lg" style={{ "color": "#a3a3a3" }} />}
+                                    onLeftClick={() => hashHistory.goBack()}
+                                >作品列表</NavBar>
+                            ) : null
+                        }
+                        
+                        <List 
+                            className={this.state.location_form == "allWorks"?"wrapper":"" }
+                            style={ this.state.location_form == "allWorks" ? {overflow: "hidden", height: this.state.height}:{} }
+                        >
+                            {/* <List.Item
+                                className="auth-works-list"
+                                multipleLine
+                                arrow="horizontal"
+                                thumb={defaultAvatar}
+                                onClick={this.gotoWorks}
                             >
-                                <List.Item
-                                    className="auth-works-list"
-                                    extra={<i style={{ "font-size": "20px" }} className="iconfont icon-jiantou2"></i>}
-                                    thumb={value.path_thumb ? value.path_thumb : defaultAvatar}
-                                    onClick={() => { this.gotoWorks(value.id) }}
-                                >
-                                    {value.title}
-                                </List.Item>
-                            </SwipeAction>
-                        ))
-                    }
-                    <div
-                        className="user-works-view-more"
-                        style={{ "display": this.state.is_next_page > 0 ? "block" : "none" }}
-                        onTouchStart={touchStart}
-                        onTouchEnd={touchEnd}
-                        onClick={this.clickNextMoreClick}
-                    >查看更多</div>
-                    
-                </List>
-            </div>
+                                添加作品
+                                    </List.Item>
+                            <List.Item
+                                className="auth-works-list"
+                                multipleLine
+                                arrow="horizontal"
+                                thumb={defaultAvatar}
+                                onClick={this.gotoWorks}
+                            >
+                                添加作品2
+                            </List.Item> */}
+                            {
+                                this.state.Works.length > 0 &&
+                                this.state.Works.map((value, index)=>(
+                                    <SwipeAction
+                                        className="works-swipe"
+                                        autoClose
+                                        right={[
+                                            {
+                                                text: '预览',
+                                                onPress: () => this.gotoWorks(value.id),
+                                                style: { backgroundColor: '#f8c301', fontSize: '16px', color: 'white', padding: '0 8px' },
+                                            },
+                                            {
+                                                text: '修改',
+                                                onPress: () => this.changeWorks(value.id),
+                                                style: { backgroundColor: '#56B949', fontSize: '16px', color: 'white', padding: '0 8px' },
+                                            },
+                                            {
+                                                text: '删除',
+                                                onPress: () => this.clickDeleteWorks(value.id, value.title),
+                                                style: { backgroundColor: '#F4333C', fontSize: '16px', color: 'white', padding: '0 8px' },
+                                            },
+                                        ]}
+                                    >
+                                        <List.Item
+                                            className="auth-works-list"
+                                            extra={<i style={{ "font-size": "20px" }} className="iconfont icon-jiantou2"></i>}
+                                            thumb={value.path_thumb ? value.path_thumb : defaultAvatar}
+                                            onClick={() => { this.gotoWorks(value.id) }}
+                                        >
+                                            {value.title}
+                                        </List.Item>
+                                    </SwipeAction>
+                                ))
+                            }
+                            <div
+                                className="user-works-view-more"
+                                style={{ "display": this.state.is_next_page > 0 ? "block" : "none" }}
+                                onTouchStart={touchStart}
+                                onTouchEnd={touchEnd}
+                                onClick={this.clickNextMoreClick}
+                            >查看更多</div>
+                            
+                        </List>
+                    </div>
+                }
+            </Motion>
         )
     }
 }

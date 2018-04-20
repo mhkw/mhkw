@@ -250,7 +250,6 @@
 
 .categoryWrap {
     padding: 0 .27rem;
-    overflow: hidden;
     .categoryPub {
         border-bottom: 1px solid #D6D6D6;
         overflow: hidden;
@@ -323,4 +322,7 @@
             padding: 3px;
         }
     }
+}
+.pswp__ui .pswp__top-bar {
+    top: 25px;
 }

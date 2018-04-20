@@ -4,6 +4,7 @@ import { hashHistory } from 'react-router';
 import { Line,Jiange } from './templateHomeCircle';
 import { OrderItemList } from "./TemplateView";
 import { Motion, spring } from 'react-motion';
+import BScroll from 'better-scroll'
 
 // require("../css/person.scss");
 const urls = [require('../images/touxiang.png')];
@@ -48,7 +49,8 @@ export default class Account extends React.Component {
             showScoreModal: false,
             selectedScore: 0, //选中的弹窗的评分
             selectedScoreComment: "", //选中的弹窗的评论留言
-            selectedScoreEnd: false //选中的评论弹窗是否已经评论。即弹窗是已评论还是没评论，已评论
+            selectedScoreEnd: false, //选中的评论弹窗是否已经评论。即弹窗是已评论还是没评论，已评论
+            height:""
         }
         this.handleSend = (res,fg) =>{
             // console.log(res,fg);            
@@ -116,6 +118,11 @@ export default class Account extends React.Component {
         }
     }
     componentDidMount(){
+        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 68.5;
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        this.setState({
+            height: hei
+        })
         this.getMainProjectList(0, 2);  //进行中的订单
         this.getMainProjectList(0, 5);  //历史订单
         //用state保存用户手机号
@@ -327,6 +334,7 @@ export default class Account extends React.Component {
                     <div className="orderListWrap" style={{ ...interpolatingStyle, position: "relative" }}>
                         <NavBar
                             mode="light"
+                            className="top"
                             icon={<i className="icon-leftarrow iconfont" style={{color:"#333",fontSize:"28px",marginTop:"4px"}}/>}
                             style={{ borderBottom:"1px solid #C7C7C7"}}
                             onLeftClick={()=>{
@@ -351,63 +359,67 @@ export default class Account extends React.Component {
                                 />
                             </WingBlank>
                         </NavBar>
-                        <Jiange name="jianGe"></Jiange>
+                        
                         <Tabs tabs={tabsLabel}
                             initialPage={0}
                             // onChange={(tab, index) => { console.log('onChange', index, tab); }}
                             // onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
                         >
-                            <div className="orderItemList" >
-                                <div className="orderItem">
-                                    <div className="orderItemLis">
-                                        <ul>
-                                            {
-                                                this.state.item_list_ing.length ? (
-                                                    this.state.item_list_ing.map((val, index) => (
-                                                        <div>
-                                                            <OrderItemList 
-                                                                {...val} 
-                                                                is_quoter={this.state.selectedSegmentIndex}
-                                                                changeShowConfirmOrder={this.changeShowConfirmOrder}
-                                                                changeShowScoreModal={this.changeShowScoreModal}
-                                                                remindOrder={this.remindOrder}
-                                                                setState={this.setState.bind(this)} 
-                                                            />
-                                                            <Jiange name="jianGe"></Jiange>
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    <img src={tempNull} />
-                                                )
-                                            }
-                                        </ul>
+                            <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
+                                <div>
+                                    <div className="orderItemList" >
+                                        <div className="orderItem">
+                                            <div className="orderItemLis">
+                                                <ul>
+                                                    {
+                                                        this.state.item_list_ing.length ? (
+                                                            this.state.item_list_ing.map((val, index) => (
+                                                                <div>
+                                                                    <OrderItemList 
+                                                                        {...val} 
+                                                                        is_quoter={this.state.selectedSegmentIndex}
+                                                                        changeShowConfirmOrder={this.changeShowConfirmOrder}
+                                                                        changeShowScoreModal={this.changeShowScoreModal}
+                                                                        remindOrder={this.remindOrder}
+                                                                        setState={this.setState.bind(this)} 
+                                                                    />
+                                                                    <Jiange name="jianGe"></Jiange>
+                                                                </div>
+                                                            ))
+                                                        ) : (
+                                                            <img src={tempNull} />
+                                                        )
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div className="orderItemList" >
-                                <div className="orderItem">
-                                    <div className="orderItemLis">
-                                        <ul>
-                                            {
-                                                this.state.item_list_end.length ? (
-                                                    this.state.item_list_end.map((val, index) => (
-                                                        <div>
-                                                            <OrderItemList 
-                                                                {...val} 
-                                                                is_quoter={this.state.selectedSegmentIndex}
-                                                                changeShowConfirmOrder={this.changeShowConfirmOrder}
-                                                                changeShowScoreModal={this.changeShowScoreModal}
-                                                                remindOrder={this.remindOrder}
-                                                                setState={this.setState.bind(this)}  
-                                                            />
-                                                            <Jiange name="jianGe"></Jiange>
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    <img src={tempNull} />
-                                                )
-                                            }
-                                        </ul>
+                                    <div className="orderItemList" >
+                                        <div className="orderItem">
+                                            <div className="orderItemLis">
+                                                <ul>
+                                                    {
+                                                        this.state.item_list_end.length ? (
+                                                            this.state.item_list_end.map((val, index) => (
+                                                                <div>
+                                                                    <OrderItemList 
+                                                                        {...val} 
+                                                                        is_quoter={this.state.selectedSegmentIndex}
+                                                                        changeShowConfirmOrder={this.changeShowConfirmOrder}
+                                                                        changeShowScoreModal={this.changeShowScoreModal}
+                                                                        remindOrder={this.remindOrder}
+                                                                        setState={this.setState.bind(this)}  
+                                                                    />
+                                                                    <Jiange name="jianGe"></Jiange>
+                                                                </div>
+                                                            ))
+                                                        ) : (
+                                                            <img src={tempNull} />
+                                                        )
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

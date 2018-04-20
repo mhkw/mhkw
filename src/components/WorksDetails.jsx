@@ -1,6 +1,7 @@
 import React from 'react'
 import { NavBar, Icon, Toast, Button, Flex, WingBlank, Popover, Modal, TextareaItem  } from 'antd-mobile';
 import { Link, hashHistory } from 'react-router';
+import BScroll from 'better-scroll'
 
 const zhanWei = require('../images/logoZhanWei.png');
 const defaultAvatar = require("../images/selec.png");
@@ -17,7 +18,8 @@ let openPhotoSwipe = function (items, index) {
     let options = {
         index: index,
         showAnimationDuration: 100,
-        hideAnimationDuration: 100
+        hideAnimationDuration: 100,
+        height:""
     }
     let gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
     gallery.init();
@@ -124,6 +126,13 @@ export default class WorksDetails extends React.Component {
         })
     }
     componentDidMount() {
+        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
+        setTimeout(() => {
+            new BScroll(document.querySelector('.wrapper'), { click: true })
+        }, 500);
+        this.setState({
+            height: hei
+        })
         this.ajaxGetWorks(this.state.works_id);
     }
     ajaxGetWorks = (works_id) => {
@@ -228,6 +237,7 @@ export default class WorksDetails extends React.Component {
             <div className="WorksDetails" key="0">
                 <NavBar
                     mode="light"
+                    className="top"
                     icon={<Icon type="left" size="lg" color="#333" />}
                     onLeftClick={() => hashHistory.goBack()}
                     // leftContent={<span style={{ fontSize: "15px" }}>返回</span>}
@@ -249,66 +259,70 @@ export default class WorksDetails extends React.Component {
                     <span className="avatar-name">{this.state.nick_name}</span>
                 </p>
                 </NavBar>
-                <WingBlank>
-                    <h1 className="works-title">{this.state.title}</h1>
-                    <Flex className="works-base-info">
-                        <Flex.Item className="left">
-                            <i className="iconfont icon-yanjing"></i>
-                            {this.state.hits}
-                            <i className="iconfont icon-Pingjia"></i>
-                            {this.state.love_count}
-                            <i className="iconfont icon-liuyan"></i>
-                            {this.state.comment_count}
-                        </Flex.Item>
-                        <Flex.Item className="right">
-                            <i className="iconfont icon-shijian1"></i>
-                            {this.state.add_time_format}
-                        </Flex.Item>
-                    </Flex>
-                    {/* {
-                        this.state.batch_video_urls.length > 0 &&
-                        this.state.batch_video_urls.map((value,index)=>(
-                            // <video
-                            //     src={value}
-                            //     style={{"height": "auto","width": "100%"}}
-                            //     controls="controls"
-                            //     // quality="high"
-                            //     // align="middle" allowScriptAccess="always"
-                            //     // allowFullScreen="true"
-                            //     // mode="transparent"
-                            //     // type="application/x-shockwave-flash"
-                            // >
-                            // </video>
-                            <iframe 
-                            width="100%" 
-                            height="auto" 
-                            src='https://v.youku.com/v_show/id_XMjk1Mjc0MzA0OA==.html?spm=a2hzp.8253869.0.0' 
-                            frameborder="0"
-                            allowfullscreen='allowfullscreen'
-                            ></iframe>
-                        ))
-                    } */}
-                    <pre
-                        className="content-box"
-                        dangerouslySetInnerHTML={{__html: this.state.content}}
-                    ></pre>
-                    <div className="attachment-box">
-                        {
-                            this.state.attachment_list.length > 0 && 
-                            this.state.attachment_list.map((value, index, elem)=>(
-                                <img
-                                    key={value.id}
-                                    className="mb-img"
-                                    src={value.path_thumb ? value.path_thumb : value.path}
-                                    // src={value.path_thumb ? (value.path_thumb).split("!")[0] + '!209x150' : value.path}
-                                    onError={(e) => { e.target.src = zhanWei; }}
-                                    onClick={() => { this.onTouchImg(index, elem) }}
-                                />
-                            ))
-                        }
+                <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
+                    <div>
+                        <WingBlank>
+                            <h1 className="works-title">{this.state.title}</h1>
+                            <Flex className="works-base-info">
+                                <Flex.Item className="left">
+                                    <i className="iconfont icon-yanjing"></i>
+                                    {this.state.hits}
+                                    <i className="iconfont icon-Pingjia"></i>
+                                    {this.state.love_count}
+                                    <i className="iconfont icon-liuyan"></i>
+                                    {this.state.comment_count}
+                                </Flex.Item>
+                                <Flex.Item className="right">
+                                    <i className="iconfont icon-shijian1"></i>
+                                    {this.state.add_time_format}
+                                </Flex.Item>
+                            </Flex>
+                            {/* {
+                                this.state.batch_video_urls.length > 0 &&
+                                this.state.batch_video_urls.map((value,index)=>(
+                                    // <video
+                                    //     src={value}
+                                    //     style={{"height": "auto","width": "100%"}}
+                                    //     controls="controls"
+                                    //     // quality="high"
+                                    //     // align="middle" allowScriptAccess="always"
+                                    //     // allowFullScreen="true"
+                                    //     // mode="transparent"
+                                    //     // type="application/x-shockwave-flash"
+                                    // >
+                                    // </video>
+                                    <iframe 
+                                    width="100%" 
+                                    height="auto" 
+                                    src='https://v.youku.com/v_show/id_XMjk1Mjc0MzA0OA==.html?spm=a2hzp.8253869.0.0' 
+                                    frameborder="0"
+                                    allowfullscreen='allowfullscreen'
+                                    ></iframe>
+                                ))
+                            } */}
+                            <pre
+                                className="content-box"
+                                dangerouslySetInnerHTML={{ __html: this.state.content }}
+                            ></pre>
+                            <div className="attachment-box">
+                                {
+                                    this.state.attachment_list.length > 0 &&
+                                    this.state.attachment_list.map((value, index, elem) => (
+                                        <img
+                                            key={value.id}
+                                            className="mb-img"
+                                            src={value.path_thumb ? value.path_thumb : value.path}
+                                            // src={value.path_thumb ? (value.path_thumb).split("!")[0] + '!209x150' : value.path}
+                                            onError={(e) => { e.target.src = zhanWei; }}
+                                            onClick={() => { this.onTouchImg(index, elem) }}
+                                        />
+                                    ))
+                                }
+                            </div>
+                        </WingBlank>
+                        <div style={{ "height": "1.6rem" }}></div>
                     </div>
-                </WingBlank>
-                <div style={{ "height": "1.2rem" }}></div>
+                </div>
                 <Flex className="bottom-features works-details">
                     <Flex.Item
                         style={{ "background-color": this.state.buttomBackgroundColor1 }}

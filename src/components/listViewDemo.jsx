@@ -68,6 +68,7 @@ class StageSelectCity extends React.Component {
         return (
             <div className="StageSelectCity">
                 <NavBar mode="light"
+                    className="top"
                     icon={<Icon size="lg" type="left" color="#707070" />}
                     onLeftClick={() => hashHistory.goBack()}
                     leftContent={iconLeft}

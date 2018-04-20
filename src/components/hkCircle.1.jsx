@@ -157,11 +157,11 @@ export default class LoginView extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.state.useBodyScroll) {
-            document.body.style.overflow = 'auto';
-        } else {
-            document.body.style.overflow = 'hidden';
-        }
+        // if (this.state.useBodyScroll) {
+        //     document.body.style.overflow = 'auto';
+        // } else {
+        //     document.body.style.overflow = 'hidden';
+        // }
     }
     shouldComponentUpdate(){
         return (this.props.router.location.action === 'POP')
