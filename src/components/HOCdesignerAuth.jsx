@@ -110,6 +110,13 @@ export default class HOCdesignerAuth extends React.Component {
                 Toast.fail(res.message, 1);
             }
         }
+        this.handleSubmitUserAuth = (res) => {
+            if (res.success) {
+                
+            } else {
+                Toast.fail(res.message, 1);
+            }
+        }
     }
 
     /**
@@ -183,6 +190,18 @@ export default class HOCdesignerAuth extends React.Component {
             work_id
         }, this.handleDeleteWorks, true, "post", work_id);
     }
+    //设计师认证，提交审核
+    ajaxSubmitUserAuth = () => {
+        console.log("提交");
+        runPromise("submit_user_auth", {
+            experience: user.experience,
+            jobs: user.jobs[0] || "",
+            keywords: user.keywords.join(","),
+            signature: user.signature_bbs || "",
+            nick_name: user.nick_name,
+            sex: user.sex,
+        }, this.handleSubmitUserAuth);
+    }
     render() {
         return (
             <div className="hoc-designer-auth">
@@ -205,6 +224,7 @@ export default class HOCdesignerAuth extends React.Component {
                             ajaxChangeDesignerTree: this.ajaxChangeDesignerTree,
                             is_next_page: this.state.is_next_page, //是否有更多作品
                             ajaxDeleteWorks: this.ajaxDeleteWorks, //删除某个作品
+                            ajaxSubmitUserAuth: this.ajaxSubmitUserAuth, //设计师认证，提交审核
                         }
                     )
                 }

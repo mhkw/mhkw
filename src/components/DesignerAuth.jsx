@@ -1,6 +1,6 @@
 import React from "react";
 import { hashHistory, Link } from "react-router";
-import { Toast, NavBar, Icon, InputItem, List, Modal, WhiteSpace, WingBlank, Tag  } from "antd-mobile";
+import { Toast, NavBar, Icon, InputItem, List, Modal, WhiteSpace, WingBlank, Tag, Button  } from "antd-mobile";
 import { Motion, spring } from 'react-motion';
 import BScroll from 'better-scroll'
 
@@ -17,6 +17,7 @@ export default class DesignerAuth extends React.Component {
             signature_bbs: '', //一句话介绍
             content: '',  //详细介绍
             keywords: [], //我的擅长技能,
+            is_auth: '', //是否已经认证，已经认证的为'1',不能再提交认证了。
             height: ""
         }
     }
@@ -58,12 +59,12 @@ export default class DesignerAuth extends React.Component {
     getSelfInfo = (props) => {
         //设置个人信息
         if (props.Self && props.Self.real_name) {
-            let { customLabels, nick_name } = props.Self;
+            let { customLabels, nick_name, is_auth } = props.Self;
             let customLabelsArray = [];
             if (customLabels && customLabels.length > 0) {
                 customLabelsArray = customLabels.split(";");
             }
-            this.setState({ nick_name, customLabelsArray })
+            this.setState({ nick_name, customLabelsArray, is_auth })
             sessionStorage.setItem("customLabelsArray", JSON.stringify(customLabelsArray))
 
             this.setState({ emptySelf: false });
@@ -90,6 +91,12 @@ export default class DesignerAuth extends React.Component {
         }
 
         //设置项目案例
+        if (props.Works && props.Works.length > 0) {
+
+            this.setState({ emptyWorks: false });
+        } else {
+            this.setState({ emptyWorks: true });
+        }
     }
     componentDidMount(){
         const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
@@ -104,6 +111,30 @@ export default class DesignerAuth extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.getSelfInfo(nextProps);
     }
+    //提交审核
+    submitUserAuth = () => {
+        let noEmpty = true; //是否没有项目为空，即是否允许提交审核
+        let { emptySelf, emptyMotto, emptySkill, emptyWorks } = this.state;
+        if (emptySelf) {
+            noEmpty = false;
+            Toast.info("请完善个人信息",1.5);
+        }
+        if (emptyMotto) {
+            noEmpty = false;
+            Toast.info("请完善关于我的介绍", 1.5);
+        }
+        if (emptySkill) {
+            noEmpty = false;
+            Toast.info("请完善擅长技能", 1.5);
+        }
+        if (emptyWorks) {
+            noEmpty = false;
+            Toast.info("请完善项目案例", 1.5);
+        }
+        if (noEmpty) {
+            this.props.ajaxSubmitUserAuth();
+        }
+    }
     render() {
         let extraElement = <i className="iconfont icon-bianji"></i>;
         let extraElementEmpty = <span className="extra-edit">未设置</span>;
@@ -116,7 +147,8 @@ export default class DesignerAuth extends React.Component {
                             mode="light"
                             icon={<Icon type="left" size="lg" style={{ "color": "#a3a3a3" }} />}
                             onLeftClick={() => hashHistory.goBack()}
-                        >设计师认证</NavBar>
+                            rightContent={this.state.is_auth == '0' ? <Button className="rechargeButton" onClick={this.submitUserAuth}>提交</Button> : null}
+                        >设计师认证{this.state.is_auth == '1' ? < i className="iconfont auth icon-renzhengguanli"></i> : null  }</NavBar>
                         <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
                             <div>
                                 <List renderHeader={<span className="render-header">个人信息</span>} className="auth-self">
@@ -160,8 +192,8 @@ export default class DesignerAuth extends React.Component {
                                 </List>
                                 <List renderHeader={[<span className="render-header">项目案例</span>, <span className="right-header">至少添加6个作品才能通过审核</span>]} className="auth-works">
                                     <List.Item className="add-works" multipleLine arrow="horizontal" onClick={this.gotoNewWork} >
-                                        <i className="iconfont icon-tianjia"></i>添加作品
-                            </List.Item>
+                                        <i className="iconfont icon-tianjia"></i>{this.state.emptyWorks ? "上传作品" : "继续添加作品"}
+                                    </List.Item>
                                 </List>
                                 {this.props.children &&
                                     React.cloneElement(
@@ -174,7 +206,7 @@ export default class DesignerAuth extends React.Component {
                                             ajaxDeleteWorks: this.props.ajaxDeleteWorks,
                                         }
                                     )
-                                }
+                                }    
                             </div>
                         </div>
                         

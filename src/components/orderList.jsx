@@ -394,6 +394,10 @@ export default class Account extends React.Component {
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
+                                <div>
                                     <div className="orderItemList" >
                                         <div className="orderItem">
                                             <div className="orderItemLis">

@@ -63,7 +63,8 @@ export default class Account2 extends React.Component {
             showPayModal: false,  //是否显示付款的弹窗
             payModel_id: 0,  //付款的模块ID
             payTotalAmount: 0,  //付款的支付总金额
-            height:""
+            height:"",
+            changeTabIndex: "",
         }
         this.handleSend = (res, quote_status) => {
             if (res.success) {
@@ -108,7 +109,8 @@ export default class Account2 extends React.Component {
             this.getMainProjectList(this.state.selectedSegmentIndex, quote_status);
         }
         this.setState({
-            selectedQuote_status: quote_status
+            selectedQuote_status: quote_status,
+            changeTabIndex: index || ""
         })
     }
     /**
@@ -235,14 +237,15 @@ export default class Account2 extends React.Component {
                             <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
                                 <div>
                                     <OrderItem
-                                        quote_status={""}
+                                        // quote_status={""}
+                                        quote_status={this.state.changeTabIndex}
                                         state={this.state}
                                         changeShowConfirmOrder={this.changeShowConfirmOrder}
                                         agreeToPay={this.agreeToPay}
                                         refuseQuote={this.refuseQuote}
                                         setState={this.setState.bind(this)}
                                     />
-                                    <OrderItem
+                                    {/* <OrderItem
                                         quote_status={1}
                                         state={this.state}
                                         changeShowConfirmOrder={this.changeShowConfirmOrder}
@@ -281,7 +284,7 @@ export default class Account2 extends React.Component {
                                         agreeToPay={this.agreeToPay}
                                         refuseQuote={this.refuseQuote}
                                         setState={this.setState.bind(this)}
-                                    />
+                                    /> */}
                                 </div>
                             </div>
                         </Tabs>

@@ -98,7 +98,7 @@
 }
 .auth-skill .am-list-header{
     font-size: 16px;
-    color: #000;
+    // color: #000;
 }
 .designer-auth-page .auth-works{
     border-bottom: 1px solid #ddd;
@@ -123,3 +123,70 @@
     border: 1px solid #ddd;
     border-radius: 3px;
 }
+.auth.icon-renzhengguanli{
+    font-size: 24px;
+    color: #f8b551;
+    margin-left: 2px;
+    margin-top: 5px;
+}
+.auth.icon-Id{
+    // font-size: 24px;
+    color: #3cbaff;
+    margin-left: 2px;
+}
+.ListItemLarge .no-auth{
+    color: #ff0000;
+}
+
+// real name start
+.real-name-page{
+    background-color: #f2f2f2;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+.real-name-list .am-list-item{
+    border-bottom: 1px solid #ddd;
+}
+.real-name-list .render-header{
+    font-size: 17px;
+}
+.real-name-list .right-header {
+    float: right;
+}
+.real-name-list .am-image-picker-list{
+    margin-bottom: 0px;
+}
+.real-name-list .am-image-picker{
+    padding-bottom: 3px;
+}
+.real-name-page .real-name-message{
+    text-align: center;
+    margin-top: 0.5rem;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+.real-name-page .real-name-button{
+    font-size: 20px;
+    color: #fff;
+    background-color: #fd4d65;
+}
+.real-name-page .real-name-button.real-name-button-active{
+    background-color: #de2a42;
+}
+.real-name-page .real-name-button.gray{
+    background-color: #ccc;
+}
+.real-name-page .real-name-button.gray.real-name-button-active{
+    background-color: #ccc;
+}
+.is_real_name .am-image-picker-item-remove{
+    display: none;
+}
+.real-name.icon-Id{
+    font-size: 24px;
+    color: #3cbaff;
+    margin-left: 2px;
+    margin-top: 5px;
+}
+// real name end

@@ -67,6 +67,7 @@ import AuthMotto from './components/AuthMotto';
 import AuthSkill from './components/AuthSkill';
 import AuthWorks from './components/AuthWorks';
 import UserWorks from './components/UserWorks';
+import RealName from './components/RealName';
 
 import './css/font/iconfont.css'
 
@@ -257,6 +258,7 @@ ReactDOM.render(
                 <Route path="authWorks" component={AuthWorks} />
                 <Route path="userWorks" component={UserWorks} />
             </Route>
+            <Route path="realName" component={RealName} />
         </Route>
     </Router>
     , document.getElementById('container'));

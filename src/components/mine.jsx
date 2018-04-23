@@ -24,7 +24,9 @@ export default class Mine extends React.Component {
                 order_count:0,
                 working_quote_count:0,
                 quote_count:0,
-                path_thumb: sessionStorage.getItem("path_thumb")
+                path_thumb: sessionStorage.getItem("path_thumb"),
+                is_auth: '', //是否是认证设计师
+                real_name_status: '', //是否实名认证
             }
         };
         
@@ -165,6 +167,13 @@ export default class Mine extends React.Component {
             query: { form: 'allWorks' }
         });
     }
+    //点击实名认证
+    clickRealName = () => {
+        hashHistory.push({
+            pathname: '/realName',
+            query: { form: 'allWorks' }
+        });
+    }
     render () {
         return (
             <div className="mineWrap">
@@ -199,15 +208,32 @@ export default class Mine extends React.Component {
                     <div>
                         <div className="showAllList">
                             <List>
-                                <Jiange name={this.state.bgStyle}></Jiange>
                                 <Line border={this.state.border}></Line>
+                                <Jiange name={this.state.bgStyle}></Jiange>
+                                {/* <Line border={this.state.border}></Line> */}
                                 <List.Item extra="" arrow="horizontal" className="ListItemLarge ListItemBorder" onClick={this.clickDesignerAuth}>
                                     <Badge>
                                         <span
                                             className="icon-personfill2 iconfont desingerIcon"
                                         />
                                     </Badge>
-                                    <span style={{ marginLeft: 12 }}>申请成为设计师</span>
+                                    <span style={{ marginLeft: 12 }}>
+                                        {this.state.personCenter.is_auth == "1" ? "我是设计师" : null}
+                                        {this.state.personCenter.is_auth == "1" ? <i className="iconfont auth icon-renzhengguanli"></i> : null}
+                                        {this.state.personCenter.is_auth == "0" ? "申请成为设计师" : null}
+                                    </span>
+                                </List.Item>
+                                <List.Item extra="" arrow="horizontal" className="ListItemLarge ListItemBorder" onClick={this.clickRealName}>
+                                    <Badge>
+                                        <span
+                                            className="icon-yirenzheng iconfont desingerIcon"
+                                        />
+                                    </Badge>
+                                    <span style={{ marginLeft: 12 }}>
+                                        实名认证
+                                {this.state.personCenter.real_name_status == "2" ? <i className="iconfont auth icon-Id"></i> : null}
+                                        {this.state.personCenter.real_name_status != "" && this.state.personCenter.real_name_status != "2" ? <span className="no-auth">(未认证)</span> : null}
+                                    </span>
                                 </List.Item>
 
                                 <Jiange name={this.state.bgStyle}></Jiange>

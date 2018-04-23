@@ -306,6 +306,7 @@ export default class WorksDetails extends React.Component {
                             ></pre>
                             <div className="attachment-box">
                                 {
+                                    this.state.attachment_list &&
                                     this.state.attachment_list.length > 0 &&
                                     this.state.attachment_list.map((value, index, elem) => (
                                         <img
