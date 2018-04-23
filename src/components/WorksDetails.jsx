@@ -225,7 +225,6 @@ export default class WorksDetails extends React.Component {
     //删掉popover气泡的DOM, 这是BUG
     componentWillUnmount() {
         let popoverArrayDOM = document.querySelectorAll(".am-popover-mask");
-
         for (let i = 0; i < popoverArrayDOM.length; i++) {
             const popover = popoverArrayDOM[i];
             let popoverRoot = popover.parentNode.parentNode;
@@ -251,13 +250,13 @@ export default class WorksDetails extends React.Component {
                         />
                     }
                 >
-                <p
-                    className="works-details-navbar-title"
-                    onClick={ this.clickDesignerTitle }
-                >
-                    <img onError={(e) => { e.target.src = defaultAvatar }} src={this.state.avatarUrl ? this.state.avatarUrl : defaultAvatar} />
-                    <span className="avatar-name">{this.state.nick_name}</span>
-                </p>
+                    <p
+                        className="works-details-navbar-title"
+                        onClick={ this.clickDesignerTitle }
+                    >
+                        <img onError={(e) => { e.target.src = defaultAvatar }} src={this.state.avatarUrl ? this.state.avatarUrl : defaultAvatar} />
+                        <span className="avatar-name">{this.state.nick_name}</span>
+                    </p>
                 </NavBar>
                 <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
                     <div>
