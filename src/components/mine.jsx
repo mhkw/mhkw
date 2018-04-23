@@ -29,11 +29,10 @@ export default class Mine extends React.Component {
                 real_name_status: '', //是否实名认证
             }
         };
-        
     }
     componentDidMount(){
-        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
-        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true, bounceTime:300 })
+        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25+'px';
+        const scroll = new BScroll(this.refs.wrapper, { click: true, bounceTime:300 })
         this.setState({
             height: hei
         })
@@ -204,7 +203,7 @@ export default class Mine extends React.Component {
                     ></PersonalCenterMsg>
                     <Line border={this.state.border}></Line>                    
                 </div>
-                <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
+                <div className="wrapper" ref="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
                     <div>
                         <div className="showAllList">
                             <List>
@@ -365,7 +364,6 @@ export default class Mine extends React.Component {
                         </div>
                     </div>
                 </div>
-                
             </div>
         )
     }
