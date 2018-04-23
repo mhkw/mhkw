@@ -56,6 +56,16 @@ export default class App extends Component {
         e.currentTarget.getElementsByTagName("i")[0].style.backgroundImage = "url(" + this.state.src[num] + ")";
         e.currentTarget.getElementsByTagName("span")[0].style.color = "#3ebbf3";
     }
+    clickContacts = () => {
+        this.sendEventChatList();
+    }
+    sendEventChatList() {
+        if (window.api) {
+            window.api.sendEvent({
+                name: 'chatList'
+            });
+        }
+    }
     render() {
         return (
             <div>
@@ -176,7 +186,8 @@ export default class App extends Component {
                                 this.setState({
                                     selectedTab: 'greenTab',
                                 });
-                                this.context.router.push("/login");                                                                
+                                // this.context.router.push("/login");
+                                this.clickContacts();                                                                
                             }}
                         >
                         </TabBar.Item>

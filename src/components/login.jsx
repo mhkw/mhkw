@@ -19,21 +19,29 @@ export default class LoginView extends React.Component {
             error: false,
             modal: false,
             animating:false,
-            value: '13958054563',
-            keywords:'215188',
-            // value: '17683993335',
-            // keywords: 'luolei1992',
+            // value: '13958054563',
+            // keywords:'215188',
+            value: '17683993335',
+            keywords: 'luolei1992',
             code:"",
             codeNum:2
         };
         this.handleSend = (res) => {
-            console.log(res)
+            // console.log(res)
             if(res.success) {
                 hashHistory.goBack();
                 validate.setCookie('user_id', res.data.id);
                 validate.setCookie('user_phone', res.data.mobile);
                 validate.setCookie('user_name', res.data.nick_name);
                 localStorage.setItem('en_user_id', res.data.en_user_id);
+
+                //环信登录
+                if (res.data.hxid) {
+                    this.IMLogin(res.data.hxid);
+                } else {
+                    console.log("没有环信id");
+                }
+                
             }else{
                 if(res.message == "图形验证码不对") {
                     Toast.info("图形验证码不正确", 2, null, false);
@@ -167,6 +175,20 @@ export default class LoginView extends React.Component {
                     }
                 });
             }
+        }
+    }
+    //环信登录
+    IMLogin(hxid) {
+        this.sendEventIMLogin(hxid);
+    }
+    sendEventIMLogin(hxid) {
+        if (window.api) {
+            window.api.sendEvent({
+                name: 'IMLogin',
+                extra: {
+                    hxid: hxid
+                }
+            });
         }
     }
     render() {        

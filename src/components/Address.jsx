@@ -87,8 +87,10 @@ export default class Address extends React.Component {
         if (query && query.form) {
             HOCAddressPage = query.form;
         }
-
+        console.log("this.bMap start");
+        
         if (this.bMap) {
+            console.log("this.bMap end");
             hashHistory.push({
                 pathname: '/baiduMap',
                 query: { form: HOCAddressPage }
@@ -292,7 +294,7 @@ export default class Address extends React.Component {
         hashHistory.goBack(); //选好地址后回到上一页
     }
     render() {
-        console.log("Address")
+        console.log("render Address")
         return (
             <div className="select-address" key="1">
                 <NavBar

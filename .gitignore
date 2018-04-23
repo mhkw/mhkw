@@ -22,6 +22,7 @@ npm-debug.log
 .*.sw*
 dist
 webpack.config.build.js
+package.json
 /src/css/common.css
 /src/css/common.css.map
 /src/css/index.css

@@ -101,7 +101,7 @@ export default class BaiduMap extends React.Component {
      */
     componentDidMount() {
         //判断是不是移动端，不是的话，直接回退
-        if (!UserIsPhone) {
+        if ( !window.api ) {
             hashHistory.goBack();
             return;
         }
