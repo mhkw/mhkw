@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavBar, Icon, InputItem, Toast, List, Button, WingBlank, ImagePicker, Flex   } from 'antd-mobile';
 import { hashHistory } from 'react-router';
+import { Motion, spring } from 'react-motion';
 
 export default class RealName extends React.Component {
     constructor(props) {
@@ -230,63 +231,67 @@ export default class RealName extends React.Component {
     }
     render() {
         return (
-            <div className="real-name-page" key="1">
-                <NavBar
-                    className="new-nav-bar"
-                    mode="light"
-                    icon={<Icon type="left" size="lg" style={{ "color": "#a3a3a3" }} />}
-                    onLeftClick={() => hashHistory.goBack()}
-                >实名认证{this.state.real_name_status == "2" ? <i className="iconfont real-name icon-Id"></i> : null}</NavBar>
-                <List renderHeader={<span className="render-header">身份信息</span>} className="real-name-list">
-                    <InputItem
-                        type="string"
-                        value={this.state.real_name}
-                        onChange={(val) => { this.setState({ real_name: val.trim() }) }}
-                        onBlur={(val) => { this.testRealName(val) }}
-                        placeholder="请输入真实姓名"
-                        maxLength="6"
-                        clear
-                        disabled={this.state.real_name_status == '1' || this.state.real_name_status == '2' ? true : false}
-                    >真实姓名</InputItem>
-                    <InputItem
-                        type="string"
-                        value={this.state.id_card_number}
-                        onChange={(val) => { this.setState({ id_card_number: val.trim() }) }}
-                        onBlur={(val) => { this.testIdCard(val) }}
-                        placeholder="请输入身份证号码"
-                        maxLength="25"
-                        clear
-                        disabled={this.state.real_name_status == '1' || this.state.real_name_status == '2' ? true : false}
-                    >身份证号</InputItem>
-                </List>
-                <div className={this.state.real_name_status == '1' || this.state.real_name_status == '2' ? "is_real_name" : null}>
-                    <List renderHeader={[<span className="render-header">身份证</span>, <span className="right-header">请依次上传身份证正面和背面照</span>]} className="real-name-list">
-                        <ImagePicker
-                            files={this.state.file_f_b}
-                            onChange={this.onChangeImg_f_b}
-                            // onImageClick={(index, fs) => console.log(index, fs)}
-                            selectable={this.state.file_f_b.length < 2}
-                        />
-                    </List>
-                    <List renderHeader={[<span className="render-header">手持照</span>, <span className="right-header">请上传手持身份证的半身照</span>]} className="real-name-list">
-                        <ImagePicker
-                            files={this.state.file_h}
-                            onChange={this.onChangeImg_h}
-                            // onImageClick={(index, fs) => console.log(index, fs)}
-                            selectable={this.state.file_h.length < 1}
-                        />
-                    </List>
-                </div>
-                <p className="real-name-message">{this.state.real_name_auth_message ? this.state.real_name_auth_message : this.state.all_message[ parseInt(this.state.real_name_status) ]}</p>
-                <WingBlank size="lg">
-                    <Button
-                        onClick={this.state.real_name_status == '1' || this.state.real_name_status == '2' ? null : this.submitRealName}
-                        // className="real-name-button"
-                        className={this.state.real_name_status == '1' || this.state.real_name_status == '2' ? "real-name-button gray" : "real-name-button"}
-                        activeClassName="real-name-button-active"
-                    >提交认证</Button>
-                </WingBlank>
-            </div>
+            <Motion defaultStyle={{ left: 300 }} style={{ left: spring(0, { stiffness: 300, damping: 28 }) }}>
+                {interpolatingStyle => 
+                    <div className="real-name-page" key="1" style={{ ...interpolatingStyle }}>
+                        <NavBar
+                            className="new-nav-bar"
+                            mode="light"
+                            icon={<Icon type="left" size="lg" style={{ "color": "#a3a3a3" }} />}
+                            onLeftClick={() => hashHistory.goBack()}
+                        >实名认证{this.state.real_name_status == "2" ? <i className="iconfont real-name icon-Id"></i> : null}</NavBar>
+                        <List renderHeader={<span className="render-header">身份信息</span>} className="real-name-list">
+                            <InputItem
+                                type="string"
+                                value={this.state.real_name}
+                                onChange={(val) => { this.setState({ real_name: val.trim() }) }}
+                                onBlur={(val) => { this.testRealName(val) }}
+                                placeholder="请输入真实姓名"
+                                maxLength="6"
+                                clear
+                                disabled={this.state.real_name_status == '1' || this.state.real_name_status == '2' ? true : false}
+                            >真实姓名</InputItem>
+                            <InputItem
+                                type="string"
+                                value={this.state.id_card_number}
+                                onChange={(val) => { this.setState({ id_card_number: val.trim() }) }}
+                                onBlur={(val) => { this.testIdCard(val) }}
+                                placeholder="请输入身份证号码"
+                                maxLength="25"
+                                clear
+                                disabled={this.state.real_name_status == '1' || this.state.real_name_status == '2' ? true : false}
+                            >身份证号</InputItem>
+                        </List>
+                        <div className={this.state.real_name_status == '1' || this.state.real_name_status == '2' ? "is_real_name" : null}>
+                            <List renderHeader={[<span className="render-header">身份证</span>, <span className="right-header">请依次上传身份证正面和背面照</span>]} className="real-name-list">
+                                <ImagePicker
+                                    files={this.state.file_f_b}
+                                    onChange={this.onChangeImg_f_b}
+                                    // onImageClick={(index, fs) => console.log(index, fs)}
+                                    selectable={this.state.file_f_b.length < 2}
+                                />
+                            </List>
+                            <List renderHeader={[<span className="render-header">手持照</span>, <span className="right-header">请上传手持身份证的半身照</span>]} className="real-name-list">
+                                <ImagePicker
+                                    files={this.state.file_h}
+                                    onChange={this.onChangeImg_h}
+                                    // onImageClick={(index, fs) => console.log(index, fs)}
+                                    selectable={this.state.file_h.length < 1}
+                                />
+                            </List>
+                        </div>
+                        <p className="real-name-message">{this.state.real_name_auth_message ? this.state.real_name_auth_message : this.state.all_message[ parseInt(this.state.real_name_status) ]}</p>
+                        <WingBlank size="lg">
+                            <Button
+                                onClick={this.state.real_name_status == '1' || this.state.real_name_status == '2' ? null : this.submitRealName}
+                                // className="real-name-button"
+                                className={this.state.real_name_status == '1' || this.state.real_name_status == '2' ? "real-name-button gray" : "real-name-button"}
+                                activeClassName="real-name-button-active"
+                            >提交认证</Button>
+                        </WingBlank>
+                    </div>
+                }
+            </Motion>
         )
     }
 }

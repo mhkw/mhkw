@@ -53,25 +53,47 @@ export default class Account2 extends React.Component {
             selectedScore: 0, //选中的弹窗的评分
             selectedScoreComment: "", //选中的弹窗的评论留言
             selectedScoreEnd: false, //选中的评论弹窗是否已经评论。即弹窗是已评论还是没评论，已评论
-            item_quote_status_: null, //报价tabs页，报价阶段，全部
-            item_quote_status_1: null, //报价tabs页，报价阶段，待处理
-            item_quote_status_2: null, //报价tabs页，报价阶段，报价成功
-            item_quote_status_3: null, //报价tabs页，报价阶段，报价失败
-            item_quote_status_4: null, //报价tabs页，报价阶段，取消报价
-            item_quote_status_5: null, //报价tabs页，报价阶段，报价超时
+            item_quote_status_: sessionStorage.getItem("item_quote_status_") ? JSON.parse(sessionStorage.getItem("item_quote_status_")) : [], //报价tabs页，报价阶段，全部
+            item_quote_status_1: sessionStorage.getItem("item_quote_status_1") ? JSON.parse(sessionStorage.getItem("item_quote_status_1")) : [], //报价tabs页，报价阶段，待处理
+            item_quote_status_2: sessionStorage.getItem("item_quote_status_2") ? JSON.parse(sessionStorage.getItem("item_quote_status_2")) : [], //报价tabs页，报价阶段，报价成功
+            item_quote_status_3: sessionStorage.getItem("item_quote_status_3") ? JSON.parse(sessionStorage.getItem("item_quote_status_3")) : [], //报价tabs页，报价阶段，报价失败
+            item_quote_status_4: sessionStorage.getItem("item_quote_status_4") ? JSON.parse(sessionStorage.getItem("item_quote_status_4")) : [], //报价tabs页，报价阶段，取消报价
+            item_quote_status_5: sessionStorage.getItem("item_quote_status_5") ? JSON.parse(sessionStorage.getItem("item_quote_status_5")) : [], //报价tabs页，报价阶段，报价超时
             selectedQuote_status: '', //用户选中的报价阶段，默认为全部
             showPayModal: false,  //是否显示付款的弹窗
             payModel_id: 0,  //付款的模块ID
             payTotalAmount: 0,  //付款的支付总金额
             height:"",
             changeTabIndex: "",
+            scroll: null, //滚动插件实例化对象
+            scroll_bottom_tips_: "上拉加载更多", //上拉加载的tips
+            scroll_bottom_tips_1: "上拉加载更多", //上拉加载的tips
+            scroll_bottom_tips_2: "上拉加载更多", //上拉加载的tips
+            scroll_bottom_tips_3: "上拉加载更多", //上拉加载的tips
+            scroll_bottom_tips_4: "上拉加载更多", //上拉加载的tips
+            scroll_bottom_tips_5: "上拉加载更多", //上拉加载的tips
         }
-        this.handleSend = (res, quote_status) => {
+        this.handleSend = (res, { quote_status, pullingUp }) => {
             if (res.success) {
                 let state_key = 'item_quote_status_' + quote_status;
+                let state_sum = 'total_projects_' + quote_status;
+                let state_tips = 'scroll_bottom_tips_' + quote_status;
                 // console.log(res.data.item_list)
+                let newItemList = this.state[state_key];
+                if (pullingUp) {
+                    // newItemList.push(res.data.item_list);
+                    newItemList = [...this.state[state_key], ...res.data.item_list];
+                } else {
+                    newItemList = res.data.item_list;
+                    sessionStorage.setItem(state_key, JSON.stringify(newItemList));
+                }
                 this.setState({
-                    [state_key]: res.data.item_list
+                    [state_key]: newItemList,
+                    [state_sum]: res.data.total_projects,
+                    [state_tips]: res.data.total_projects > 3 ? "上拉加载更多" : ""
+                },()=>{
+                    this.state.scroll.finishPullUp()
+                    this.state.scroll.refresh();
                 })
             } else {
                 Toast.info(res.message, 1.5);
@@ -90,27 +112,73 @@ export default class Account2 extends React.Component {
         
     }
     componentDidMount(){
+        // console.log("componentDidMount");
+        setTimeout(() => {
+            this.initBScroll(0);
+            this.getMainProjectList(0);  //收到的报价（甲方），全部
+        }, 200);
+    }
+    componentWillUnmount() {
+        this.state.scroll.destroy();
+    }
+    initBScroll = ( index = 0 ) => {
+        if (this.state.scroll) {
+            this.state.scroll.destroy()
+        }
         const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 68.5;
-        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        let selector = `.am-tabs-pane-wrap:nth-child(${index + 1}) .wrapper`;
+        const scroll = new BScroll(document.querySelector(selector), { click: true, pullUpLoad: { threshold: -50 } })
         this.setState({
-            height: hei
+            height: hei,
+            scroll,
         })
-        this.getMainProjectList(0);  //收到的报价（甲方），全部
+        scroll.on('pullingUp', () => {
+            this.ajaxNextPage();
+        })
+    }
+    ajaxNextPage = () => {
+        let hasNextPage = false;
+        let state_sum = 'total_projects_' + this.state.selectedQuote_status;
+        let item_list = 'item_quote_status_' + this.state.selectedQuote_status;
+        let state_tips = 'scroll_bottom_tips_' + this.state.selectedQuote_status;
+        // console.log("ajaxNextPage");
+        if (this.state[item_list].length < this.state[state_sum]) {
+            
+            hasNextPage = true;
+        }
+        let page = parseInt(this.state[item_list].length / 5) + 1;
+        
+        this.setState({
+            [state_tips]: hasNextPage ? "加载中..." : "加载完成"
+        })
+        if (hasNextPage) {
+            setTimeout(() => {
+                this.getMainProjectList(this.state.selectedSegmentIndex, this.state.selectedQuote_status, 5, page, true);
+            }, 500);
+        }
+        
     }
     onChangeControl = (e) => {
         let selectedSegmentIndex = e.nativeEvent.selectedSegmentIndex;
         this.getMainProjectList(selectedSegmentIndex, this.state.selectedQuote_status);
         this.setState({ selectedSegmentIndex })
+        this.state.scroll.scrollTo(0, 0, 200);
     }
     onChangeTabs = (tab, index) => {
+        // console.log(index);
+        this.initBScroll(index);
         let quote_status = tab.quote_status;
+        // console.log(quote_status);
         let state_quote_status = this.state['item_quote_status_' + quote_status];
-        if (!state_quote_status) {
-            this.getMainProjectList(this.state.selectedSegmentIndex, quote_status);
-        }
+        this.getMainProjectList(this.state.selectedSegmentIndex, quote_status);
+        // if (!state_quote_status) {
+        //     this.getMainProjectList(this.state.selectedSegmentIndex, quote_status);
+        // }
         this.setState({
             selectedQuote_status: quote_status,
             changeTabIndex: index || ""
+        },()=>{
+            this.state.scroll.refresh();
         })
     }
     /**
@@ -119,18 +187,18 @@ export default class Account2 extends React.Component {
      * @author ZhengGuoQing
      * @param {any} is_quoter 是否报价方（乙方），0否（甲方），1是（乙方）
      * @param {any} quote_status 报价阶段，0草稿，1待处理，2报价成功，3报价失败，4取消报价，5报价超时，可不填，表示全部 (这里只传空字符串表示进行中，传5表示历史订单)
-     * @param {number} [per_page=10] 每页大小，默认为10
+     * @param {number} [per_page=3] 每页大小，默认为3
      * @param {number} [page=1] 第几页，默认为1（从1开始计数）
      * @memberof Account
      */
-    getMainProjectList(is_quoter = this.state.selectedSegmentIndex, quote_status = this.state.selectedQuote_status, per_page = 10, page = 1) {
+    getMainProjectList(is_quoter = this.state.selectedSegmentIndex, quote_status = this.state.selectedQuote_status, per_page = 5, page = 1, pullingUp = false ) {
         runPromise("get_main_project_list", {
             "per_page": per_page,
             "page": page,
             "is_quoter": is_quoter,
             "quote_status": quote_status,
             "type": 1, //项目类型，1是报价项目，2是服务项目，可不填，表示全部
-        }, this.handleSend, true, "post", quote_status);
+        }, this.handleSend, true, "post", { quote_status, pullingUp });
     }
     //同意支付下单
     agreeToPay = (model_id, totalAmount) => {
@@ -231,6 +299,7 @@ export default class Account2 extends React.Component {
                         </NavBar>
                         <Tabs tabs={tabsLabel}
                             initialPage={0}
+                            swipeable={false}
                             onChange={this.onChangeTabs}
                         // onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
                         >
@@ -285,6 +354,7 @@ export default class Account2 extends React.Component {
                                         refuseQuote={this.refuseQuote}
                                         setState={this.setState.bind(this)}
                                     /> */}
+                                    <div className="scroll-bottom-tips">{this.state['scroll_bottom_tips_' + this.state.selectedQuote_status]}</div>
                                 </div>
                             </div>
                         </Tabs>

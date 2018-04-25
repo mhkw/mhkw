@@ -8,15 +8,18 @@ export default class HOCdesignerAuth extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            Self: {}, //个人信息
+            // Self: {}, //个人信息
+            Self: sessionStorage.getItem("AuthSelf") ? JSON.parse(sessionStorage.getItem("AuthSelf")) : {},
             Motto: {}, //关于我，一句话介绍,座右铭，格言
             Skill: [], //擅长技能,技能树
-            Works: [], //项目案例
+            // Works: [], //项目案例
+            Works: sessionStorage.getItem("AuthWorks") ? JSON.parse(sessionStorage.getItem("AuthWorks")) : {},            
             is_next_page: 0, //是否有更多作品
         }
         this.handleGetSelfInfo = (res) => {
             if (res.success) {
                 this.setState({ Self: res.data});
+                sessionStorage.setItem("AuthSelf", JSON.stringify(res.data));
                 //传递设计师数据到HOC高阶组件里去
                 let { path_thumb, path, nick_name, sex, txt_address, experience, works_count,id } = res.data;
                 this.props.propsSetState('Designer', {
@@ -85,6 +88,7 @@ export default class HOCdesignerAuth extends React.Component {
                     Works: res.data.item_list,
                     is_next_page: res.data.is_next_page,
                 })
+                sessionStorage.setItem("AuthWorks", JSON.stringify(res.data.item_list));
             } else {
                 Toast.fail(res.message, 1);
             }
@@ -138,9 +142,12 @@ export default class HOCdesignerAuth extends React.Component {
         return this.props.router.location.action === 'POP';
     }
     componentDidMount() {
-        this.ajaxGetSelfInfo();
-        this.ajaxGetDesignerTree();
-        this.ajaxGetWorksListBySelf();
+        this.token = setTimeout(() => {
+            this.ajaxGetSelfInfo();
+            this.ajaxGetDesignerTree();
+            this.ajaxGetWorksListBySelf();
+        }, 200);
+        console.log("HOCdesignerAuth componentDidMount");
     }
     //ajax获取个人信息
     ajaxGetSelfInfo = () => {
@@ -201,6 +208,9 @@ export default class HOCdesignerAuth extends React.Component {
             nick_name: user.nick_name,
             sex: user.sex,
         }, this.handleSubmitUserAuth);
+    }
+    componentWillMount() {
+        clearTimeout(this.token);
     }
     render() {
         return (

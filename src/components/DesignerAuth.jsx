@@ -100,7 +100,7 @@ export default class DesignerAuth extends React.Component {
     }
     componentDidMount(){
         const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
-        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true, bounceTime: 300, swipeBounceTime: 200 })
         this.setState({
             height: hei
         })
@@ -153,7 +153,7 @@ export default class DesignerAuth extends React.Component {
                             <div>
                                 <List renderHeader={<span className="render-header">个人信息</span>} className="auth-self">
                                     <List.Item multipleLine arrow="horizontal" onClick={this.gotoSelf} extra={this.state.emptySelf ? extraElementEmpty : extraElement}>
-                                        {this.state.nick_name}
+                                        {this.state.nick_name ? this.state.nick_name : "昵称"}
                                         <List.Item.Brief>
                                             <div className="tag-container">
                                                 {

@@ -17,7 +17,7 @@ export default class Mine extends React.Component {
             border: "line",
             hide: false,
             height: "",
-            personCenter:{
+            personCenter: sessionStorage.getItem("personCenter") ? JSON.parse(sessionStorage.getItem("personCenter")) : {
                 nick_name: sessionStorage.getItem("nick_name") || '用户昵称',
                 total_financial:0.00,
                 working_order_count:0,
@@ -32,7 +32,7 @@ export default class Mine extends React.Component {
     }
     componentDidMount(){
         const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25+'px';
-        const scroll = new BScroll(this.refs.wrapper, { click: true, bounceTime:300 })
+        const scroll = new BScroll(this.refs.wrapper, { click: true, bounceTime: 300, swipeBounceTime: 200 })
         this.setState({
             height: hei
         })
@@ -50,6 +50,8 @@ export default class Mine extends React.Component {
             this.setState({
                 personCenter: response.data.data
             })
+            sessionStorage.setItem("personCenter", JSON.stringify(response.data.data));
+
             if (response.data.data.nick_name) {
                 sessionStorage.setItem("nick_name", response.data.data.nick_name)
             }
@@ -305,64 +307,64 @@ export default class Mine extends React.Component {
                                 <div className="bottom" style={{ "height": "60px", "background-color": "#f7f7f7" }}></div>
                             </List>
                         </div>
-                        <div className="navPlus" >
-                            <QueueAnim className="demo-content"
-                                animConfig={[
-                                    { opacity: [1, 0], translateY: [0, -800] },
-                                    { opacity: [1, 0], translateY: [0, -80] }
-                                ]}>
-                                {this.state.hide ? [
-                                    <div className="demo-thead navPlusAnim" key="a">
-                                        <div className="mineWrapTop">
-                                            <p>
-                                                <a href="javascript:;">我的名片</a>
-                                            </p>
-                                        </div>
-                                        <WhiteSpace size="lg" />
-                                        <div className="minePic">
-                                            <div className="minePicTou">
-                                                <img src={this.state.personCenter.path_thumb || urls[0]} alt="" />
-                                            </div>
-                                        </div>
-                                        <WhiteSpace size="lg" />
-                                        <div style={{ margin: "0 20px", backgroundColor: "#E8E8E8", height: "1px" }}></div>
-                                        <div className="personalMsgList">
-                                            <List>
-                                                <List.Item extra={this.state.personCenter.nick_name}>
-                                                    <p>称呼</p>
-                                                </List.Item>
-                                                <List.Item extra={this.state.personCenter.sex}>
-                                                    <p>性别</p>
-                                                </List.Item>
-                                                <List.Item extra={this.state.personCenter.company}>
-                                                    <p>公司</p>
-                                                </List.Item>
-                                                <List.Item extra={this.state.personCenter.job_name}>
-                                                    <p>职务</p>
-                                                </List.Item>
-                                                <List.Item extra={this.state.personCenter.mobile}>
-                                                    <p>手机</p>
-                                                </List.Item>
-                                                <List.Item extra={this.state.personCenter.qq}>
-                                                    <p>Q Q</p>
-                                                </List.Item>
-                                                <List.Item extra={this.state.personCenter.long_lat_address}>
-                                                    <p>所在地</p>
-                                                </List.Item>
-                                            </List>
-                                            <span
-                                                className="iconfont icon-chuyidong1-copy"
-                                                onClick={() => {
-                                                    this.showPersonalMsg();
-                                                    this.props.setState({ display: "block" })
-                                                }}
-                                            ></span>
-                                        </div>
-                                    </div>
-                                ] : null}
-                            </QueueAnim>
-                        </div>
                     </div>
+                </div>
+                <div className="navPlus" >
+                    <QueueAnim className="demo-content"
+                        animConfig={[
+                            { opacity: [1, 0], translateY: [0, -800] },
+                            { opacity: [1, 0], translateY: [0, -80] }
+                        ]}>
+                        {this.state.hide ? [
+                            <div className="demo-thead navPlusAnim" key="a">
+                                <div className="mineWrapTop">
+                                    <p>
+                                        <a href="javascript:;">我的名片</a>
+                                    </p>
+                                </div>
+                                <WhiteSpace size="lg" />
+                                <div className="minePic">
+                                    <div className="minePicTou">
+                                        <img src={this.state.personCenter.path_thumb || urls[0]} alt="" />
+                                    </div>
+                                </div>
+                                <WhiteSpace size="lg" />
+                                <div style={{ margin: "0 20px", backgroundColor: "#E8E8E8", height: "1px" }}></div>
+                                <div className="personalMsgList">
+                                    <List>
+                                        <List.Item extra={this.state.personCenter.nick_name}>
+                                            <p>称呼</p>
+                                        </List.Item>
+                                        <List.Item extra={this.state.personCenter.sex}>
+                                            <p>性别</p>
+                                        </List.Item>
+                                        <List.Item extra={this.state.personCenter.company}>
+                                            <p>公司</p>
+                                        </List.Item>
+                                        <List.Item extra={this.state.personCenter.job_name}>
+                                            <p>职务</p>
+                                        </List.Item>
+                                        <List.Item extra={this.state.personCenter.mobile}>
+                                            <p>手机</p>
+                                        </List.Item>
+                                        <List.Item extra={this.state.personCenter.qq}>
+                                            <p>Q Q</p>
+                                        </List.Item>
+                                        <List.Item extra={this.state.personCenter.long_lat_address}>
+                                            <p>所在地</p>
+                                        </List.Item>
+                                    </List>
+                                    <span
+                                        className="iconfont icon-chuyidong1-copy"
+                                        onClick={() => {
+                                            this.showPersonalMsg();
+                                            this.props.setState({ display: "block" })
+                                        }}
+                                    ></span>
+                                </div>
+                            </div>
+                        ] : null}
+                    </QueueAnim>
                 </div>
             </div>
         )

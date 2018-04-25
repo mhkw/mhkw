@@ -154,7 +154,9 @@ export default class Collect extends React.Component {
             this.props.route,
             this.routerWillLeave
         )
-        this.getWorkList(1, this.props.state.tabnum == 1 ? this.props.state.tabnum:0)
+        setTimeout(() => {
+            this.getWorkList(1, this.props.state.tabnum == 1 ? this.props.state.tabnum:0)
+        }, 200);
     }
     shouldComponentUpdate() {
         return this.props.router.location.action === 'POP';
@@ -408,6 +410,7 @@ export default class Collect extends React.Component {
                         </div>
                         <Tabs tabs={this.tabs()}
                             initialPage={this.props.state.tabnum}
+                            swipeable={false}
                             onChange={(tab, index) => { 
                                 this.setState({ tabnum: index })
                                 this.props.setState({ tabnum: index })
@@ -474,14 +477,14 @@ export default class Collect extends React.Component {
                         <div className="toast-example">
                             <ActivityIndicator
                                 toast
-                                text="Loading..."
+                                text="加载中..."
                                 animating={this.state.animating1}
                             />
                         </div>
                         <div className="toast-example">
                             <ActivityIndicator
                                 toast
-                                text="Loading..."
+                                text="加载中..."
                                 animating={this.state.animating2}
                             />
                         </div>

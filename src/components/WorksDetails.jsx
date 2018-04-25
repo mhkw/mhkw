@@ -51,7 +51,8 @@ export default class WorksDetails extends React.Component {
             reportText: '', //投诉的内容
             is_favorite: 0, //是否关注了作品（收藏）
             islove: 0, //是否点赞了作品
-
+            attachment_list_load_num: 0,
+            scroll: {}, // 滚动组件实例化对象
         }
         this.handleGetWorks = (res) => {
             if (res.success) {
@@ -127,13 +128,17 @@ export default class WorksDetails extends React.Component {
     }
     componentDidMount() {
         const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
-        setTimeout(() => {
-            new BScroll(document.querySelector('.wrapper'), { click: true })
-        }, 500);
+        // setTimeout(() => {
+        // }, 500);
+        const scroll =  new BScroll('.wrapper', { click: true })
         this.setState({
-            height: hei
+            height: hei,
+            scroll,
         })
         this.ajaxGetWorks(this.state.works_id);
+    }
+    refreshScroll = () => {
+        this.state.scroll.refresh();
     }
     ajaxGetWorks = (works_id) => {
         runPromise('get_works_info', {
@@ -313,7 +318,21 @@ export default class WorksDetails extends React.Component {
                                             className="mb-img"
                                             src={value.path_thumb ? value.path_thumb : value.path}
                                             // src={value.path_thumb ? (value.path_thumb).split("!")[0] + '!209x150' : value.path}
-                                            onError={(e) => { e.target.src = zhanWei; }}
+                                            onError={(e) => {
+                                                e.target.src = zhanWei;
+                                                if (this.state.attachment_list_load_num >= this.state.attachment_list.length - 1) {
+                                                    this.refreshScroll();
+                                                } else {
+                                                    this.setState({ attachment_list_load_num: this.state.attachment_list_load_num + 1 })
+                                                }
+                                            }}
+                                            onLoad={()=>{
+                                                if (this.state.attachment_list_load_num >= this.state.attachment_list.length - 1) {
+                                                    this.refreshScroll();
+                                                } else{
+                                                    this.setState({ attachment_list_load_num: this.state.attachment_list_load_num + 1 })
+                                                }
+                                            }} 
                                             onClick={() => { this.onTouchImg(index, elem) }}
                                         />
                                     ))

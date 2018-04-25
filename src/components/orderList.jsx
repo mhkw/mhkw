@@ -44,26 +44,62 @@ export default class Account extends React.Component {
                     showMoney: "-88.90"
                 }
             ],
-            item_list_ing: [], //进行中的订单
-            item_list_end: [], //历史订单
+            item_list_ing: sessionStorage.getItem("item_list_ing") ? JSON.parse(sessionStorage.getItem("item_list_ing")) : [], //进行中的订单
+            item_list_end: sessionStorage.getItem("item_list_end") ? JSON.parse(sessionStorage.getItem("item_list_end")) : [], //历史订单
             showScoreModal: false,
             selectedScore: 0, //选中的弹窗的评分
             selectedScoreComment: "", //选中的弹窗的评论留言
             selectedScoreEnd: false, //选中的评论弹窗是否已经评论。即弹窗是已评论还是没评论，已评论
-            height:""
+            height:"",
+            changeTabIndex: 0, //tabs组件index
+            scroll: null, //滚动插件实例化对象
+            scroll2: null, //滚动插件实例化对象
+            scroll_bottom_tips_0: "上拉加载更多", //上拉加载的tips
+            scroll_bottom_tips_1: "上拉加载更多", //上拉加载的tips
         }
-        this.handleSend = (res,fg) =>{
+        this.handleSend = (res, { stage_id, pullingUp }) =>{
+            if (res.success) {
+                let index = stage_id == "2" ? 0 : 1;
+                let state_sum = 'total_projects_' + index;
+                let item_list = index == 0 ? 'item_list_ing' : 'item_list_end';
+                let state_tips = 'scroll_bottom_tips_' + index;
+
+                let newItemList = this.state[item_list];
+                if (pullingUp) {
+                    // newItemList.push(res.data.item_list);
+                    newItemList = [...this.state[item_list], ...res.data.item_list];
+                } else {
+                    newItemList = res.data.item_list;
+                    sessionStorage.setItem(item_list, JSON.stringify(newItemList));
+                }
+                this.setState({
+                    [item_list]: newItemList,
+                    [state_sum]: res.data.total_projects,
+                    [state_tips]: res.data.total_projects > 3 ? "上拉加载更多" : ""
+                }, () => {
+                    if (index == 0) {
+                        this.state.scroll.finishPullUp()
+                        this.state.scroll.refresh();
+                    } else {
+                        this.state.scroll2.finishPullUp()
+                        this.state.scroll2.refresh();
+                    }
+                })
+
+            } else {
+                Toast.info(res.message, 1.5);
+            }
             // console.log(res,fg);            
-            if (fg == 2) {
-                this.setState({
-                    item_list_ing: res.data.item_list
-                });
-            }
-            if (fg == 5) {
-                this.setState({
-                    item_list_end: res.data.item_list
-                });
-            }
+            // if (stage_id == 2) {
+            //     this.setState({
+            //         item_list_ing: res.data.item_list
+            //     });
+            // }
+            // if (stage_id == "") {
+            //     this.setState({
+            //         item_list_end: res.data.item_list
+            //     });
+            // }
         }
         //图形验证码发送成功后的执行函数
         this.handlePicSend = (res, param) => {
@@ -102,7 +138,7 @@ export default class Account extends React.Component {
                     this.changeShowScoreModal(false);
                     let index = this.state.selectedSegmentIndex;
                     this.getMainProjectList(index, 2);  //进行中的订单
-                    this.getMainProjectList(index, 5);  //历史订单
+                    this.getMainProjectList(index, "");  //历史订单
                 });
             } else {
                 Toast.info(res.message, 1.5);
@@ -118,23 +154,66 @@ export default class Account extends React.Component {
         }
     }
     componentDidMount(){
-        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 68.5;
-        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+
+        setTimeout(() => {
+            const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 68.5;
+            const scroll = new BScroll(document.querySelector('.wrapper.one'), { click: true, pullUpLoad: { threshold: -50 } });
+            const scroll2 = new BScroll(document.querySelector('.wrapper.two'), { click: true, pullUpLoad: { threshold: -50 } });
+            this.setState({
+                height: hei,
+                scroll,
+                scroll2,
+            });
+            scroll.on('pullingUp', () => {
+                this.ajaxNextPage(0);
+            });
+            scroll2.on('pullingUp', () => {
+                this.ajaxNextPage(1);
+            });
+
+            this.getMainProjectList(0, 2);  //进行中的订单
+            this.getMainProjectList(0, "");  //历史订单
+            //用state保存用户手机号
+            this.setState({
+                confirmOrderPhone: validate.getCookie("user_phone")
+            });
+
+        }, 200);
+    }
+    ajaxNextPage = (index) => {
+        let hasNextPage = false;
+        let state_sum = 'total_projects_' + index;
+        let item_list = index == 0 ? 'item_list_ing' : 'item_list_end';
+        let stage_id = index == 0 ? 2 : '';
+        let state_tips = 'scroll_bottom_tips_' + index;
+
+        if (this.state[item_list].length < this.state[state_sum]) {
+
+            hasNextPage = true;
+        }
+        let page = parseInt(this.state[item_list].length / 5) + 1;
+
         this.setState({
-            height: hei
+            [state_tips]: hasNextPage ? "加载中..." : "加载完成"
         })
-        this.getMainProjectList(0, 2);  //进行中的订单
-        this.getMainProjectList(0, 5);  //历史订单
-        //用state保存用户手机号
-        this.setState({
-            confirmOrderPhone: validate.getCookie("user_phone")
-        });
+        if (hasNextPage) {
+            setTimeout(() => {
+                this.getMainProjectList(this.state.selectedSegmentIndex, stage_id, 5, page, true);
+            }, 500);
+        }
+
+
     }
     onChangeControl = (e) => {
         let selectedSegmentIndex = e.nativeEvent.selectedSegmentIndex;
         this.getMainProjectList(selectedSegmentIndex, 2);  //进行中的订单
-        this.getMainProjectList(selectedSegmentIndex, 5);  //历史订单
+        this.getMainProjectList(selectedSegmentIndex, "");  //历史订单
         this.setState({ selectedSegmentIndex })
+        if (this.state.changeTabIndex == 0) {
+            this.state.scroll.scrollTo(0, 0, 200);
+        } else {
+            this.state.scroll2.scrollTo(0, 0, 200);
+        }
     }
     onValueChange = (value) => {
         console.log(value);
@@ -150,7 +229,7 @@ export default class Account extends React.Component {
      * @param {number} [page=1] 第几页，默认为1（从1开始计数）
      * @memberof Account
      */
-    getMainProjectList(is_quoter, stage_id, per_page = 10, page = 1) {
+    getMainProjectList(is_quoter, stage_id, per_page = 5, page = 1, pullingUp = false) {
         runPromise("get_main_project_list", {
             "per_page": per_page,
             "page": page,
@@ -159,7 +238,7 @@ export default class Account extends React.Component {
             /*is_quoter：0表示服务方*/
             "is_quoter": is_quoter,
             stage_id: stage_id, //项目状态，进度
-        }, this.handleSend, true, "post", stage_id);
+        }, this.handleSend, true, "post", { stage_id, pullingUp });
     }
     //判断是打开还是关闭确认验收的弹窗
     changeShowConfirmOrder = (isShow) => {
@@ -327,6 +406,11 @@ export default class Account extends React.Component {
             "project_id": confirmOrderID,
         }, () => {});
     }
+    changeTabs = (tab, index) => {
+        this.setState({
+            changeTabIndex: index
+        })
+    }
     render() {
         return(
             <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
@@ -362,10 +446,11 @@ export default class Account extends React.Component {
                         
                         <Tabs tabs={tabsLabel}
                             initialPage={0}
-                            // onChange={(tab, index) => { console.log('onChange', index, tab); }}
+                            swipeable={false}
+                            onChange={this.changeTabs}
                             // onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
                         >
-                            <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
+                            <div className="wrapper one" style={{ overflow: "hidden", height: this.state.height }}>
                                 <div>
                                     <div className="orderItemList" >
                                         <div className="orderItem">
@@ -394,9 +479,10 @@ export default class Account extends React.Component {
                                             </div>
                                         </div>
                                     </div>
+                                    <div className="scroll-bottom-tips">{this.state.scroll_bottom_tips_0}</div>
                                 </div>
                             </div>
-                            <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
+                            <div className="wrapper two" style={{ overflow: "hidden", height: this.state.height }}>
                                 <div>
                                     <div className="orderItemList" >
                                         <div className="orderItem">
@@ -425,6 +511,7 @@ export default class Account extends React.Component {
                                             </div>
                                         </div>
                                     </div>
+                                    <div className="scroll-bottom-tips">{this.state.scroll_bottom_tips_1}</div>
                                 </div>
                             </div>
                         </Tabs>
