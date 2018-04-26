@@ -13,7 +13,30 @@ export default class UserWorks extends React.Component {
             location_form: 'mine',
             Works: [], //作品列表
             is_next_page: 0, //作品列表是否还有下一页
-            height: ""
+            total_pages: 0, //作品总页数
+            height: "",
+            scroll: null, //滚动插件实例化对象
+            scroll_bottom_tips: "上拉加载更多", //上拉加载的tips
+        }
+        this.handleGetWorksListBySelf = (res) => {
+            if (res.success) {
+                let newItemList = this.state.Works;
+
+                // newItemList.push(res.data.item_list);
+                newItemList = [...this.state.Works, ...res.data.item_list];
+
+                this.setState({
+                    Works: newItemList,
+                    total_pages: res.data.total_pages,
+                    scroll_bottom_tips: this.state.Works.length > 10 ? "上拉加载更多" : ""
+                }, () => {
+                    this.state.scroll.finishPullUp()
+                    this.state.scroll.refresh();
+                })
+
+            } else {
+                Toast.info(res.message, 1.5);
+            }
         }
     }
     //预览作品，跳到作品详情页面去
@@ -38,7 +61,14 @@ export default class UserWorks extends React.Component {
     }
     //加载更多
     clickNextMoreClick = () => {
-        console.log("加载更多");
+        if (this.state.location_form == "mine") {
+            hashHistory.push({
+                pathname: '/userWorks',
+                query: { form: 'allWorks' }
+            });
+        } else {
+            
+        }
     }
     //点击删除作品
     clickDeleteWorks = (id, title) => {
@@ -52,15 +82,55 @@ export default class UserWorks extends React.Component {
         if (props.Works && props.Works.length > 0) {
             let Works = props.Works;
             let is_next_page = props.is_next_page;
-            this.setState({ Works, is_next_page });
+            let total_pages = props.total_pages;
+            this.setState({ Works, is_next_page, total_pages });
         }
     }
     componentDidMount(){
         const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
-        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true }) 
+        if (this.state.location_form == "mine") {
+            const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+            this.setState({
+                height: hei
+            })
+        } else {
+            const scroll = new BScroll(document.querySelector('.wrapper'), { click: true, pullUpLoad: { threshold: -50 } })
+            this.setState({
+                height: hei,
+                scroll
+            })
+            scroll.on('pullingUp', () => {
+                this.ajaxNextPage();
+            });
+        }  
+    }
+    //下拉加载下一页
+    ajaxNextPage = () => {
+        let hasNextPage = false;
+
+        if (this.state.Works.length >= 10 && Math.ceil(this.state.Works.length / 10) < this.state.total_pages ) {
+
+            hasNextPage = true;
+        }
+        let page = parseInt(this.state.Works.length / 10) + 1;
+
         this.setState({
-            height: hei
+            scroll_bottom_tips: hasNextPage ? "加载中..." : "加载完成"
         })
+
+        if (hasNextPage) {
+            setTimeout(() => {
+                this.ajaxGetWorksListBySelf(10, page);
+            }, 500);
+        }
+    }
+    //获取我的作品列表
+    ajaxGetWorksListBySelf = (per_page = 10, page = 1) => {
+        runPromise("get_works_list_by_self", {
+            user_id: validate.getCookie("user_id"),
+            per_page,
+            page,
+        }, this.handleGetWorksListBySelf, true, "get");
     }
     componentWillMount() {
         if (this.props.location.query && this.props.location.query.form) {
@@ -120,8 +190,12 @@ export default class UserWorks extends React.Component {
                             </List.Item> */}
                             {
                                 this.state.Works.length > 0 &&
-                                this.state.Works.map((value, index)=>(
-                                    <SwipeAction
+                                this.state.Works.map((value, index)=>{
+                                    let isShow = true;
+                                    if (this.state.location_form == "mine" && index >= 5) {
+                                        isShow = false;
+                                    }
+                                    return isShow ? <SwipeAction
                                         className="works-swipe"
                                         autoClose
                                         right={[
@@ -151,12 +225,16 @@ export default class UserWorks extends React.Component {
                                         >
                                             {value.title}
                                         </List.Item>
-                                    </SwipeAction>
-                                ))
+                                    </SwipeAction> : null
+                                })
                             }
+                            <div 
+                                className="scroll-bottom-tips"
+                                style={{ "display": this.state.location_form == "mine" ? "none" : "block" }}
+                            >{this.state.scroll_bottom_tips}</div>
                             <div
                                 className="user-works-view-more"
-                                style={{ "display": this.state.is_next_page > 0 ? "block" : "none" }}
+                                style={{ "display": this.state.location_form == "mine" ? "block" : "none" }}
                                 onTouchStart={touchStart}
                                 onTouchEnd={touchEnd}
                                 onClick={this.clickNextMoreClick}

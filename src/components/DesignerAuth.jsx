@@ -204,6 +204,8 @@ export default class DesignerAuth extends React.Component {
                                             Works: this.props.Works,
                                             propsSetState: this.props.propsSetState,
                                             ajaxDeleteWorks: this.props.ajaxDeleteWorks,
+                                            is_next_page: this.props.is_next_page, //是否有更多作品
+                                            total_pages: this.props.total_pages, //作品总页数
                                         }
                                     )
                                 }    

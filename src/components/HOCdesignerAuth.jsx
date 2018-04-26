@@ -15,6 +15,7 @@ export default class HOCdesignerAuth extends React.Component {
             // Works: [], //项目案例
             Works: sessionStorage.getItem("AuthWorks") ? JSON.parse(sessionStorage.getItem("AuthWorks")) : {},            
             is_next_page: 0, //是否有更多作品
+            total_pages: 0, //作品总页数
         }
         this.handleGetSelfInfo = (res) => {
             if (res.success) {
@@ -87,6 +88,7 @@ export default class HOCdesignerAuth extends React.Component {
                 this.setState({ 
                     Works: res.data.item_list,
                     is_next_page: res.data.is_next_page,
+                    total_pages: res.data.total_pages,
                 })
                 sessionStorage.setItem("AuthWorks", JSON.stringify(res.data.item_list));
             } else {
@@ -184,7 +186,7 @@ export default class HOCdesignerAuth extends React.Component {
         runPromise('change_user_info', { keywords: keywords.join(",") }, this.handleChangeDesignerTree);
     }
     //获取我的作品列表
-    ajaxGetWorksListBySelf = (per_page = 20, page = 1) => {
+    ajaxGetWorksListBySelf = (per_page = 10, page = 1) => {
         runPromise("get_works_list_by_self", {
             user_id: validate.getCookie("user_id"),
             per_page,
@@ -233,6 +235,7 @@ export default class HOCdesignerAuth extends React.Component {
                             ajaxChangeMotto: this.ajaxChangeMotto,
                             ajaxChangeDesignerTree: this.ajaxChangeDesignerTree,
                             is_next_page: this.state.is_next_page, //是否有更多作品
+                            total_pages: this.state.total_pages, //作品总页数
                             ajaxDeleteWorks: this.ajaxDeleteWorks, //删除某个作品
                             ajaxSubmitUserAuth: this.ajaxSubmitUserAuth, //设计师认证，提交审核
                         }

@@ -115,6 +115,24 @@ class OrderPopup extends React.Component {
         }
         //微信支付
         // if (PayMethod == "WxPay") {
+        //     const config = JSON.parse(orderInfo);
+        //     const wxPay = api.require('wxPay');
+        //     const { apiKey, orderId, mchId, nonceStr, timeStamp, package, sign } = config;
+        //     wxPay.payOrder({
+        //         apiKey,
+        //         orderId,
+        //         mchId,
+        //         nonceStr,
+        //         timeStamp,
+        //         package,
+        //         sign,
+        //     }, (ret, err) => {
+        //         ret.code == 9000 ? this.props.paySuccessCallback() : this.props.payFailCallback();
+        //     });
+        // }
+
+
+        // if (PayMethod == "WxPay") {
         //     let config = JSON.parse(orderInfo);
         //     let wxPay = api.require('wxPay');
         //     wxPay.payOrder({

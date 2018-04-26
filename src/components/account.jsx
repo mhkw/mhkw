@@ -18,10 +18,7 @@ export default class Account extends React.Component {
             blance:0,
             frozenCash:0,
             realName:false,
-            financialList:{
-                item_list:[],
-
-            },
+            financialList: sessionStorage.getItem("financialList") ? JSON.parse(sessionStorage.getItem("financialList")) : [],
             account:[
                 {
                     type:"充值",
@@ -39,6 +36,9 @@ export default class Account extends React.Component {
             showPayInputModal: false,  //是否显示输入金额的弹窗
             showPayModal: false,  //是否显示付款的弹窗,充值
             payRecharge: 0,  //付款的支付总金额， 充值
+            scroll: null, //滚动插件实例化对象
+            scroll_bottom_tips: "上拉加载更多", //上拉加载的tips
+            total_count: 0, //收支明细的总数量
         }
         this.handleBlance = (res) => {
             this.setState({blance:res.message})
@@ -49,18 +49,46 @@ export default class Account extends React.Component {
         this.handleRealName = (res) => {
             this.setState({ realName: res.data.real_name_status})
         }
-        this.handleFinancialList = (res) => {
-            console.log(res.data);
+        this.handleFinancialList = (res, pullingUp) => {
+            // console.log(res.data);
 
-            this.setState({ financialList:res.data })
+            // this.setState({
+            //     financialList: res.data.item_list, total_count: res.data.total_count  })
+
+            if (res.success) {
+                let newItemList = this.state.financialList;
+                if (pullingUp) {
+                    // newItemList.push(res.data.item_list);
+                    newItemList = [...this.state.financialList, ...res.data.item_list];
+                } else {
+                    newItemList = res.data.item_list;
+                    sessionStorage.setItem("financialList", JSON.stringify(newItemList));
+                }
+
+                this.setState({
+                    financialList: newItemList,
+                    total_count: res.data.total_count,
+                    scroll_bottom_tips: res.data.total_count > 3 ? "上拉加载更多" : ""
+                }, () => {
+                    this.state.scroll.finishPullUp()
+                    this.state.scroll.refresh();
+                })
+                
+            } else {
+                Toast.info(res.message, 1.5);
+            }
         }
     }
     componentDidMount(){
         const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
-        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true, pullUpLoad: { threshold: -50 }})
         this.setState({
-            height: hei
+            height: hei,
+            scroll,
         })
+        scroll.on('pullingUp', () => {
+            this.ajaxNextPage();
+        });
         runPromise('get_blance', {
             user_id:validate.getCookie('user_id')
         }, this.handleBlance, true, "post");
@@ -70,11 +98,34 @@ export default class Account extends React.Component {
         runPromise('get_real_name_auth', {
             user_id:validate.getCookie('user_id')
         }, this.handleRealName, true, "post");
+        this.ajaxGetFinancialList();
+    }
+    ajaxGetFinancialList = (limit = 10, offset = 0, pullingUp = false) => {
         runPromise('get_financial_list', {
-            user_id:validate.getCookie('user_id'),
-            offset: 0,
-            limit: 10
-        }, this.handleFinancialList, true, "post");
+            user_id: validate.getCookie('user_id'),
+            limit,
+            offset,
+        }, this.handleFinancialList, true, "post", pullingUp);
+    }
+    //下拉加载下一页
+    ajaxNextPage = () => {
+        let hasNextPage = false;
+
+        let offset = this.state.financialList.length;
+        if (offset < this.state.total_count) {
+            hasNextPage = true;
+        }
+        
+        this.setState({
+            scroll_bottom_tips: hasNextPage ? "加载中..." : "加载完成"
+        })
+
+        if (hasNextPage) {
+            setTimeout(() => {
+                this.ajaxGetFinancialList(10, offset, true);
+            }, 500);
+        }
+        
     }
     hasAdmin () {
         // console.log(this.state.realName);
@@ -155,7 +206,8 @@ export default class Account extends React.Component {
                                     <span className="fn-left" ></span> 收支明细 <span className="fn-right"></span>
                                 </p>
                                 <div className="accountListDetails">
-                                    <AccountListDetails item_list={this.state.financialList.item_list} blance={this.state.blance}></AccountListDetails>
+                                    <AccountListDetails item_list={this.state.financialList} blance={this.state.blance}></AccountListDetails>
+                                    <div className="scroll-bottom-tips">{this.state.scroll_bottom_tips}</div>
                                 </div>
                             </div>
                         </div>
