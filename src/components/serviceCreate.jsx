@@ -17,7 +17,7 @@ const ServerItem = (props) => (
         <p className="describe ellipsis-lines">{props.describe}</p>
         <div className="unit-box"><span className="unit_price">{props.unit_price}</span><span className="unit">{props.unit}</span></div>
         <Stepper
-            className="my-stepper"
+            className="my-stepper service-create-num"
             showNumber
             min={1}
             max={10000}
@@ -40,6 +40,9 @@ export default class ServerCreate extends React.Component {
             checkedServerList: [],
             serverList: [],
             height:"",
+            scroll: null, //滚动插件实例化对象
+            scroll_bottom_tips: "上拉加载更多", //上拉加载的tips
+            total_count: 0, //总数量
             // serverList: [{
             //     id: "1",
             //     server_name: "PS简单处理图片",
@@ -59,6 +62,50 @@ export default class ServerCreate extends React.Component {
             //     isChecked: false
             // }],
         };
+        this.handleGetSelfService = (res) => {
+            if (res.success) {
+                let newItemList = this.state.serverList;
+
+                newItemList = [...this.state.serverList, ...res.data.item_list];
+
+                newItemList.map((value, index, elem) => {
+                    elem[index].number = 1;
+                    elem[index].isChecked = false;
+                    elem[index].server_name = value.Name;
+                    elem[index].describe = value.Description;
+                })
+
+                this.props.setState({
+                    serverList: newItemList,
+                })
+
+                this.setState({
+                    total_count: res.data.total_count,
+                    scroll_bottom_tips: res.data.total_count > 8 ? "上拉加载更多" : ""
+                }, () => {
+                    this.state.scroll.finishPullUp()
+                    this.state.scroll.refresh();
+                })
+
+            } else {
+                Toast.info(res.message, 1.5);
+            }
+
+
+
+            if (res.success) {
+                let item_list = res.data.item_list;
+                item_list.map((value, index, elem) => {
+                    elem[index].number = 1;
+                    elem[index].isChecked = false;
+                    elem[index].server_name = value.Name;
+                    elem[index].describe = value.Description;
+                })
+                this.setState({ serverList: item_list });
+            } else {
+                Toast.fail(res.message, 1.5);
+            }
+        }
         
     }
 
@@ -81,14 +128,43 @@ export default class ServerCreate extends React.Component {
     }
     componentDidMount() {
         const hei = document.documentElement.clientHeight - document.querySelector('.serverStep').offsetHeight - document.querySelector('.top').offsetHeight - 25;
-        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true, pullUpLoad: { threshold: -50 } })
         this.setState({
-            height: hei
+            height: hei,
+            scroll,
         })
+        scroll.on('pullingUp', () => {
+            this.ajaxNextPage();
+        });
         const maskDOM = document.getElementsByClassName("am-modal-mask");
         if (maskDOM.length) {
             maskDOM[0].style.display = "none";
         }
+    }
+    ajaxNextPage = () => {
+        let hasNextPage = false;
+
+        let offset = this.state.serverList.length;
+        if (offset < this.state.total_count) {
+            hasNextPage = true;
+        }
+
+        this.setState({
+            scroll_bottom_tips: hasNextPage ? "加载中..." : "加载完成"
+        })
+
+        if (hasNextPage) {
+            setTimeout(() => {
+                this.ajaxGetSelfServiceList(10, offset, true);
+            }, 500);
+        }
+    }
+    ajaxGetSelfServiceList = (limit = 10, offset = 0, pullingUp = false) => {
+        //服务模板
+        runPromise('get_self_service_template_list', {
+            limit,
+            offset,
+        }, this.handleGetSelfService, true, "post", pullingUp);
     }
     componentDidUpdate() {
         const maskDOM = document.getElementsByClassName("am-modal-mask");
@@ -219,13 +295,14 @@ export default class ServerCreate extends React.Component {
                                         )
                                     })
                                 }
-                                <div className="serverButton" style={{paddingBottom:"15px"}}>
+                                <div className="scroll-bottom-tips" style={{ "display": this.state.serverList.length > 4 ? "block" : "none" }}>{this.state.scroll_bottom_tips}</div>
+                                <div className="serverButton" style={{ "padding-bottom": "60px", "visibility": this.state.serverList.length > 3 ? "hidden" : "visible"}}>
                                     <Button
                                         type="ghost"
                                         icon={<i className="iconfont icon-tianjiajiahaowubiankuang"></i>}
                                         size="large"
-                                        style={{ margin: "0 2.3rem", color: "#009AE8", border: "1px solid #009AE8", height: "1.2rem" }}
-                                        activeStyle={{ backgroundColor: "#259EEF", color: "#fff", border: "1px solid #259EEF" }}
+                                        style={{ margin: "0 2.3rem", color: "#009AE8", height: "1.2rem" }}
+                                        activeStyle={{ backgroundColor: "#259EEF", color: "#fff" }}
                                     >
                                         <Link to="/addServer">添加服务内容</Link>
                                     </Button>

@@ -9,35 +9,55 @@ export default class Contacts extends React.Component {
         super(props)
         this.state = {
             location_form: '',
-            contactsList: [],
+            contactsList: sessionStorage.getItem("contactsList") ? JSON.parse(sessionStorage.getItem("contactsList")) : [],
             showInputModal: false, //编辑或新增联系人的弹窗，是否打开
             // InputModalData: null, //编辑或新增联系人的弹窗，里面的内容，每次关闭弹窗时都设为null
             yunLinkName: '', //联系人弹窗，名字
             yunLinkPhone: '', //联系人弹窗，手机号 
             yunLinkCompany: '', //联系人弹窗，公司
             yunLinkEmail: '', //联系人弹窗，邮箱
+            scroll: null, //滚动插件实例化对象
+            scroll_bottom_tips: "上拉加载更多", //上拉加载的tips
+            total_count: 0, //总数量
         }
         //获取联系人列表
-        this.handleGetCustomers = (res) => {
+        this.handleGetCustomers = (res, pullingUp) => {
             if (res.success) {
+                let newItemList = this.state.contactsList;
+                if (pullingUp) {
+                    // newItemList.push(res.data.item_list);
+                    newItemList = [...this.state.contactsList, ...res.data.item_list];
+                } else {
+                    newItemList = res.data.item_list;
+                    sessionStorage.setItem("contactsList", JSON.stringify(newItemList));
+                }
+
                 this.setState({
-                    contactsList: res.data.item_list
+                    contactsList: newItemList,
+                    total_count: res.data.total_count,
+                    scroll_bottom_tips: res.data.total_count > 8 ? "上拉加载更多" : ""
+                }, () => {
+                    this.state.scroll.finishPullUp()
+                    this.state.scroll.refresh();
                 })
+
             } else {
-                Toast.info(res.message, 1);
+                Toast.info(res.message, 1.5);
             }
         }
         //删除某个联系人
         this.handleDelCustomer = (res) => {
             if (res.success) {
+                Toast.success("成功", 1);
                 this.ajaxGetCustomers(); //重新获取本页数据
             } else {
                 Toast.info(res.message, 1);
             }
         }
         //新增或编辑某个联系人
-        this.handleAddCustomer = () => {
+        this.handleAddCustomer = (res) => {
             if (res.success) {
+                Toast.success("成功", 1);
                 this.ajaxGetCustomers(); //重新获取本页数据
                 this.setState({ showInputModal: false})
             } else {
@@ -47,10 +67,14 @@ export default class Contacts extends React.Component {
     }
     componentDidMount() {
         const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 30;
-        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true, pullUpLoad: { threshold: -50 } })
         this.setState({
-            height: hei
+            height: hei,
+            scroll,
         })
+        scroll.on('pullingUp', () => {
+            this.ajaxNextPage();
+        });
         this.ajaxGetCustomers();
         if (this.props.location.query && this.props.location.query.form) {
             this.setState({
@@ -58,15 +82,33 @@ export default class Contacts extends React.Component {
             })
         }
     }
+    ajaxNextPage = () => {
+        let hasNextPage = false;
+
+        let offset = this.state.contactsList.length;
+        if (offset < this.state.total_count) {
+            hasNextPage = true;
+        }
+
+        this.setState({
+            scroll_bottom_tips: hasNextPage ? "加载中..." : "加载完成"
+        })
+
+        if (hasNextPage) {
+            setTimeout(() => {
+                this.ajaxGetCustomers(10, offset, true);
+            }, 500);
+        }
+    }
     shouldComponentUpdate() {
         return this.props.router.location.action === 'POP';
     }
     //获取联系人列表
-    ajaxGetCustomers = (offset = 0, limit = 10) => {
+    ajaxGetCustomers = (limit = 10, offset = 0, pullingUp = false) => {
         runPromise('getCustomers', {
             offset,
             limit,
-        }, this.handleGetCustomers);
+        }, this.handleGetCustomers, true, "post", pullingUp);
     }
     handleClickItem(value) {
         // hashHistory.replace({
@@ -93,12 +135,12 @@ export default class Contacts extends React.Component {
         }
     }
     //新增或删除联系人
-    ajaxAddCustomer = (yunLinkName, yunLinkPhone, yunLinkCompany, yunLinkEmail) => {
+    ajaxAddCustomer = (linkName, linkPhone, linkCompany, linkEmail) => {
         runPromise('addCustomer', {
-            yunLinkName, 
-            yunLinkPhone, 
-            yunLinkCompany, 
-            yunLinkEmail
+            linkName, 
+            linkPhone, 
+            linkCompany, 
+            linkEmail
         }, this.handleAddCustomer);
     }
     //删除联系人
@@ -235,6 +277,7 @@ export default class Contacts extends React.Component {
                                         </SwipeAction>
                                     ))
                                 }
+                                <div className="scroll-bottom-tips">{this.state.scroll_bottom_tips}</div>
                             </List>
                         </div>
                         <Modal

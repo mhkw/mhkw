@@ -17,6 +17,7 @@ export default class AddServer extends React.Component {
         this.handleAddService = (res) => {
             if (res.success) {
                 Toast.success("添加服务成功", 1,()=>{
+                    this.props.ajaxGetSelfServiceList(); //刷新服务模板列表
                     hashHistory.goBack();
                 });
             } else {
@@ -40,7 +41,7 @@ export default class AddServer extends React.Component {
             Toast.info("请输入服务单价",1);
             return;
         }
-        if (!server_name) {
+        if (!unit) {
             Toast.info("请输入服务单位",1);
             return;
         }
@@ -48,7 +49,7 @@ export default class AddServer extends React.Component {
         runPromise('add_service_template', {
             Name: server_name,
             unit_price: unit_price,
-            unit: unit,
+            unit: '元/' + unit,
             Description: describe,
         }, this.handleAddService, true);
     }
@@ -114,7 +115,9 @@ export default class AddServer extends React.Component {
                 </Flex>
                 <TextareaItem
                     placeholder="描述：对内容的简单说明"
-                    rows="5"
+                    autoHeight
+                    rows={5}
+                    count={200}
                     value={this.state.describe}
                     onChange={(val) => { this.setState({ describe: val}) }}
                 />

@@ -89,12 +89,15 @@ export default class HOCoffer extends React.Component {
         }
     }
     componentDidMount() {
-        console.log("componentDidMount")
+        // console.log("componentDidMount")
+        this.ajaxGetSelfServiceList(); 
+    }
+    ajaxGetSelfServiceList = (limit = 10, offset = 0, pullingUp = false) => {
         //服务模板
         runPromise('get_self_service_template_list', {
-            offset: 0,
-            limit: 10,
-        }, this.handleGetSelfService, true);
+            limit,
+            offset,
+        }, this.handleGetSelfService, true, "post", pullingUp);
     }
     setSelectedCustomer = (value) => {
         let { yunLinkName: customer_name, yunLinkPhone: customer_phone, yunLinkCompany: customer_company, yunLinkEmail: customer_email } = value;
@@ -204,7 +207,7 @@ export default class HOCoffer extends React.Component {
         Toast.loading('发送报价中，请稍候',6);
         axios({
             method: 'post',
-            url: 'https://www.huakewang.com/quoteApi/send_quote',
+            url: 'https://www.huakewang.com/quoteApi/send_quote_ex',
             withCredentials: true,
             crossDomain: true,
             headers: {
@@ -248,6 +251,7 @@ export default class HOCoffer extends React.Component {
                             inputDiscountPrice: this.state.inputDiscountPrice, //用户输入的优惠价格
                             CreateOfferQuotation: this.CreateOfferQuotation, // 最后的点击，生成报价单
                             offerShareURL: this.state.offerShareURL,
+                            ajaxGetSelfServiceList: this.ajaxGetSelfServiceList,
                         }
                     ) 
                 }

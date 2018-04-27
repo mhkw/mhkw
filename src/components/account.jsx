@@ -68,7 +68,7 @@ export default class Account extends React.Component {
                 this.setState({
                     financialList: newItemList,
                     total_count: res.data.total_count,
-                    scroll_bottom_tips: res.data.total_count > 3 ? "上拉加载更多" : ""
+                    scroll_bottom_tips: res.data.total_count > 8 ? "上拉加载更多" : ""
                 }, () => {
                     this.state.scroll.finishPullUp()
                     this.state.scroll.refresh();
