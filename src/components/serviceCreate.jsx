@@ -11,11 +11,11 @@ const ServerItem = (props) => (
         <Checkbox.CheckboxItem key={props.index} checked={props.isChecked} onChange={() => props.onChangeisChecked(props.index)}>
             {[
                 <h2 className="ellipsis">{props.title}</h2>,
-                <Link to="/addServer">编辑</Link>
+                <a onClick={() => { props.editServer(props.id) }}>编辑</a>
             ]}
         </Checkbox.CheckboxItem>
         <p className="describe ellipsis-lines">{props.describe}</p>
-        <div className="unit-box"><span className="unit_price">{props.unit_price}</span><span className="unit">{props.unit}</span></div>
+        <div className="unit-box"><span className="unit_price">{props.unit_price}</span>/<span className="unit">{props.unit}</span></div>
         <Stepper
             className="my-stepper service-create-num"
             showNumber
@@ -93,18 +93,18 @@ export default class ServerCreate extends React.Component {
 
 
 
-            if (res.success) {
-                let item_list = res.data.item_list;
-                item_list.map((value, index, elem) => {
-                    elem[index].number = 1;
-                    elem[index].isChecked = false;
-                    elem[index].server_name = value.Name;
-                    elem[index].describe = value.Description;
-                })
-                this.setState({ serverList: item_list });
-            } else {
-                Toast.fail(res.message, 1.5);
-            }
+            // if (res.success) {
+            //     let item_list = res.data.item_list;
+            //     item_list.map((value, index, elem) => {
+            //         elem[index].number = 1;
+            //         elem[index].isChecked = false;
+            //         elem[index].server_name = value.Name;
+            //         elem[index].describe = value.Description;
+            //     })
+            //     this.setState({ serverList: item_list });
+            // } else {
+            //     Toast.fail(res.message, 1.5);
+            // }
         }
         
     }
@@ -128,7 +128,7 @@ export default class ServerCreate extends React.Component {
     }
     componentDidMount() {
         const hei = document.documentElement.clientHeight - document.querySelector('.serverStep').offsetHeight - document.querySelector('.top').offsetHeight - 25;
-        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true, pullUpLoad: { threshold: -50 } })
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true, bounceTime: 300, swipeBounceTime: 200, pullUpLoad: { threshold: -50 } })
         this.setState({
             height: hei,
             scroll,
@@ -145,7 +145,7 @@ export default class ServerCreate extends React.Component {
         let hasNextPage = false;
 
         let offset = this.state.serverList.length;
-        if (offset < this.state.total_count) {
+        if (offset < this.props.state.total_count) {
             hasNextPage = true;
         }
 
@@ -241,6 +241,21 @@ export default class ServerCreate extends React.Component {
             Toast.info("请选择服务项目", 1.5);
         }
     }
+    clickAddServer = () => {
+        hashHistory.push({
+            pathname: '/addServer',
+            query: { form: 'addServer' },
+        });
+    }
+    clickEditServer = (id) => {
+        hashHistory.push({
+            pathname: '/addServer',
+            query: { 
+                form: 'editServer',
+                id,
+            },
+        });
+    }
     render () {
         // this.countNumberAndPrice();
         return (
@@ -258,10 +273,10 @@ export default class ServerCreate extends React.Component {
                             //     <span style={{ color: "#000", fontSize: "14px"}}>添加</span>
                             // ]}
                             rightContent={
-                                <Link to="/addServer">
+                                <a onClick={this.clickAddServer}>
                                     <i className="iconfont icon-tianjiajiahaowubiankuang" style={{ color: "#A8A8A8", marginRight: "3px" }}></i>
                                     <span style={{ color: "#000", fontSize: "14px" }}>添加</span>
-                                </Link>
+                                </a>
                             }
                         >报价</NavBar>
                         <div className="serverStep">
@@ -291,6 +306,7 @@ export default class ServerCreate extends React.Component {
                                                 number={val.number}
                                                 onChangeThisNumber={this.onChangeThisNumber}
                                                 isChecked={val.isChecked}
+                                                editServer={this.clickEditServer}
                                             ></ServerItem>
                                         )
                                     })

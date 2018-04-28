@@ -31,7 +31,8 @@ export default class ConfirmOffer extends React.Component {
             remarks: "",
             pure_price: "",
             clicked: 'none',
-            height:""
+            height:"",
+            SendSuccess: false,
         }
         // this.wx = api.require('wx');
     }
@@ -55,12 +56,15 @@ export default class ConfirmOffer extends React.Component {
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.offerShareURL) {
-            this.showShareActionSheet();
+            if (!this.state.SendSuccess) {
+                this.showShareActionSheet();
+            }
+            this.setState({ SendSuccess: true })
         }
     }
     componentDidMount(){
         const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
-        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true, bounceTime: 300, swipeBounceTime: 200 })
         this.setState({
             height: hei
         })
@@ -74,7 +78,7 @@ export default class ConfirmOffer extends React.Component {
                 thumb: thumb,
                 contentUrl: contentUrl
             }, (ret, err) => {
-                if (ret.status) {
+                if (ret.status) {   
                     // alert(JSON.stringify(ret))
 
                 } else {
@@ -189,7 +193,7 @@ export default class ConfirmOffer extends React.Component {
                                 onClick={this.onClickConfirmOffer}
                                 className="confirm-offer-button"
                                 activeClassName="confirm-offer-button-active"
-                            >确认发送并分享</Button>
+                            >{this.state.SendSuccess ? "已发送，分享" : "确认发送并分享"}</Button>
                         </div>
                     </div>
                 </div>

@@ -27,7 +27,7 @@ export default class HOCoffer extends React.Component {
                     elem[index].server_name = value.Name;
                     elem[index].describe = value.Description;
                 })
-                this.setState({ serverList: item_list });
+                this.setState({ serverList: item_list, total_count: res.data.total_count, });
             } else {
                 Toast.fail(res.message, 1.5);
             }
@@ -79,9 +79,10 @@ export default class HOCoffer extends React.Component {
         //最后发送报价的ajax处理函数
         this.handleSendQuote = (res) => {
             if (res.success) {
-                console.log(res);
+                // console.log(res);
                 this.setState({
-                    offerShareURL: 'https://www.huakewang.com/2017_data/H5offerSheet.html?id=122,name=%E9%83%91%E5%9B%BD%E5%BA%86,phone=17683993335,count=oauth,timestamp=1512631141'
+                    // offerShareURL: 'https://www.huakewang.com/2017_data/H5offerSheet.html?id=122,name=%E9%83%91%E5%9B%BD%E5%BA%86,phone=17683993335,count=oauth,timestamp=1512631141',
+                    offerShareURL: res.data.url,
                 })
             } else {
                 Toast.fail(res.message, 1.5);
@@ -176,7 +177,7 @@ export default class HOCoffer extends React.Component {
 
             shortProjectsData.parts.push(partOne);
         });
-        console.log(NewProjectsData);
+        // console.log(NewProjectsData);
         return NewProjectsData;
     }
     //报价-添加付款列表
@@ -219,7 +220,13 @@ export default class HOCoffer extends React.Component {
             })
         })
             .then((response) => {
-                Toast.hide();
+                if (response.data && response.data.success) {
+                    Toast.success("发送报价成功", 1.5, () => {
+                        Toast.hide();
+                    })
+                } else {
+                    Toast.hide();
+                }
                 requestIsSuccess(response) && this.handleSendQuote(response.data)
             })
             .catch((error) => {
@@ -252,6 +259,7 @@ export default class HOCoffer extends React.Component {
                             CreateOfferQuotation: this.CreateOfferQuotation, // 最后的点击，生成报价单
                             offerShareURL: this.state.offerShareURL,
                             ajaxGetSelfServiceList: this.ajaxGetSelfServiceList,
+                            project_id: this.state.project_id,                            
                         }
                     ) 
                 }

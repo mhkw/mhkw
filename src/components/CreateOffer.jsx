@@ -64,7 +64,7 @@ export default class CreateOffer extends React.Component {
     }
     componentDidMount(){
         const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
-        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true, bounceTime: 300, swipeBounceTime: 200 })
         this.setState({
             height: hei
         })
@@ -85,10 +85,45 @@ export default class CreateOffer extends React.Component {
     }
     onClickCreateOffer = () => {
         // this.props.CreateOfferQuotation(); //点击生成报价单
+        if (!this.checkInputEnter()) {
+            return;
+        }
         hashHistory.push({
             pathname: '/confirmOffer',
             query: { form: 'CreateOffer' },
         });
+    }
+    //检查用户是否输入了所有该填的输入框
+    checkInputEnter = () => {
+        if (this.state.checkedServerList.length < 1) {
+            Toast.info('请选择服务', 1);
+            return false;
+        }
+        if (!this.props.customer_name) {
+            Toast.info('请输入客户姓名', 1);
+            return false;
+        }
+        if (!this.props.customer_company) {
+            Toast.info('请输入客户公司', 1);
+            return false;
+        }
+        if (!this.props.customer_phone) {
+            Toast.info('请输入客户手机', 1);
+            return false;
+        }
+        if (!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.props.customer_phone))) {
+            Toast.info('客户手机号错误', 1);
+            return false;
+        }
+        if (!this.props.proname) {
+            Toast.info('请输入项目名称', 1);
+            return false;
+        }
+        if (!this.props.cut_off_date) {
+            Toast.info('请选择截止日期', 1);
+            return false;
+        }
+        return true;
     }
     hikeUpKeyboard = (param) => {
         let DOMCover = this.refs.coverCustomKeyboard;
@@ -164,7 +199,7 @@ export default class CreateOffer extends React.Component {
                 <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
                     <div>
                         <div className="create-offer-main">
-                            {console.log(this.state.checkedServerList)}
+                            {/* {console.log(this.state.checkedServerList)} */}
                             {
                                 this.state.checkedServerList.map((val, index) => (
                                     <OfferItem
@@ -197,8 +232,8 @@ export default class CreateOffer extends React.Component {
                         <div className="create-offer-customer">
                             <p className="customer-title">
                                 <span className="left">客户信息</span>
-                                <span className="right">请输入客户信息</span>
                                 <i className="iconfont icon-geren3" onClick={this.selectContacts}></i>
+                                <span className="right float">联系人</span>
                             </p>
                             <div className="customer-input-box">
                                 <InputItem
@@ -207,7 +242,7 @@ export default class CreateOffer extends React.Component {
                                     maxLength="10"
                                     placeholder=""
                                     value={this.props.customer_name}
-                                    onChange={(val) => { this.props.setState({ customer_name: val }) }}
+                                    onChange={(val) => { this.props.setState({ customer_name: val.trim() }) }}
                                 >姓名</InputItem>
                                 <InputItem
                                     className="input-company"
@@ -215,7 +250,7 @@ export default class CreateOffer extends React.Component {
                                     maxLength="30"
                                     placeholder="用于身份确认"
                                     value={this.props.customer_company}
-                                    onChange={(val) => { this.props.setState({ customer_company: val }) }}
+                                    onChange={(val) => { this.props.setState({ customer_company: val.trim() }) }}
                                 >公司</InputItem>
                                 <InputItem
                                     className="input-phone"
@@ -223,7 +258,7 @@ export default class CreateOffer extends React.Component {
                                     maxLength="11"
                                     placeholder="输入手机号用于接收短信"
                                     value={this.props.customer_phone}
-                                    onChange={(val) => { this.props.setState({ customer_phone: val }) }}
+                                    onChange={(val) => { this.props.setState({ customer_phone: val.trim() }) }}
                                 >手机</InputItem>
                             </div>
                         </div>
