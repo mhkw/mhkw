@@ -115,7 +115,16 @@ export default class Account2 extends React.Component {
         // console.log("componentDidMount");
         setTimeout(() => {
             this.initBScroll(0);
-            this.getMainProjectList(0);  //收到的报价（甲方），全部
+            if (this.props.location.query && this.props.location.query.form && this.props.location.query.form == "confirmOffer") {
+                this.setState({
+                    selectedSegmentIndex: 1
+                },()=>{
+                    this.getMainProjectList(1);  //发出的的报价（乙方），全部
+                })
+            } else {
+                this.getMainProjectList(0);  //收到的报价（甲方），全部
+            }
+            
         }, 200);
     }
     componentWillUnmount() {
@@ -166,7 +175,9 @@ export default class Account2 extends React.Component {
     }
     onChangeTabs = (tab, index) => {
         // console.log(index);
-        this.initBScroll(index);
+        setTimeout(() => {
+            this.initBScroll(index);
+        }, 200);
         let quote_status = tab.quote_status;
         // console.log(quote_status);
         let state_quote_status = this.state['item_quote_status_' + quote_status];

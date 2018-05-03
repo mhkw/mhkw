@@ -21,9 +21,6 @@ const ActionDataList = [{
     title: '微信好友'
 }]
 
-if (window.api) {
-    var wx = api.require('wx');
-}
 export default class ConfirmOffer extends React.Component {
     constructor(props) {
         super(props)
@@ -37,19 +34,41 @@ export default class ConfirmOffer extends React.Component {
         // this.wx = api.require('wx');
     }
     onClickConfirmOffer = () => {
-        this.props.CreateOfferQuotation(); //点击生成报价单
+        if (this.props.state && this.props.state.checkedServerList && this.props.state.checkedServerList.length > 0) {
+            if (this.state.SendSuccess) {
+                this.showShareActionSheet();
+            } else {
+                this.props.CreateOfferQuotation(); //点击生成报价单
+            }
+        } else {
+            hashHistory.push({
+                pathname: '/',
+                query: { form: 'confirmOffer' }
+            });
+        }
+        
         // this.showShareActionSheet();
     }
     showShareActionSheet = () => {
         ActionSheet.showShareActionSheetWithOptions({
             options: ActionDataList,
             title: '分享到',
+            cancelButtonIndex: -1, 
+            maskClosable: false, 
         },
             (buttonIndex) => {
                 this.setState({ clicked: buttonIndex > -1 ? ActionDataList[buttonIndex].title : 'cancel' });
+                //如果点击取消
+                if (buttonIndex == -1) {
+                    hashHistory.push({
+                        pathname: '/quoteList',
+                        query: { form: 'confirmOffer' }
+                    });
+                }
                 //点击的是微信
                 if (buttonIndex == 0) {
-                    this.wxShareWebpage(this.props.state.proname, this.props.offerShareURL);
+                    let otherShareURL = this.props.offerShareURL.replace(/myself/, "other")
+                    this.wxShareWebpage(this.props.state.proname, otherShareURL);
                 }
             }
         );
@@ -62,6 +81,21 @@ export default class ConfirmOffer extends React.Component {
             this.setState({ SendSuccess: true })
         }
     }
+    componentWillMount() {
+        if (this.props.location.query && this.props.location.query.form != "CreateOffer") {
+            hashHistory.push({
+                pathname: '/',
+                query: { form: 'confirmOffer' }
+            });
+        }
+        if (this.props.state && this.props.state.checkedServerList && this.props.state.checkedServerList.length > 0) {
+        } else {
+            hashHistory.push({
+                pathname: '/',
+                query: { form: 'confirmOffer' }
+            });
+        }
+    }
     componentDidMount(){
         const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
         const scroll = new BScroll(document.querySelector('.wrapper'), { click: true, bounceTime: 300, swipeBounceTime: 200 })
@@ -70,7 +104,7 @@ export default class ConfirmOffer extends React.Component {
         })
     }
     wxShareWebpage = (description, contentUrl, title = '画客网报价', thumb = 'widget://dist/images/huakerappicon.png', scene = 'session', ) => {
-        if (wx) {
+        if (window.wx) {
             wx.shareWebpage({
                 scene: scene,
                 title: title,
@@ -84,6 +118,11 @@ export default class ConfirmOffer extends React.Component {
                 } else {
 
                 }
+                //不管是否分享成功，都跳转到报价列表，发出的报价
+                hashHistory.push({
+                    pathname: '/quoteList',
+                    query: { form: 'confirmOffer' }
+                });
             });
         }
     }

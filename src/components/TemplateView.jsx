@@ -10,16 +10,21 @@ export const OrderItemList = (props) => {
         <li className="clearfix">
             <h3><span className="name ellipsis">{props.project_name ? props.project_name : "快速下单"}</span><span className="fn-right">{props.type == "1" ? "报价订单" : "服务订单"}</span></h3>
             {
-                props.content && props.content.map((val, index) => (
+                // props.content && props.content.map((val, index) => (
+                props.parts && props.parts.length > 0 && props.parts[0].parts && props.parts[0].parts.length > 0 && props.parts[0].parts.map((val, index) => (
                     <div className="orderItemLisWrap clearfix spelis">
                         <div className="fn-left floatWrap">
                             <span className="order fn-left">{index + 1}</span>
-                            <h4 className="fn-left"> {val.name}</h4>
-                            <p className="fn-left" style={{ color: "#676767" }}>融合产品需要参与策划与数据整合</p>
+                            <div>
+                                <h4 className=""> {val.description}</h4>
+                                <p className="" style={{ color: "#676767" }}>{val.part && val.part.length > 0 && val.part[0].content}</p>
+                            </div>
                         </div>
                         <div className="fn-right" style={{ color: "#676767" }}>
-                            <h4>{val.total_price}</h4>
-                            <p>x{val.num}套</p>
+                            {/* <h4>{val.total_price}</h4>
+                            <p>x{val.num}套</p> */}
+                            <h4>{val.part && val.part.length > 0 && val.part[0].total}</h4>
+                            <p>x{val.part && val.part.length > 0 && val.part[0].number}套</p>
                         </div>
                     </div>
                 ))
@@ -28,13 +33,13 @@ export const OrderItemList = (props) => {
                 props.type == "2" && props.content.length < 1 ? (
                     <div className="orderItemLisWrap clearfix spelis">
                         <div className="fn-left floatWrap">
-                            <span className="order fn-left">1</span>
+                            {/* <span className="order fn-left">1</span> */}
                             <h4 className="fn-left"> 自定义服务订单</h4>
-                            <p className="fn-left" style={{ color: "#676767" }}>融合产品需要参与策划与数据整合</p>
+                            {/* <p className="fn-left" style={{ color: "#676767" }}>融合产品需要参与策划与数据整合</p> */}
                         </div>
                         <div className="fn-right" style={{ color: "#676767" }}>
                             <h4>{props.price_after_discount ? props.price_after_discount : (props.price_before_discount ? props.price_before_discount : "0")}</h4>
-                            <p>x{1}套</p>
+                            {/* <p>x{1}套</p> */}
                         </div>
                     </div>
                 ) : null
@@ -190,16 +195,20 @@ export const QuoteItemList = (props) => {
         <li className="clearfix">
             <h3><span className="name ellipsis">{props.project_name ? props.project_name : "报价单"}</span><span className="fn-right">{props.send_time ? props.send_time.split(" ")[0] : "" }</span></h3>
             {
-                props.content && props.content.map((val, index) => (
-                    <div className="orderItemLisWrap clearfix spelis">
+                props.parts && props.parts.length > 0 && props.parts[0].parts && props.parts[0].parts.length > 0 && props.parts[0].parts.map((val, index) => (
+                    <div className="orderItemLisWrap clearfix spelis" key={val.id}>
                         <div className="fn-left floatWrap">
                             <span className="order fn-left">{index + 1}</span>
-                            <h4 className="fn-left"> {val.name}</h4>
-                            <p className="fn-left" style={{ color: "#676767" }}>融合产品需要参与策划与数据整合</p>
+                            <div>
+                                <h4 className=""> {val.description}</h4>
+                                <p className="" style={{ color: "#676767" }}>{val.part && val.part.length > 0 && val.part[0].content}</p>
+                            </div>
                         </div>
                         <div className="fn-right" style={{ color: "#676767" }}>
-                            <h4>{val.total_price}</h4>
-                            <p>x{val.num}套</p>
+                            {/* <h4>{val.total_price}</h4>
+                            <p>x{val.num}套</p> */}
+                            <h4>{val.part && val.part.length > 0 && val.part[0].total}</h4>
+                            <p>x{val.part && val.part.length > 0 && val.part[0].number}套</p>
                         </div>
                     </div>
                 ))

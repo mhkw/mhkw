@@ -232,8 +232,10 @@ export default class CreateOffer extends React.Component {
                         <div className="create-offer-customer">
                             <p className="customer-title">
                                 <span className="left">客户信息</span>
-                                <i className="iconfont icon-geren3" onClick={this.selectContacts}></i>
-                                <span className="right float">联系人</span>
+                                <div className="float right" onClick={this.selectContacts}>
+                                    <span style={{"margin-right":"5px"}}>联系人</span>
+                                    <i className="iconfont icon-geren3"></i>
+                                </div>
                             </p>
                             <div className="customer-input-box">
                                 <InputItem
