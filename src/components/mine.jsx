@@ -30,6 +30,21 @@ export default class Mine extends React.Component {
             }
         };
     }
+    //缓存头像图片, 环信聊天必须用本地图片
+    imageCacheAvatar = (path_thumb) => {
+        setTimeout(() => {
+            if (window.api) {
+                window.api.imageCache({
+                    url: path_thumb
+                }, (ret, err) => {
+                    if (ret.status) {
+                        sessionStorage.setItem("cacheAvatarSelf", ret.url)
+                    }
+                });
+            }
+        }, 500);
+        
+    }
     componentDidMount(){
         const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25+'px';
         const scroll = new BScroll(this.refs.wrapper, { click: true, bounceTime: 300, swipeBounceTime: 200 })
@@ -56,7 +71,12 @@ export default class Mine extends React.Component {
                 sessionStorage.setItem("nick_name", response.data.data.nick_name)
             }
             if (response.data.data.path_thumb) {
-                sessionStorage.setItem("path_thumb", response.data.data.path_thumb)
+                sessionStorage.setItem("path_thumb", response.data.data.path_thumb);
+
+                this.imageCacheAvatar(response.data.data.path_thumb);
+            }
+            if (response.data.data.hxid) {
+                sessionStorage.setItem("hxid", response.data.data.hxid);
             }
         })
         .catch((error) => {

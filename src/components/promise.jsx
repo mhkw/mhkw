@@ -102,6 +102,7 @@ const ajaxURLList = {
     submit_user_auth: "hkw_newapi/submit_user_auth", //提交设计师认证
 
     get_my_notice_list: "hkw_newapi/get_my_notice_list", //我的动态
+    get_user_list2: "hkw_newapi/get_user_list2", //获取指定id的设计师列表
 }
 
 function get_user_list_ex(params) {

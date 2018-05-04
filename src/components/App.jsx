@@ -56,16 +56,16 @@ export default class App extends Component {
         e.currentTarget.getElementsByTagName("i")[0].style.backgroundImage = "url(" + this.state.src[num] + ")";
         e.currentTarget.getElementsByTagName("span")[0].style.color = "#3ebbf3";
     }
-    clickContacts = () => {
-        this.sendEventChatList();
-    }
-    sendEventChatList() {
-        if (window.api) {
-            window.api.sendEvent({
-                name: 'chatList'
-            });
-        }
-    }
+    // clickContacts = () => {
+    //     this.sendEventChatList();
+    // }
+    // sendEventChatList() {
+    //     if (window.api) {
+    //         window.api.sendEvent({
+    //             name: 'chatList'
+    //         });
+    //     }
+    // }
     render() {
         return (
             <div>
@@ -78,6 +78,8 @@ export default class App extends Component {
                             setState: this.setState.bind(this),
                             HOCState: this.props.state,
                             propsSetState: this.props.propsSetState,
+                            conversations: this.props.conversations,
+                            sumUnreadMessagesCount: this.props.sumUnreadMessagesCount,
                         }
                     )
                 }
@@ -179,15 +181,17 @@ export default class App extends Component {
                                 }}
                                 />
                             }
-                            title="联系人"
+                            title="消息"
                             key="Friend"
-                            selected={this.state.selectedTab === 'greenTab'}
+                            selected={this.state.selectedTab === '/chatList'}
+                            // dot={true}
+                            badge={this.props.sumUnreadMessagesCount > 0 ? this.props.sumUnreadMessagesCount : ""}
                             onPress={() => {
                                 this.setState({
-                                    selectedTab: 'greenTab',
+                                    selectedTab: '/chatList',
                                 });
-                                // this.context.router.push("/login");
-                                this.clickContacts();                                                                
+                                this.context.router.push("/chatList");
+                                // this.clickContacts();                                                                
                             }}
                         >
                         </TabBar.Item>
@@ -210,10 +214,10 @@ export default class App extends Component {
                             }
                             title="我 的"
                             key="Friend"
-                            selected={this.state.selectedTab === 'yellowTab'}
+                            selected={this.state.selectedTab === '/mine'}
                             onPress={() => {
                                 this.setState({
-                                    selectedTab: 'yellowTab',
+                                    selectedTab: '/mine',
                                 });
                                 this.context.router.push("/mine");                                                                
                             }}

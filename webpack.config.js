@@ -61,7 +61,8 @@ module.exports = {
                     // presets: [['es2015', { modules: false }], 'stage-0', 'react'] // tree-shaking
                 }
             },
-            {test: /\.(jpg|png)$/, loader: "url-loader?limit=8192&name=images/[hash:8].[name].[ext]"},
+            { test: /\.(jpg|png)$/, loader: "url-loader?limit=8192&name=images/[name].[ext]" },
+            // {test: /\.(jpg|png)$/, loader: "url-loader?limit=8192&name=images/[hash:8].[name].[ext]"},
             // {test:/\.(eot|ttf|woff|woff2|svg)$/,loader:'file?name=fonts/[name].[ext]'},
             { test: /\.(gif|woff|svg|eot|ttf)\??.*$/, loader: 'url-loader?limit=20000&name=/fonts/[name].[ext]'},
             // 注意：如下不使用 ExtractTextPlugin 的写法，不能单独 build 出 css 文件

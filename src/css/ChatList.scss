@@ -1,0 +1,65 @@
+.am-tab-bar-bar .am-tab-bar-tab-icon .tab-badge sup.am-badge-text{
+    left: 30px;
+}
+.chat-list-page .list-icon-box{
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #ec8c4b;
+    text-align: center;
+    margin-right: 10px;
+}
+.chat-list-page .list-icon-box .icon-bell{
+    line-height: 48px;
+    color: #fff;
+    font-size: 24px;
+}
+.chat-list-page .am-list-item.am-list-item-middle .am-list-line{
+    padding: 5px 15px 5px 0;
+}
+.chat-list-item .chat-list-avatar{
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+}
+.name-and-time .nice-name{
+    display: inline-block;
+    width: 60%;
+}
+.name-and-time .sned-time{
+    display: inline-block;
+    width: 38%;
+    font-size: 12px;
+    color: #333;
+    text-align: right;
+}
+.chat-list-item .word-text{
+    display: inline-block;
+    font-size: 14px;
+    color: #999;
+}
+.chat-list-item.am-list-item .am-list-line .am-list-content{
+    padding-top: 0;
+    padding-bottom: 0; 
+}
+.chat-list-item .avatar-box{
+    display: inline-block;
+    position: relative;
+}
+.avatar-box .min-badge-text{
+    position: absolute;
+    top: 0px;
+    left: 40px; 
+    height: 18px;
+    line-height: 18px;
+    min-width: 9px;
+    border-radius: 12px;
+    padding: 0 5px;
+    text-align: center;
+    font-size: 12px;
+    color: #fff;
+    background-color: #ff5b05;
+    z-index: 1;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "\5FAE\8F6F\96C5\9ED1", SimSun, sans-serif;
+}

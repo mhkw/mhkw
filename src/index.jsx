@@ -68,6 +68,7 @@ import AuthSkill from './components/AuthSkill';
 import AuthWorks from './components/AuthWorks';
 import UserWorks from './components/UserWorks';
 import RealName from './components/RealName';
+import ChatList from './components/ChatList';
 
 import './css/font/iconfont.css'
 
@@ -165,6 +166,7 @@ ReactDOM.render(
                 <IndexRoute component={Index} />
                 <Route path="circle" component={Hkcircle} />
                 <Route path="mine" component={Mine} />
+                <Route path="chatList" component={ChatList} />
             </Route>
             <Route path="baiduMap" component={BaiduMap} />
             <Route path="address" component={Address} />
