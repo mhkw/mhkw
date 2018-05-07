@@ -339,15 +339,17 @@ export default class CreatWork extends React.Component {
             this.ClearHOCPropsData();
             hashHistory.goBack();
         } else {
-            Modal.alert('作品没保存,是否清空数据?', null, [
-                { text: '取消', onPress: () => { 
-                    hashHistory.goBack(); 
-                } },
-                { text: '确定', onPress: () => {
-                    this.ClearHOCPropsData();
-                    hashHistory.goBack();
-                } },
-            ])
+            this.ClearHOCPropsData(); //不管那么多了，直接清除数据吧
+            hashHistory.goBack();
+            // Modal.alert('作品没保存,是否清空数据?', null, [
+            //     { text: '取消', onPress: () => { 
+            //         hashHistory.goBack(); 
+            //     } },
+            //     { text: '确定', onPress: () => {
+            //         this.ClearHOCPropsData();
+            //         hashHistory.goBack();
+            //     } },
+            // ])
         }
         
     }

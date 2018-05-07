@@ -78,6 +78,11 @@ export default class ChatList extends React.Component {
             if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
     }
+    //系统通知
+    SystemNotice = () => {
+        console.log("sys");
+        
+    }
     render() {
         return (
             <div className="chat-list-page">
@@ -90,7 +95,7 @@ export default class ChatList extends React.Component {
                     // leftContent={<span style={{ fontSize: "15px" }}>返回</span>}
                 >消息</NavBar>
                 <List>
-                    <List.Item arrow="horizontal" multipleLine onClick={() => { }}>
+                    <List.Item arrow="horizontal" multipleLine onClick={this.SystemNotice}>
                         <span className="list-icon-box"><i className="iconfont icon-bell"></i></span>系统通知
                     </List.Item>
                 </List>
@@ -200,6 +205,10 @@ export default class ChatList extends React.Component {
                             </SwipeAction>
                         })
                     }
+                    {/* {
+                        this.props.conversations &&
+                        this.props.conversations.length == 0 ? <p className="no-news">暂无消息</p> : null
+                    } */}
                     
 
                 </List>

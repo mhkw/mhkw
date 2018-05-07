@@ -105,6 +105,7 @@ export default class BaiduMap extends React.Component {
             hashHistory.goBack();
             return;
         }
+        this.clickKeyback(); //注册监听事件， 点击返回键
         //打开地图
         this.open();
 
@@ -274,6 +275,24 @@ export default class BaiduMap extends React.Component {
             lon: lon,
             lat: lat
         });
+    }
+    //监听事件，点击系统返回键
+    clickKeyback = () => {
+        if (window.api) {
+            window.api.addEventListener({
+                name: 'keyback'
+            }, (ret, err) => {
+                this.back(); //执行关闭页面的相关操作
+            });
+        }
+    }
+    componentWillMount() {
+        //移除事件，点击系统返回键
+        if (window.api) {
+            window.api.removeEventListener({
+                name: 'keyback'
+            });
+        }
     }
     render() {
         return (
