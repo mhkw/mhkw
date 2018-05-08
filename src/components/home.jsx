@@ -218,7 +218,7 @@ export default class HomeView extends React.Component {
     }
     //选择某个设计师后将信息通过props回调传给HOC
     selectDesignerToHOC = (obj) => {
-        let { path_thumb, path, nick_name, sex, txt_address, experience, works_count, comment_count, id } = obj;
+        let { path_thumb, path, nick_name, sex, txt_address, experience, works_count, comment_count, id, hxid } = obj;
         this.props.propsSetState('Designer', {
             path_thumb,
             path,
@@ -229,6 +229,7 @@ export default class HomeView extends React.Component {
             works_count,
             comment_count,
             id,
+            hxid,
         });
     }
     clickSelectAddress = () => {
@@ -279,7 +280,7 @@ export default class HomeView extends React.Component {
                     <div className="indexNav">
                         <NavBar
                             mode="light"
-                            onLeftClick={() => hashHistory.goBack()}
+                            // onLeftClick={() => hashHistory.goBack()}
                             rightContent={[
                                 <Link to="/search">
                                     <div className="searchAll">

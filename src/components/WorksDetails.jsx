@@ -69,6 +69,13 @@ export default class WorksDetails extends React.Component {
                     islove,
                     is_favorite,
                 });
+                //如果路由参数没有传递作者ID过来，则重新获取作者信息,比如头像，昵称，环信ID的
+                let { userId } = this.state;
+                // if (!id && userId) {
+                if (!userId) {
+                    let id = res.data.user_id;
+                    this.ajaxGetSelfInfo(id);
+                }
             } else {
                 Toast.fail(res.message, 1.5);
             }
@@ -113,18 +120,47 @@ export default class WorksDetails extends React.Component {
                 Toast.fail(res.message, 1)
             }
         }
+        this.handleGetSelfInfo = (res) => {
+            if (res.success) {
+                let { id, nick_name, path_thumb, hxid, mobile } = res.data;
+                this.setState({
+                    id,     //id是设计师ID，但是props传过来的
+                    nick_name,
+                    avatarUrl: path_thumb,
+                    hxid,
+                    mobile,
+                })
+            } else {
+                Toast.fail(res.message, 1.5);
+            }
+        }
 
     }
     componentWillMount() {
-        let { id, path_thumb, nick_name } = this.props.designer;
-        let { works_id, form} = this.props.location.query;
+        let { id, path_thumb, nick_name, hxid, mobile } = this.props.designer;
+        let { works_id, form, userId} = this.props.location.query;
         // console.log(nick_name)
         this.setState({
-            id,
+            id,     //id是设计师ID，但是props传过来的
+            userId, //userId也是设计师ID，但是路由参数传过来的，
             nick_name,
             avatarUrl: path_thumb,
             works_id,
+            hxid, 
+            mobile,
         })
+    }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps) {
+            let { id, path_thumb, nick_name, hxid, mobile } = nextProps.designer;
+            this.setState({
+                id,
+                nick_name,
+                avatarUrl: path_thumb,
+                hxid,
+                mobile,
+            })
+        }
     }
     componentDidMount() {
         const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
@@ -136,9 +172,20 @@ export default class WorksDetails extends React.Component {
             scroll,
         })
         this.ajaxGetWorks(this.state.works_id);
+        let { id, userId } = this.state;
+        // if (!id && userId) {
+        if (userId) {
+            this.ajaxGetSelfInfo(userId);
+        }
     }
+    
     refreshScroll = () => {
         this.state.scroll.refresh();
+    }
+    ajaxGetSelfInfo = (userId) => {
+        runPromise('get_user_info', {
+            user_id: userId,
+        }, this.handleGetSelfInfo, true, 'get');
     }
     ajaxGetWorks = (works_id) => {
         runPromise('get_works_info', {
@@ -235,6 +282,40 @@ export default class WorksDetails extends React.Component {
             let popoverRoot = popover.parentNode.parentNode;
             popoverRoot.parentNode.removeChild(popoverRoot);
         }
+    }
+    touchStartStyle = (index) => {
+        this.setState({
+            ["buttomBackgroundColor" + index]: this.state.touchButtomBackgroundColor
+        })
+    }
+    touchEndStyle = (index) => {
+        this.setState({
+            ["buttomBackgroundColor" + index]: this.state.endButtomBackgroundColor
+        })
+    }
+    //打电话
+    handleCall = (mobile) => {
+        console.log(mobile)
+        if (window.api) {
+            //APP处理
+            window.api.call({
+                type: 'tel_prompt',
+                number: mobile
+            });
+        } else {
+            //H5页面处理
+        }
+    }
+    //交谈，即时聊天
+    handleTalk = (hxid) => {
+        console.log(hxid)
+    }
+    //评论
+    handleComment = () => {
+        hashHistory.push({
+            pathname: '/writerComment',
+            query: { form: 'designerHome' }
+        });
     }
     render() {
         return (
@@ -347,13 +428,13 @@ export default class WorksDetails extends React.Component {
                         style={{ "background-color": this.state.buttomBackgroundColor1 }}
                         onTouchStart={() => this.touchStartStyle(1)}
                         onTouchEnd={() => this.touchEndStyle(1)}
-                        onClick={this.handleCall}
+                        onClick={() => this.handleCall(this.state.mobile)}
                     ><i className="iconfont icon-icon-phone"></i>电话</Flex.Item>
                     <Flex.Item
                         style={{ "background-color": this.state.buttomBackgroundColor2 }}
                         onTouchStart={() => this.touchStartStyle(2)}
                         onTouchEnd={() => this.touchEndStyle(2)}
-                        onClick={this.handleTalk}
+                        onClick={() => this.handleTalk(this.state.hxid)}
                     ><i className="iconfont icon-icon-talk"></i>交谈</Flex.Item>
                     <Flex.Item
                         style={{ "background-color": this.state.buttomBackgroundColor3 }}

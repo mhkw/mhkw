@@ -103,6 +103,8 @@ const ajaxURLList = {
 
     get_my_notice_list: "hkw_newapi/get_my_notice_list", //我的动态
     get_user_list2: "hkw_newapi/get_user_list2", //获取指定id的设计师列表
+
+    get_my_sys_notice_list: "hkw_newapi/get_my_sys_notice_list", //获取系统通知
 }
 
 function get_user_list_ex(params) {

@@ -148,7 +148,7 @@ export default class WorkList extends React.Component {
     }
     handleClickWorksDetails = (works_id, designer) => {
         // let { path_thumb, nick_name, id } = designer;
-        let { path_thumb, path, nick_name, sex, txt_address, experience, works_count, comment_count, id } = designer;
+        let { path_thumb, path, nick_name, sex, txt_address, experience, works_count, comment_count, id, hxid, mobile } = designer;
         this.props.propsSetState('Designer', {
             path_thumb,
             nick_name,
@@ -159,12 +159,15 @@ export default class WorkList extends React.Component {
             experience,
             works_count,
             comment_count,
+            hxid, 
+            mobile,
         });
         hashHistory.push({
             pathname: '/worksDetails',
             query: {
                 form: 'workList',
                 works_id,
+                userId: id,
             },
         });
     }

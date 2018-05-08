@@ -42,8 +42,10 @@ export default class HOCdesignerHome extends React.Component {
             });
         }
     }
-    componentDidMount() {
+    componentDidMount() { 
+        
         let userId = this.props.location.query.userId;
+        console.log("hoc designerHome::", userId);
         if (userId) {
             this.setState({ userId });
             // this.ajaxGetSelfInfo(69590);

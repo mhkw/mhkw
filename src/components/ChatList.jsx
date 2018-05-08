@@ -4,7 +4,7 @@ import { NavBar, Icon, List, SwipeAction, WhiteSpace } from 'antd-mobile';
 import BScroll from 'better-scroll'
 
 const defaultAvatar = require('../images/selec.png');
-
+const system = require('../images/system.png');
 export default class ChatList extends React.Component {
     constructor(props) {
         super(props)
@@ -80,7 +80,10 @@ export default class ChatList extends React.Component {
     }
     //系统通知
     SystemNotice = () => {
-        console.log("sys");
+        hashHistory.push({
+            pathname: "/systemNotice",
+            query: { form: 'ChatList' },
+        });
         
     }
     render() {

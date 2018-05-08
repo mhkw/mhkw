@@ -13,18 +13,18 @@ export default class DesignerHome extends React.Component {
         this.state = {
             id: 0, //设计师ID
             user_name: "",
-            avatarUrl:require("../images/avatar.png"),
-            sex: "女",
-            address: "杭州-滨江区", 
-            experience: "6年经验", 
-            works:"22作品", 
-            slogan:'"传播现代的高雅艺术文化"',
-            Get_demand: "6",
+            avatarUrl:"",
+            sex: "",
+            address: "", 
+            experience: "", 
+            works:"", 
+            slogan:'',
+            Get_demand: "",
             Feedback_rate: "100%",
             Praise_rate: "100%",
-            huake_info: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis dicta voluptatibus voluptatum fuga amet eius modi! Repellat, labore fuga. In, atque dolores! Unde, placeat incidunt quaerat dolorem, asperiores praesentium ipsa dolor nulla ab alias delectus amet doloremque aperiam molestias quibusdam tenetur vero corporis id aliquam quae expedita tempora impedit non.",
-            works_collect: "8",
-            comment: "10",
+            huake_info: "",
+            works_collect: "",
+            comment: "",
             tab_index: 0, //设计师主页展示作品集还是评论，就看这个状态
             buttomBackgroundColor1: "#2068ab", //底部栏原始的背景颜色
             buttomBackgroundColor2: "#2068ab", //底部栏原始的背景颜色
@@ -124,12 +124,21 @@ export default class DesignerHome extends React.Component {
         })
     }
     //打电话
-    handleCall = () => {
-        console.log(1)
+    handleCall = (mobile) => {
+        console.log(mobile)
+        if (window.api) {
+            //APP处理
+            window.api.call({
+                type: 'tel_prompt',
+                number: mobile
+            });
+        } else {
+            //H5页面处理
+        }
     }
     //交谈，即时聊天
-    handleTalk = () => {
-        console.log(2)
+    handleTalk = (hxid) => {
+        console.log(hxid)
     }
     //评论
     handleComment = () => {
@@ -254,7 +263,7 @@ export default class DesignerHome extends React.Component {
     }
     render() {
         
-        let { path, nick_name, sex, txt_address, experience, works_count, signature, signature_bbs, comment_count } = this.props.designer;
+        let { path, nick_name, sex, txt_address, experience, works_count, signature, signature_bbs, comment_count, hxid, mobile } = this.props.designer;
         return (
             // <QueueAnim className="designer-home-anim"
             //     animConfig={[
@@ -359,13 +368,13 @@ export default class DesignerHome extends React.Component {
                         style={{ "background-color": this.state.buttomBackgroundColor1}}
                         onTouchStart={() => this.touchStartStyle(1)}
                         onTouchEnd={() => this.touchEndStyle(1)}
-                        onClick={this.handleCall}
+                        onClick={() => this.handleCall(mobile)}
                         ><i className="iconfont icon-icon-phone"></i>电话</Flex.Item>
                         <Flex.Item
                         style={{ "background-color": this.state.buttomBackgroundColor2 }}
                         onTouchStart={() => this.touchStartStyle(2)}
                         onTouchEnd={() => this.touchEndStyle(2)}
-                        onClick={this.handleTalk}
+                        onClick={() => this.handleTalk(hxid)}
                         ><i className="iconfont icon-icon-talk"></i>交谈</Flex.Item>
                         <Flex.Item
                         style={{ "background-color": this.state.buttomBackgroundColor3 }}
@@ -407,17 +416,22 @@ export const IndexWorksCollection = (props) => {
         e.target.style.backgroundColor = oldBackgroundColor;
     }
     const handleClick = () => {
+        let userId;
+        if (props.designer && props.designer.id) {
+            userId = props.designer.id;
+        }
         hashHistory.push({
             pathname: '/worksCollection',
-            query: { form: 'designerHome' },
+            query: { form: 'designerHome', userId },
         });
     }
-    const handleClickWorksDetails = (works_id) => {
+    const handleClickWorksDetails = (works_id, userId) => {
         hashHistory.push({
             pathname: '/designerWorksDetails',
             query: { 
                 form: 'designerHome', 
                 works_id,
+                userId,
             },
         });
     }
@@ -492,7 +506,7 @@ const DesignerPopover = (props) => (
 )
 
 const WorksItem = (props) => (
-    <div key={props.id} onClick={() => { props.handleClickWorksDetails(props.id) }} style={{ display: "inline-block", width: "50%", boxSizing: "border-box", padding: "5px" }}>
+    <div key={props.id} onClick={() => { props.handleClickWorksDetails(props.id, props.user_id) }} style={{ display: "inline-block", width: "50%", boxSizing: "border-box", padding: "5px" }}>
         <div className="items" style={{
             border: "1px solid #ccc",
             boxSizing: "border-box",

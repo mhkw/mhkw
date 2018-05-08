@@ -315,19 +315,21 @@ export default class Collect extends React.Component {
         });
     }
     handleClickWorksDetails = (works_id, designer) => {
+        
         // let { path_thumb, nick_name, id } = designer;
-        let { path_thumb, path, nick_name, sex, txt_address, experience, works_count, comment_count, id } = designer;
-        this.props.propsSetState('Designer', {
-            path_thumb,
-            nick_name,
-            id,
-            path,
-            sex,
-            txt_address,
-            experience,
-            works_count,
-            comment_count,
-        });
+        // let { path_thumb, path, nick_name, sex, txt_address, experience, works_count, comment_count, id } = designer;
+        // this.props.propsSetState('Designer', {
+        //     path_thumb,
+        //     nick_name,
+        //     id,
+        //     path,
+        //     sex,
+        //     txt_address,
+        //     experience,
+        //     works_count,
+        //     comment_count,
+        // });
+        // let { user_id } = designer;
         hashHistory.push({
             pathname: '/worksDetails',
             query: {
@@ -373,7 +375,7 @@ export default class Collect extends React.Component {
             return (
                 <div key={rowID} 
                     style={{ display: "inline-block", width: "50%", boxSizing: "border-box", padding: "5px" }} 
-                    onClick={() => { this.handleClickWorksDetails(obj.id, obj) }}
+                    onClick={() => { this.handleClickWorksDetails(obj.id, rowData) }}
                 >
                     <div className="items" style={{
                         border: "1px solid #ccc",

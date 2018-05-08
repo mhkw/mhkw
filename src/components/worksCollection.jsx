@@ -96,10 +96,18 @@ export default class WorksCollection extends React.Component {
         }
         this.getWorkList(parseInt(this.state.size / 8) + 1);
     };
-    getWorkList(n = 1) {     //获取作品列表
+    getWorkList(n = 1) {     
+        //获取作品列表
+        let user_id;
+        if (this.props.designer.id) {
+            user_id = this.props.designer.id;
+        } else if (this.props.location.query && this.props.location.query.userId) {
+            user_id = this.props.location.query.userId;
+        }
+        
         runPromise("get_user_works_list_ex", {
             // user_id: validate.getCookie("user_id"),
-            user_id: this.props.designer.id || validate.getCookie("user_id"),
+            user_id: user_id || validate.getCookie("user_id"),
             sort: "add_time",
             per_page: 8,        //每页数量
             page: n,            //第几页，从第一页开始
@@ -107,15 +115,29 @@ export default class WorksCollection extends React.Component {
     }
     row = (rowData, sectionID, rowID) => {
         const obj = rowData;
+        const handleClickWorksDetails = (works_id, userId) => {
+            hashHistory.push({
+                pathname: '/worksDetails',
+                query: {
+                    form: 'home',
+                    works_id,
+                    userId,
+                },
+            });
+        }
         return (
             <div key={rowID} style={{ display: "inline-block", width: "50%", boxSizing: "border-box", padding: "5px"}}>
-                <div className="items" style={{ 
-                    border: "1px solid #ccc", 
-                    boxSizing: "border-box",
-                    borderRadius:"3px",
-                    backgroundColor:"#f5f5f5",
-                    boxShadow:"0px 0px 10px #ccc",
-                }}>
+                <div 
+                    className="items" 
+                    style={{ 
+                        border: "1px solid #ccc", 
+                        boxSizing: "border-box",
+                        borderRadius:"3px",
+                        backgroundColor:"#f5f5f5",
+                        boxShadow:"0px 0px 10px #ccc",
+                    }}
+                    onClick={() => { handleClickWorksDetails(obj.id, obj.uid) }}
+                >
                     <div>
                         <img src={obj.path_thumb ? obj.path_thumb : obj.path} style={{width:"100%",height:"5rem"}} />
                         <div style={{height:"26px",overflow:"hidden"}}>

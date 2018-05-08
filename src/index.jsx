@@ -69,6 +69,7 @@ import AuthWorks from './components/AuthWorks';
 import UserWorks from './components/UserWorks';
 import RealName from './components/RealName';
 import ChatList from './components/ChatList';
+import SystemNotice from './components/SystemNotice';
 
 import './css/font/iconfont.css'
 
@@ -261,6 +262,7 @@ ReactDOM.render(
                 <Route path="userWorks" component={UserWorks} />
             </Route>
             <Route path="realName" component={RealName} />
+            <Route path="systemNotice" component={SystemNotice} />
         </Route>
     </Router>
     , document.getElementById('container'));

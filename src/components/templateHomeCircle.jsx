@@ -15,12 +15,13 @@ export const ItemPicLists = (props) => (
     <ul>
         {
             props.works_list.slice(0, 4).map(function (value, idx) {
-                const handleClickWorksDetails = (works_id) => {
+                const handleClickWorksDetails = (works_id, userId) => {
                     hashHistory.push({
                         pathname: '/worksDetails',
                         query: {
                             form: 'home',
                             works_id,
+                            userId,
                         },
                     });
                 }
@@ -29,7 +30,7 @@ export const ItemPicLists = (props) => (
                     e.target.src = zhanWei;
                     // e.target.className = "zhan-wei";
                 }
-                return <li onClick={() => { handleClickWorksDetails(value.id) }} >
+                return <li onClick={() => { handleClickWorksDetails(value.id, value.uid) }} >
                         <img 
                             // src={value.path.indexOf('upaiyun.com') != -1 ? value.path + '!540x390' : value.path}
                             src={value.path_thumb}

@@ -139,7 +139,7 @@ export default class HOC extends React.Component{
     }
     //API 监听获取所有会话列表
     apiGetAllConversations = () => {
-        console.log("getAllConversations 0");
+        // console.log("getAllConversations 0");
         if (window.api) {
             console.log("getAllConversations 1");
             window.api.addEventListener({
