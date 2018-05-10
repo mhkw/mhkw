@@ -51,7 +51,7 @@ export const PersonalMsg = (props) => (
         </div>
         <div className="itemsTopRight">
             <p>
-                <span className="fn-left" onClick={() => { hashHistory.push({ pathname: '/designerHome', query: { userId: props.id } }) }} style={{ fontSize: '16px' }}>
+                <span className="fn-left one-line" onClick={() => { hashHistory.push({ pathname: '/designerHome', query: { userId: props.id } }) }} style={{ fontSize: '16px' }}>
                     {props.nick_name}&nbsp;
                     {props.sex == '女' ? <i className="iconfont icon-xingbienv_f" style={{ color: '#F46353', fontWeight: "800", fontSize: "12px" }} /> : props.sex == '男' ? <i className="iconfont icon-xingbienanxuanzhong" style={{ color: '#4DA7E0', fontWeight: "800", fontSize: "12px" }} /> : ""}
                 </span>

@@ -47,7 +47,7 @@ export default class Mine extends React.Component {
     }
     componentDidMount(){
         const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25+'px';
-        const scroll = new BScroll(this.refs.wrapper, { click: true, bounceTime: 300, swipeBounceTime: 200 })
+        const scroll = new BScroll(this.refs.wrapper, { click: true, bounceTime: 300, swipeBounceTime: 200, momentumLimitTime: 200 })
         this.setState({
             height: hei
         })
@@ -240,7 +240,7 @@ export default class Mine extends React.Component {
                                     </Badge>
                                     <span style={{ marginLeft: 12 }}>
                                         {this.state.personCenter.is_auth == "1" ? "我是设计师" : null}
-                                        {this.state.personCenter.is_auth == "1" ? <i className="iconfont auth icon-renzhengguanli"></i> : null}
+                                        {this.state.personCenter.is_auth == "1" ? <i className="iconfont auth icon-renzhengguanli" style={{ "top": "5px" }}></i> : null}
                                         {this.state.personCenter.is_auth == "0" ? "申请成为设计师" : null}
                                     </span>
                                 </List.Item>
@@ -252,7 +252,7 @@ export default class Mine extends React.Component {
                                     </Badge>
                                     <span style={{ marginLeft: 12 }}>
                                         实名认证
-                                {this.state.personCenter.real_name_status == "2" ? <i className="iconfont auth icon-Id"></i> : null}
+                                {this.state.personCenter.real_name_status == "2" ? <i className="iconfont auth icon-Id" style={{"top":"5px"}}></i> : null}
                                         {this.state.personCenter.real_name_status != "" && this.state.personCenter.real_name_status != "2" ? <span className="no-auth">(未认证)</span> : null}
                                     </span>
                                 </List.Item>
@@ -288,25 +288,29 @@ export default class Mine extends React.Component {
                                 <Jiange name={this.state.bgStyle}></Jiange>
                                 <List.Item extra="" arrow="horizontal" className="ListItemBorder amlistitem" onClick={this.clickMyContacts}>
                                     <Badge>
-                                        <span className="icon-geren3 iconfont" />
+                                        {/* <span className="icon-geren3 iconfont" /> */}
+                                        <span className="icon-lianxiren1 iconfont" />
                                     </Badge>
                                     <span style={{ marginLeft: 12 }}>联系人</span>
                                 </List.Item>
                                 <List.Item extra="" arrow="horizontal" className="ListItemBorder amlistitem" onClick={this.clickUserFansList}>
                                     <Badge>
-                                        <span className="icon-fensi iconfont" style={{ "font-weight": "bold" }} />
+                                        {/* <span className="icon-fensi iconfont" style={{ "font-weight": "bold" }} /> */}
+                                        <span className="icon-fensi1 iconfont" />
                                     </Badge>
                                     <span style={{ marginLeft: 12 }}>粉丝</span>
                                 </List.Item>
                                 <List.Item extra="" arrow="horizontal" className="ListItemBorder amlistitem" onClick={this.clickUserBlackList}>
                                     <Badge>
-                                        <span className="icon-heimingdan iconfont" />
+                                        {/* <span className="icon-heimingdan iconfont" /> */}
+                                        <span className="icon-heimingdan1 iconfont" />
                                     </Badge>
                                     <span style={{ marginLeft: 12 }}>黑名单</span>
                                 </List.Item>
                                 <List.Item extra="" arrow="horizontal" className="ListItemBorder amlistitem" onClick={this.clickSetUp}>
                                     <Badge>
-                                        <span className="icon-shezhi1 iconfont" />
+                                        {/* <span className="icon-shezhi1 iconfont" /> */}
+                                        <span className="icon-yingyong iconfont" />
                                     </Badge>
                                     <span style={{ marginLeft: 12 }}>个人设置</span>
                                 </List.Item>
@@ -319,7 +323,8 @@ export default class Mine extends React.Component {
                                     onClick={this.callPhone}
                                 >
                                     <Badge>
-                                        <span className="iconfont icon-wenhao" />
+                                        {/* <span className="iconfont icon-wenhao" /> */}
+                                        <span className="iconfont icon-kefu" />
                                     </Badge>
                                     <span style={{ marginLeft: 12 }}>联系客服</span>
                                 </List.Item>

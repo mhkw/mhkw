@@ -118,7 +118,7 @@ export default class HOCdesignerAuth extends React.Component {
         }
         this.handleSubmitUserAuth = (res) => {
             if (res.success) {
-                
+                Toast.success(res.message, 2);
             } else {
                 Toast.fail(res.message, 1);
             }
@@ -201,14 +201,15 @@ export default class HOCdesignerAuth extends React.Component {
     }
     //设计师认证，提交审核
     ajaxSubmitUserAuth = () => {
-        console.log("提交");
+        // console.log("提交");
+        let { experience, jobs, keywords, signature_bbs, nick_name, sex  } = this.state.Self;
         runPromise("submit_user_auth", {
-            experience: user.experience,
-            jobs: user.jobs[0] || "",
-            keywords: user.keywords.join(","),
-            signature: user.signature_bbs || "",
-            nick_name: user.nick_name,
-            sex: user.sex,
+            experience,
+            jobs: jobs[0] || "",
+            keywords: keywords.join(","),
+            signature: signature_bbs || "",
+            nick_name,
+            sex,
         }, this.handleSubmitUserAuth);
     }
     componentWillMount() {

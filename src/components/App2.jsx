@@ -3,6 +3,11 @@ import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router';
 import QueueAnim from 'rc-queue-anim';
 import { TabBar } from 'antd-mobile';
 
+import Index from './home';
+import Hkcircle from './hkCircle';
+import Mine from './mine';
+import ChatList from './ChatList';
+
 // import 'antd-mobile/dist/antd-mobile.css';
 import '../css/main.scss';
 
@@ -26,7 +31,6 @@ export default class App extends Component {
         super(props);
         this.state = {
             show: false,
-            display:"block",
             src: [appUrl.tabbar_one_close, appUrl.tabbar_two_close, appUrl.tabbar_three_close, appUrl.tabbar_four_close],
             activeSrc: [appUrl.tabbar_one_on, appUrl.tabbar_two_on, appUrl.tabbar_three_on, appUrl.tabbar_four_on],
             selectedTab: '',
@@ -56,26 +60,9 @@ export default class App extends Component {
         e.currentTarget.getElementsByTagName("i")[0].style.backgroundImage = "url(" + this.state.src[num] + ")";
         e.currentTarget.getElementsByTagName("span")[0].style.color = "#3ebbf3";
     }
-    clickContacts = () => {
-        // this.sendEventChatList();
-        if (window.UIEaseChat && window.api) {
-            window.UIEaseChat.getAllConversations(function (ret) {
-                // console.log("getAllConversations_NB");
-                // console.log(JSON.stringify(ret));
-                if (ret.conversations) {
-                    window.api.sendEvent({
-                        name: 'getAllConversations',
-                        extra: {
-                            conversations: ret.conversations
-                        }
-                    });
-                }
-            });
-        } else {
-            //H5页面
-            // console.log("H5 page no api");
-        }
-    }
+    // clickContacts = () => {
+    //     this.sendEventChatList();
+    // }
     // sendEventChatList() {
     //     if (window.api) {
     //         window.api.sendEvent({
@@ -86,7 +73,7 @@ export default class App extends Component {
     render() {
         return (
             <div>
-                {this.props.children && 
+                {/* {this.props.children && 
                     React.cloneElement(
                         this.props.children,
                         {
@@ -99,15 +86,16 @@ export default class App extends Component {
                             sumUnreadMessagesCount: this.props.sumUnreadMessagesCount,
                         }
                     )
-                }
-                <div className="barBottom fn-clear" style={{display:this.state.display,zIndex:1000}}>
-                    <TabBar className="tabBarUl"
+                } */}
+                <div className="">
+                    <TabBar prefixCls=""
                         unselectedTintColor="#949494"
                         tintColor="#33A3F4"
                         barTintColor="white"
-                        hidden={this.state.hidden}
+                        // hidden={this.state.hidden}
                     >
                         <TabBar.Item
+                            className=""
                             title="首 页"
                             key="home"
                             icon={<div style={{
@@ -130,10 +118,19 @@ export default class App extends Component {
                                 this.setState({
                                     selectedTab: '/',
                                 });
-                                this.context.router.push("/");
+                                // this.context.router.push("/");
                             }}
                             data-seed="logId"
                         >
+                            <Index 
+                                state={this.state}
+                                props={this.props}
+                                setState={this.setState.bind(this)}
+                                HOCState={this.props.state}
+                                propsSetState={this.props.propsSetState}
+                                conversations={this.props.conversations}
+                                sumUnreadMessagesCount={this.props.sumUnreadMessagesCount}
+                            />
                         </TabBar.Item>
                         <TabBar.Item
                             icon={
@@ -159,7 +156,7 @@ export default class App extends Component {
                                 this.setState({
                                     selectedTab: '/circle',
                                 });
-                                this.context.router.push("/circle");                                
+                                // this.context.router.push("/circle");                                
                             }}
                             data-seed="logId1"
                         >
@@ -207,8 +204,8 @@ export default class App extends Component {
                                 this.setState({
                                     selectedTab: '/chatList',
                                 });
-                                this.context.router.push("/chatList");
-                                this.clickContacts();                                                                
+                                // this.context.router.push("/chatList");
+                                // this.clickContacts();                                                                
                             }}
                         >
                         </TabBar.Item>
@@ -236,7 +233,7 @@ export default class App extends Component {
                                 this.setState({
                                     selectedTab: '/mine',
                                 });
-                                this.context.router.push("/mine");                                                                
+                                // this.context.router.push("/mine");                                                                
                             }}
                         >
                         </TabBar.Item>

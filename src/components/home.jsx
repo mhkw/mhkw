@@ -76,6 +76,8 @@ export default class HomeView extends React.Component {
                 index = realData.length - 1;
                 realDataLength = res.data.item_list.length;
                 NUM_ROWS = realDataLength;
+                console.log( "pageIndex:: " + pageIndex);
+                
                 if (pageIndex == 0){
                     this.rData = {};
                     this.rData = { ...this.rData, ...this.genData(++pageIndex, realDataLength, realData) };
@@ -140,6 +142,7 @@ export default class HomeView extends React.Component {
     // }
     routerWillLeave(nextLocation) {
         document.body.style.overflow = 'inherit';
+        pageIndex = 0;
     }
     componentWillMount() {
         if (this.props.HOCState.Home.currentIdx) {
@@ -149,6 +152,7 @@ export default class HomeView extends React.Component {
         }
     }
     componentDidMount() {
+        // app2 update
         this.props.router.setRouteLeaveHook(
             this.props.route,
             this.routerWillLeave
@@ -206,6 +210,11 @@ export default class HomeView extends React.Component {
         this.getWorkList(this.state.keyArray[index], 1);
     }
     getWorkList = (keywords,page) => {
+        console.log("get_user_list_ex");
+        console.log(this.props.HOCState.Address.lon);
+        console.log(this.props.HOCState.Address.lat);
+        
+        
         runPromise("get_user_list_ex", {
             sort: "add_time",
             offices: "all",

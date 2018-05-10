@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router';
 
+import App2 from './components/App2';
 import App from './components/App';
 import Login from './components/login';
 import Register from './components/register';
@@ -70,6 +71,7 @@ import UserWorks from './components/UserWorks';
 import RealName from './components/RealName';
 import ChatList from './components/ChatList';
 import SystemNotice from './components/SystemNotice';
+import DesignerComment3 from './components/designerComment3';
 
 import './css/font/iconfont.css'
 
@@ -214,6 +216,7 @@ ReactDOM.render(
                 </Route>
                 {/* 所有留言列表，可以加载下一页的 */}
                 <Route path="commentlist" component={DesignerComment} />
+                <Route path="workCommentlist" component={DesignerComment3} />
                 {/* 单个留言详情 */}
                 <Route path="commentDetails" component={DesignerComment2} />
                 <Route path="designerWorksDetails" component={WorksDetails} />

@@ -286,7 +286,7 @@ export default class BaiduMap extends React.Component {
             });
         }
     }
-    componentWillMount() {
+    componentWillUnmount() {
         //移除事件，点击系统返回键
         if (window.api) {
             window.api.removeEventListener({

@@ -157,6 +157,12 @@ export default class HOC extends React.Component{
                         sumUnreadMessagesCount,
                     })
                 }
+                if (ret.value && ret.value.conversations && ret.value.conversations.length == 0) {
+                    this.setState({
+                        conversations: [],
+                        sumUnreadMessagesCount: 0,
+                    })
+                }
             });
         }
     }

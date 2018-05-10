@@ -298,7 +298,7 @@ export default class Address extends React.Component {
         return (
             <div className="select-address" key="1">
                 <NavBar
-                    className="new-nav-bar"
+                    className="new-nav-bar address-nav-bar"
                     mode="light"
                     icon={<Icon type="left" size="lg" style={{ "color": "#a3a3a3" }} />}
                     onLeftClick={() => hashHistory.goBack()}

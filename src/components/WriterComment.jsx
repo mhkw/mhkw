@@ -51,14 +51,36 @@ export default class WriterComment extends React.Component {
         }
     }
     componentWillMount() {
-        console.log(this.props.designer);
-        if (this.props.designer) {
-            let { nick_name, id } = this.props.designer;
-            this.setState({
-                navBarTitle: nick_name,
-                id,
-            })
+        // console.log(this.props.designer);
+        let location_form = "designerHome";
+        if (this.props.location.query && this.props.location.query.form) {
+            location_form = this.props.location.query.form;
         }
+        if (location_form == "designerHome") {
+            if (this.props.designer) {
+                let { nick_name, id } = this.props.designer;
+                this.setState({
+                    navBarTitle: nick_name,
+                    id,
+                    location_form,
+                })
+            }
+        }
+        if (location_form == "WorksDetails") {
+            let id = 0;
+            let title = 0;
+            if (this.props.location.query && this.props.location.query.id && this.props.location.query.title) {
+                id = this.props.location.query.id;
+                title = this.props.location.query.title;
+            }
+            this.setState({
+                navBarTitle: title,
+                id,
+                location_form,
+            })
+
+        }
+        
     }
     componentDidMount() {
         let imagePickerUploadBtn = document.getElementsByClassName("am-image-picker-upload-btn")[0];
@@ -119,10 +141,14 @@ export default class WriterComment extends React.Component {
     }
     //发表对设计师的评论
     ajaxAddComment = () => {
-        let { id, commentText, score, imgUploadIds } = this.state;
+        let { id, commentText, score, imgUploadIds, location_form} = this.state;
+        let type = "user";
+        if (location_form == "WorksDetails") {
+            type = "works";
+        }
         runPromise("add_comment", {
             user_id: validate.getCookie('user_id'), //评论人的id
-            type: "user",               //works=作品；project=需求;news=文章;circle=帖子;
+            type,               //works=作品；project=需求;news=文章;circle=帖子;
             user_id_to: id,     //发布文章人的id
             article_id: id,          //文章id
             content: commentText,   //评论内容

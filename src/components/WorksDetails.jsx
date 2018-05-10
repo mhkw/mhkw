@@ -295,7 +295,11 @@ export default class WorksDetails extends React.Component {
     }
     //打电话
     handleCall = (mobile) => {
-        console.log(mobile)
+        // console.log(mobile)
+        if (!mobile) {
+            //如果不存在电话号码
+            Toast.info("未绑定手机号", 1.5)
+        }
         if (window.api) {
             //APP处理
             window.api.call({
@@ -307,14 +311,45 @@ export default class WorksDetails extends React.Component {
         }
     }
     //交谈，即时聊天
-    handleTalk = (hxid) => {
-        console.log(hxid)
+    handleTalk = (hxid, nick_name, path_thumb) => {
+        if (!hxid) {
+            //如果不存在电话号码
+            Toast.info("未绑定聊天账号", 1.5)
+        }
+        // console.log(hxid);
+        // console.log(nick_name);
+        // console.log(path_thumb);
+        this.sendEventOpenNewChat(hxid, nick_name, path_thumb);
+    }
+    //发送消息，根据会话 ID 和类型创建并打开聊天页面
+    sendEventOpenNewChat = (conversationId, nick_name, path_thumb) => {
+        if (window.api) {
+            // console.log("openNewChat_2");
+            window.api.sendEvent({
+                name: 'openNewChat',
+                extra: {
+                    conversation_id: conversationId,
+                    conversation_nick_name: nick_name,
+                    hx_id: sessionStorage.getItem("hxid"),
+                    nick_name: sessionStorage.getItem("nick_name"),
+                    path_thumb: path_thumb,
+                }
+            });
+        }
     }
     //评论
     handleComment = () => {
+        // hashHistory.push({
+        //     pathname: '/writerComment',
+        //     query: { form: 'designerHome' }
+        // });
         hashHistory.push({
-            pathname: '/writerComment',
-            query: { form: 'designerHome' }
+            pathname: '/workCommentlist',
+            query: { 
+                form: 'WorksDetails',
+                id: this.state.works_id,
+                title: this.state.title,  
+            }
         });
     }
     render() {
@@ -434,7 +469,7 @@ export default class WorksDetails extends React.Component {
                         style={{ "background-color": this.state.buttomBackgroundColor2 }}
                         onTouchStart={() => this.touchStartStyle(2)}
                         onTouchEnd={() => this.touchEndStyle(2)}
-                        onClick={() => this.handleTalk(this.state.hxid)}
+                        onClick={() => this.handleTalk(this.state.hxid, this.state.nick_name, this.state.avatarUrl)}
                     ><i className="iconfont icon-icon-talk"></i>交谈</Flex.Item>
                     <Flex.Item
                         style={{ "background-color": this.state.buttomBackgroundColor3 }}

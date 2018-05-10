@@ -1,6 +1,6 @@
 import React from 'react';
 import { hashHistory, Link } from 'react-router';
-import { NavBar, Icon, List, SwipeAction, WhiteSpace } from 'antd-mobile';
+import { NavBar, Icon, List, SwipeAction, WhiteSpace, Modal } from 'antd-mobile';
 import BScroll from 'better-scroll'
 
 const defaultAvatar = require('../images/selec.png');
@@ -35,8 +35,21 @@ export default class ChatList extends React.Component {
     }
     //删除会话
     deleteConversation = (conversationId, nick_name) => {
-        console.log(conversationId);
-        console.log(nick_name);
+        Modal.alert('删除好友?', nick_name, [
+            { text: '取消', onPress: () => { }, style: 'default' },
+            { text: '确定', onPress: () => this.sendEventDeleteContact(conversationId) },
+        ]);
+    }
+    //发送消息，根据会话 ID 删除好友，然后更新会话列表
+    sendEventDeleteContact = (conversationId) => {
+        if (window.api) {
+            window.api.sendEvent({
+                name: 'deleteContact',
+                extra: {
+                    conversation_id: conversationId,
+                }
+            });
+        }
     }
     getTimeText(argument) {
         var timeS = argument;
@@ -83,8 +96,7 @@ export default class ChatList extends React.Component {
         hashHistory.push({
             pathname: "/systemNotice",
             query: { form: 'ChatList' },
-        });
-        
+        });        
     }
     render() {
         return (

@@ -91,3 +91,18 @@
     text-align: center;
     margin-top: 5px;
 }
+.navPlus .navPlusAnim{
+    padding-top: 25px;
+}
+.select-address .address-nav-bar .am-navbar-title{
+    -webkit-box-flex: 2;
+    -webkit-flex: 2;
+    -ms-flex: 2;
+    flex: 2;
+}
+.itemsTopRight .fn-left.one-line{
+    width: 60%;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
