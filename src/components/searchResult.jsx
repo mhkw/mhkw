@@ -852,6 +852,7 @@ export default class SearchResult extends React.Component {
                         </div>
                         <Tabs tabs={this.tabs()}
                             initialPage={this.props.state.tab}
+                            swipeable={false}
                             onChange={(tab, index) => { 
                                 this.setState({ tabnum: index })
                                 this.props.setState({ tab: index })

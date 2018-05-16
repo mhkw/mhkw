@@ -36,8 +36,8 @@ module.exports = {
     output: {
         filename: '[name].js',
         chunkFilename: '[id].chunk.js',
-        // path: path.join(__dirname, '/dist/'),
-        // publicPath: '/dist/'
+        // path: path.join(__dirname, './dist/'),
+        // publicPath: './dist/'
         path: path.join(__dirname, '../画客网H5打包/dist/'),
         publicPath: './dist/'
     },
@@ -106,7 +106,7 @@ module.exports = {
     plugins: [
         new webpack.ProvidePlugin({
             runPromise: ['../components/promise.jsx', 'default'],
-            validate: ['../components/validate.jsx', 'default'],
+            validate: ['../components/validate.js', 'default'],
         }),
         new webpack.optimize.ModuleConcatenationPlugin(),
         // new webpack.optimize.CommonsChunkPlugin('shared.js'),

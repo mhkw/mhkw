@@ -82,7 +82,7 @@ export default class DesignerAuth extends React.Component {
         }
 
         //设置擅长技能
-        if (props.Self && props.Self.keywords) {
+        if (props.Self && props.Self.keywords.length > 0) {
             let { keywords } = props.Self;
             this.setState({ keywords });
             this.setState({ emptySkill: false });

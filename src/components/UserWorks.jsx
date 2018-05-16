@@ -83,7 +83,13 @@ export default class UserWorks extends React.Component {
             let Works = props.Works;
             let is_next_page = props.is_next_page;
             let total_pages = props.total_pages;
-            this.setState({ Works, is_next_page, total_pages });
+            let scroll_bottom_tips = "上拉加载更多";
+            if (props.Works.length <= 10) {
+                scroll_bottom_tips = "";
+            }
+            this.setState({ Works, is_next_page, total_pages, scroll_bottom_tips });
+        } else if (props.Works.length == 0) {
+            this.setState({ scroll_bottom_tips: "暂无作品"});
         }
     }
     componentDidMount(){

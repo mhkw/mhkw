@@ -151,14 +151,23 @@ function run(taskDef) {
  */
 export default function runPromise(ajaxName, param, handle, mustLogin = false, method="post", handleParam) {
     let cookie_user_id = getCookie('user_id');
-    if (mustLogin && !cookie_user_id) {
-        //如果没登录，跳转到登录页
-        hashHistory.push({
-            pathname: '/login',
-            query: { form: 'promise' }
-        });
-        return;
-    }
+    // let cookie_user_id = validate.getCookie("user_id");
+    // console.log(ajaxName, mustLogin, cookie_user_id);
+    
+    // if (window.api) {
+    //     window.api.alert({ msg: ajaxName + "::" + mustLogin + "::"+ cookie_user_id });
+    // }
+    // if (mustLogin && !cookie_user_id) {
+    //     if (window.api) {
+    //         window.api.alert({ msg: "又跳到登录页了" });
+    //     }
+    //     //如果没登录，跳转到登录页
+    //     hashHistory.push({
+    //         pathname: '/login',
+    //         query: { form: 'promise' }
+    //     });
+    //     return;
+    // }
     
     let serializeParam = { "user_id": cookie_user_id };
     let en_user_id = localStorage.getItem("en_user_id");

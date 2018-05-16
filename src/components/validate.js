@@ -24,17 +24,24 @@ const CheckKeywords = (value) => {
 }
 //短信验证码
 
-const getCookie = (name) => {
-    let arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
-    if (arr != null) return decodeURIComponent(arr[2]); return null;
-};
+// const getCookie = (name) => {
+//     let arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+//     if (arr != null) return decodeURIComponent(arr[2]); return null;
+// };
 
-const setCookie = (name, value, time) => {
-    var strsec = getsec(time);
-    var exp = new Date();
-    exp.setTime(exp.getTime() + strsec * 1);
-    document.cookie = name + "=" + encodeURIComponent(value) + ";expires=" + exp.toGMTString();
-};
+// const setCookie = (name, value, time) => {
+//     var strsec = getsec(time);
+//     var exp = new Date();
+//     exp.setTime(exp.getTime() + strsec * 1);
+//     document.cookie = name + "=" + encodeURIComponent(value) + ";expires=" + exp.toGMTString();
+// };
+const getCookie = (name) => {
+    return localStorage.getItem("mock_cookie_" + name);
+}
+const setCookie = (name, value) => {
+    return localStorage.setItem("mock_cookie_" + name, value);
+}
+
 const getsec = (str) => {
     if (str == "" || str == null) {
         str = "3d";

@@ -325,7 +325,7 @@ export default class HomeView extends React.Component {
                         dataSource={this.state.dataSource}
                         // renderHeader={() => <span>Pull to refresh</span>}
                         renderFooter={() => (<div style={{ padding: 20, textAlign: 'center' }}>
-                            {this.state.isLoading ? 'Loading...' : 'Loaded'}
+                            {this.state.isLoading ? '加载中...' : '加载完成'}
                         </div>)}
                         renderRow={row}
                         renderSeparator={separator}

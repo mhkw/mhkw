@@ -106,3 +106,7 @@
     text-overflow:ellipsis;
     white-space: nowrap;
 }
+.serverButton .am-button-ghost.am-button-icon::before{
+    width: 198%;
+    height: 198%;
+}

@@ -2,6 +2,7 @@ import React from 'react'
 import { List, InputItem, Toast, Button, Modal, ActivityIndicator } from 'antd-mobile';
 import { Link, hashHistory } from 'react-router';
 import { Motion, spring } from 'react-motion';
+// import validate from "./validate.js";
 
 import '../css/font/iconfont.css'
 
@@ -41,7 +42,14 @@ export default class LoginView extends React.Component {
                 } else {
                     console.log("没有环信id");
                 }
-                
+                // let cookie_user_id = validate.getCookie("user_id");
+                // console.log("login res.data.id::" + res.data.id);
+                // console.log( "login cookie::" +cookie_user_id);
+                // if (window.api) {
+                //     window.api.alert({ msg: "cookie::" + cookie_user_id });
+                // }
+                // hashHistory.goBack();
+
             }else{
                 if(res.message == "图形验证码不对") {
                     Toast.info("图形验证码不正确", 2, null, false);
@@ -74,6 +82,17 @@ export default class LoginView extends React.Component {
             this.setState({
                 [key]: true,
             });
+        }
+    }
+    clickLogin = (e) => {
+        e.preventDefault();       // 修复 Android 上点击穿透
+        if (this.state.value.replace(/(^\s*)|(\s*$)/g, '') == "" || this.state.keywords.replace(/(^\s*)|(\s*$)/g, '') == "") {
+            Toast.info('用户名或者密码不能为空', 2, null, false);
+        } else if (this.state.hasError == true || this.state.error == true) {
+            Toast.info('请输入正确格式的用户名和密码', 2, null, false);
+        } else {
+            //执行登录
+            this.onLogin();
         }
     }
     onClose = key => () => {   //关闭图形验证码弹窗
@@ -213,6 +232,7 @@ export default class LoginView extends React.Component {
                                                 onErrorClick={() => {
                                                     this.onErrorClick(validate.CheckPhone(this.state.value).errorMessage);
                                                 }}
+                                                clear
                                                 onChange={this.onChange}
                                             ><i className="phone iconfont icon-shouji1"></i></InputItem>
 
@@ -225,6 +245,7 @@ export default class LoginView extends React.Component {
                                                 onErrorClick={() => {
                                                     this.onErrorClick(validate.CheckKeywords(this.state.keywords).errorMessage);
                                                 }}
+                                                clear
                                                 onChange={this.onChangeKeyword}
                                             ><i className="pwd iconfont icon-icon-test"></i></InputItem>
                                         </List>
@@ -232,7 +253,8 @@ export default class LoginView extends React.Component {
                                     <div>
                                         <Button type="primary"
                                             className="loginBtn"
-                                            onClick={this.showModal('modal')}
+                                            // onClick={this.showModal('modal')}
+                                            onClick={this.clickLogin} 
                                         >登 陆</Button>
                                         <Modal
                                             visible={this.state.modal}

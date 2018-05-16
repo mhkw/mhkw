@@ -51,14 +51,20 @@ export default class RealName extends React.Component {
                 let file_h = [];
                 let urls_h = [];
 
-                file_f_b.push({ url: id_card_pic_f_thumb });
-                urls_h.push(id_card_pic_f_thumb);
+                if (id_card_pic_f_thumb) {
+                    file_f_b.push({ url: id_card_pic_f_thumb });
+                    urls_h.push(id_card_pic_f_thumb);
+                }
 
-                file_f_b.push({ url: id_card_pic_b_thumb});
-                urls_h.push(id_card_pic_b_thumb);
+                if (id_card_pic_b_thumb) {
+                    file_f_b.push({ url: id_card_pic_b_thumb});
+                    urls_h.push(id_card_pic_b_thumb);
+                }
 
-                file_h.push({ url: id_card_pic_h_thumb });
-                urls_h.push(id_card_pic_h_thumb);
+                if (id_card_pic_h_thumb) {
+                    file_h.push({ url: id_card_pic_h_thumb });
+                    urls_h.push(id_card_pic_h_thumb);
+                }
 
                 if (real_name_status == "2") {
                     id_card_number = id_card_number.replace(/(\w)/g, function (a, b, c, d) { return ((c > 7 && c < 13) || c > (id_card_number.length - 3)) ? '*' : a });
@@ -104,14 +110,20 @@ export default class RealName extends React.Component {
             let file_h = [];
             let urls_h = [];
 
-            file_f_b.push({ url: id_card_pic_f_thumb });
-            urls_h.push(id_card_pic_f_thumb);
+            if (id_card_pic_f_thumb) {
+                file_f_b.push({ url: id_card_pic_f_thumb });
+                urls_h.push(id_card_pic_f_thumb);
+            }
 
-            file_f_b.push({ url: id_card_pic_b_thumb });
-            urls_h.push(id_card_pic_b_thumb);
+            if (id_card_pic_b_thumb) {
+                file_f_b.push({ url: id_card_pic_b_thumb });
+                urls_h.push(id_card_pic_b_thumb);
+            }
 
-            file_h.push({ url: id_card_pic_h_thumb });
-            urls_h.push(id_card_pic_h_thumb);
+            if (id_card_pic_h_thumb) {
+                file_h.push({ url: id_card_pic_h_thumb });
+                urls_h.push(id_card_pic_h_thumb);
+            }
 
             if (real_name_status == "2") {
                 id_card_number = id_card_number.replace(/(\w)/g, function (a, b, c, d) { return ((c > 7 && c < 13) || c > (id_card_number.length - 3)) ? '*' : a });

@@ -151,7 +151,7 @@ export default class WorksDetails extends React.Component {
         })
     }
     componentWillReceiveProps(nextProps) {
-        if (nextProps) {
+        if (nextProps && nextProps.designer && Object.keys(nextProps.designer).length > 0 ) {
             let { id, path_thumb, nick_name, hxid, mobile } = nextProps.designer;
             this.setState({
                 id,
@@ -166,7 +166,7 @@ export default class WorksDetails extends React.Component {
         const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
         // setTimeout(() => {
         // }, 500);
-        const scroll =  new BScroll('.wrapper', { click: true })
+        const scroll = new BScroll('.wrapper', { click: true, bounceTime: 300, swipeBounceTime: 200 })
         this.setState({
             height: hei,
             scroll,
@@ -353,6 +353,8 @@ export default class WorksDetails extends React.Component {
         });
     }
     render() {
+        console.log("works details");
+        
         return (
             <div className="WorksDetails" key="0">
                 <NavBar
