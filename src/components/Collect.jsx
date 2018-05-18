@@ -45,8 +45,8 @@ export default class Collect extends React.Component {
             return dataBlob;
         };
         this.state = {
-            dataSource1: dataSource.cloneWithRows([]),            
-            dataSource2: dataSource.cloneWithRows([]),             
+            dataSource1: dataSource.cloneWithRows(sessionStorage.getItem("searchDesigner") ? JSON.parse(sessionStorage.getItem("searchDesigner")) : []),            
+            dataSource2: dataSource.cloneWithRows(sessionStorage.getItem("searchWorks") ? JSON.parse(sessionStorage.getItem("searchWorks")) : []),             
             refreshing: false,
             isLoading: true,
             hasMore: false,
@@ -80,10 +80,11 @@ export default class Collect extends React.Component {
             if (res.success) {
                 realData1 = res.data.item_list;
                 realDataLength1 = res.data.item_list.length;
+                
                 if (pageIndex1 == 0) {
                     this.rData1 = [];
                     this.rData1 = [...this.rData1, ...this.genData(pageIndex1++, realDataLength1, realData1)];
-                    // sessionStorage.setItem("searchDesigner", JSON.stringify(realData1));
+                    sessionStorage.setItem("searchDesigner", JSON.stringify(this.rData1));
                 } else {
                     this.rData1 = [...this.rData1, ...this.genData(pageIndex1++, realDataLength1, realData1)];
                 }
@@ -92,7 +93,7 @@ export default class Collect extends React.Component {
                     dataSource1: this.state.dataSource1.cloneWithRows(this.rData1),
                     hasMore: res.data.is_next_page ? true : false,
                     isLoading: res.data.is_next_page ? true : false,
-                    page: ++this.state.page,
+                    // page: ++this.state.page,
                     height1: hei,
                     animating1:false
                 });
@@ -117,7 +118,7 @@ export default class Collect extends React.Component {
                 if (pageIndex2 == 0) {
                     this.rData2 = [];
                     this.rData2 = [...this.rData2, ...this.genData(pageIndex2++, realDataLength2, realData2)];
-                    // sessionStorage.setItem("searchWorks", JSON.stringify(realData2));
+                    sessionStorage.setItem("searchWorks", JSON.stringify(this.rData2));
                 } else {
                     this.rData2 = [...this.rData2, ...this.genData(pageIndex2++, realDataLength2, realData2)];
                 }
@@ -126,7 +127,7 @@ export default class Collect extends React.Component {
                     dataSource2: this.state.dataSource2.cloneWithRows(this.rData2),
                     hasMore: res.data.is_next_page  ? true : false,
                     isLoading: res.data.is_next_page ? true : false,
-                    page1: ++this.state.page1,
+                    // page1: ++this.state.page1,
                     height2: hei,
                     animating2:false
                 });
@@ -148,6 +149,11 @@ export default class Collect extends React.Component {
     }
 
     componentDidMount() {
+        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight * 2 - 25 + 'px';
+        this.setState({
+            height1: hei,
+            height2: hei,
+        })
         this.rData1 = this.genData();
         this.rData2 = this.genData();
         this.props.router.setRouteLeaveHook(
@@ -173,7 +179,6 @@ export default class Collect extends React.Component {
             refreshing: true,
             isLoading: true
         })
-        console.log(pageIndex2);
         if (this.state.tabnum == 0){
             this.getWorkList(1, 0);
         } else if (this.state.tabnum == 1) {
@@ -192,10 +197,10 @@ export default class Collect extends React.Component {
     };
     getWorkList = (page,idx) => {
         if(idx == 0) {
-            this.setState({animating1:true})
+            // this.setState({animating1:true})
             this.getUserSearch("user",page)
         } else if (idx == 1) {
-            this.setState({animating2:true})
+            // this.setState({animating2:true})
             this.getWorksSearch("works", page)
         }
     }
@@ -210,6 +215,7 @@ export default class Collect extends React.Component {
             }
         })
         .then((res) => {
+            this.setState({ page: ++page});
             this.handleSearchDes(res.data);
         })
         .catch((error) => {
@@ -227,6 +233,7 @@ export default class Collect extends React.Component {
             }
         })
             .then((res) => {
+                this.setState({ page1: ++page });
                 this.handleSearchWork(res.data);
             })
             .catch((error) => {
@@ -461,6 +468,7 @@ export default class Collect extends React.Component {
                                     </div>)}
                                     style={{
                                         height: this.state.height2,
+                                        // height: this.state.height1,
                                         width: "100%",
                                         overflow: "auto"
                                     }}

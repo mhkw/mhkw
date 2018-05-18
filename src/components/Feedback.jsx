@@ -85,6 +85,7 @@ export default class Feedback extends React.Component{
                     placeholder="选填，便于我们及时回复您"
                     value={this.state.phone}
                     onChange={(val) => { val = val.trim(); this.setState({ phone: val }) }}
+                    clear
                 />
             </div>
         )

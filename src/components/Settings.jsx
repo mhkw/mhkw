@@ -1,11 +1,13 @@
 import React from "react";
 import { hashHistory } from "react-router";
-import { Toast, NavBar, Icon, WhiteSpace, List, Modal } from "antd-mobile";
+import { Toast, NavBar, Icon, WhiteSpace, List, Modal, Badge } from "antd-mobile";
 
 export default class Settings extends React.Component{
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            cacheSize: 0
+        }
         this.handleSignOut = (res) => {
             if (res.success) {
                 //如果没登录，跳转到登录页
@@ -61,7 +63,29 @@ export default class Settings extends React.Component{
     }
     //清理缓存
     ClearCache = () => {
-        console.log("ClearCache")
+        // console.log("ClearCache")
+        if (window.api) {
+            window.api.clearCache(()=>{
+                Toast.success("清除完成",1);
+                this.setState({
+                    cacheSize: 0
+                });
+            });
+        }
+    }
+    //获取缓存占用空间大小，缓存包括下载的缓存文件、拍照临时文件以及网页缓存文件等，计算可能需要花费一些时间,有同步和异步两种方式
+    getCacheSize = () => {
+        if (window.api) {
+            window.api.getCacheSize((ret)=>{
+                let cacheSize = (ret.size / 1024 / 1024).toFixed(2);
+                this.setState({
+                    cacheSize: cacheSize > 0 ? cacheSize : 0
+                })
+            })
+        }
+    }
+    componentDidMount() {
+        this.getCacheSize();
     }
     render() {
         return (
@@ -78,10 +102,18 @@ export default class Settings extends React.Component{
                 </List>
                 <WhiteSpace size="xl" />
                 <List className="settings-more">
-                    <List.Item arrow="horizontal" onClick={this.Feedback}>意见反馈</List.Item>    
-                    <List.Item arrow="horizontal" onClick={this.Reviews}>我要评价</List.Item>    
+                    <List.Item arrow="horizontal" onClick={this.Feedback}>意见反馈</List.Item>   
+                    {/* 没有想好怎么评价，也没有接口，先隐藏吧  */}
+                    {/* <List.Item arrow="horizontal" onClick={this.Reviews}>我要评价</List.Item>     */}
                     <List.Item arrow="horizontal" onClick={this.AboutUs}>关于我们</List.Item>    
-                    <List.Item arrow="horizontal" onClick={this.ClearCache}>清理缓存</List.Item>    
+                    {
+                        window.api ? 
+                        <List.Item
+                            arrow="horizontal" 
+                            onClick={this.ClearCache}
+                            extra={<Badge text={this.state.cacheSize > 0 ? this.state.cacheSize + 'm' : 0} overflowCount={99} />}
+                         >清理缓存</List.Item> : null    
+                    }
                 </List>
                 <WhiteSpace size="xl" />
                 <List className="settings-sign-out">

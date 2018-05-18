@@ -110,3 +110,37 @@
     width: 198%;
     height: 198%;
 }
+
+.progress.serverStep{
+    color: #fff;
+    font-size: 14px;
+}
+.progress.serverStep .triangle-right{
+    width: 0;
+    height: 0;
+    border-top: 0.5rem solid transparent;
+    border-bottom: 0.5rem solid transparent;
+    border-left: 0.35rem solid #C1DBE3;
+    position: absolute;
+    top: 0.01rem;
+    right: -0.34rem;
+}
+.progress.serverStep .finish{
+    background-color: #199bd8;
+}
+.progress.serverStep .finish .triangle-right{
+    border-left-color: #199bd8;
+}
+.progress.serverStep {
+    height: 1rem;
+    line-height: 1rem;
+    background-color: #C1DBE3;
+}
+.progress.serverStep ul li {
+    float: left;
+    width: 33.33%;
+    text-align: center;
+    position: relative;
+    padding-left: 0.1rem;
+    box-sizing: border-box;
+}

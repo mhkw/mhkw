@@ -15,6 +15,7 @@ export default class HOCoffer extends React.Component {
             inputDiscountPrice: null, //用户输入的优惠价格，即优先级最大的最终价格
             project_id: 0, //项目ID，这个值在第一次为项目添加客户信息时获取，作为生成报价单的项目ID。其他接口共用这个ID
             offerShareURL: '', //确认发送报价后的分享链接
+            progress: 0, //添加服务输入信息的进度：0,1,2,3
         }
         //获取自己的服务报价模板列表
         this.handleGetSelfService = (res) => {
@@ -83,6 +84,7 @@ export default class HOCoffer extends React.Component {
                 this.setState({
                     // offerShareURL: 'https://www.huakewang.com/2017_data/H5offerSheet.html?id=122,name=%E9%83%91%E5%9B%BD%E5%BA%86,phone=17683993335,count=oauth,timestamp=1512631141',
                     offerShareURL: res.data.url,
+                    progress: 3,
                 })
             } else {
                 Toast.fail(res.message, 1.5);
@@ -111,7 +113,8 @@ export default class HOCoffer extends React.Component {
             checkedServerList, 
             showModal, 
             serverList,
-            checkPriceTax: (parseFloat(checkPrice).toFixed(2) * 1.06).toFixed(2)
+            checkPriceTax: (parseFloat(checkPrice).toFixed(2) * 1.06).toFixed(2),
+            progress: showModal ? 1 : 0,
         })
     }
     CreateOfferQuotation = () => {
@@ -259,7 +262,8 @@ export default class HOCoffer extends React.Component {
                             CreateOfferQuotation: this.CreateOfferQuotation, // 最后的点击，生成报价单
                             offerShareURL: this.state.offerShareURL,
                             ajaxGetSelfServiceList: this.ajaxGetSelfServiceList,
-                            project_id: this.state.project_id,                            
+                            project_id: this.state.project_id,   
+                            progress: this.state.progress,                         
                         }
                     ) 
                 }

@@ -33,7 +33,7 @@ export default class ServerCreate extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            progress: 2, //添加服务输入信息的进度：0,1,2,3
+            progress: 0, //添加服务输入信息的进度：0,1,2,3
             showModal: false, //显示弹窗
             checkNum: 0, //用户已经选中了几个服务模板
             checkPrice: 0, //用户已经选中了几个服务模板的价格总计
@@ -281,9 +281,9 @@ export default class ServerCreate extends React.Component {
                         >报价</NavBar>
                         <div className="serverStep">
                             <ul>
-                                <li className={this.state.progress > 0 ? "finish" : null}>创建/选择内容<div className="triangle-right"></div></li>
-                                <li className={this.state.progress > 1 ? "finish" : null}>客户信息<div className="triangle-right"></div></li>
-                                <li className={this.state.progress > 2 ? "finish" : null}>生成报价并分享<div className="triangle-right"></div></li>
+                                <li className={this.props.progress > 0 ? "finish" : null}>创建/选择内容<div className="triangle-right"></div></li>
+                                <li className={this.props.progress > 1 ? "finish" : null}>客户信息<div className="triangle-right"></div></li>
+                                <li className={this.props.progress > 2 ? "finish" : null}>生成报价并分享</li>
                             </ul>
                         </div>
                         <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>

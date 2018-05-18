@@ -195,6 +195,24 @@ export default class Mine extends React.Component {
             query: { form: 'allWorks' }
         });
     }
+    //计算个人信息完成度，现在在头像右边的数字
+    computeSelfInfoProgress = (data) => {
+        let baseInfo = 9; //基本信息有9个
+        let completeNum = 0;
+        let { path, nick_name, company, job_name, qq, sex, mobile, email, weixin  } = data;
+
+        path ? completeNum++ : null;
+        nick_name ? completeNum++ : null;
+        company ? completeNum++ : null;
+        job_name ? completeNum++ : null;
+        qq ? completeNum++ : null;
+        (sex && sex != "保密") ? completeNum++ : null;
+        mobile ? completeNum++ : null;
+        email ? completeNum++ : null;
+        weixin ? completeNum++ : null;
+
+        return (completeNum / baseInfo * 100).toFixed(0);
+    }
     render () {
         return (
             <div className="mineWrap">
@@ -212,7 +230,7 @@ export default class Mine extends React.Component {
                         <div className="minePicTou" onClick={this.clickPersonAvatar}>
                             <img src={this.state.personCenter.path_thumb || urls[0]} alt="" />
                             <div className="minePicStages">
-                                <span>37%</span>
+                                <span>{this.computeSelfInfoProgress(this.state.personCenter)}%</span>
                             </div>
                         </div>
                     </div>

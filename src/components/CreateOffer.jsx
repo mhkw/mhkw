@@ -61,9 +61,16 @@ export default class CreateOffer extends React.Component {
         //         customer_phone: this.props.customer_phone,
         //     })
         // }
+        
+        let { customer_name, customer_company, customer_phone, progress } = this.props.state;
+        if (customer_name && customer_company && customer_phone) {
+            if (progress != 2) {
+                this.props.setState({ progress: 2 });
+            }
+        }
     }
     componentDidMount(){
-        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
+        const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 60;
         const scroll = new BScroll(document.querySelector('.wrapper'), { click: true, bounceTime: 300, swipeBounceTime: 200 })
         this.setState({
             height: hei
@@ -186,6 +193,19 @@ export default class CreateOffer extends React.Component {
             this.props.setState({ haveDiscount: !this.props.haveDiscount });
         }
     }
+    componentWillReceiveProps(nextProps) {
+        
+        let { customer_name, customer_company, customer_phone, progress  } = nextProps.state;
+        if (customer_name && customer_company && customer_phone ) {
+            if (progress != 2) {
+                this.props.setState({ progress: 2 });
+            }
+        } else {
+            if (progress != 1) {
+                this.props.setState({ progress: 1 });
+            }
+        } 
+    }
     render() {
         return (
             <div className="create-offer" key="1">
@@ -196,6 +216,13 @@ export default class CreateOffer extends React.Component {
                     onLeftClick={() => hashHistory.goBack()}
                     leftContent={<span style={{ fontSize: "15px" }}>返回</span>}
                 >创建报价</NavBar>
+                <div className="progress serverStep">
+                    <ul>
+                        <li className={this.props.progress > 0 ? "finish" : null}>创建/选择内容<div className="triangle-right"></div></li>
+                        <li className={this.props.progress > 1 ? "finish" : null}>客户信息<div className="triangle-right"></div></li>
+                        <li className={this.props.progress > 2 ? "finish" : null}>生成报价并分享</li>
+                    </ul>
+                </div>
                 <div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
                     <div>
                         <div className="create-offer-main">

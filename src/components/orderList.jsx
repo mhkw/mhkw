@@ -157,8 +157,8 @@ export default class Account extends React.Component {
 
         setTimeout(() => {
             const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 68.5;
-            const scroll = new BScroll(document.querySelector('.wrapper.one'), { click: true, pullUpLoad: { threshold: -50 } });
-            const scroll2 = new BScroll(document.querySelector('.wrapper.two'), { click: true, pullUpLoad: { threshold: -50 } });
+            const scroll = new BScroll(document.querySelector('.wrapper.one'), { click: true, bounceTime: 300, swipeBounceTime: 200, pullUpLoad: { threshold: -50 } });
+            const scroll2 = new BScroll(document.querySelector('.wrapper.two'), { click: true, bounceTime: 300, swipeBounceTime: 200, pullUpLoad: { threshold: -50 } });
             this.setState({
                 height: hei,
                 scroll,

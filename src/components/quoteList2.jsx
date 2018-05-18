@@ -136,7 +136,7 @@ export default class Account2 extends React.Component {
         }
         const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 68.5;
         let selector = `.am-tabs-pane-wrap:nth-child(${index + 1}) .wrapper`;
-        const scroll = new BScroll(document.querySelector(selector), { click: true, pullUpLoad: { threshold: -50 } })
+        const scroll = new BScroll(document.querySelector(selector), { click: true, bounceTime: 300, swipeBounceTime: 200, pullUpLoad: { threshold: -50 } })
         this.setState({
             height: hei,
             scroll,
