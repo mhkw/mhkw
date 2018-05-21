@@ -811,3 +811,14 @@ html:not([data-scale]) .am-button.confirm-offer-button::before{
 .create-offer-customer .customer-title .right.float{
     float: right;
 }
+.h5-map-info{
+    background: rgba(0,0,0,0.2);
+    color: #fff;
+    font-size: 12px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+}
