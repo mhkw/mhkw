@@ -3,6 +3,7 @@ const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const pxtorem = require('postcss-pxtorem');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 // const Visualizer = require('webpack-visualizer-plugin'); // remove it in production environment.
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; // remove it in production environment.
@@ -31,15 +32,19 @@ module.exports = {
         disableHostCheck: true
     },
     
-    entry: {"index": path.resolve(__dirname, 'src/index')},
+    entry: { "index": path.resolve(__dirname, 'src/index') },
+    // entry: {
+    //     "index": path.resolve(__dirname, 'src/index'),
+    //     vendor: ['react', 'react-dom']
+    // },
     
     output: {
         filename: '[name].js',
         chunkFilename: '[id].chunk.js',
-        // path: path.join(__dirname, './dist/'),
-        // publicPath: './dist/'
-        path: path.join(__dirname, '../画客网H5打包/dist/'),
+        path: path.join(__dirname, './dist/'),
         publicPath: './dist/'
+        // path: path.join(__dirname, '../画客网H5打包/dist/'),
+        // publicPath: './dist/'
     },
     
     resolve: {
@@ -110,13 +115,29 @@ module.exports = {
         }),
         new webpack.optimize.ModuleConcatenationPlugin(),
         // new webpack.optimize.CommonsChunkPlugin('shared.js'),
+        // new webpack.optimize.CommonsChunkPlugin({
+        //     // minChunks: 2,
+        //     name: 'vendor',
+        //     filename: 'vendor.js'
+        // }),
+        // new webpack.optimize.CommonsChunkPlugin({
+        //     name: 'vendor',
+        //     minChunks: function (module) {
+        //         // 该配置假定你引入的 vendor 存在于 node_modules 目录中
+        //         return module.context && module.context.indexOf('node_modules') !== -1;
+        //     }
+        // }),
         new webpack.optimize.CommonsChunkPlugin({
-            // minChunks: 2,
-            name: 'shared',
-            filename: 'shared.js'
+            name: 'vendor',
+            minChunks: ({ resource }) => (
+                resource &&
+                resource.indexOf('node_modules') >= 0 &&
+                resource.match(/\.js$/)
+            ),
         }),
         new webpack.HotModuleReplacementPlugin(),
-        new ExtractTextPlugin({filename: '[name].css', allChunks: true})
+        new ExtractTextPlugin({filename: '[name].css', allChunks: true}),
+        new UglifyJSPlugin()
         // ...otherPlugins
     ],
     devServer:{

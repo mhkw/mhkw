@@ -31,7 +31,11 @@ module.exports = {
         disableHostCheck: true
     },
     
-    entry: {"index": path.resolve(__dirname, 'src/index')},
+    // entry: { "index": path.resolve(__dirname, 'src/index') },
+    entry: {
+        "index": path.resolve(__dirname, 'src/index')
+        // shared: ['react', 'react-dom']
+    },
     
     output: {
         filename: '[name].js',
