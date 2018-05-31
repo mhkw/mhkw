@@ -28,6 +28,8 @@ let realDataLength = realData.length;
 let NUM_ROWS = 8;
 let pageIndex = 0;
 
+let scrollTop = 0;
+
 const separator = (sectionID, rowID) => (   //每个元素之间的间距
     <div
         key={`${sectionID}-${rowID}`}
@@ -56,7 +58,8 @@ export default class HomeView extends React.Component {
             page:1,
             hasMore:true,
             keyArray:["附近","艺术绘画","品牌建设","互联网设计","产品设计","空间设计","虚拟现实","多媒体","程序开发","其他设计"],
-            currentIdx:0
+            currentIdx:0,
+            showBackToTop: false,
         };
         
         this.genData = (pIndex = 0, NUM_ROWS, data) => {
@@ -142,7 +145,12 @@ export default class HomeView extends React.Component {
     // }
     routerWillLeave(nextLocation) {
         document.body.style.overflow = 'inherit';
-        pageIndex = 0;
+        // pageIndex = 0;
+        scrollTop = document.documentElement.scrollTop;
+        if (window.api) {
+            //应该是移动端
+            scrollTop = document.body.scrollTop;
+        }
     }
     componentWillMount() {
         if (this.props.HOCState.Home.currentIdx) {
@@ -157,7 +165,14 @@ export default class HomeView extends React.Component {
             this.props.route,
             this.routerWillLeave
         )
-        this.getWorkList(this.state.keyArray[this.state.currentIdx],1);
+        if (!sessionStorage.getItem("fstdata")) {
+            pageIndex = 0;
+            console.log("getWorkList componentDidMount");
+            
+            this.getWorkList(this.state.keyArray[this.state.currentIdx], 1);            
+        }
+        this.lv.scrollTo(0, scrollTop)
+        // this.getWorkList(this.state.keyArray[this.state.currentIdx],1);
         if (!sessionStorage.getItem("designer_tree")) {
             runPromise("get_designer_tree", null, this.getPicsLis,false,"get");
         }
@@ -180,6 +195,7 @@ export default class HomeView extends React.Component {
             refreshing: true,
             isLoading: true
         })
+        console.log("getWorkList onRefresh");
         this.getWorkList(this.state.keyArray[this.state.currentIdx],1);
     };
 
@@ -190,9 +206,24 @@ export default class HomeView extends React.Component {
             return ;
         };
         // this.setState({ isLoading: true });
+        console.log("getWorkList onEndReached");
         this.getWorkList(this.state.keyArray[this.state.currentIdx], this.state.page);
     };
-    
+    onScroll = (e) => {
+
+        let newScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        
+        if (Math.abs(newScrollTop - scrollTop) > 20) {
+            this.props.setShowTabBar(!(newScrollTop > scrollTop && newScrollTop > 500))
+        }
+
+        this.setState({
+            showBackToTop: newScrollTop > 500,
+        },()=>{
+            scrollTop = newScrollTop;
+        });
+        
+    }
     changeUserList  (tab,index) {
         pageIndex = 0;
         if (this.state.currentIdx){
@@ -207,6 +238,7 @@ export default class HomeView extends React.Component {
         let idx = index-1;
         let currentImg = document.getElementById("img"+idx);
         idx<0?"":currentImg.src = tab.title.props.dataSrc;
+        console.log("getWorkList changeUserList");
         this.getWorkList(this.state.keyArray[index], 1);
     }
     getWorkList = (keywords,page) => {
@@ -246,6 +278,41 @@ export default class HomeView extends React.Component {
             pathname: '/address',
             query: { form: 'Address' },
         });
+    }
+    clickBackToTop = () => {
+        cancelAnimationFrame(this.toTopTimer);
+        let then = this;
+        this.toTopTimer = requestAnimationFrame(function fn() {
+            var oTop = document.body.scrollTop || document.documentElement.scrollTop;
+            if (oTop > 0) {
+                let stepper = 60;
+                if (oTop > 1000) {
+                    stepper = 200;
+                } 
+                if (oTop > 2000) {
+                    stepper = 300;
+                }
+                if (oTop > 3000) {
+                    stepper = 400;
+                }
+                if (oTop > 4000) {
+                    stepper = 500;
+                }
+                if (oTop > 5000) {
+                    stepper = 600;
+                }
+                document.body.scrollTop = document.documentElement.scrollTop = oTop - stepper;
+                then.toTopTimer = requestAnimationFrame(fn);
+            } else {
+                cancelAnimationFrame(then.toTopTimer);
+            }
+        });
+    }
+    touchStartBackToTop = (ref) => {
+        ref.style.opacity = 0.5;
+    }
+    touchEndBackToTop = (ref) => {
+        ref.style.opacity = 1;
     }
     render() {
         // let index = this.state.res.length - 1;
@@ -319,6 +386,7 @@ export default class HomeView extends React.Component {
                     </div>
                 </div>
                 <div className="homeWrapMain">
+                    <div ref={(ref) => { this.backToTopRef = ref }} onTouchEnd={()=>{ this.touchEndBackToTop(this.backToTopRef) }} onTouchStart={() => { this.touchStartBackToTop(this.backToTopRef) }} onClick={this.clickBackToTop} style={{"display": this.state.showBackToTop ? "block" : "none"}} className="back-to-top"><img className="back-to-top-img" src={require("../images/backTop.png")} /></div>
                     <ListView
                         key={this.state.useBodyScroll ? '0' : '1'}
                         ref={el => this.lv = el}
@@ -341,7 +409,10 @@ export default class HomeView extends React.Component {
                         />}
                         onEndReached={this.onEndReached}
                         pageSize={8}
-                        scrollRenderAheadDistance={100}
+                        scrollRenderAheadDistance={200}
+                        onEndReachedThreshold={10}
+                        onScroll={this.onScroll}
+                        scrollEventThrottle={200}
                     />
                 </div>
             </div>

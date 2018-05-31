@@ -20,17 +20,24 @@ export default class LoginView extends React.Component {
             error: false,
             modal: false,
             animating:false,
-            // value: '13958054563',
-            // keywords:'215188',
-            value: '17683993335',
-            keywords: 'luolei1992',
+            value: '15657185156',
+            keywords:'luolei251537',
+            // value: '',
+            // keywords: '',
             code:"",
             codeNum:2
         };
         this.handleSend = (res) => {
             // console.log(res)
             if(res.success) {
-                hashHistory.goBack();
+                if (this.props.location.query && this.props.location.query.form == "register") {
+                    hashHistory.push({
+                        pathname: '/',
+                        query: { form: 'login' }
+                    });
+                } else {
+                    hashHistory.goBack();
+                }
                 validate.setCookie('user_id', res.data.id);
                 validate.setCookie('user_phone', res.data.mobile);
                 validate.setCookie('user_name', res.data.nick_name);
@@ -60,6 +67,15 @@ export default class LoginView extends React.Component {
                     Toast.info(res.message, 2, null, false);                    
                     this.onClose('modal')();
                 }
+            }
+        }
+        this.handleThirdLogin = (res) => {
+            console.log("############# login.jsx 66 第三方登录返回值###############")
+            console.log(JSON.stringify(res));
+            if (res.success) {
+                
+            } else {
+                Toast.info(res.message, 1.5); 
             }
         }
     }
@@ -143,15 +159,57 @@ export default class LoginView extends React.Component {
         }, this.handleSend, false, "post");
         
     }
+    /**
+     * 第三方登录接口
+     * 
+     * @memberof LoginView
+     */
+    thirdLogin = (platform, access_token, image_path, nick_name) => {
+        runPromise("third_login", {
+            platform, 
+            access_token, 
+            image_path, 
+            nick_name
+        }, this.handleThirdLogin, false, "post");
+    }
     loginWx(idx){
         if(window.api){
             if (idx == 1) {
                 var wx = api.require('wx');
+                let apiKey = 'wx119ef00ddad7a304';
+                let apiSecret = '9e0d18bf6ff205f1f7d1e1d955d0a505';
                 wx.auth(function (ret, err) {
-                    alert(JSON.stringify(ret))
-                    alert(JSON.stringify(err))
                     if (ret.status) {
+                        alert(JSON.stringify(ret));
                         console.log(JSON.stringify(ret));
+                        wx.getToken({
+                            apiKey,
+                            apiSecret,
+                            code: ret.code
+                        }, function (ret, err) {
+                            alert(JSON.stringify(ret));
+                            console.log(JSON.stringify(ret));
+                            if (ret.status) {
+                                let accessToken = ret.accessToken;
+                                let openId = ret.openId;
+                                wx.getUserInfo({
+                                    accessToken,
+                                    openId,
+                                }, function (ret, err) {
+                                    if (ret.status) {
+                                        alert(JSON.stringify(ret));
+                                        let { nickname, headimgurl} = ret;
+                                        this.thirdLogin("weixin", accessToken, headimgurl, nickname);
+                                    } else {
+                                        console.log(err.code);
+                                    }
+                                });
+
+                            } else {
+                                console.log("getUserInfo err.code");
+                                console.log(err.code);
+                            }
+                        });
                     } else {
                         console.log(err.code);
                         //数字类型；
@@ -255,7 +313,7 @@ export default class LoginView extends React.Component {
                                             className="loginBtn"
                                             // onClick={this.showModal('modal')}
                                             onClick={this.clickLogin} 
-                                        >登 陆</Button>
+                                        >登 录</Button>
                                         <Modal
                                             visible={this.state.modal}
                                             transparent
@@ -300,9 +358,9 @@ export default class LoginView extends React.Component {
                                 /> */}
                                 </div>
                             </div>
-                            <div className="loginThree">
+                            <div className="loginThree" style={{"display":"none"}}>
                                 <div className="loginThreeLine">
-                                    <span className="fn-left"></span> 其他登陆方式 <span className="fn-right"></span>
+                                    <span className="fn-left"></span> 其他登录方式 <span className="fn-right"></span>
                                 </div>
                                 <div className="loginThreeBottom">
                                     <ul className="fn-clear">

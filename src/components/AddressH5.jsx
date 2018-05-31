@@ -368,6 +368,8 @@ export default class Address extends React.Component {
             lat, //纬度
             currentLocation,
         });
+        //当选择地址后，进入首页，需要从新刷新，获取数据
+        sessionStorage.removeItem("fstdata");
         hashHistory.goBack(); //选好地址后回到上一页
     }
     render() {

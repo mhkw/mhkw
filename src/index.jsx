@@ -46,8 +46,8 @@ import Test from './components/page1';
 import TempTest from './components/TempTest';
 import ConfirmOffer from './components/ConfirmOffer';
 import HOCdesignerHome from './components/HOCdesignerHome';
-// import Address from './components/Address';
-import Address from './components/AddressH5';
+import Address from './components/Address';
+// import Address from './components/AddressH5';
 import BaiduMap from './components/BaiduMap';
 // import BaiduMap from './components/BaiduMapH5';
 import HOC from './components/HOC';
@@ -75,94 +75,9 @@ import ChatList from './components/ChatList';
 import SystemNotice from './components/SystemNotice';
 import DesignerComment3 from './components/designerComment3';
 
-import './css/font/iconfont.css'
+import './css/font/iconfont.css';
 
-import 'lib-flexible/flexible'
-
-//设置路由
-// class Index extends React.Component {
-//   render() {
-//     return (
-//       <div className="body">
-//         <h1>Stages list</h1>
-//         <ul role="nav">
-//           <li><Link to="/s1">ListView + Carousel</Link></li>
-//         </ul>
-//       </div>
-//     );
-//   }
-// }
-
-
-//路由配置
-// ReactDOM.render(
-//     <Router history={hashHistory}>
-//         <Route component={HOC}>
-//             <Route path="/" component={App}>
-//                 <IndexRoute component={Index} />
-//                 <Route path="/circle" component={Hkcircle} />
-//                 <Route path="/mine" component={Mine} />
-//             </Route>
-//             <Route path="/baiduMap" component={BaiduMap} />
-//             <Route path="/address" component={Address} />
-//             <Route path="/city" component={listViewDemo} />
-//             <Route path="/page1" component={Test} />
-//             <Route path="/bind" component={Bind} />
-//             <Route path="/forget" component={Forget} />
-//             <Route path="/login" component={Login} />
-//             <Route path="/register" component={Register} />
-//             <Route path="/search" component={Search} />
-//             <Route path="/account" component={Account} >
-//                 <Route component={OrderPopup}>
-//                     <IndexRoute component={PayModal} />
-//                     <Route path="payModal" component={PayModal} />
-//                     <Route path="payMethod" component={PayMethod} />
-//                 </Route>
-//             </Route>
-//             <Route path="/orderList" component={OrderList} />
-//             <Route path="/demand" component={DemandList} />
-//             <Route path="/demandDetail" component={DemandDetail} />
-//             <Route path="/workList" component={WorkList} />
-//             <Route path="/creatNeed" component={CreatNeed} />
-//             {/* <Route path="/quoteList" component={QuoteList} /> */}
-//             <Route path="/quoteList" component={QuoteList2}>
-//                 <Route component={OrderPopup}>
-//                     <IndexRoute component={PayModal} />
-//                     <Route path="payModal" component={PayModal} />
-//                     <Route path="payMethod" component={PayMethod} />
-//                 </Route>
-//             </Route>
-//             <Route path="/" component={HOCdesignerHome}>
-//                 <Route path="designerHome" component={designerHome}>
-//                     <IndexRoute component={IndexWorksCollection} />
-//                     <Route path="indexWorksCollection" component={IndexWorksCollection} />
-//                     <Route path="designerComment" component={DesignerComment} />
-//                 </Route>
-//                 {/* 先将作品提出来，写完了再嵌套到/designerHome */}
-//                 <Route path="worksCollection" component={WorksCollection} />
-//                 <Route path="writerComment" component={WriterComment} />
-//                 <Route path="placeOrder" component={PlaceOrder}>
-//                     <Route component={OrderPopup}>
-//                         <IndexRoute component={PayModal} />
-//                         <Route path="payModal" component={PayModal} />
-//                         <Route path="payMethod" component={PayMethod} />
-//                     </Route>
-//                 </Route>
-//             </Route>
-//             {/* 测试,评论页不是单独一页 */}
-//             {/* <Route path="/designerComment" component={DesignerComment} /> */}
-//             <Route path="/" component={HOCoffer}>
-//                 <Route path="creatServer" component={CreatServer} />
-//                 <Route path="addServer" component={AddServer} />
-//                 <Route path="createOffer" component={CreateOffer} />
-//                 <Route path="confirmOffer" component={ConfirmOffer} />
-//                 <Route path="contacts" component={Contacts} />
-//             </Route>
-//             <Route path="/TempTest" component={TempTest} />
-//             <Route path="/withdraw" component={Withdraw} />
-//         </Route>
-//     </Router>
-//     , document.getElementById('container'));
+import 'lib-flexible/flexible';
 
 ReactDOM.render(
     <Router history={hashHistory}>

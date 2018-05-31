@@ -105,6 +105,7 @@ const ajaxURLList = {
     get_user_list2: "hkw_newapi/get_user_list2", //获取指定id的设计师列表
 
     get_my_sys_notice_list: "hkw_newapi/get_my_sys_notice_list", //获取系统通知
+    third_login: "hkw_newapi/third_login", //第三方登录
 }
 
 function get_user_list_ex(params) {
@@ -149,7 +150,7 @@ function run(taskDef) {
  * @param {String} method ajax请求类型，默认是post
  * @param {String} handleParam ajax执行完成后的处理函数的参数
  */
-export default function runPromise(ajaxName, param, handle, mustLogin = false, method="post", handleParam) {
+export default function runPromise(ajaxName = "", param = {}, handle = () => {}, mustLogin = false, method="post", handleParam) {
     let cookie_user_id = getCookie('user_id');
     // let cookie_user_id = validate.getCookie("user_id");
     // console.log(ajaxName, mustLogin, cookie_user_id);

@@ -32,6 +32,7 @@ export default class App extends Component {
             selectedTab: '',
             hidden: false,
             fullScreen: false,
+            showTabBar: true,
         };
     }
     
@@ -83,6 +84,11 @@ export default class App extends Component {
     //         });
     //     }
     // }
+    setShowTabBar = (show) => {
+        this.setState({
+            showTabBar: !!show
+        })
+    }
     render() {
         return (
             <div>
@@ -97,10 +103,11 @@ export default class App extends Component {
                             propsSetState: this.props.propsSetState,
                             conversations: this.props.conversations,
                             sumUnreadMessagesCount: this.props.sumUnreadMessagesCount,
+                            setShowTabBar: this.setShowTabBar,
                         }
                     )
                 }
-                <div className="barBottom fn-clear" style={{display:this.state.display,zIndex:1000}}>
+                <div className="barBottom fn-clear" style={{display:this.state.display, zIndex:1000, bottom: this.state.showTabBar ? "0" : "-1.4rem" }}>
                     <TabBar className="tabBarUl"
                         unselectedTintColor="#949494"
                         tintColor="#33A3F4"

@@ -28,7 +28,10 @@ export default class Address extends React.Component {
             searchInCity_totalPage: 0, //搜索的结果的总页数
             historyAddress: localStorage.getItem('historyAddress') ? JSON.parse(localStorage.getItem('historyAddress')) : [], //历史位置，用户输入地址，或者定位当前位置后都会新增一条，点击某条地址后跳到最前面，最多保存10条地址
         }
-        this.bMap = window.bMap || null ;
+        // this.bMap = window.bMap || null ;
+    }
+    componentDidMount() {
+        this.bMap = window.bMap || null;
     }
     componentWillMount() {
         let HOCAddressPage = 'Address';
@@ -291,6 +294,7 @@ export default class Address extends React.Component {
             lat, //纬度
             currentLocation,
         });
+        sessionStorage.removeItem("fstdata"); 
         hashHistory.goBack(); //选好地址后回到上一页
     }
     render() {

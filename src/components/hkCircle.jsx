@@ -24,6 +24,7 @@ let realDataLength = realData.length;
 const NUM_ROWS = 7;
 let pageIndex = 0;
 
+let scrollTopCircle = 0;
 
 export default class LoginView extends React.Component {
     constructor(props) {
@@ -36,7 +37,8 @@ export default class LoginView extends React.Component {
             page:"1",
             imgHeight: 176,
             slideIndex: 0,
-            dataSource: dataSource.cloneWithRows(JSON.parse(sessionStorage.getItem("resdata")) ? JSON.parse(sessionStorage.getItem("resdata")) : []),
+            // dataSource: dataSource.cloneWithRows(JSON.parse(sessionStorage.getItem("resdata")) ? JSON.parse(sessionStorage.getItem("resdata")) : []),
+            dataSource: dataSource.cloneWithRows(JSON.parse(sessionStorage.getItem("resdata")) ? JSON.parse(sessionStorage.getItem("resdata")) : {}),
             refreshing: false,
             isLoading: true,
             useBodyScroll: true,
@@ -64,12 +66,19 @@ export default class LoginView extends React.Component {
                 realData = res.data.item_list;
                 index = realData.length - 1;
                 realDataLength = res.data.item_list.length;
+                // if (pageIndex == 0) {
+                //     this.rData = [];
+                //     this.rData = [ ...this.rData, ...this.genData(pageIndex++, realDataLength, realData) ];
+                //     sessionStorage.setItem("resdata", JSON.stringify(realData));
+                // }else{
+                //     this.rData = [ ...this.rData, ...this.genData(pageIndex++, realDataLength, realData) ];
+                // }
                 if (pageIndex == 0) {
-                    this.rData = [];
-                    this.rData = [ ...this.rData, ...this.genData(pageIndex++, realDataLength, realData) ];
+                    this.rData = {};
+                    this.rData = {...this.rData, ...this.genData(pageIndex++, realDataLength, realData)};
                     sessionStorage.setItem("resdata", JSON.stringify(realData));
-                }else{
-                    this.rData = [ ...this.rData, ...this.genData(pageIndex++, realDataLength, realData) ];
+                } else {
+                    this.rData = {...this.rData, ...this.genData(pageIndex++, realDataLength, realData)};
                 }
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(this.rData),
@@ -152,10 +161,20 @@ export default class LoginView extends React.Component {
             this.props.route,
             this.routerWillLeave
         )
-        this.getNoticeList(1);
+        if (!sessionStorage.getItem("resdata")) {
+            pageIndex = 0;
+            this.getNoticeList(1);            
+        }
+        this.lv.scrollTo(0, scrollTopCircle)
+        // this.getNoticeList(1);
     }
     routerWillLeave(nextLocation) {
-        pageIndex = 0;
+        // pageIndex = 0;
+        scrollTopCircle = document.documentElement.scrollTop;
+        if (window.api) {
+            //应该是移动端
+            scrollTopCircle = document.body.scrollTop;
+        }
         document.body.style.overflow = 'inherit';
     }
     getNoticeList=(page)=>{

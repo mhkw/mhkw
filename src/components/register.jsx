@@ -20,8 +20,10 @@ export default class RegisterView extends React.Component {
             hasError: false,
             error:false,
             checked:true,
-            value: '15657185156',
-            keywords: 'luolei1992',
+            // value: '15657185156',
+            // keywords: 'luolei1992',
+            value: '',
+            keywords: '',
             message:"",       //短信验证码
             code: "",             //图形验证码
             maskClosable: true,
@@ -36,18 +38,24 @@ export default class RegisterView extends React.Component {
             console.log(res,'注册或修改密码');
             if (res.success) {
                 if(this.state.type == 'reg') {
-                    Toast.info(res.message, 2, null, false);
-                    hashHistory.goBack();
+                    // Toast.info(res.message, 2, null, false);
+                    // hashHistory.goBack();
                     validate.setCookie('user_id', res.data.id);
                 }else{
-                    Toast.info(res.message, 2, null, false);
-                    setTimeout(()=>{
-                        hashHistory.push({
-                            pathname: '/login'
-                            // query: { form: 'promise',a:'444' }
-                        });
-                    },500);
+                    // Toast.info(res.message, 2, null, false);
+                    // setTimeout(()=>{
+                    //     hashHistory.push({
+                    //         pathname: '/login',
+                    //         query: { form: 'register' }
+                    //     });
+                    // },500);
                 }
+                Toast.info(res.message, 1.5, () => {
+                    hashHistory.push({
+                        pathname: '/login',
+                        query: { form: 'register' }
+                    });
+                });
             } else {
                 Toast.info(res.message, 2, null, false);
             }
@@ -200,7 +208,8 @@ export default class RegisterView extends React.Component {
                         <div className="loginWrap" key="1">
                             <div className="loginIn">
                                 <div className="loginCenter">
-                                    <div className="loginLogo" onClick={() => { hashHistory.push({ pathname: '/' }) }}>
+                                    {/* <div className="loginLogo" onClick={() => { hashHistory.push({ pathname: '/' }) }}> */}
+                                    <div className="loginLogo">
                                         <img src={loginUrl[0]} alt="" />
                                     </div>
                                     <div className="loginIpt">
@@ -295,11 +304,11 @@ export default class RegisterView extends React.Component {
                                     </div>
                                     <div className="noAccount fn-clear">
                                         <Link className="fn-left" to='/forget'>忘记密码？</Link>
-                                        <Link className="fn-right" to='/login'>登 录</Link>
+                                        <Link className="fn-right" to='/login?form=register'>登 录</Link>
                                     </div>
                                 </div>
                             </div>
-                            <div className="loginThree">
+                            <div className="loginThree" style={{"display":"none"}}>
                                 <div className="loginThreeLine">
                                     <span className="fn-left"></span> 其他登陆方式 <span className="fn-right"></span>
                                 </div>

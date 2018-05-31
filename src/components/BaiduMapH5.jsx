@@ -75,6 +75,9 @@ export default class BaiduMap extends React.Component {
         } else {
             this.addHistoryAddress(this.state); //添加到历史位置。注意了，此时把整个state都传进去了。
         }
+        if (HOCAddressPage == 'Address') {
+            sessionStorage.removeItem("fstdata");
+        }
         // this.bMap.close(); //关闭地图
         this.closeFrame(); //关闭地图浮动层页面
         hashHistory.goBack();

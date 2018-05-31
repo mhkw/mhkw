@@ -118,9 +118,14 @@ export default class HOC extends React.Component{
                         // avatar[element.hxid] = ret.url;
                         avatar.id = element.hxid;
                         avatar.url = ret.url;
-                        // cacheAvatar.push(avatar);
-                        let cacheAvatar = JSON.parse(sessionStorage.getItem("cacheAvatar"));
-                        if (cacheAvatar && cacheAvatar.length > 0) {
+                        // cacheAvatar.push(avatar);   
+                        let cacheAvatar = "";
+                        let sessionStorageCacheAvatar = sessionStorage.getItem("cacheAvatar");
+                        if (sessionStorageCacheAvatar) {
+                            let cacheAvatar = JSON.parse(sessionStorageCacheAvatar);                            
+                        }         
+                        // let cacheAvatar = JSON.parse(sessionStorage.getItem("cacheAvatar"));
+                        if (sessionStorageCacheAvatar && cacheAvatar && cacheAvatar.length > 0) {
                             cacheAvatar.push(avatar);
                             sessionStorage.setItem("cacheAvatar", JSON.stringify(cacheAvatar));
                         } else {

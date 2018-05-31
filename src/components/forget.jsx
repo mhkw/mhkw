@@ -18,8 +18,10 @@ export default class ForgetView extends React.Component {
             hasError: false,
             error: false,
             checked: true,
-            value: '15657185156',
-            keywords: 'luolei1992',
+            // value: '15657185156',
+            // keywords: 'luolei1992',
+            value: '',
+            keywords: '',
             message: "",       //短信验证码
             code: "",             //图形验证码
             maskClosable: true,
@@ -28,9 +30,15 @@ export default class ForgetView extends React.Component {
             text: "获取验证码",
         };
         this.handleLoginSend = (res) => {   //修改密码
-            console.log(res, '修改密码');
+            // console.log(res, '修改密码');
             if (res.success) {
-                hashHistory.goBack();
+                // hashHistory.goBack();
+                Toast.info(res.message, 1.5, ()=>{
+                    hashHistory.push({
+                        pathname: '/login',
+                        query: { form: 'register' }
+                    });
+                });
                 
                 // validate.setCookie('user_id', res.data.id);
             } else {
@@ -69,7 +77,7 @@ export default class ForgetView extends React.Component {
         }
     }
     componentDidMount (){
-        
+        this.clickKeyback(); //注册监听事件， 点击返回键
     }
     onRegister() {   //确认修改密码
         if (this.state.message.length !== 4) {
@@ -154,6 +162,31 @@ export default class ForgetView extends React.Component {
             message: value       //手机验证码输入
         })
     }
+    //点击页面左上角的返回
+    gotoBack = () => {
+        hashHistory.push({
+            pathname: '/login',
+            query: { form: 'register' }
+        });
+    }
+    //监听事件，点击系统返回键
+    clickKeyback = () => {
+        if (window.api) {
+            window.api.addEventListener({
+                name: 'keyback'
+            }, (ret, err) => {
+                this.gotoBack(); //执行关闭页面的相关操作
+            });
+        }
+    }
+    componentWillUnmount() {
+        //移除事件，点击系统返回键
+        if (window.api) {
+            window.api.removeEventListener({
+                name: 'keyback'
+            });
+        }
+    }
     render() {
         return (
             <Motion defaultStyle={{ left: 300 }} style={{ left: spring(0, { stiffness: 300, damping: 28 }) }}>
@@ -163,7 +196,7 @@ export default class ForgetView extends React.Component {
                             <NavBar
                                 mode="light"
                                 icon={<Icon type="left" size="lg" color="#707070" />}
-                                onLeftClick={() => hashHistory.goBack()}
+                                onLeftClick={() => this.gotoBack()}
                             >找回密码</NavBar>
                         </div>
                         <WhiteSpace size="lg" />
