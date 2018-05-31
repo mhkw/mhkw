@@ -79,7 +79,7 @@ export default class HomeView extends React.Component {
                 index = realData.length - 1;
                 realDataLength = res.data.item_list.length;
                 NUM_ROWS = realDataLength;
-                console.log( "pageIndex:: " + pageIndex);
+                // console.log( "pageIndex:: " + pageIndex);
                 
                 if (pageIndex == 0){
                     this.rData = {};
@@ -87,11 +87,19 @@ export default class HomeView extends React.Component {
                     sessionStorage.setItem("fstdata", JSON.stringify(realData));
                 }else{
                     this.rData = { ...this.rData, ...this.genData(++pageIndex, realDataLength, realData) };
+
+                    let storageFstdata = sessionStorage.getItem("fstdata");
+                    if (storageFstdata && JSON.parse(storageFstdata).length > 0) {
+                        realData = [...JSON.parse(storageFstdata), ...realData];
+                        sessionStorage.setItem("fstdata", JSON.stringify(realData));
+                        
+                    }
                 }
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(this.rData),
                     hasMore: res.data.total_pages > pageIndex ? true : false,
-                    isLoading: true,
+                    // isLoading: true,
+                    isLoading: res.data.total_pages > pageIndex ? true : false,
                     page:++this.state.page
                 });
                 setTimeout(() => {
@@ -146,11 +154,7 @@ export default class HomeView extends React.Component {
     routerWillLeave(nextLocation) {
         document.body.style.overflow = 'inherit';
         // pageIndex = 0;
-        scrollTop = document.documentElement.scrollTop;
-        if (window.api) {
-            //应该是移动端
-            scrollTop = document.body.scrollTop;
-        }
+        scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
     }
     componentWillMount() {
         if (this.props.HOCState.Home.currentIdx) {
@@ -160,6 +164,7 @@ export default class HomeView extends React.Component {
         }
     }
     componentDidMount() {
+        this.props.setShowTabBar(true);
         // app2 update
         this.props.router.setRouteLeaveHook(
             this.props.route,
@@ -167,7 +172,7 @@ export default class HomeView extends React.Component {
         )
         if (!sessionStorage.getItem("fstdata")) {
             pageIndex = 0;
-            console.log("getWorkList componentDidMount");
+            // console.log("getWorkList componentDidMount");
             
             this.getWorkList(this.state.keyArray[this.state.currentIdx], 1);            
         }
@@ -189,13 +194,15 @@ export default class HomeView extends React.Component {
         }
     }
 
-    onRefresh = () => {   //顶部下拉刷新数据
+    onRefresh = () => {   
+        //顶部下拉刷新数据
+        sessionStorage.removeItem("fstdata"); //下拉刷新时把缓存数据也清空吧
         pageIndex = 0;
         this.setState({
             refreshing: true,
             isLoading: true
         })
-        console.log("getWorkList onRefresh");
+        // console.log("getWorkList onRefresh");
         this.getWorkList(this.state.keyArray[this.state.currentIdx],1);
     };
 
@@ -206,8 +213,9 @@ export default class HomeView extends React.Component {
             return ;
         };
         // this.setState({ isLoading: true });
-        console.log("getWorkList onEndReached");
-        this.getWorkList(this.state.keyArray[this.state.currentIdx], this.state.page);
+        // console.log("getWorkList onEndReached");
+        // this.getWorkList(this.state.keyArray[this.state.currentIdx], this.state.page);
+        this.getWorkList(this.state.keyArray[this.state.currentIdx], pageIndex); 
     };
     onScroll = (e) => {
 
@@ -234,17 +242,17 @@ export default class HomeView extends React.Component {
         }
         this.setState({currentIdx : index});
         this.props.propsSetState('Home', { currentIdx: index });
-        console.log(index);
+        // console.log(index);
         let idx = index-1;
         let currentImg = document.getElementById("img"+idx);
         idx<0?"":currentImg.src = tab.title.props.dataSrc;
-        console.log("getWorkList changeUserList");
+        // console.log("getWorkList changeUserList");
         this.getWorkList(this.state.keyArray[index], 1);
     }
     getWorkList = (keywords,page) => {
-        console.log("get_user_list_ex");
-        console.log(this.props.HOCState.Address.lon);
-        console.log(this.props.HOCState.Address.lat);
+        // console.log("get_user_list_ex");
+        // console.log(this.props.HOCState.Address.lon);
+        // console.log(this.props.HOCState.Address.lat);
         
         
         runPromise("get_user_list_ex", {
@@ -348,6 +356,12 @@ export default class HomeView extends React.Component {
             );
         };
 
+        let initialListSize = 8;
+        let storageFstdata = sessionStorage.getItem("fstdata");
+        if (storageFstdata && JSON.parse(storageFstdata).length > 0) {
+            initialListSize = JSON.parse(storageFstdata).length;
+        }
+
         return (
             <div className="homeWrap">
                 <div className="homeWrapTop" style={{
@@ -409,10 +423,11 @@ export default class HomeView extends React.Component {
                         />}
                         onEndReached={this.onEndReached}
                         pageSize={8}
-                        scrollRenderAheadDistance={200}
+                        scrollRenderAheadDistance={900}
                         onEndReachedThreshold={10}
                         onScroll={this.onScroll}
                         scrollEventThrottle={200}
+                        initialListSize={initialListSize}
                     />
                 </div>
             </div>

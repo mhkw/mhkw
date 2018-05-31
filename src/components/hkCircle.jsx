@@ -21,7 +21,8 @@ let realData = [];
 let index = realData.length - 1;
 let realDataLength = realData.length;
 
-const NUM_ROWS = 7;
+// const NUM_ROWS = 7;
+let NUM_ROWS = 5;
 let pageIndex = 0;
 
 let scrollTopCircle = 0;
@@ -54,11 +55,20 @@ export default class LoginView extends React.Component {
             replySendStatus:false,    //回复还是留言
             rep_user_id:"",     //被回复人的id
             comment_id:"",      //回复的回复id
-            replay_name:""     //给..回复
+            replay_name:"",     //给..回复
+            showBackToTop: false,
         };
-        this.genData = (pIndex = 0, realLength, data) => {
-            let dataBlob = [];
-            dataBlob = data;
+        // this.genData = (pIndex = 0, realLength, data) => {
+        //     let dataBlob = [];
+        //     dataBlob = data;
+        //     return dataBlob;
+        // };
+        this.genData = (pIndex = 0, NUM_ROWS, data) => {
+            const dataBlob = {};
+            for (let i = 0; i < NUM_ROWS; i++) {
+                const ii = (pIndex * NUM_ROWS) + i;
+                dataBlob[`${ii}`] = data[i];
+            }
             return dataBlob;
         };
         this.handleSend = (res) => {
@@ -66,6 +76,7 @@ export default class LoginView extends React.Component {
                 realData = res.data.item_list;
                 index = realData.length - 1;
                 realDataLength = res.data.item_list.length;
+                NUM_ROWS = realDataLength;
                 // if (pageIndex == 0) {
                 //     this.rData = [];
                 //     this.rData = [ ...this.rData, ...this.genData(pageIndex++, realDataLength, realData) ];
@@ -79,13 +90,20 @@ export default class LoginView extends React.Component {
                     sessionStorage.setItem("resdata", JSON.stringify(realData));
                 } else {
                     this.rData = {...this.rData, ...this.genData(pageIndex++, realDataLength, realData)};
+
+                    let storageFstdata = sessionStorage.getItem("resdata");
+                    if (storageFstdata && JSON.parse(storageFstdata).length > 0) {
+                        realData = [...JSON.parse(storageFstdata), ...realData];
+                        sessionStorage.setItem("resdata", JSON.stringify(realData));
+
+                    }
                 }
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(this.rData),
                     hasMore: res.data.is_next_page ? true : false,
                     isLoading: res.data.is_next_page ? true : false,
                     page: ++this.state.page,
-                    res: this.state.dataSource.cloneWithRows(this.rData)._dataBlob.s1,
+                    // res: this.state.dataSource.cloneWithRows(this.rData)._dataBlob.s1,
                 });
                 setTimeout(() => {
                     this.setState({
@@ -153,10 +171,11 @@ export default class LoginView extends React.Component {
             document.body.style.overflow = 'hidden';
         }
     }
-    shouldComponentUpdate(){
-        return (this.props.router.location.action === 'POP');
-    }
+    // shouldComponentUpdate(){
+    //     return (this.props.router.location.action === 'POP');
+    // }
     componentDidMount() {
+        this.props.setShowTabBar(true);
         this.props.router.setRouteLeaveHook(
             this.props.route,
             this.routerWillLeave
@@ -170,12 +189,8 @@ export default class LoginView extends React.Component {
     }
     routerWillLeave(nextLocation) {
         // pageIndex = 0;
-        scrollTopCircle = document.documentElement.scrollTop;
-        if (window.api) {
-            //应该是移动端
-            scrollTopCircle = document.body.scrollTop;
-        }
         document.body.style.overflow = 'inherit';
+        scrollTopCircle = document.documentElement.scrollTop || document.body.scrollTop;
     }
     getNoticeList=(page)=>{
         runPromise("get_circle_list", {        //获取列表
@@ -184,7 +199,9 @@ export default class LoginView extends React.Component {
             page: page
         }, this.handleSend, false, "get");
     }
-    onRefresh = () => {   //顶部下拉刷新数据
+    onRefresh = () => {
+        //顶部下拉刷新数据
+        sessionStorage.removeItem("resdata"); //下拉刷新时把缓存数据也清空吧
         pageIndex = 0;
         this.setState({ 
             refreshing: true
@@ -197,8 +214,22 @@ export default class LoginView extends React.Component {
         if (!this.state.isLoading && !this.state.hasMore) {
             return;
         }
-        this.getNoticeList(this.state.page);
+        // this.getNoticeList(this.state.page);
+        this.getNoticeList(pageIndex);
     };
+
+    onScroll = (e) => {
+        // if (Math.abs(newScrollTop - scrollTopCircle) > 20) {
+        //     this.props.setShowTabBar(!(newScrollTop > scrollTopCircle && newScrollTop > 500))
+        // }
+        let newScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        this.setState({
+            showBackToTop: newScrollTop > 500,
+        }, () => {
+            scrollTopCircle = newScrollTop;
+        });
+
+    }
     addHeart=(e,toId,rowID)=>{    //点赞
         e.persist();
         runPromise("add_love", {
@@ -267,6 +298,41 @@ export default class LoginView extends React.Component {
         // this.setState({
         //     refreshing: true
         // });
+    }
+    clickBackToTop = () => {
+        cancelAnimationFrame(this.toTopTimer);
+        let then = this;
+        this.toTopTimer = requestAnimationFrame(function fn() {
+            var oTop = document.body.scrollTop || document.documentElement.scrollTop;
+            if (oTop > 0) {
+                let stepper = 60;
+                if (oTop > 1000) {
+                    stepper = 200;
+                }
+                if (oTop > 2000) {
+                    stepper = 300;
+                }
+                if (oTop > 3000) {
+                    stepper = 400;
+                }
+                if (oTop > 4000) {
+                    stepper = 500;
+                }
+                if (oTop > 5000) {
+                    stepper = 600;
+                }
+                document.body.scrollTop = document.documentElement.scrollTop = oTop - stepper;
+                then.toTopTimer = requestAnimationFrame(fn);
+            } else {
+                cancelAnimationFrame(then.toTopTimer);
+            }
+        });
+    }
+    touchStartBackToTop = (ref) => {
+        ref.style.opacity = 0.5;
+    }
+    touchEndBackToTop = (ref) => {
+        ref.style.opacity = 1;
     }
     render() {
         const separator = (sectionID, rowID) => (   //这个是每个元素之间的间距
@@ -436,10 +502,16 @@ export default class LoginView extends React.Component {
             );
         };
 
+        let initialListSize = 5;
+        let storageFstdata = sessionStorage.getItem("fstdata");
+        if (storageFstdata && JSON.parse(storageFstdata).length > 0) {
+            initialListSize = JSON.parse(storageFstdata).length;
+        }
+
         return (
             <div className="homeWrap">
                 <div className="lanternLis">
-                    <WingBlank>
+                    <WingBlank style={{"height": "3.2rem"}}>
                         <Carousel
                             autoplay={true}
                             autoplayInterval={3000}
@@ -454,10 +526,10 @@ export default class LoginView extends React.Component {
                                         src={val}
                                         alt=""
                                         style={{ width: '100%', verticalAlign: 'top' }}
-                                        onLoad={() => {
-                                            window.dispatchEvent(new Event('resize'));
-                                            this.setState({ imgHeight: 'auto' });
-                                        }}
+                                        // onLoad={() => {
+                                        //     window.dispatchEvent(new Event('resize'));
+                                        //     this.setState({ imgHeight: 'auto' });
+                                        // }}
                                     />
                                 </a>
                             ))}
@@ -493,15 +565,20 @@ export default class LoginView extends React.Component {
                     </div>
                 </div>
                 <div className="homeWrapMain" id="hkCircle">
+                    <div ref={(ref) => { this.backToTopRef = ref }} onTouchEnd={() => { this.touchEndBackToTop(this.backToTopRef) }} onTouchStart={() => { this.touchStartBackToTop(this.backToTopRef) }} onClick={this.clickBackToTop} style={{ "display": this.state.showBackToTop ? "block" : "none" }} className="back-to-top"><img className="back-to-top-img" src={require("../images/backTop.png")} /></div>
                     <ListView         
                         key={this.state.useBodyScroll ? '0' : '1'}
                         ref={el => this.lv = el}
                         dataSource={this.state.dataSource}
-                        renderFooter={() => (<div style={{ padding:"0 10px", textAlign: 'center',marginBottom:"1.4rem" }}>
+                        // renderFooter={() => (<div style={{ padding:"0 10px", textAlign: 'center',marginBottom:"1.4rem" }}>
+                        //     {this.state.isLoading ? '加载中...' : '加载完成'}
+                        // </div>)}
+                        renderFooter={() => (<div style={{ padding: 20, textAlign: 'center' }}>
                             {this.state.isLoading ? '加载中...' : '加载完成'}
                         </div>)}
                         renderRow={row}
-                        renderSeparator={separator}                        
+                        renderSeparator={separator}    
+                        distanceToRefresh={1}                    
                         useBodyScroll={this.state.useBodyScroll}
                         pullToRefresh={<PullToRefresh
                             refreshing={this.state.refreshing}
@@ -509,6 +586,11 @@ export default class LoginView extends React.Component {
                         />}
                         onEndReached={this.onEndReached}
                         pageSize={5}
+                        scrollRenderAheadDistance={900}
+                        onEndReachedThreshold={10}
+                        onScroll={this.onScroll}
+                        scrollEventThrottle={200}
+                        initialListSize={initialListSize}
                     />
                 </div>
 
