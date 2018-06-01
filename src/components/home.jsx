@@ -29,7 +29,7 @@ let NUM_ROWS = 8;
 let pageIndex = 0;
 
 let scrollTop = 0;
-
+let backToTopDoing = false;
 const separator = (sectionID, rowID) => (   //每个元素之间的间距
     <div
         key={`${sectionID}-${rowID}`}
@@ -194,12 +194,12 @@ export default class HomeView extends React.Component {
         }
     }
 
-    onRefresh = () => {   
+    onRefresh = (refreshing = true) => {   
         //顶部下拉刷新数据
         sessionStorage.removeItem("fstdata"); //下拉刷新时把缓存数据也清空吧
         pageIndex = 0;
         this.setState({
-            refreshing: true,
+            refreshing,
             isLoading: true
         })
         // console.log("getWorkList onRefresh");
@@ -218,7 +218,9 @@ export default class HomeView extends React.Component {
         this.getWorkList(this.state.keyArray[this.state.currentIdx], pageIndex); 
     };
     onScroll = (e) => {
-
+        if (backToTopDoing) {
+            return;
+        }
         let newScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
         
         if (Math.abs(newScrollTop - scrollTop) > 20) {
@@ -288,30 +290,21 @@ export default class HomeView extends React.Component {
         });
     }
     clickBackToTop = () => {
+        backToTopDoing = true;
         cancelAnimationFrame(this.toTopTimer);
         let then = this;
         this.toTopTimer = requestAnimationFrame(function fn() {
             var oTop = document.body.scrollTop || document.documentElement.scrollTop;
             if (oTop > 0) {
-                let stepper = 60;
-                if (oTop > 1000) {
-                    stepper = 200;
-                } 
-                if (oTop > 2000) {
-                    stepper = 300;
-                }
-                if (oTop > 3000) {
-                    stepper = 400;
-                }
-                if (oTop > 4000) {
-                    stepper = 500;
-                }
-                if (oTop > 5000) {
-                    stepper = 600;
+                let stepper = Math.floor(oTop / 6)
+                if (stepper < 5) {
+                    stepper = 5;
                 }
                 document.body.scrollTop = document.documentElement.scrollTop = oTop - stepper;
                 then.toTopTimer = requestAnimationFrame(fn);
             } else {
+                backToTopDoing = false;
+                then.onRefresh(false);
                 cancelAnimationFrame(then.toTopTimer);
             }
         });

@@ -26,7 +26,7 @@ let NUM_ROWS = 5;
 let pageIndex = 0;
 
 let scrollTopCircle = 0;
-
+let backToTopDoing = false;
 export default class LoginView extends React.Component {
     constructor(props) {
         super(props);
@@ -199,12 +199,12 @@ export default class LoginView extends React.Component {
             page: page
         }, this.handleSend, false, "get");
     }
-    onRefresh = () => {
+    onRefresh = (refreshing = true) => {
         //顶部下拉刷新数据
         sessionStorage.removeItem("resdata"); //下拉刷新时把缓存数据也清空吧
         pageIndex = 0;
         this.setState({ 
-            refreshing: true
+            refreshing
         });
         this.getNoticeList(1);
     };
@@ -215,14 +215,20 @@ export default class LoginView extends React.Component {
             return;
         }
         // this.getNoticeList(this.state.page);
-        this.getNoticeList(pageIndex);
+        this.getNoticeList(pageIndex + 1);
     };
 
     onScroll = (e) => {
         // if (Math.abs(newScrollTop - scrollTopCircle) > 20) {
         //     this.props.setShowTabBar(!(newScrollTop > scrollTopCircle && newScrollTop > 500))
         // }
+        if (backToTopDoing) {
+            return;
+        }
         let newScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        if (Math.abs(newScrollTop - scrollTopCircle) > 20) {
+            this.props.setShowTabBar(!(newScrollTop > scrollTopCircle && newScrollTop > 500))
+        }
         this.setState({
             showBackToTop: newScrollTop > 500,
         }, () => {
@@ -299,31 +305,51 @@ export default class LoginView extends React.Component {
         //     refreshing: true
         // });
     }
+    // clickBackToTop = () => {
+    //     cancelAnimationFrame(this.toTopTimer);
+    //     let then = this;
+    //     this.toTopTimer = requestAnimationFrame(function fn() {
+    //         var oTop = document.body.scrollTop || document.documentElement.scrollTop;
+    //         if (oTop > 0) {
+    //             let stepper = 60;
+    //             if (oTop > 1000) {
+    //                 stepper = 200;
+    //             }
+    //             if (oTop > 2000) {
+    //                 stepper = 300;
+    //             }
+    //             if (oTop > 3000) {
+    //                 stepper = 400;
+    //             }
+    //             if (oTop > 4000) {
+    //                 stepper = 500;
+    //             }
+    //             if (oTop > 5000) {
+    //                 stepper = 600;
+    //             }
+    //             document.body.scrollTop = document.documentElement.scrollTop = oTop - stepper;
+    //             then.toTopTimer = requestAnimationFrame(fn);
+    //         } else {
+    //             cancelAnimationFrame(then.toTopTimer);
+    //         }
+    //     });
+    // }
     clickBackToTop = () => {
+        backToTopDoing = true;
         cancelAnimationFrame(this.toTopTimer);
         let then = this;
         this.toTopTimer = requestAnimationFrame(function fn() {
             var oTop = document.body.scrollTop || document.documentElement.scrollTop;
             if (oTop > 0) {
-                let stepper = 60;
-                if (oTop > 1000) {
-                    stepper = 200;
-                }
-                if (oTop > 2000) {
-                    stepper = 300;
-                }
-                if (oTop > 3000) {
-                    stepper = 400;
-                }
-                if (oTop > 4000) {
-                    stepper = 500;
-                }
-                if (oTop > 5000) {
-                    stepper = 600;
+                let stepper = Math.floor(oTop / 6)
+                if (stepper < 5) {
+                    stepper = 5;
                 }
                 document.body.scrollTop = document.documentElement.scrollTop = oTop - stepper;
                 then.toTopTimer = requestAnimationFrame(fn);
             } else {
+                backToTopDoing = false;
+                then.onRefresh(false);
                 cancelAnimationFrame(then.toTopTimer);
             }
         });
