@@ -22,8 +22,8 @@ export default class LoginView extends React.Component {
             animating:false,
             // value: '13958054563',
             // keywords:'215188',
-            value: '17683993335',
-            keywords: 'luolei1992',
+            value: '',
+            keywords: '',
             code:"",
             codeNum:2
         };
