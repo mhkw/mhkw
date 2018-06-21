@@ -299,7 +299,7 @@ export default class RegisterView extends React.Component {
                                     </div>
                                 </div>
                             </div>
-                            <div className="loginThree">
+                            <div className="loginThree" style={{ "display": "none" }}>
                                 <div className="loginThreeLine">
                                     <span className="fn-left"></span> 其他登陆方式 <span className="fn-right"></span>
                                 </div>
