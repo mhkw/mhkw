@@ -359,7 +359,8 @@ export default class SearchResult extends React.Component {
         runPromise("get_user_list_ex", {    //获取设计师列表
             sort: "add_time",
             offices: "all",
-            keywords: keywords,
+            keywords: "all",
+            keycode: keywords,
             longitude: "0",
             latitude: "0",
             per_page: "8",

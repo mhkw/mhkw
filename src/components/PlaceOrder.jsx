@@ -48,8 +48,8 @@ export default class PlaceOrder extends React.Component {
             days: this.state.StepperDay,
             tax: ((this.state.orderPrice - 0)*0.06).toFixed(2),
             total_price: this.state.payment,
-            auth_user_id: 69123,
-            // auth_user_id: this.props.designer.id,
+            // auth_user_id: 69123,
+            auth_user_id: this.props.designer.id,
             project_id: 0,
         }, this.handleServiceSimple); 
 
