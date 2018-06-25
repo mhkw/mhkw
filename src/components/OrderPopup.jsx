@@ -1,6 +1,7 @@
 import React from 'react';
 import { hashHistory, Link } from 'react-router';
 import { Toast, NavBar, Icon, Button, WingBlank, List, Modal} from 'antd-mobile';
+import { Z_BUF_ERROR } from 'zlib';
 
 const PayMethod = (props) => (
     <div className="pay-method-div">
@@ -58,7 +59,6 @@ class OrderPopup extends React.Component {
         }
         this.handleAjaxToPay = (res) => {
             Toast.hide();
-            // console.log(res);
             if (res.success) {
                 let orderInfo;
                 if (this.state.PayMethod == "AliPay") {
@@ -114,22 +114,33 @@ class OrderPopup extends React.Component {
             });
         }
         //微信支付
-        // if (PayMethod == "WxPay") {
-        //     const config = JSON.parse(orderInfo);
-        //     const wxPay = api.require('wxPay');
-        //     const { apiKey, orderId, mchId, nonceStr, timeStamp, package, sign } = config;
-        //     wxPay.payOrder({
-        //         apiKey,
-        //         orderId,
-        //         mchId,
-        //         nonceStr,
-        //         timeStamp,
-        //         package,
-        //         sign,
-        //     }, (ret, err) => {
-        //         ret.code == 9000 ? this.props.paySuccessCallback() : this.props.payFailCallback();
-        //     });
-        // }
+        if (PayMethod == "WxPay") {
+            // const config = JSON.parse(orderInfo);
+            // api.alert({ msg: PayMethod });
+            // api.alert({ msg: JSON.stringify(orderInfo) });          
+            
+            const config = orderInfo;
+            const wxPay = api.require('wxPay');
+            const { appid, prepayid, partnerid, noncestr, timestamp, paySign } = config;
+            const apiKey = appid;
+            const orderId = prepayid;
+            const mchId = partnerid;
+            const sign = paySign;
+            const packageStr = config.package;
+            wxPay.payOrder({
+                apiKey,
+                orderId,
+                mchId,
+                nonceStr: noncestr,
+                timeStamp: timestamp,
+                package: packageStr,
+                sign,
+            }, (ret, err) => {
+                // api.alert({ msg: JSON.stringify(ret) }); 
+                // api.alert({ msg: JSON.stringify(err) });
+                ret.status ? this.props.paySuccessCallback() : this.props.payFailCallback();
+            });
+        }
 
 
         // if (PayMethod == "WxPay") {
