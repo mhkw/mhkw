@@ -16,7 +16,9 @@
     // background-color: #fff;
     margin-top: .1rem;
     display: inline-block;
-    float: left;
+	float: left;
+	position: relative;
+    z-index: 1;
 }
 .get-user-list-sort .circle-box{
 	height: 1.2rem;
@@ -33,17 +35,38 @@
 		color: #fff;
 		background-color: #375b83;
 		font-size: 12px;
+		opacity: 0;
+		transition: all 0.3s ease;
 		&.out-one{
 			border: 1px solid #fff;
 			background-color: #4f9bd2;
+			box-sizing: border-box;
 			z-index: 2;
+			opacity: 1;
 		}
 		&.out-two{
 			z-index: 1;
+			&.down{
+				// top: 1.35rem;
+				transform: translate(0, 1.4rem);
+				opacity: 1;
+			}
 		}
 		&.out-three{
 			z-index: 0;
+			&.down{
+				// top: 2.7rem;
+				transform: translate(0, 2.8rem);
+				opacity: 1;
+			}
 		}
 	}
+}
+.get-user-list-sort .circle-p{
+	line-height: 14px;
+    margin-top: .15rem;
+	font-size: 12px;
+	text-align: center;
+	color: #fff;
 }
 /************** update 0626 end ****************/

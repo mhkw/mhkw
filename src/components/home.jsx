@@ -9,7 +9,7 @@ import axios from 'axios';
 import '../css/font/iconfont.css';
 
 const loginUrl = [
-    require('../images/home/locs.png'),
+    // require('../images/home/locs.png'),
     require('../images/home/lei2.png'),
     require('../images/home/lei3.png'),
     require('../images/home/lei4.png'),
@@ -27,6 +27,8 @@ let index = realData.length - 1;
 let realDataLength = realData.length;
 let NUM_ROWS = 8;
 let pageIndex = 0;
+
+let isOnClick = false;
 
 let scrollTop = 0;
 let backToTopDoing = false;
@@ -57,10 +59,12 @@ export default class HomeView extends React.Component {
             tabsData: JSON.parse(sessionStorage.getItem("designer_tree")) || [],
             page:1,
             hasMore:true,
-            keyArray:["附近","艺术绘画","品牌建设","互联网设计","产品设计","空间设计","虚拟现实","多媒体","程序开发","其他设计"],
+            // keyArray:["附近","艺术绘画","品牌建设","互联网设计","产品设计","空间设计","虚拟现实","多媒体","程序开发","其他设计"],
+            keyArray:["艺术绘画","品牌建设","互联网设计","产品设计","空间设计","虚拟现实","多媒体","程序开发","其他设计"],
             currentIdx:0,
 			showBackToTop: false,
-			getUserListSort:["附近","人气","最新"],
+            getUserListSort:["附近","人气","最新"],
+            circleDown: false, //获取设计师请的排序选择器，是否打开
         };
         
         this.genData = (pIndex = 0, NUM_ROWS, data) => {
@@ -118,10 +122,12 @@ export default class HomeView extends React.Component {
                 this.setState({
                     tabsData: res.data
                 },()=>{
-                    tabs = [{ title: <div className="fn-clear tabsList"><img src={loginUrl[0]} /><p>附近</p></div> }];
+                    // tabs = [{ title: <div className="fn-clear tabsList"><img src={loginUrl[0]} /><p>附近</p></div> }];
+                    tabs = [];
                     for (let i = 0; i < this.state.tabsData.length; i++) {
                         let src = this.state.tabsData[i].path; //未被点击的样式
-                        if (this.state.currentIdx > 0 && i == this.state.currentIdx - 1) {
+                        // if (this.state.currentIdx > 0 && i == this.state.currentIdx - 1) {
+                            if (this.state.currentIdx >= 0 && i == this.state.currentIdx - 1) {
                             src = this.state.tabsData[this.state.currentIdx - 1].path1; //点击的样式
                         }
                         tabs.push({
@@ -182,11 +188,13 @@ export default class HomeView extends React.Component {
         if (!sessionStorage.getItem("designer_tree")) {
             runPromise("get_designer_tree", null, this.getPicsLis,false,"get");
         }
-        tabs = [{ title: <div className="fn-clear tabsList"><img src={loginUrl[0]} /><p>附近</p></div> }];
+        // tabs = [{ title: <div className="fn-clear tabsList"><img src={loginUrl[0]} /><p>附近</p></div> }];
+        tabs = [];
         for (let i = 0; i < this.state.tabsData.length; i++) {
             let src = this.state.tabsData[i].path; //未被点击的样式
-            if (this.state.currentIdx > 0 && i == this.state.currentIdx - 1 ) {
-                src = this.state.tabsData[this.state.currentIdx -1].path1; //点击的样式
+            // if (this.state.currentIdx > 0 && i == this.state.currentIdx - 1 ) {
+                if (this.state.currentIdx >= 0 && i == this.state.currentIdx ) {
+                src = this.state.tabsData[this.state.currentIdx].path1; //点击的样式
             }
             tabs.push({
                 title: <div className="fn-clear tabsList" dataSrc={this.state.tabsData[i].path1}>
@@ -240,16 +248,20 @@ export default class HomeView extends React.Component {
     }
     changeUserList  (tab,index) {
         pageIndex = 0;
-        if (this.state.currentIdx){
-            let Idx = this.state.currentIdx - 1;
+        // console.log(index, this.state.currentIdx);
+        
+        // if (this.state.currentIdx){
+            // let Idx = this.state.currentIdx - 1;
+            let Idx = this.state.currentIdx;
             let currentBg = this.state.tabsData[Idx].path;
             let change = document.getElementById("img" + Idx);
             change.src = currentBg;
-        }
+        // }
         this.setState({currentIdx : index});
         this.props.propsSetState('Home', { currentIdx: index });
         // console.log(index);
-        let idx = index-1;
+        // let idx = index-1;
+        let idx = index;
         let currentImg = document.getElementById("img"+idx);
         idx<0?"":currentImg.src = tab.title.props.dataSrc;
         // console.log("getWorkList changeUserList");
@@ -265,6 +277,8 @@ export default class HomeView extends React.Component {
             sort: "add_time",
             offices: "all",
             keywords: keywords,
+            // offices: this.state.getUserListSort[0],  //update 0627
+            // jobs: keywords, //update 0627
             longitude: this.props.HOCState.Address ? this.props.HOCState.Address.lon : "0" ,
             latitude: this.props.HOCState.Address ? this.props.HOCState.Address.lat : "0",
             per_page: "8",
@@ -398,6 +412,45 @@ export default class HomeView extends React.Component {
             this.getWorkList(this.state.keyArray[this.state.currentIdx], 1);
         });
     }
+    //点击设计系排序按钮，重新向后端发起请求
+    clickCircle = (index) => {
+        let { getUserListSort } = this.state;
+        if (index > 0) {
+            let selectedValue = getUserListSort.splice(index,1);
+            getUserListSort.unshift(selectedValue[0]);
+        }
+        this.setState({
+            getUserListSort,
+            circleDown: !this.state.circleDown
+        }, ()=>{
+            if (index <= 0) {
+                return;
+            }
+            //更新数据
+            sessionStorage.removeItem("fstdata");
+            pageIndex = 0;
+            this.getWorkList(this.state.keyArray[this.state.currentIdx], 1);
+        });
+    }
+    setUseBodyScrollFalse = () => {
+        isOnClick = false;
+        if (this.state.useBodyScroll) {
+            
+            this.setState({useBodyScroll: false})
+        }
+    }
+    setUseBodyScrollTrue = () => {
+        if (!this.state.useBodyScroll) {
+            if (isOnClick) {
+                this.setState({useBodyScroll: true});
+            } else {
+                this.timerScroll = setTimeout(()=>{
+                    this.setState({useBodyScroll: true});
+                    clearTimeout(this.timerScroll)
+                },250)
+            }
+        }
+    }
     render() {
         // let index = this.state.res.length - 1;
         const row = (rowData, sectionID, rowID) => {
@@ -440,8 +493,8 @@ export default class HomeView extends React.Component {
 
         return (
             <div className="homeWrap">
-                <div className="homeWrapTop" style={{
-                    background: "url("+loginUrl[10]+") no-repeat center center / 100% 100%"
+                <div className="homeWrapTop" style={{ 
+                    background: "url("+loginUrl[9]+") no-repeat center center / 100% 100%"
                     }}>
                     <div className="indexNav">
                         <NavBar
@@ -459,12 +512,33 @@ export default class HomeView extends React.Component {
                     <div className="home-tabs-box">
 						<div className="get-user-list-sort">
 							<div className="circle-box">
-								<div className="circle out-one">{this.state.getUserListSort[0]}</div>
-								<div className="circle out-two">{this.state.getUserListSort[1]}</div>
-								<div className="circle out-three">{this.state.getUserListSort[2]}</div>
+                                <div 
+                                    onTouchStart={(e) => { e.target.style.opacity = 0.5 }}
+                                    onTouchEnd={(e) => { e.target.style.opacity = 1 }}
+                                    onClick={()=>{ this.clickCircle(0) }} 
+                                    className="circle out-one"
+                                >{this.state.getUserListSort[0]}</div>
+                                <div 
+                                    onTouchStart={(e) => { e.target.style.opacity = 0.5 }}
+                                    onTouchEnd={(e) => { e.target.style.opacity = 1 }}
+                                    onClick={()=>{ this.clickCircle(1) }} 
+                                    className={this.state.circleDown ? "circle down out-two" : "circle out-two"}
+                                >{this.state.getUserListSort[1]}</div>
+                                <div 
+                                    onTouchStart={(e) => { e.target.style.opacity = 0.5 }}
+                                    onTouchEnd={(e) => { e.target.style.opacity = 1 }}
+                                    onClick={()=>{ this.clickCircle(2) }} 
+                                    className={this.state.circleDown ? "circle down out-three" : "circle out-three"}
+                                >{this.state.getUserListSort[2]}</div>
 							</div>
+                            <p className="circle-p"><i className="iconfont icon-shuangjiantou-copy-copy"></i></p>
 						</div>
-						<div className="hometabs">
+                        <div 
+                            className="hometabs"
+                            onClick={()=>{ isOnClick = true; }}
+                            onTouchStart={this.setUseBodyScrollFalse}
+                            onTouchEnd={this.setUseBodyScrollTrue} 
+                        >
 							<Tabs tabs={tabs}
 								useOnPan = {true}
 								distanceToChangeTab={0.8}
@@ -499,8 +573,8 @@ export default class HomeView extends React.Component {
                         distanceToRefresh={1}
                         useBodyScroll={this.state.useBodyScroll}
                         style={this.state.useBodyScroll ? {} : {
-                            height: "30px",
-                            margin: '5px 0',
+                            height: document.querySelector('.homeWrapMain').offsetHeight + "px",
+                            // margin: '5px 0',
                         }}
                         pullToRefresh={<PullToRefresh
                             refreshing={this.state.refreshing}
