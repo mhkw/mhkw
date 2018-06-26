@@ -12,6 +12,8 @@ export default class Settings extends React.Component{
             if (res.success) {
                 //如果没登录，跳转到登录页
                 validate.setCookie('user_id', '');
+                //删掉定位时的本地存储
+                localStorage.removeItem("locationAddress");
                 hashHistory.push({
                     pathname: '/login',
                     query: { form: 'Settings' }

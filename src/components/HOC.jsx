@@ -8,7 +8,7 @@ export default class HOC extends React.Component{
     constructor(props) {
         super(props)
         this.state = {
-            Address: {
+            Address: localStorage.getItem("locationAddress") ? JSON.parse(localStorage.getItem("locationAddress")) : {
                 address: "", //百度地图address字段
                 city: "", //通过城市列表选择的城市或者地图定位的城市
                 lon: "", //经度
@@ -89,10 +89,16 @@ export default class HOC extends React.Component{
      * 
      * @memberof HOC
      */
-    propsSetState = (page, state) => {
+    propsSetState = (page, state, callback = ()=>{}) => {
+        if (page == "homeAddress") {
+            page = "Address";
+            localStorage.setItem("locationAddress", JSON.stringify(state));
+        }
         if (this.state[page]) {
             const newState = update(this.state, { [page]: { $merge: state } });
-            this.setState(newState);
+            this.setState(newState,()=>{
+                callback();
+            });
         }
     }
     shouldComponentUpdate() {

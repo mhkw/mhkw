@@ -1,5 +1,5 @@
 import React from 'react'
-import { List, InputItem, NavBar, Tabs, PullToRefresh, ListView } from 'antd-mobile';
+import { List, InputItem, NavBar, Tabs, PullToRefresh, ListView, Modal, Toast } from 'antd-mobile';
 import { Link, hashHistory } from 'react-router';
 import { createForm } from 'rc-form';
 import QueueAnim from 'rc-queue-anim';
@@ -192,6 +192,9 @@ export default class HomeView extends React.Component {
                     <img id={"img" + i} src={src} /><p>{this.state.tabsData[i].category_name}</p></div>
             })
         }
+
+        //判断是否定位
+        this.initjudgeLocation();
     }
 
     onRefresh = (refreshing = true) => {   
@@ -314,6 +317,85 @@ export default class HomeView extends React.Component {
     }
     touchEndBackToTop = (ref) => {
         ref.style.opacity = 1;
+    }
+    // update 0626 进入app后，提示“是否定位到当前位置？”
+    //判断是否定位。本地存储是否有值
+    initjudgeLocation() {
+        // if (this.props.HOCState.Address && this.props.HOCState.Address.currentLocation) {
+        //     return;
+        // }
+        if (localStorage.getItem("locationAddress")) {
+            return;
+        }
+        // isShowLocationAddressAlert: false, 
+        //是否显示有自动定位的弹窗
+        if (sessionStorage.getItem("isShowLocationAddressAlert")) {
+            return;
+        } else {
+            sessionStorage.setItem("isShowLocationAddressAlert", "yes")
+        }
+        Modal.alert('定位', '是否定位到当前位置？', [
+            { text: '取消', onPress: () => { }, style: 'default' },
+            { text: '确定', onPress: () => this.getLocation() },
+        ]);
+    }
+    //以下都是百度地图的相关方法。使用前都得判断百度地图是否存在
+    //定位当前位置
+    getLocation = () => {
+        if (window.bMap) {
+            this.bMap = window.bMap;
+        } else {
+            Toast.fail("百度地图错误", 1.5) 
+            return; 
+        }
+        Toast.loading('定位中...', 3);
+        this.bMap.getLocation({
+            accuracy: '100m',
+            autoStop: true,
+            filter: 1
+        }, (ret, err) => {
+            if (ret.status) {
+                this.getNameFromCoords(ret.lon, ret.lat);
+            } else {
+                Toast.fail(err.msg, 1)
+            }
+        });
+    }
+    /**
+     * 根据经纬度查找地址信息
+     * 
+     * @param lon 经度
+     * @param lat 纬度
+     * @memberof Address
+     */
+    getNameFromCoords = (lon, lat) => {
+        this.bMap.getNameFromCoords({
+            lon: lon,
+            lat: lat
+        }, (ret, err) => {
+            if (ret.status) {
+                let { city, district, streetName, streetNumber, lon, lat, address, sematicDescription } = ret;
+                //关闭正在定位中的提示
+                Toast.hide();
+                this.updateHOCAddress(city, address, lon, lat, streetName + sematicDescription);
+            } else {
+                Toast.fail(err.msg, 1)
+            }
+        });
+    }
+    updateHOCAddress = (city, address, lon, lat, currentLocation) => {
+        this.props.propsSetState("homeAddress", {
+            city,
+            address,
+            lon, //经度
+            lat, //纬度
+            currentLocation,
+        }, ()=>{
+            //更新数据
+            sessionStorage.removeItem("fstdata");
+            pageIndex = 0;
+            this.getWorkList(this.state.keyArray[this.state.currentIdx], 1);
+        });
     }
     render() {
         // let index = this.state.res.length - 1;
