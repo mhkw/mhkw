@@ -1,0 +1,49 @@
+/************** update 0626 start ****************/
+.hometabs{
+    width: 80%;
+}
+.homeWrap .homeWrapTop .hometabs .am-tabs-default-bar .am-tabs-default-bar-tab .tabsList p{
+	overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+.homeWrap .homeWrapTop .hometabs{
+	display: inline-block;
+}
+.get-user-list-sort{
+    width: 18%;
+    height: 2.133333rem;
+    // background-color: #fff;
+    margin-top: .1rem;
+    display: inline-block;
+    float: left;
+}
+.get-user-list-sort .circle-box{
+	height: 1.2rem;
+	width: 1.2rem;
+	margin: 0 auto;
+	position: relative;
+	.circle{
+		border-radius: 50%;
+		height: 1.2rem;
+		line-height: 1.2rem;
+		text-align: center;
+		width: 1.2rem;
+		position: absolute;
+		color: #fff;
+		background-color: #375b83;
+		font-size: 12px;
+		&.out-one{
+			border: 1px solid #fff;
+			background-color: #4f9bd2;
+			z-index: 2;
+		}
+		&.out-two{
+			z-index: 1;
+		}
+		&.out-three{
+			z-index: 0;
+		}
+	}
+}
+/************** update 0626 end ****************/

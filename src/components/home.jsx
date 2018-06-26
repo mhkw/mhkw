@@ -59,7 +59,8 @@ export default class HomeView extends React.Component {
             hasMore:true,
             keyArray:["附近","艺术绘画","品牌建设","互联网设计","产品设计","空间设计","虚拟现实","多媒体","程序开发","其他设计"],
             currentIdx:0,
-            showBackToTop: false,
+			showBackToTop: false,
+			getUserListSort:["附近","人气","最新"],
         };
         
         this.genData = (pIndex = 0, NUM_ROWS, data) => {
@@ -455,23 +456,32 @@ export default class HomeView extends React.Component {
                             ]}
                         ><span onClick={this.clickSelectAddress} className="index-address"><i className="iconfont icon-dingwei"></i>{this.props.HOCState.Address ? (this.props.HOCState.Address.currentLocation ? this.props.HOCState.Address.currentLocation : '未定位') : '未定位'}</span></NavBar>
                     </div>
-                    <div className="hometabs">
-                        <Tabs tabs={tabs}
-                            useOnPan = {true}
-                            distanceToChangeTab={0.8}
-                            animated = {true}
-                            tabBarBackgroundColor="transparent"
-                            tabBarUnderlineStyle={{ display: "none",color:"red" }}
-                            // renderTab={(tab)=>{
-                            //     console.log(tab)
-                            // }}
-                            onTabClick={(tab, index) => { 
-                                // this.setState({keywords:this.state.keyArray[index]}); 
-                                this.changeUserList(tab,index);
-                            }}
-                            initialPage={this.state.currentIdx ? this.state.currentIdx : 0}
-                        >
-                        </Tabs>
+                    <div className="home-tabs-box">
+						<div className="get-user-list-sort">
+							<div className="circle-box">
+								<div className="circle out-one">{this.state.getUserListSort[0]}</div>
+								<div className="circle out-two">{this.state.getUserListSort[1]}</div>
+								<div className="circle out-three">{this.state.getUserListSort[2]}</div>
+							</div>
+						</div>
+						<div className="hometabs">
+							<Tabs tabs={tabs}
+								useOnPan = {true}
+								distanceToChangeTab={0.8}
+								animated = {true}
+								tabBarBackgroundColor="transparent"
+								tabBarUnderlineStyle={{ display: "none",color:"red" }}
+								// renderTab={(tab)=>{
+								//     console.log(tab)
+								// }}
+								onTabClick={(tab, index) => { 
+									// this.setState({keywords:this.state.keyArray[index]}); 
+									this.changeUserList(tab,index);
+								}}
+								initialPage={this.state.currentIdx ? this.state.currentIdx : 0}
+							>
+							</Tabs>
+						</div>
                     </div>
                 </div>
                 <div className="homeWrapMain">
@@ -494,7 +504,8 @@ export default class HomeView extends React.Component {
                         }}
                         pullToRefresh={<PullToRefresh
                             refreshing={this.state.refreshing}
-                            onRefresh={this.onRefresh}
+							onRefresh={this.onRefresh}
+							damping={200}
                         />}
                         onEndReached={this.onEndReached}
                         pageSize={8}
