@@ -63,7 +63,7 @@ export default class HomeView extends React.Component {
             keyArray:["艺术绘画","品牌建设","互联网设计","产品设计","空间设计","虚拟现实","多媒体","程序开发","其他设计"],
             currentIdx:0,
 			showBackToTop: false,
-            getUserListSort:["附近","人气","最新"],
+            getUserListSort: ["附近","人气","最新"],
             circleDown: false, //获取设计师请的排序选择器，是否打开
         };
         
@@ -167,6 +167,11 @@ export default class HomeView extends React.Component {
         if (this.props.HOCState.Home.currentIdx) {
             this.setState({
                 currentIdx: this.props.HOCState.Home.currentIdx
+            })
+        }
+        if (this.props.HOCState.Home.getUserListSort) {
+            this.setState({
+                getUserListSort: this.props.HOCState.Home.getUserListSort
             })
         }
     }
@@ -278,7 +283,7 @@ export default class HomeView extends React.Component {
                 sort = "add_time";
                 break;
             case "人气":
-                sort = "followers_count";
+                sort = "hits_count";
                 break;
             case "附近":
                 sort = "distance";
@@ -286,14 +291,12 @@ export default class HomeView extends React.Component {
             default:
                 break;
         }
-        
-        
         runPromise("get_user_list_ex", {
             // sort: "add_time",
-            offices: "all",
+            keywords: "all",
             // keywords: keywords,
             sort,  //update 0627
-            keywords, //update 0627
+            offices: keywords, //update 0627
             longitude: this.props.HOCState.Address ? this.props.HOCState.Address.lon : "0" ,
             latitude: this.props.HOCState.Address ? this.props.HOCState.Address.lat : "0",
             per_page: "8",
@@ -446,6 +449,7 @@ export default class HomeView extends React.Component {
             pageIndex = 0;
             this.getWorkList(this.state.keyArray[this.state.currentIdx], 1);
         });
+        this.props.propsSetState('Home', { getUserListSort });
     }
     setUseBodyScrollFalse = () => {
         isOnClick = false;

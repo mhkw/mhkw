@@ -359,7 +359,9 @@ export default class SearchResult extends React.Component {
         runPromise("get_user_list_ex", {    //获取设计师列表
             sort: "add_time",
             offices: "all",
-            keywords: keywords,
+            // keywords: keywords,
+            keywords: "all",
+            keycode: keywords,
             longitude: "0",
             latitude: "0",
             per_page: "8",
@@ -1003,28 +1005,28 @@ export default class SearchResult extends React.Component {
                         <div className="toast-example">
                             <ActivityIndicator
                                 toast
-                                text="Loading..."
+                                text="加载中..."
                                 animating={this.state.animating1}
                             />
                         </div>
                         <div className="toast-example">
                             <ActivityIndicator
                                 toast
-                                text="Loading..."
+                                text="加载中..."
                                 animating={this.state.animating3}
                             />
                         </div>
                         <div className="toast-example">
                             <ActivityIndicator
                                 toast
-                                text="Loading..."
+                                text="加载中..."
                                 animating={this.state.animating2}
                             />
                         </div>
                         <div className="toast-example">
                             <ActivityIndicator
                                 toast
-                                text="Loading..."
+                                text="加载中..."
                                 animating={this.state.animating4}
                             />
                         </div>
