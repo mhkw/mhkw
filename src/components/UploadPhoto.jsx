@@ -11,7 +11,7 @@ export default class UploadPhoto extends React.Component {
 		}
 	}
 	nextStep = () => {
-		this.openImagePickerOld();
+
 	}
 	clickGoBack = () => {
 		hashHistory.goBack();
@@ -58,7 +58,7 @@ export default class UploadPhoto extends React.Component {
 			showPreview: false,
 			showBrowser: true
 		}, function (ret) {
-			if (ret) {
+			if (ret.eventType == "confirm") {
 				alert(JSON.stringify(ret));
 			}
 		});
