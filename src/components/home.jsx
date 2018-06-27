@@ -466,7 +466,7 @@ export default class HomeView extends React.Component {
                 this.timerScroll = setTimeout(()=>{
                     this.setState({useBodyScroll: true});
                     clearTimeout(this.timerScroll)
-                },250)
+                },300)
             }
         }
     }
