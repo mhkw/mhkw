@@ -37,7 +37,7 @@ export default class Mine extends React.Component {
                 window.api.imageCache({
                     url: path_thumb
                 }, (ret, err) => {
-                    if (ret.status) {
+                    if (ret.status && ret.url) {
                         sessionStorage.setItem("cacheAvatarSelf", ret.url)
                     }
                 });
@@ -65,8 +65,9 @@ export default class Mine extends React.Component {
             this.setState({
                 personCenter: response.data.data
             })
-            sessionStorage.setItem("personCenter", JSON.stringify(response.data.data));
-
+            if (response.data.data) {
+                sessionStorage.setItem("personCenter", JSON.stringify(response.data.data));
+            }
             if (response.data.data.nick_name) {
                 sessionStorage.setItem("nick_name", response.data.data.nick_name)
             }
