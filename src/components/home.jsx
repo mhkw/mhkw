@@ -267,18 +267,33 @@ export default class HomeView extends React.Component {
         // console.log("getWorkList changeUserList");
         this.getWorkList(this.state.keyArray[index], 1);
     }
-    getWorkList = (keywords,page) => {
+    getWorkList = (keywords = "all", page) => {
         // console.log("get_user_list_ex");
         // console.log(this.props.HOCState.Address.lon);
         // console.log(this.props.HOCState.Address.lat);
+        let sort = "add_time";
+        let sortValue = this.state.getUserListSort[0];
+        switch (sortValue) {
+            case "最新":
+                sort = "add_time";
+                break;
+            case "人气":
+                sort = "followers_count";
+                break;
+            case "附近":
+                sort = "distance";
+                break;
+            default:
+                break;
+        }
         
         
         runPromise("get_user_list_ex", {
-            sort: "add_time",
+            // sort: "add_time",
             offices: "all",
-            keywords: keywords,
-            // offices: this.state.getUserListSort[0],  //update 0627
-            // jobs: keywords, //update 0627
+            // keywords: keywords,
+            sort,  //update 0627
+            keywords, //update 0627
             longitude: this.props.HOCState.Address ? this.props.HOCState.Address.lon : "0" ,
             latitude: this.props.HOCState.Address ? this.props.HOCState.Address.lat : "0",
             per_page: "8",
