@@ -36,6 +36,7 @@ import DemandDetail from './components/DemandDetail';
 import WorkList from './components/WorkList';
 import CreatNeed from './components/CreatNeed';
 import CreatWork from './components/CreatWork';
+import CreatWork2 from './components/CreatWork2';
 import CreatCard from './components/CreatCard';
 import MyNotice from './components/MyNotice';
 import Collect from './components/Collect';
@@ -74,6 +75,7 @@ import RealName from './components/RealName';
 import ChatList from './components/ChatList';
 import SystemNotice from './components/SystemNotice';
 import DesignerComment3 from './components/designerComment3';
+import UploadPhoto from "./components/UploadPhoto";
 
 import './css/font/iconfont.css';
 
@@ -183,6 +185,7 @@ ReactDOM.render(
             </Route>
             <Route path="realName" component={RealName} />
             <Route path="systemNotice" component={SystemNotice} />
+            <Route path="uploadPhoto" component={UploadPhoto} />
         </Route>
     </Router>
     , document.getElementById('container'));

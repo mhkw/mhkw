@@ -100,7 +100,7 @@ export default class UserWorks extends React.Component {
                 height: hei
             })
         } else {
-            const scroll = new BScroll(document.querySelector('.wrapper'), { click: true, pullUpLoad: { threshold: -50 } })
+            const scroll = new BScroll(document.querySelector('.wrapper'), { click: true, bounceTime: 300, swipeBounceTime: 200, momentumLimitTime: 200, pullUpLoad: { threshold: -50 } })
             this.setState({
                 height: hei,
                 scroll
