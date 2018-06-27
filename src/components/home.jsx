@@ -293,10 +293,10 @@ export default class HomeView extends React.Component {
         }
         runPromise("get_user_list_ex", {
             // sort: "add_time",
-            keywords: "all",
+            offices: "all",
             // keywords: keywords,
             sort,  //update 0627
-            offices: keywords, //update 0627
+            keywords: keywords, //update 0627
             longitude: this.props.HOCState.Address ? this.props.HOCState.Address.lon : "0" ,
             latitude: this.props.HOCState.Address ? this.props.HOCState.Address.lat : "0",
             per_page: "8",
