@@ -266,7 +266,8 @@ export default class App extends Component {
                                         </Link>
                                     </li>
                                     <li className="upWorks">
-                                        <Link to='/creatWork'>
+                                        {/* <Link to='/creatWork'> */}
+                                        <Link to='/uploadPhoto'>
                                             <img src={appUrl.upWorks} alt="" />
                                             发布作品
                                         </Link>
