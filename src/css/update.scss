@@ -74,7 +74,8 @@
 }
 .upload-photo-page{
 	height: 100%;
-    background-color: yellowgreen;
+    // background-color: yellowgreen;
+    background-color: #fff;
 }
 .bottom-scroll-box{
 	min-width: 100%;
@@ -86,15 +87,19 @@
 	& .am-image-picker-item{
 		display: inline-block;
 		position: relative;
-		width: 24vw;
-		height: 24vw;
-		margin-left: 0.5vw;
-		margin-right: 0.5vw;
+		width: 25vw;
+		height: 25vw;
+		text-align: center;
+		float: left;
+		// margin-left: 0.5vw;
+		// margin-right: 0.5vw;
+		// margin-left: 5px;
+		// margin-right: 5px;
 		& .am-image-picker-item-remove{
 			width: 0.4rem;
 			height: 0.4rem;
 			position: absolute;
-			right: 0.12rem;
+			right: 0.22rem;
 			top: 0.12rem;
 			text-align: right;
 			vertical-align: top;
@@ -103,8 +108,10 @@
 			background-image: url("../images/DeletePhotoBtn.svg");
 		}
 		& .am-image-picker-item-content{
-			height: 100%;
-			width: 100%;
+			// height: 100%;
+			// width: 100%;
+			height: 23vw;
+			width: 23vw;
 			border-radius: 0.06rem;
 			background-size: cover;
 		}
@@ -114,6 +121,9 @@
 		border-radius: 0.06rem;
 		border: 1PX solid #ddd;
 		background-color: #fff;
+		height: 23vw;
+		width: 23vw;
+		margin-left: 1vw;
 		&::before,
 		&::after{
 			width: 1PX;
@@ -131,6 +141,18 @@
 			width: 1rem;
     		height: 1PX;
 		}
+	}
+}
+.upload-photo-page{
+	.origin-img-box{
+		position: relative;
+		height: 75%;
+		height: calc(100% - 26vw - 65px);
+	}
+	.wrapper{
+		overflow: hidden;
+		width: 100vw;
+		height: 25vw;
 	}
 }
 
