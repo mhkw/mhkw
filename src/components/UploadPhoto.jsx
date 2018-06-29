@@ -33,7 +33,7 @@ import PhotoSwipeUI_Default from '../js/photoswipe/photoswipe-ui-default.min.js'
 // }
 
 let openPhotoSwipe = function (items) {
-	let pswpElement = document.querySelectorAll('.pswp')[0];
+	let template = document.querySelectorAll('.pswp')[0];
 	let options = {
 		index: 0,
 		modal: false,
@@ -42,9 +42,14 @@ let openPhotoSwipe = function (items) {
 		closeOnVerticalDrag: false,
 		showAnimationDuration: 0,
 		hideAnimationDuration: 0,
-		history: false
+		history: false,
 	}
-	let gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+	let gallery = new PhotoSwipe(template, PhotoSwipeUI_Default, items, options);
+	gallery.listen('updateScrollOffset', function (_offset) {
+		var r = template.getBoundingClientRect();
+		_offset.x += r.left;
+		_offset.y += r.top;
+	});
 	gallery.init();
 	gallery.bg.style.backgroundColor = "#333";
 }
@@ -52,11 +57,8 @@ let openPhotoSwipe = function (items) {
 
 let imgDemo = [
 	require("../images/temp/two.jpg"),
-	require("../images/temp/psu.jpg"),
 	require("../images/temp/one.jpg"),
-	require("../images/temp/two.jpg"),
-	require("../images/temp/psu.jpg"),
-	require("../images/temp/one.jpg"),
+	require("../images/temp/three.jpg"),
 ];
 
 export default class UploadPhoto extends React.Component {
@@ -71,15 +73,29 @@ export default class UploadPhoto extends React.Component {
 					naturalWidth: 0,
 					naturalHeight: 0,
 				},
+				{
+					path: imgDemo[1],
+					thumbPath: imgDemo[1],
+					naturalWidth: 0,
+					naturalHeight: 0,
+				},
+				{
+					path: imgDemo[2],
+					thumbPath: imgDemo[2],
+					naturalWidth: 0,
+					naturalHeight: 0,
+				},
 				
 			],
 			galleryIndex: 0, //PhotoSwipe索引，记住上次的索引，避免多次点击用一个图片
 			scrollHeight: 0,
+			scroll: null,
 		}
 	}
 	componentDidMount() {
 		let wrapper = document.querySelector(".wrapper");
-		this.setScrollWidth(); 
+		let photoListLength = (parseInt(this.state.photoList.length) + 1);
+		this.setScrollWidth(photoListLength); 
 		const scroll = new BScroll(wrapper, {
 			startX: 0,
 			click: true,
@@ -89,19 +105,35 @@ export default class UploadPhoto extends React.Component {
 			bounceTime: 300, 
 			momentum: true,
 			swipeBounceTime: 200, 
-		})
+		});
+		this.setState({ scroll });
 		
 		// const scroll = new BScroll(wrapper, { scrollX: true, scrollY: false, click: true, bounceTime: 300, swipeBounceTime: 200, momentumLimitTime: 200 })
 	}
-	setScrollWidth() {
+	/**
+	 * 动态的计算滚动条的宽度
+	 *
+	 * @author ZhengGuoQing
+	 * @param {number} [length=0] 照片列表长度加上一个添加照片按钮的长度
+	 * @returns
+	 * @memberof UploadPhoto
+	 */
+	setScrollWidth(length = 0) {
+		if (length < 4) {
+			return;
+		}
 		// let tabItemAdd = document.querySelector(".tab-item-add");
 		let tabItemAdd = document.querySelector(".am-image-picker-item"); 
 		let tabWrapper = document.querySelector(".tab-wrapper");
 		let itemswidth = 0;
 		let oneItemWidth = tabItemAdd.getBoundingClientRect().width;//getBoundingClientRect() 返回元素的大小及其相对于视口的位置
-		itemswidth = oneItemWidth * (parseInt(this.state.photoList.length) +1 );
+		itemswidth = oneItemWidth * length;
 		tabWrapper.style.width = itemswidth + 'px';
 		
+		if (this.state.scroll) {
+			this.state.scroll.refresh();
+		}
+
 	}
 	nextStep = () => {
 
@@ -170,10 +202,18 @@ export default class UploadPhoto extends React.Component {
 						});
 					});
 					const photoList = update(this.state.photoList, { $push: originPhotoList });
+
+					let photoListLength = (parseInt(photoList.length) + 1);
+					this.setScrollWidth(photoListLength); //更新横向滚动条宽度
+
 					this.setState({ photoList });
 				} else {
 					//android
 					const photoList = update(this.state.photoList, { $push: ret.list });
+
+					let photoListLength = (parseInt(photoList.length) + 1);
+					this.setScrollWidth(photoListLength); //更新横向滚动条宽度
+
 					this.setState({ photoList });
 				}
 
@@ -209,9 +249,26 @@ export default class UploadPhoto extends React.Component {
 			}
 		});
 	}
-	onLoadPreview = (e, index) => {
-		let naturalWidth = e.target.naturalWidth;
-		let naturalHeight = e.target.naturalHeight;
+	onLoadPreview = (e, index, path) => {
+		console.log(index);
+		
+		////获取照片原图的尺寸宽等信息
+		if (!window.imageFilter) {
+			//先不返回，先在网页上测试
+			let { naturalWidth, naturalHeight } = e.target;
+			this.setPhotoAttr(index, naturalWidth, naturalHeight);
+			return;
+		}
+		window.imageFilter.getAttr({
+			path: path
+		}, (ret, err) => {
+			if (ret.status) {
+				let { width, height } = ret;
+				this.setPhotoAttr(index, width, height);
+			}
+		});
+	}
+	setPhotoAttr = (index, naturalWidth, naturalHeight ) => {
 		if (index == 0) {
 			//初始化PhotoSwipe
 			let item = [{
@@ -245,15 +302,26 @@ export default class UploadPhoto extends React.Component {
 			src: path,
 		}];
 		openPhotoSwipe(item);
-		
-		// // this.state.gallery.items[0] = item[0];
-		// this.state.gallery.items.push(item);
-		// // this.state.gallery.items.splice(0,1);
-		// // this.state.gallery.items.shift();
-		// // this.state.gallery.currItem = 0;
-		// this.state.gallery.invalidateCurrItems();
-		// this.state.gallery.updateSize(true);
-		// this.state.gallery.ui.update()
+	}
+	clickDeletePhoto = (event, index) => {
+		event.stopPropagation(); //阻止事件冒泡
+		Modal.alert('删除照片', '确定删除该照片吗?', [
+			{ text: '取消', onPress: () => { }, style: 'default' },
+			{ text: '确定', onPress: () => this.UIDeletePhoto(index) },
+		]);
+	}
+	UIDeletePhoto(index) {
+		//先判断是否需要转移PhotoSwipe显示的图片，如果PhotoSwipe显示的和删除的是同一张图片，PhotoSwipe往左移动一张
+		let { galleryIndex } = this.state;
+		if (galleryIndex == index && index > 0) {
+			this.clickPhoto(index - 1);
+			this.setState({ galleryIndex: index - 1 });
+		}
+		if (galleryIndex == index && index == 0) {
+			this.setState({ galleryIndex: 0 });
+		}
+		const photoList = update(this.state.photoList, { $splice: [[[index], 1]] });
+		this.setState({ photoList });
 	}
 	render() {
 		return (
@@ -273,15 +341,15 @@ export default class UploadPhoto extends React.Component {
 							<PhotoSwipeItem />
 						</div>
 						<div className="bottom-scroll-box wrapper">
-							<div className="tab-wrapper">
+							<div className="tab-wrapper" style={{"min-width":"100vw"}}>
 								{
 									this.state.photoList.map((value, index) => (
 										<div 
 											className="am-image-picker-item"
 											onClick={() => { this.clickPhoto(index) }}
 										>
-											<div className="am-image-picker-item-remove" role="button" aria-label="Click and Remove this image"></div>
-											<img className="am-image-picker-item-content file" src={value.thumbPath} onLoad={(e) => { this.onLoadPreview(e, index) }} />
+											<div onClick={(e) => { this.clickDeletePhoto(e, index) }} className="am-image-picker-item-remove" role="button" aria-label="Click and Remove this image"></div>
+											<img className="am-image-picker-item-content file" src={value.thumbPath} onLoad={(e) => { this.onLoadPreview(e, index, value.path) }} />
 										</div>
 									))
 								}

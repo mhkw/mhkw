@@ -90,7 +90,7 @@
 		width: 25vw;
 		height: 25vw;
 		text-align: center;
-		float: left;
+		// float: left;
 		// margin-left: 0.5vw;
 		// margin-right: 0.5vw;
 		// margin-left: 5px;
@@ -124,6 +124,7 @@
 		height: 23vw;
 		width: 23vw;
 		margin-left: 1vw;
+		margin-right: 0.5vw;
 		&::before,
 		&::after{
 			width: 1PX;
@@ -148,6 +149,9 @@
 		position: relative;
 		height: 75%;
 		height: calc(100% - 26vw - 65px);
+		.pswp{
+			z-index: 1;
+		}
 	}
 	.wrapper{
 		overflow: hidden;
