@@ -51,7 +51,14 @@ let openPhotoSwipe = function (items) {
 		_offset.y += r.top;
 	});
 	gallery.init();
-	gallery.bg.style.backgroundColor = "#333";
+	if (items.length > 0 && items[0].src) {
+		gallery.bg.style.backgroundColor = "#333";
+	} else {
+		gallery.bg.style.backgroundColor = "#fff";
+		//将背景设置成灰色
+		document.querySelector(".upload-photo-page").style.backgroundColor = "#fff";
+	}
+	
 }
 
 
@@ -67,6 +74,24 @@ export default class UploadPhoto extends React.Component {
 		this.state = {
 			NavBarTitle: "选择封面",
 			photoList: [
+				{
+					path: imgDemo[0],
+					thumbPath: imgDemo[0],
+					naturalWidth: 0,
+					naturalHeight: 0,
+				},
+				{
+					path: imgDemo[1],
+					thumbPath: imgDemo[1],
+					naturalWidth: 0,
+					naturalHeight: 0,
+				},
+				{
+					path: imgDemo[2],
+					thumbPath: imgDemo[2],
+					naturalWidth: 0,
+					naturalHeight: 0,
+				},
 				{
 					path: imgDemo[0],
 					thumbPath: imgDemo[0],
@@ -250,7 +275,7 @@ export default class UploadPhoto extends React.Component {
 		});
 	}
 	onLoadPreview = (e, index, path) => {
-		console.log(index);
+		// console.log(index);
 		
 		////获取照片原图的尺寸宽等信息
 		if (!window.imageFilter) {
@@ -282,29 +307,44 @@ export default class UploadPhoto extends React.Component {
 			// gallery.bg.style.backgroundColor = "#333";
 			// this.setState({ gallery });
 			openPhotoSwipe(item);
+			this.setState({ galleryIndex: 0});
 			//将背景设置成灰色
 			document.querySelector(".upload-photo-page").style.backgroundColor = "#333";
 		}
 		let photoList = update(this.state.photoList, { [index]: { naturalWidth: { $set: naturalWidth }, naturalHeight: { $set: naturalHeight } } });
 		this.setState({ photoList });
 	}
-	clickPhoto = (index) => {
+	clickPhoto = (index, type = "click") => {
 		let {galleryIndex} = this.state;
 		if (galleryIndex == index) {
 			return;
-		} else {
+		} else if (type == "click") {
 			this.setState({ galleryIndex: index});
 		}
-		let { naturalWidth, naturalHeight, path } = this.state.photoList[index]
-		let item = [{
-			w: naturalWidth,
-			h: naturalHeight,
-			src: path,
-		}];
-		openPhotoSwipe(item);
+		let photo = this.state.photoList[index];
+		if (photo) {
+			let { naturalWidth, naturalHeight, path } = photo;
+			let item = [{
+				w: naturalWidth,
+				h: naturalHeight,
+				src: path,
+			}];
+			openPhotoSwipe(item);
+		} else {
+			//此时没有图片，应该不显示图片了。
+			this.setState({ galleryIndex: -1});
+			let item = [{
+				w: '',
+				h: '',
+				src: '',
+			}];
+			openPhotoSwipe(item);
+		}
+		
 	}
 	clickDeletePhoto = (event, index) => {
 		event.stopPropagation(); //阻止事件冒泡
+		this.clickPhoto(index, "click");
 		Modal.alert('删除照片', '确定删除该照片吗?', [
 			{ text: '取消', onPress: () => { }, style: 'default' },
 			{ text: '确定', onPress: () => this.UIDeletePhoto(index) },
@@ -314,10 +354,14 @@ export default class UploadPhoto extends React.Component {
 		//先判断是否需要转移PhotoSwipe显示的图片，如果PhotoSwipe显示的和删除的是同一张图片，PhotoSwipe往左移动一张
 		let { galleryIndex } = this.state;
 		if (galleryIndex == index && index > 0) {
-			this.clickPhoto(index - 1);
+			this.clickPhoto(index - 1, "delete");
 			this.setState({ galleryIndex: index - 1 });
 		}
+		if (galleryIndex != index && index > 0) {
+			this.setState({ galleryIndex: --galleryIndex });
+		}
 		if (galleryIndex == index && index == 0) {
+			this.clickPhoto(index + 1, "delete");
 			this.setState({ galleryIndex: 0 });
 		}
 		const photoList = update(this.state.photoList, { $splice: [[[index], 1]] });
