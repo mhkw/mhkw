@@ -74,42 +74,12 @@ export default class UploadPhoto extends React.Component {
 		this.state = {
 			NavBarTitle: "选择封面",
 			photoList: [
-				{
-					path: imgDemo[0],
-					thumbPath: imgDemo[0],
-					naturalWidth: 0,
-					naturalHeight: 0,
-				},
-				{
-					path: imgDemo[1],
-					thumbPath: imgDemo[1],
-					naturalWidth: 0,
-					naturalHeight: 0,
-				},
-				{
-					path: imgDemo[2],
-					thumbPath: imgDemo[2],
-					naturalWidth: 0,
-					naturalHeight: 0,
-				},
-				{
-					path: imgDemo[0],
-					thumbPath: imgDemo[0],
-					naturalWidth: 0,
-					naturalHeight: 0,
-				},
-				{
-					path: imgDemo[1],
-					thumbPath: imgDemo[1],
-					naturalWidth: 0,
-					naturalHeight: 0,
-				},
-				{
-					path: imgDemo[2],
-					thumbPath: imgDemo[2],
-					naturalWidth: 0,
-					naturalHeight: 0,
-				},
+				// {
+				// 	path: imgDemo[0],
+				// 	thumbPath: imgDemo[0],
+				// 	naturalWidth: 0,
+				// 	naturalHeight: 0,
+				// },
 				
 			],
 			galleryIndex: 0, //PhotoSwipe索引，记住上次的索引，避免多次点击用一个图片
@@ -170,6 +140,7 @@ export default class UploadPhoto extends React.Component {
 		this.openImagePicker();	
 	}
 	openImagePicker = () => {
+		let uploadImageIndex = this.state.photoList.length; //上传图片的起始点为上次图片列表的长度
 		//打开图片选择器，打开后会全屏显示
 		if (!window.UIMediaScanner ) {
 			return;
@@ -231,7 +202,10 @@ export default class UploadPhoto extends React.Component {
 					let photoListLength = (parseInt(photoList.length) + 1);
 					this.setScrollWidth(photoListLength); //更新横向滚动条宽度
 
-					this.setState({ photoList });
+					this.setState({ photoList },()=>{
+						//上传图片
+						this.uploadImages(uploadImageIndex);
+					});
 				} else {
 					//android
 					const photoList = update(this.state.photoList, { $push: ret.list });
@@ -239,7 +213,10 @@ export default class UploadPhoto extends React.Component {
 					let photoListLength = (parseInt(photoList.length) + 1);
 					this.setScrollWidth(photoListLength); //更新横向滚动条宽度
 
-					this.setState({ photoList });
+					this.setState({ photoList },()=>{
+						//上传图片
+						this.uploadImages(uploadImageIndex);
+					});
 				}
 
 			}
@@ -366,6 +343,93 @@ export default class UploadPhoto extends React.Component {
 		}
 		const photoList = update(this.state.photoList, { $splice: [[[index], 1]] });
 		this.setState({ photoList });
+	}
+	//上传图片
+	uploadImages(i = 0) {
+		if (!window.api) {
+			return;
+		}
+		let { photoList } = this.state;
+		if ((photoList.length <= i && photoList.length > 0) || i > 100) {
+			this.setState({ uploadIng: false })
+			return;
+		} else {
+			//开始上传
+			if (this.state.uploadIng == false) {
+				this.setState({ uploadIng: true })
+			}
+		}
+		let { path } = photoList[i];
+		console.log(path)
+		window.api.ajax({
+			url: 'https://www.huakewang.com/upload/upload_images_for_mobile',
+			method: 'POST',
+			dataType: 'JSON',
+			// headers: { 'Content-Type': 'multipart/form-data' },
+			// headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			report: true,
+			data: {
+				values: {
+					'alt': ''
+				},
+				files: {
+					Filedata: path
+				}
+			}
+		}, (ret, err) => {
+			console.log(JSON.stringify(ret));
+			if (ret.status == "0") {
+				//上传中
+				console.log(JSON.stringify(ret));
+			}
+			if (ret.status == "1") {
+				//上传完成
+				console.log(JSON.stringify(ret));
+				console.log(JSON.stringify(ret.body));
+
+				//上传下一张
+				i++;
+				this.uploadImages(i);
+			}
+			if (ret.status == "2") {
+				//上传失败
+				console.log(JSON.stringify(ret));
+
+				//上传下一张
+				i++;
+				this.uploadImages(i);
+			}
+			if (err) {
+				console.log(JSON.stringify(err));
+			}
+		});
+		// window.api.ajax({
+		// 	url: 'https://www.huakewang.com/hkw_newapi/get_user_list_ex',
+		// 	method: 'POST',
+		// 	dataType: 'JSON',
+		// 	// headers: {
+		// 	// 	'Content-Type': 'application/x-www-form-urlencoded'
+		// 	// },
+		// 	data: {
+		// 		values: {
+		// 			user_id: '',
+		// 			en_user_id: "5822d3713732538eaae45e06b7221ed89709e6b3282f4e694da5a9c53c5e4278",
+		// 			offices: "all",
+		// 			sort: "distance",
+		// 			keywords: "艺术绘画",
+		// 			longitude: "",
+		// 			latitude: "",
+		// 			per_page: 8,
+		// 			page: 1,
+		// 		}
+		// 	}
+		// }, function (ret, err) {
+		// 	if (ret) {
+		// 		api.alert({ msg: JSON.stringify(ret) });
+		// 	} else {
+		// 		api.alert({ msg: JSON.stringify(err) });
+		// 	}
+		// });
 	}
 	render() {
 		return (
