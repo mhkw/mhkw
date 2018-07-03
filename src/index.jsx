@@ -112,6 +112,7 @@ ReactDOM.render(
             <Route path="workList" component={WorkList} />
             <Route path="creatNeed" component={CreatNeed} />
             <Route path="creatWork" component={CreatWork} />
+            <Route path="creatWork2" component={CreatWork2} />
             <Route path="collect" component={Collect} />
             <Route path="myNotice" component={MyNotice} />
             <Route path="creatCard" component={CreatCard} />

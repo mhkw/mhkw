@@ -1,6 +1,6 @@
 import React from 'react'
 import { hashHistory } from 'react-router'
-import { NavBar, ImagePicker, List, Icon, TextareaItem, WingBlank, Toast, Modal } from 'antd-mobile'
+import { NavBar, ImagePicker, List, Icon, TextareaItem, WingBlank, Toast, Modal, Progress } from 'antd-mobile'
 import { Motion, spring } from 'react-motion';
 import update from 'immutability-helper';
 import BScroll from 'better-scroll';
@@ -74,18 +74,22 @@ export default class UploadPhoto extends React.Component {
 		this.state = {
 			NavBarTitle: "选择封面",
 			photoList: [
-				// {
-				// 	path: imgDemo[0],
-				// 	thumbPath: imgDemo[0],
-				// 	naturalWidth: 0,
-				// 	naturalHeight: 0,
-				// },
+				{
+					path: imgDemo[0],
+					thumbPath: imgDemo[0],
+					naturalWidth: 0,
+					naturalHeight: 0,
+				},
 				
 			],
 			galleryIndex: 0, //PhotoSwipe索引，记住上次的索引，避免多次点击用一个图片
 			scrollHeight: 0,
 			scroll: null,
 		}
+		this.props.router.setRouteLeaveHook(
+			this.props.route,
+			this.routerWillLeave
+		)
 	}
 	componentDidMount() {
 		let wrapper = document.querySelector(".wrapper");
@@ -131,10 +135,45 @@ export default class UploadPhoto extends React.Component {
 
 	}
 	nextStep = () => {
+		let { photoList } = this.state;
+		if (photoList.length > 0) {
+			hashHistory.push({
+				pathname: '/creatWork2',
+				query: { form: 'uploadPhoto' }
+			});
+		} else {
+			Toast.info("请至少上传一张图片", 1.5);
+		}
+		
 
 	}
 	clickGoBack = () => {
 		hashHistory.goBack();
+	}
+	routerWillLeave = (nextLocation) => {
+		// console.log(nextLocation)
+		// return false;
+		let { pathname } = nextLocation;
+		let { photoList } = this.state;
+		if (pathname != "/creatWork2" && photoList.length > 0 && this.deleteAllPhotoAndLeave) {
+			Modal.alert('确认返回吗?', '返回将删除已上传照片', [
+				{ text: '取消', onPress: () => { }, style: 'default' },
+				{ text: '确定', onPress: () => this.deleteAllPhotoAndLeave() },
+			]);
+			hashHistory.go(1);
+			return false;
+		} else {
+			return true;
+		}
+	}
+	//此时应该是state里存在已经上传的图片信息，需要删除图片，然后离开router
+	deleteAllPhotoAndLeave() {
+		this.setState({
+			photoList: [],
+			deleteAllPhotoAndLeave: true,
+		},()=>{
+			hashHistory.goBack();
+		})
 	}
 	clickAddPhoto = () => {
 		this.openImagePicker();	
@@ -206,6 +245,8 @@ export default class UploadPhoto extends React.Component {
 						//上传图片
 						this.uploadImages(uploadImageIndex);
 					});
+					//抛出photoList，用于调试
+					window.photoList = photoList;
 				} else {
 					//android
 					const photoList = update(this.state.photoList, { $push: ret.list });
@@ -217,6 +258,8 @@ export default class UploadPhoto extends React.Component {
 						//上传图片
 						this.uploadImages(uploadImageIndex);
 					});
+					//抛出photoList，用于调试
+					window.photoList = photoList;
 				}
 
 			}
@@ -290,6 +333,8 @@ export default class UploadPhoto extends React.Component {
 		}
 		let photoList = update(this.state.photoList, { [index]: { naturalWidth: { $set: naturalWidth }, naturalHeight: { $set: naturalHeight } } });
 		this.setState({ photoList });
+		//抛出photoList，用于调试
+		window.photoList = photoList;
 	}
 	clickPhoto = (index, type = "click") => {
 		let {galleryIndex} = this.state;
@@ -343,6 +388,12 @@ export default class UploadPhoto extends React.Component {
 		}
 		const photoList = update(this.state.photoList, { $splice: [[[index], 1]] });
 		this.setState({ photoList });
+
+		let photoListLength = (parseInt(photoList.length) + 1);
+		this.setScrollWidth(photoListLength); //更新横向滚动条宽度
+
+		//抛出photoList，用于调试
+		window.photoList = photoList;
 	}
 	//上传图片
 	uploadImages(i = 0) {
@@ -360,7 +411,6 @@ export default class UploadPhoto extends React.Component {
 			}
 		}
 		let { path } = photoList[i];
-		console.log(path)
 		window.api.ajax({
 			url: 'https://www.huakewang.com/upload/upload_images_for_mobile',
 			method: 'POST',
@@ -377,59 +427,67 @@ export default class UploadPhoto extends React.Component {
 				}
 			}
 		}, (ret, err) => {
-			console.log(JSON.stringify(ret));
 			if (ret.status == "0") {
 				//上传中
-				console.log(JSON.stringify(ret));
+				// console.log(JSON.stringify(ret));
+				let { progress: pr } = ret;
+				this.setPhotoProgress(i, (pr ? pr : 0));
 			}
 			if (ret.status == "1") {
 				//上传完成
-				console.log(JSON.stringify(ret));
-				console.log(JSON.stringify(ret.body));
+				// console.log(JSON.stringify(ret));
+				if (ret.body) {
+					if (ret.body.success) {
+						let { id, file_path } = ret.body.data;
+						let photoList = update(this.state.photoList, { [i]: { id: { $set: id }, file_path: { $set: file_path } } });
+						this.setState({ photoList });
+						//抛出photoList，用于调试
+						window.photoList = photoList;
 
-				//上传下一张
-				i++;
-				this.uploadImages(i);
+						//更新单个图片的上传进度，索引为i的这个图片，上传成功 
+						this.setPhotoProgress(i, 100);
+						//上传下一张
+						i++;
+						this.uploadImages(i);
+
+					} else {
+						Toast.info(res.message, 1.5);
+					}
+				} else {
+					Toast.info('请求错误', 1.5);
+				}
 			}
 			if (ret.status == "2") {
 				//上传失败
-				console.log(JSON.stringify(ret));
+				// console.log(JSON.stringify(ret));
+
+				//更新单个图片的上传进度，索引为i的这个图片，上传失败，进度设置为-1 ，表示上传失败
+				this.setPhotoProgress(i, -1);
 
 				//上传下一张
 				i++;
 				this.uploadImages(i);
 			}
 			if (err) {
-				console.log(JSON.stringify(err));
+				if (err.msg) {
+					api.alert({ msg: err.msg });
+				}
 			}
 		});
-		// window.api.ajax({
-		// 	url: 'https://www.huakewang.com/hkw_newapi/get_user_list_ex',
-		// 	method: 'POST',
-		// 	dataType: 'JSON',
-		// 	// headers: {
-		// 	// 	'Content-Type': 'application/x-www-form-urlencoded'
-		// 	// },
-		// 	data: {
-		// 		values: {
-		// 			user_id: '',
-		// 			en_user_id: "5822d3713732538eaae45e06b7221ed89709e6b3282f4e694da5a9c53c5e4278",
-		// 			offices: "all",
-		// 			sort: "distance",
-		// 			keywords: "艺术绘画",
-		// 			longitude: "",
-		// 			latitude: "",
-		// 			per_page: 8,
-		// 			page: 1,
-		// 		}
-		// 	}
-		// }, function (ret, err) {
-		// 	if (ret) {
-		// 		api.alert({ msg: JSON.stringify(ret) });
-		// 	} else {
-		// 		api.alert({ msg: JSON.stringify(err) });
-		// 	}
-		// });
+	}
+	/**
+	 * 设置某个图片的上传进度
+	 *
+	 * @author ZhengGuoQing
+	 * @param {number} [i=0] 图片的索引，即顺序
+	 * @param {number} [newProgress=0] 新的进度为多少，最小为0 ，最大为100，表示上传成功
+	 * @memberof UploadPhoto
+	 */
+	setPhotoProgress(i = 0, newProgress = 0) {
+		const photoList = update(this.state.photoList, { [i]: { progress: { $set: newProgress } } });
+		this.setState({ photoList });
+		//抛出photoList，用于调试
+		window.photoList = photoList;
 	}
 	render() {
 		return (
@@ -458,6 +516,22 @@ export default class UploadPhoto extends React.Component {
 										>
 											<div onClick={(e) => { this.clickDeletePhoto(e, index) }} className="am-image-picker-item-remove" role="button" aria-label="Click and Remove this image"></div>
 											<img className="am-image-picker-item-content file" src={value.thumbPath} onLoad={(e) => { this.onLoadPreview(e, index, value.path) }} />
+											<div className="progress-box">
+												
+												{
+													value.progress > 0 && value.progress < 100 ?
+														<Progress percent={100} position="normal" /> : null
+												}
+												{
+													!value.progress ? <div className="wait-upload">等待上传</div> : null
+												}
+												{
+													value.progress < 0 ? <div className="wait-upload">上传失败</div> : null
+												}
+												{
+													value.progress >= 100 ? <div className="wait-upload">上传成功</div> : null
+												}
+											</div>
 										</div>
 									))
 								}

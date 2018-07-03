@@ -115,6 +115,29 @@
 			border-radius: 0.06rem;
 			background-size: cover;
 		}
+		.progress-box{
+			display: inline-block;
+			width: 25vw;
+			position: absolute;
+			bottom: 2vw;
+			left: 0;
+			padding: 0 1vw;
+			box-sizing: border-box;
+			.am-progress-outer{
+				overflow: hidden;
+				.am-progress-bar{
+					border: 3px solid #108ee9;
+				}
+			}
+			.wait-upload{
+				margin-bottom: 1vw;
+				// font-size: 0.28rem;
+				font-size: 14px;
+				color: #fff;
+				// text-shadow: 0.02rem -0.02rem 0.03rem #aaa;
+				text-shadow: 2px -2px 2px #aaa;
+			}
+		}
 	}
 	& .am-image-picker-upload-btn{
 		box-sizing: border-box;
