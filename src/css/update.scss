@@ -184,3 +184,53 @@
 }
 
 /************** update 0626 end ****************/
+
+/************** creatWork2 update 0626 start ****************/
+.am-list-item.am-input-item.create-work-input-title{
+	height: auto;
+	.am-input-label{
+		width: 60px;
+		height: 50px;
+		padding: 5px 0;
+		margin-right: 10px;
+		text-align: center;
+		img{
+			width: auto;
+			height: 50px;
+		}
+	}
+}
+.needLists .am-list-item .am-list-line .am-list-extra{
+	-webkit-flex-basis: 50%;
+    -ms-flex-preferred-size: 50%;
+    flex-basis: 50%;
+    color: #000;
+}
+
+.create-work-item{
+	.am-list-thumb{
+		width: 20px;
+    	margin-right: 10px;
+	}
+	// &.am-list-item .am-list-line .am-input-label{
+	// 	width: 20px;
+    // 	margin-right: 10px;
+	// }
+	// &.am-list-item .am-list-line .am-list-content{
+	// 	color: #707070;
+	// }
+	&.am-list-item{
+		height: 60px;
+		.am-list-line{
+			.am-input-label{
+				width: 20px;
+				margin-right: 10px;
+			}
+			.am-list-content{
+				color: #707070;
+			}
+		}
+	}
+}
+
+/************** creatWork2 update 0626 end ****************/

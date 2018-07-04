@@ -74,17 +74,18 @@ export default class UploadPhoto extends React.Component {
 		this.state = {
 			NavBarTitle: "选择封面",
 			photoList: [
-				{
-					path: imgDemo[0],
-					thumbPath: imgDemo[0],
-					naturalWidth: 0,
-					naturalHeight: 0,
-				},
+				// {
+				// 	path: imgDemo[0],
+				// 	thumbPath: imgDemo[0],
+				// 	naturalWidth: 0,
+				// 	naturalHeight: 0,
+				// },
 				
 			],
 			galleryIndex: 0, //PhotoSwipe索引，记住上次的索引，避免多次点击用一个图片
 			scrollHeight: 0,
 			scroll: null,
+			uploadIng: false, //是否正在上传中，这个状态用于是否允许用户点击下一步
 		}
 		this.props.router.setRouteLeaveHook(
 			this.props.route,
@@ -108,6 +109,17 @@ export default class UploadPhoto extends React.Component {
 		this.setState({ scroll });
 		
 		// const scroll = new BScroll(wrapper, { scrollX: true, scrollY: false, click: true, bounceTime: 300, swipeBounceTime: 200, momentumLimitTime: 200 })
+
+		//初始化加载HOC组件上的photoList
+		if (this.props.state && this.props.state.photoList && this.props.state.photoList.length > 0 ) {
+			let { photoList } = this.props.state;
+			this.setState({ photoList },()=>{
+				//如果图片列表有图片，需要更新滚动组件
+				if (this.state.scroll) {
+					this.state.scroll.refresh();
+				}
+			});
+		}
 	}
 	/**
 	 * 动态的计算滚动条的宽度
@@ -135,14 +147,26 @@ export default class UploadPhoto extends React.Component {
 
 	}
 	nextStep = () => {
+		if (this.state.uploadIng) {
+			Toast.info("上传图片中，请稍后...", 1);
+			return;
+		}
 		let { photoList } = this.state;
+		photoList.map((value, index, elem) => {
+			//剔除上传失败的，得到一个全新的，上传进度100%的图片数组，该数组可能和本地显示的图片数组不一致，本地会显示上传失败的图片
+			if (!value.progress || !value.progress >= 100) {
+				elem.splice(index, 1);
+			}
+		})
 		if (photoList.length > 0) {
-			hashHistory.push({
-				pathname: '/creatWork2',
-				query: { form: 'uploadPhoto' }
-			});
+			this.props.setState({ photoList },()=>{
+				hashHistory.push({
+					pathname: '/creatWork2',
+					query: { form: 'uploadPhoto' }
+				});
+			})
 		} else {
-			Toast.info("请至少上传一张图片", 1.5);
+			Toast.info("请至少上传一张图片", 1);
 		}
 		
 
@@ -168,6 +192,7 @@ export default class UploadPhoto extends React.Component {
 	}
 	//此时应该是state里存在已经上传的图片信息，需要删除图片，然后离开router
 	deleteAllPhotoAndLeave() {
+		this.props.setState({ photoList: [] }); //情况父组件的图片列表
 		this.setState({
 			photoList: [],
 			deleteAllPhotoAndLeave: true,
@@ -469,6 +494,7 @@ export default class UploadPhoto extends React.Component {
 				this.uploadImages(i);
 			}
 			if (err) {
+				this.setState({ uploadIng: false }); //发生错误，此时会暂停所有上传图片的流程（递归）。
 				if (err.msg) {
 					api.alert({ msg: err.msg });
 				}
