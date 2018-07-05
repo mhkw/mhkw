@@ -19,6 +19,8 @@ import WriterComment from './components/WriterComment';
 import PlaceOrder from './components/PlaceOrder';
 import { OrderPopup, PayMethod, PayModal} from './components/OrderPopup';
 import Hkcircle from './components/hkCircle';
+import hkCircle2 from './components/hkCircle2';
+import PostBar from './components/PostBar2';
 import Search from './components/Search';
 import CreatServer from './components/serviceCreate';
 import AddServer from './components/AddServer';
@@ -86,7 +88,7 @@ ReactDOM.render(
         <Route path="/"  component={HOC}>
             <Route component={App}>
                 <IndexRoute component={Index} />
-                <Route path="circle" component={Hkcircle} />
+                <Route path="circle" component={hkCircle2} />
                 <Route path="mine" component={Mine} />
                 <Route path="chatList" component={ChatList} />
             </Route>
@@ -119,6 +121,7 @@ ReactDOM.render(
             <Route path="Searchresult" component={SearchResult} />
             <Route path="category" component={Category} />
             <Route path="activity" component={Activity} />
+            <Route path="postBar" component={PostBar} />
             {/* <Route path="/quoteList" component={QuoteList} /> */}
             <Route path="quoteList" component={QuoteList2}>
                 <Route component={OrderPopup}>

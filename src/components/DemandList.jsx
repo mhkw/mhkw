@@ -22,7 +22,7 @@ export default class DemandList extends React.Component {
             rowHasChanged: (row1, row2) => row1 !== row2,
         });
         this.state = {
-            animating:true,
+            animating:false,
             dataSource: dataSource.cloneWithRows(JSON.parse(sessionStorage.getItem("demandData")) ? JSON.parse(sessionStorage.getItem("demandData")) : []),
             useBodyScroll:false,
             refreshing: false,
@@ -111,8 +111,10 @@ export default class DemandList extends React.Component {
         pageIndex = 0;
     }
     getProgectList(page,type = "add_time") {  
+        this.setState({ animating: true });
         axios({
             method: "POST",
+            timeout: 6000,
             url: 'https://www.huakewang.com/hkw_newapi/get_project_list/0/'+type+'/0/0/10/'+page,
             // url: 'https://www.huakewang.com/hkw_newapi/get_project_list/0/' + type +'/120.219375/30.259244/10/'+page,
             data: {
@@ -121,9 +123,11 @@ export default class DemandList extends React.Component {
         })
         .then((res)=>{
             this.handleLoginSend(res.data);
+            this.setState({ animating: false });
         })
         .catch((error) => {
-            console.log(error.data);
+            console.log(error);
+            this.setState({ animating: false });
         });
 
     }

@@ -30,7 +30,7 @@ export default class Activity extends React.Component {
     }
     componentDidMount() {
         const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 68;
-        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true })
+        const scroll = new BScroll(document.querySelector('.wrapper'), { click: true, bounceTime: 300, swipeBounceTime: 200, momentumLimitTime: 200 })
         this.setState({
             height: hei
         })
