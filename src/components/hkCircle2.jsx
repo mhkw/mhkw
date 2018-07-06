@@ -58,6 +58,10 @@ export default class LoginView extends React.Component {
             replay_name:"",     //给..回复
             showBackToTop: false,
         };
+        this.props.router.setRouteLeaveHook(
+            this.props.route,
+            this.routerWillLeave
+        )
         // this.genData = (pIndex = 0, realLength, data) => {
         //     let dataBlob = [];
         //     dataBlob = data;
@@ -103,7 +107,7 @@ export default class LoginView extends React.Component {
                     hasMore: res.data.is_next_page ? true : false,
                     isLoading: res.data.is_next_page ? true : false,
                     page: ++this.state.page,
-                    // res: this.state.dataSource.cloneWithRows(this.rData)._dataBlob.s1,
+                    res: this.state.dataSource.cloneWithRows(this.rData)._dataBlob.s1,
                 });
                 setTimeout(() => {
                     this.setState({
@@ -163,7 +167,10 @@ export default class LoginView extends React.Component {
             }
         }
     }
-
+    componentWillMount() {
+        //切换手机顶部状态栏样式
+        this.sendEventChangeStatusBarStyle("#000", "light");
+    }
     componentDidUpdate() {
         if (this.state.useBodyScroll) {
             document.body.style.overflow = 'auto';
@@ -176,10 +183,6 @@ export default class LoginView extends React.Component {
     // }
     componentDidMount() {
         this.props.setShowTabBar(true);
-        this.props.router.setRouteLeaveHook(
-            this.props.route,
-            this.routerWillLeave
-        )
         if (!sessionStorage.getItem("resdata")) {
             pageIndex = 0;
             this.getNoticeList(1);            
@@ -187,10 +190,28 @@ export default class LoginView extends React.Component {
         this.lv.scrollTo(0, scrollTopCircle)
         // this.getNoticeList(1);
     }
-    routerWillLeave(nextLocation) {
+    //发送API事件，修改手机顶部状态栏样式
+    sendEventChangeStatusBarStyle(color = "#fff", style = "dark") {
+        if (window.api) {
+            window.api.sendEvent({
+                name: 'changeStatusBarStyle',
+                extra: {
+                    color,
+                    style,
+                }
+            });
+        }
+    }
+    routerWillLeave = (nextLocation) => {
         // pageIndex = 0;
         document.body.style.overflow = 'inherit';
         scrollTopCircle = document.documentElement.scrollTop || document.body.scrollTop;
+        //切换手机顶部状态栏样式
+        if (nextLocation.pathname == "/") {
+            this.sendEventChangeStatusBarStyle("#22255a", "light");
+        } else {
+            this.sendEventChangeStatusBarStyle("#fff", "dark");
+        }
     }
     getNoticeList=(page)=>{
         runPromise("get_circle_list", {        //获取列表

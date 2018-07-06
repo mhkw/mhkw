@@ -32,13 +32,14 @@ export default class PostBar extends React.Component {
             page:"1",
             imgHeight: 176,
             slideIndex: 0,
-            // dataSource: dataSource.cloneWithRows(JSON.parse(sessionStorage.getItem("resdata")) ? JSON.parse(sessionStorage.getItem("resdata")) : []),
-            dataSource: dataSource.cloneWithRows(JSON.parse(sessionStorage.getItem("resdata")) ? JSON.parse(sessionStorage.getItem("resdata")) : {}),
+            // dataSource: dataSource.cloneWithRows(JSON.parse(sessionStorage.getItem("resdata2")) ? JSON.parse(sessionStorage.getItem("resdata2")) : []),
+            dataSource: dataSource.cloneWithRows(JSON.parse(sessionStorage.getItem("resdata2")) ? JSON.parse(sessionStorage.getItem("resdata2")) : {}),
             refreshing: false,
             isLoading: true,
             useBodyScroll: false,
             showReplyInput:false,       //输入框显示
-            res: [],
+            // res: [],
+            res: sessionStorage.getItem("resdata2") ? dataSource.cloneWithRows(JSON.parse(sessionStorage.getItem("resdata2")))._dataBlob.s1 : [],
             love_list:[],
             placeholderWords:"留言：",
             commentToId:"",        //发帖人id
@@ -52,6 +53,10 @@ export default class PostBar extends React.Component {
             replay_name:"",     //给..回复
             showBackToTop: false,
         };
+        this.props.router.setRouteLeaveHook(
+            this.props.route,
+            this.routerWillLeave
+        )
         // this.genData = (pIndex = 0, realLength, data) => {
         //     let dataBlob = [];
         //     dataBlob = data;
@@ -74,30 +79,32 @@ export default class PostBar extends React.Component {
                 // if (pageIndex == 0) {
                 //     this.rData = [];
                 //     this.rData = [ ...this.rData, ...this.genData(pageIndex++, realDataLength, realData) ];
-                //     sessionStorage.setItem("resdata", JSON.stringify(realData));
+                //     sessionStorage.setItem("resdata2", JSON.stringify(realData));
                 // }else{
                 //     this.rData = [ ...this.rData, ...this.genData(pageIndex++, realDataLength, realData) ];
                 // }
                 if (pageIndex == 0) {
                     this.rData = {};
                     this.rData = {...this.rData, ...this.genData(pageIndex++, realDataLength, realData)};
-                    sessionStorage.setItem("resdata", JSON.stringify(realData));
+                    sessionStorage.setItem("resdata2", JSON.stringify(realData));
                 } else {
                     this.rData = {...this.rData, ...this.genData(pageIndex++, realDataLength, realData)};
 
-                    let storageFstdata = sessionStorage.getItem("resdata");
+                    let storageFstdata = sessionStorage.getItem("resdata2");
                     if (storageFstdata && JSON.parse(storageFstdata).length > 0) {
                         realData = [...JSON.parse(storageFstdata), ...realData];
-                        sessionStorage.setItem("resdata", JSON.stringify(realData));
+                        sessionStorage.setItem("resdata2", JSON.stringify(realData));
 
                     }
                 }
+                const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
                 this.setState({
                     dataSource: this.state.dataSource.cloneWithRows(this.rData),
                     hasMore: res.data.is_next_page ? true : false,
                     isLoading: res.data.is_next_page ? true : false,
                     page: ++this.state.page,
-                    // res: this.state.dataSource.cloneWithRows(this.rData)._dataBlob.s1,
+                    height: hei,
+                    res: this.state.dataSource.cloneWithRows(this.rData)._dataBlob.s1,
                 });
                 setTimeout(() => {
                     this.setState({
@@ -169,11 +176,10 @@ export default class PostBar extends React.Component {
     //     return (this.props.router.location.action === 'POP');
     // }
     componentDidMount() {
-        this.props.router.setRouteLeaveHook(
-            this.props.route,
-            this.routerWillLeave
-        )
-        if (!sessionStorage.getItem("resdata")) {
+        
+        const height = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 25;
+        this.setState({ height });
+        if (!sessionStorage.getItem("resdata2")) {
             pageIndex = 0;
             this.getNoticeList(1);            
         }
@@ -194,7 +200,7 @@ export default class PostBar extends React.Component {
     }
     onRefresh = (refreshing = true) => {
         //顶部下拉刷新数据
-        sessionStorage.removeItem("resdata"); //下拉刷新时把缓存数据也清空吧
+        sessionStorage.removeItem("resdata2"); //下拉刷新时把缓存数据也清空吧
         pageIndex = 0;
         this.setState({ 
             refreshing
@@ -547,6 +553,10 @@ export default class PostBar extends React.Component {
                                     renderFooter={() => (<div style={{ padding: 20, textAlign: 'center' }}>
                                         {this.state.isLoading ? '加载中...' : '加载完成'}
                                     </div>)}
+                                    style={{
+                                        height: this.state.height,
+                                        overflow: "auto"
+                                    }}
                                     renderRow={row}
                                     renderSeparator={separator}
                                     distanceToRefresh={1}

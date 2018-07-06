@@ -158,10 +158,29 @@ export default class HomeView extends React.Component {
     // shouldComponentUpdate(){
     //     // return (this.props.router.location.action === 'POP')
     // }
-    routerWillLeave(nextLocation) {
+    //发送API事件，修改手机顶部状态栏样式
+    sendEventChangeStatusBarStyle(color = "#fff", style = "dark") {
+        if (window.api) {
+            window.api.sendEvent({
+                name: 'changeStatusBarStyle',
+                extra: {
+                    color,
+                    style,
+                }
+            });
+        }
+    }
+    routerWillLeave = (nextLocation) => {
         document.body.style.overflow = 'inherit';
         // pageIndex = 0;
         scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        //切换手机顶部状态栏样式
+        console.log(nextLocation)
+        if (nextLocation.pathname == "/circle") {
+            this.sendEventChangeStatusBarStyle("#000", "light");
+        } else {
+            this.sendEventChangeStatusBarStyle("#fff", "dark");
+        }
     }
     componentWillMount() {
         if (this.props.HOCState.Home.currentIdx) {
@@ -174,6 +193,8 @@ export default class HomeView extends React.Component {
                 getUserListSort: this.props.HOCState.Home.getUserListSort
             })
         }
+        //切换手机顶部状态栏样式
+        this.sendEventChangeStatusBarStyle("#22255a", "light");
     }
     componentDidMount() {
         this.props.setShowTabBar(true);
