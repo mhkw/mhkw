@@ -109,9 +109,25 @@ export default class ChatList extends React.Component {
                     // onLeftClick={() => hashHistory.goBack()}
                     // leftContent={<span style={{ fontSize: "15px" }}>返回</span>}
                 >消息</NavBar>
-                <List>
+                <List className="chat-sys-notice">
                     <List.Item arrow="horizontal" multipleLine onClick={this.SystemNotice}>
                         <span className="list-icon-box"><i className="iconfont icon-bell"></i></span>系统通知
+                    </List.Item>
+                    <List.Item
+                        arrow="horizontal"
+                        thumb={<span className="list-icon-box geren"><i className="iconfont icon-geren"></i></span>}
+                        multipleLine
+                        onClick={() => { hashHistory.push("/myCustomer") }}
+                    >
+                        我的客户<List.Item.Brief>张兰，郑国庆，黄建超...25个客户</List.Item.Brief>
+                    </List.Item>
+                    <List.Item
+                        arrow="horizontal"
+                        thumb={<span className="list-icon-box"><i className="iconfont icon-bell"></i></span>}
+                        multipleLine
+                        onClick={() => { }}
+                    >
+                        系统消息<List.Item.Brief>6未读通知 6看过我 12未读评论 2赞</List.Item.Brief>
                     </List.Item>
                 </List>
                 {/* <WhiteSpace size="lg" /> */}

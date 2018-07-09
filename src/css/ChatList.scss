@@ -144,3 +144,26 @@
     padding-left: 0.1rem;
     box-sizing: border-box;
 }
+/************ chatList update 0709 start ***************/
+.chat-sys-notice{
+    .am-list-thumb .list-icon-box{
+        margin-right: 0px;
+        &.geren{
+            background-color: #3bbd79;
+            .icon-geren{
+                line-height: 48px;
+                color: #fff;
+                font-size: 24px;
+            }
+        }
+    }
+    .am-list-line{
+        .am-list-brief{
+            font-size: 12px;
+        }
+    } 
+    .am-list-item{
+        border-bottom: 1PX solid #ddd;
+    }
+}
+/************ chatList update 0709 end ***************/

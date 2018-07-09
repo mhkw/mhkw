@@ -78,6 +78,7 @@ import ChatList from './components/ChatList';
 import SystemNotice from './components/SystemNotice';
 import DesignerComment3 from './components/designerComment3';
 import UploadPhoto from "./components/UploadPhoto";
+import MyCustomer from "./components/MyCustomer";
 
 import './css/font/iconfont.css';
 
@@ -190,6 +191,7 @@ ReactDOM.render(
             <Route path="realName" component={RealName} />
             <Route path="systemNotice" component={SystemNotice} />
             <Route path="uploadPhoto" component={UploadPhoto} />
+            <Route path="myCustomer" component={MyCustomer} />
         </Route>
     </Router>
     , document.getElementById('container'));
