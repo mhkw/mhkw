@@ -109,6 +109,8 @@ const ajaxURLList = {
     get_customer_list2: "linkerapi/get_customer_list2", //画客网，获取我的客户列表
     change_customer_set: "linkerapi/change_customer_set", //修改客户状态，当参数show_in_linker: 0，表示删除客户
     add_contact_history: "linkerapi/add_contact_history", //给我的客户添加一条记录
+    get_contact_history: "linkerapi/get_contact_history", //获取拜访历史,获取客户记录
+    getCustomerInfo: "linkerapi/getCustomerInfo", //获取客户信息
 }
 
 function get_user_list_ex(params) {

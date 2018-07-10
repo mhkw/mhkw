@@ -55,6 +55,8 @@ export default class HOC extends React.Component{
             keywords:"",
             conversations: [], //环信会话消息列表
             sumUnreadMessagesCount: 0, //环信会话消息列表总的未读消息条数
+            MyCustomer: [], //我的客户，只获取第一次请求的前10个
+            selectedCustomer: {}, //点击某客户，跳转到客户详情页时先把数据提到父组件，再通过props传递，加快页面内数据展示速度。减少ajax请求
         }
         this.handleGetUserList2 = (res, conversations) => {
             if (res.success) {

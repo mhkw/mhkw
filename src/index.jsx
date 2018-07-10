@@ -79,6 +79,7 @@ import SystemNotice from './components/SystemNotice';
 import DesignerComment3 from './components/designerComment3';
 import UploadPhoto from "./components/UploadPhoto";
 import MyCustomer from "./components/MyCustomer";
+import AddCustomer from "./components/AddCustomer";
 
 import './css/font/iconfont.css';
 
@@ -192,6 +193,7 @@ ReactDOM.render(
             <Route path="systemNotice" component={SystemNotice} />
             <Route path="uploadPhoto" component={UploadPhoto} />
             <Route path="myCustomer" component={MyCustomer} />
+            <Route path="addCustomer" component={AddCustomer} />
         </Route>
     </Router>
     , document.getElementById('container'));

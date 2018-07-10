@@ -8,7 +8,7 @@ export default class MyCustomer extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			search: '',
+			searchText: '',
 			longitude: "",
 			latitude: "",
 			address: "",
@@ -20,26 +20,36 @@ export default class MyCustomer extends React.Component {
 			click_customer_id: "", // 选择的客户ID
 			click_name: "", // 选择的客户名称
 			recordInfo: "", //给某个客户添加记录的内容
+			renderType: "", //渲染类型，默认为空值，即渲染contactsList，渲染客户列表，当值为search时，渲染类型为搜索，之所以加这个渲染类型，是因为需要保持之前的客户列表state
+			contactsListSearch: [], //搜索得到的客户列表，默认为空
+			scroll_bottom_tips_search: "",
+			total_count_search: 0,
 		}
 		//获取我的客户列表
 		this.handleGetCustomerList = (res, pullingUp) => {
 			if (res.success) {
-				let newItemList = this.state.contactsList;
+				let renderType = this.state.renderType;
+				let contactsListType = renderType == "search" ? "contactsListSearch" : "contactsList";
+				let total_count_Type = renderType == "search" ? "total_count_search" : "total_count";
+				let scroll_bottom_tips_Type = renderType == "search" ? "scroll_bottom_tips_search" :  "scroll_bottom_tips";
+
+				let newItemList = this.state[contactsListType];
 				if (pullingUp) {
 					// newItemList.push(res.data.item_list);
-					newItemList = [...this.state.contactsList, ...res.data.item_list];
+					newItemList = [...this.state[contactsListType], ...res.data.item_list];
 				} else {
 					newItemList = res.data.item_list;
-					if (newItemList.length < 1) {
-						return;
+					if (newItemList.length >= 1) {
+						if (contactsListType == "contactsList") {
+							sessionStorage.setItem("customerList", JSON.stringify(newItemList));
+						}
 					}
-					sessionStorage.setItem("customerList", JSON.stringify(newItemList));
 				}
 
 				this.setState({
-					contactsList: newItemList,
-					total_count: res.data.total_count,
-					scroll_bottom_tips: newItemList.length == 10 ? "上拉加载更多" : ""
+					[contactsListType]: newItemList,
+					[total_count_Type]: res.data.total_count,
+					[scroll_bottom_tips_Type]: newItemList.length == 10 ? "上拉加载更多" : ""
 				}, () => {
 					this.state.scroll.finishPullUp()
 					this.state.scroll.refresh();
@@ -57,9 +67,12 @@ export default class MyCustomer extends React.Component {
 				Toast.info(res.message || "删除失败", 1.5);
 			}
 		}
-		this.handleAddContactHistory = (res) => {
+		this.handleAddContactHistory = (res, type) => {
 			if (res.success) {
-				Toast.info("添加记录成功", 1.5);
+				if (type != "call") {
+					//如果是用户拨打电话自动产生的添加记录则不弹窗提示
+					Toast.info("添加记录成功", 1.5);
+				}
 				this.onCloseRecord(); //关闭弹出层
 
 			} else {
@@ -78,14 +91,16 @@ export default class MyCustomer extends React.Component {
 		scroll.on('pullingUp', () => {
 			this.ajaxNextPage();
 		});
-		this.ajaxGetCustomerList();
+		if (!sessionStorage.getItem("customerList")) {
+			this.ajaxGetCustomerList();
+		}
 		if (this.props.state && this.props.state.Address) {
 			let { lat: latitude, lon: longitude, address } = this.props.state.Address;
 			this.setState({ latitude, longitude, address });
 		}
 	}
 	//获取联系人列表
-	ajaxGetCustomerList = (limit = 10, offset = 0, keyword = "", pullingUp = false) => {
+	ajaxGetCustomerList = (limit = 10, offset = 0, pullingUp = false) => {
 		let user_id = validate.getCookie("user_id");
 		if (!user_id) {
 			hashHistory.push({
@@ -94,7 +109,7 @@ export default class MyCustomer extends React.Component {
 			});
 			return;
 		}
-		let { latitude, longitude } = this.state;
+		let { latitude, longitude, searchText: keyword } = this.state;
 		runPromise('get_customer_list2', {
 			user_id,
 			longitude,
@@ -112,13 +127,14 @@ export default class MyCustomer extends React.Component {
 			hasNextPage = true;
 		}
 
+		let scroll_bottom_tips_Type = this.state.renderType == "search" ? "scroll_bottom_tips_search" : "scroll_bottom_tips";
 		this.setState({
-			scroll_bottom_tips: hasNextPage ? "加载中..." : "加载完成"
+			[scroll_bottom_tips_Type]: hasNextPage ? "加载中..." : "加载完成"
 		})
 
 		if (hasNextPage) {
 			setTimeout(() => {
-				this.ajaxGetCustomerList(10, offset, '', true);
+				this.ajaxGetCustomerList(10, offset, true);
 			}, 100);
 		}
 	}
@@ -126,16 +142,19 @@ export default class MyCustomer extends React.Component {
 		return this.props.router.location.action === 'POP';
 	}
 	newAdd = () => {
-		console.log("新增");
+		hashHistory.push({
+            pathname: '/addCustomer',
+			query: { form: 'addCustomer' }
+        });
 	}
 	callPhone(phone, customer_Id) {
 		this.setState({ click_customer_id: customer_Id},()=>{
-			this.submitRecord("拨打电话");
+			this.submitRecord("拨打电话", "call");
 		})
 		if (window.api) {
 			//移动端
 			window.api.call({
-				type: 'tel_prompt',
+				type: 'tel',
 				number: phone
 			});
 		} else {
@@ -144,8 +163,28 @@ export default class MyCustomer extends React.Component {
 		}
 	}
 	onSearch = () => {
-		let { search } = this.state;
-		console.log("onSearch::", search);
+		this.setState({ renderType: "search"},()=>{
+			this.ajaxGetCustomerList();
+		})
+
+	}
+	onCancel = () => {
+		this.setState({ 
+			searchText: '',
+			renderType: '',
+			contactsListSearch: [], //搜索得到的客户列表，默认为空
+			scroll_bottom_tips_search: "",
+			total_count_search: 0,
+		})
+	}
+	onClear = () => {
+		this.setState({
+			searchText: '',
+			renderType: '',
+			contactsListSearch: [], //搜索得到的客户列表，默认为空
+			scroll_bottom_tips_search: "",
+			total_count_search: 0,
+		})
 	}
 	callDelete(customer_id, Name) {
 		Modal.alert('删除客户', `确定删除${Name}吗？`, [
@@ -198,7 +237,13 @@ export default class MyCustomer extends React.Component {
 			popupRecord: false,
 		});
 	}
-	submitRecord = (message) => {
+	/**
+	 * message 直接传输一个记录内容
+	 * type 添加内容类型，默认为空，即用户手写输入，如果该值为'call'则表示打电话自动添加的记录，此时不会有请求返回成功的弹窗
+	 *
+	 * @memberof MyCustomer
+	 */
+	submitRecord = (message, type) => {
 		let { click_customer_id, recordInfo } = this.state;
 		let contactInfo = recordInfo.trim() || message || "";
 		if (!contactInfo.length) {
@@ -209,9 +254,9 @@ export default class MyCustomer extends React.Component {
 			Toast.info("请选择一个客户", 1.5);
 			return;
 		}
-		this.ajaxAddContactHistory(click_customer_id, contactInfo);
+		this.ajaxAddContactHistory(click_customer_id, contactInfo, type);
 	}
-	ajaxAddContactHistory(customerId, contactInfo) {
+	ajaxAddContactHistory(customerId, contactInfo, type) {
 		let user_id = validate.getCookie("user_id");
 		if (!user_id) {
 			hashHistory.push({
@@ -228,7 +273,19 @@ export default class MyCustomer extends React.Component {
 			longitude,
 			latitude,
 			long_lat_address: address
-		}, this.handleAddContactHistory);
+		}, this.handleAddContactHistory, true, "post", type);
+	}
+	handleClickItem(e, value) { 
+		e.stopPropagation();
+		this.props.setState({ selectedCustomer: value },()=>{
+			hashHistory.push({
+				pathname: '/addCustomer',
+				query: { 
+					form: 'seeCustomer',
+					customer_id: value.customer_id
+				}
+			});
+		})
 	}
 	render() {
 		return (
@@ -246,16 +303,18 @@ export default class MyCustomer extends React.Component {
 							className="search-bar"
 							placeholder="请输入姓名或者手机号查询"
 							maxLength={15}
-							value={this.state.search}
-							onChange={(val)=>{ this.setState({ search: val }) }}
-							onCancel={() => { this.setState({ search: '' }) }}
-							onClear={() => { this.setState({ search: '' }) }}
+							value={this.state.searchText}
+							onChange={(val)=>{ this.setState({ searchText: val.trim() }) }}
+							onCancel={this.onCancel}
+							onClear={this.onClear}
 							onSubmit={this.onSearch}
 						/>
 						<div className="wrapper" style={{ overflow: "hidden", height: this.state.height }}>
 							<List className="contacts-list">
 								{
-									this.state.contactsList.map((value, index) => (
+									this.state[this.state.renderType == "search" ? "contactsListSearch" : "contactsList"] &&
+									this.state[this.state.renderType == "search" ? "contactsListSearch" : "contactsList"].length >= 0 &&
+									this.state[this.state.renderType == "search" ? "contactsListSearch" : "contactsList"].map((value, index) => (
 										<SwipeAction
 											className="customer-swipe"
 											key={value.id}
@@ -264,25 +323,26 @@ export default class MyCustomer extends React.Component {
 												{
 													text: '删除',
 													onPress: this.callDelete.bind(this, value.customer_id, value.Name),
-													style: { backgroundColor: '#EE4035', color: '#fff', fontSize: '16px', padding: '0 5px' },
+													style: { backgroundColor: '#EE4035', color: '#fff', fontSize: '16px', padding: '0 15px' },
 												},
-												{
-													text: '记录',
-													onPress: this.handlerAddRecord.bind(this, value.customer_id, value.Name),
-													style: { backgroundColor: '#1875ff', color: '#fff', fontSize: '16px', padding: '0 5px' },
-												},
-												{
-													text: '电话',
-													onPress: this.callPhone.bind(this, value.customer_id, value.phone),
-													style: { backgroundColor: '#56B949', color: '#fff', fontSize: '16px', padding: '0 5px' },
-												}
+												// {
+												// 	text: '记录',
+												// 	onPress: this.handlerAddRecord.bind(this, value.customer_id, value.Name),
+												// 	style: { backgroundColor: '#1875ff', color: '#fff', fontSize: '16px', padding: '0 5px' },
+												// },
+												// {
+												// 	text: '电话',
+												// 	onPress: this.callPhone.bind(this, value.customer_id, value.phone),
+												// 	style: { backgroundColor: '#56B949', color: '#fff', fontSize: '16px', padding: '0 5px' },
+												// }
 											]}
 										>
 											<List.Item
 												key={value.id}
 												// arrow="horizontal"
-												extra={<i style={{ "font-size": "20px" }} className="iconfont icon-jiantou2"></i>}
-												onClick={() => this.handleClickItem(value)}
+												extra={<div onClick={(e) => { this.handleClickItem(e, value) }}>{value.last_visit_time_txt}<i className="iconfont icon-xiangqing"></i></div>}
+												// onClick={this.handleClickItem.bind(this, value)}
+												onClick={this.callPhone.bind(this, value.customer_id, value.phone)}
 											>
 												{(value.Name ? value.Name : "") + '/' + (value.companyname ? value.companyname : "")}
 												<List.Item.Brief>
@@ -293,7 +353,12 @@ export default class MyCustomer extends React.Component {
 										</SwipeAction>
 									))
 								}
-								<div className="scroll-bottom-tips" style={{ "background-color":"#f5f5f9"}}>{this.state.scroll_bottom_tips}</div>
+								{/* <div className="scroll-bottom-tips" style={{ "background-color": "#f5f5f9" }}>{this.state.scroll_bottom_tips}</div> */}
+								<div className="scroll-bottom-tips" style={{ "background-color":"#f5f5f9"}}>
+									{
+										this.state.renderType == "search" ? this.state.scroll_bottom_tips_search : this.state.scroll_bottom_tips
+									}
+								</div>
 							</List>
 						</div>
 						<Modal
@@ -310,7 +375,7 @@ export default class MyCustomer extends React.Component {
 										<i onClick={this.onCloseRecord} className="iconfont icon-untitled94"></i>
 									</div>
 								)}>
-								<WingBlank size="md">
+								<WingBlank size="md" className="add-record-wing-blank">
 									<TextareaItem
 										onChange={(val) => { this.setState({ recordInfo: val }) }}
 										placeholder=""

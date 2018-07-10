@@ -7,9 +7,17 @@
 	}
 	.customer-swipe{
 		.am-list-line .am-list-extra{
-			-webkit-flex-basis: 10%;
-			-ms-flex-preferred-size: 10%;
-			flex-basis: 10%;
+			-webkit-flex-basis: 30%;
+			-ms-flex-preferred-size: 30%;
+			flex-basis: 30%;
+			line-height: 2;
+			font-size: 14px;
+			.iconfont{
+				font-size: 20px;
+				vertical-align: sub;
+				color: #00a0ff;
+				margin-left: 5px;
+			}
 		}
 	}
 }
@@ -27,9 +35,71 @@
 		}
 	}
 	.am-list-body{
-		.am-list-item{
+		.add-record-wing-blank{
 			border: 1px solid #ddd;
 		}
 	}
 	
 } 
+.add-customer-page{
+	height: 100%;
+	background-color: #f5f5f9;
+	.new-add-btn{
+		font-size: 14px;
+    	color: #212121;
+	}
+	.am-list{
+		.am-list-header{
+			padding: 10px 15px 5px 15px;
+			.iconfont{
+				font-size: 18px;
+				margin-right: 3px;
+			}
+		}
+		.am-list-body{
+			.am-list-item .am-input-label{
+				width: 60px;
+			}
+			.am-list-item:not(:last-child) .am-list-line{
+				border-bottom: 1px solid #ddd;
+				.am-list-extra{
+					-webkit-flex-basis: 10%;
+					-ms-flex-preferred-size: 10%;
+					flex-basis: 10%;
+					.iconfont{
+						font-size: 18px;
+					}
+				}
+			}
+			.add-record-wing-blank{
+				border: 1px solid #ddd;
+			}
+		}
+	}
+	.am-list.contact-history-list{
+		.am-list-header{
+			padding: 15px;
+			.header-right{
+				float: right;
+				color: #00a0ff;
+				font-size: 14px;
+				&.look-all{
+					margin-left: 25px;
+					.iconfont{
+						font-size: 14px;
+    					margin-right: 0
+					}
+				}
+			}
+		}
+	}
+}
+.am-modal.am-modal-operation .am-modal-content .am-modal-button{
+	text-align: left;
+    padding: 10px;
+	padding-left: 10px;
+	font-size: 15px;
+	line-height: 1.5;
+	white-space: normal;
+	height: auto;
+}
