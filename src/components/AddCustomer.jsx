@@ -205,6 +205,15 @@ export default class AddCustomer extends React.Component {
 			{ text: remark, onPress: () => {} }
 		])
 	}
+	goAllContactHistory = () => {
+		hashHistory.push({
+			pathname: '/allContactHistory',
+			query: {
+				form: 'addCustomer',
+				customer_id: this.state.customerId
+			}
+		});
+	}
 	render() {
 		return (
 			<Motion defaultStyle={{ left: 300 }} style={{ left: spring(0, { stiffness: 300, damping: 28 }) }}>
@@ -273,7 +282,7 @@ export default class AddCustomer extends React.Component {
 										value={this.state.remark}
 										onChange={(val) => { this.setState({ remark: val }) }}
 										placeholder="添加备注..."
-										rows={4}
+										rows={3}
 										clear
 									/>
 								</List>
@@ -283,8 +292,8 @@ export default class AddCustomer extends React.Component {
 									renderHeader={
 										<div>
 											<span className="header-left">记录</span>
-											<span onClick={() => { this.setState({ popupRecord: true }) }} className="header-right look-all">查看全部<i className="iconfont icon-jiantou1"></i></span>
-											<span onClick={() => { this.setState({ popupRecord: true }) }} className="header-right">添加记录</span>
+											<span onClick={this.goAllContactHistory} className="header-right look-all">查看全部<i className="iconfont icon-jiantou1"></i></span>
+											{/* <span onClick={() => { this.setState({ popupRecord: true }) }} className="header-right">添加记录</span> */}
 										</div> 
 									}
 								>
@@ -299,6 +308,9 @@ export default class AddCustomer extends React.Component {
 											</List.Item>
 										))
 									}
+									<List.Item>
+										<Button className="add-record-btn" type="primary" onClick={() => { this.setState({ popupRecord: true }) }}>添加记录</Button>
+									</List.Item>
 								</List>
 							</div>
 						</div>

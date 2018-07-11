@@ -93,6 +93,10 @@
 			}
 		}
 	}
+	.am-button.add-record-btn{
+		height: 40px;
+    	line-height: 40px;
+	}
 }
 .am-modal.am-modal-operation .am-modal-content .am-modal-button{
 	text-align: left;
@@ -102,4 +106,18 @@
 	line-height: 1.5;
 	white-space: normal;
 	height: auto;
+}
+.all-contact-history-page{
+	height: 100%;
+	background-color: #f5f5f9;
+	.wrapper .am-list-item:not(:last-child) .am-list-line{
+		border-bottom: 1px solid #ddd;
+	}
+	.am-navbar-left{
+		-webkit-box-flex: 2;
+		-webkit-flex: 2;
+		-ms-flex: 2;
+		flex: 2;
+		color: #212121;
+	}
 }

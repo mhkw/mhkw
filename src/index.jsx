@@ -80,6 +80,7 @@ import DesignerComment3 from './components/designerComment3';
 import UploadPhoto from "./components/UploadPhoto";
 import MyCustomer from "./components/MyCustomer";
 import AddCustomer from "./components/AddCustomer";
+import AllContactHistory from "./components/AllContactHistory";
 
 import './css/font/iconfont.css';
 
@@ -194,6 +195,7 @@ ReactDOM.render(
             <Route path="uploadPhoto" component={UploadPhoto} />
             <Route path="myCustomer" component={MyCustomer} />
             <Route path="addCustomer" component={AddCustomer} />
+            <Route path="allContactHistory" component={AllContactHistory} />
         </Route>
     </Router>
     , document.getElementById('container'));
