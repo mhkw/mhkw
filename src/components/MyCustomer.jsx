@@ -49,7 +49,8 @@ export default class MyCustomer extends React.Component {
 				this.setState({
 					[contactsListType]: newItemList,
 					[total_count_Type]: res.data.total_count,
-					[scroll_bottom_tips_Type]: newItemList.length == 10 ? "上拉加载更多" : ""
+					// [scroll_bottom_tips_Type]: newItemList.length == 10 ? "上拉加载更多" : ""
+					[scroll_bottom_tips_Type]: res.data.item_list.length == 10 ? "上拉加载更多" : ""
 				}, () => {
 					this.state.scroll.finishPullUp()
 					this.state.scroll.refresh();
