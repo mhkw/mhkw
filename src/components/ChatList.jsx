@@ -125,7 +125,7 @@ export default class ChatList extends React.Component {
                         arrow="horizontal"
                         thumb={<span className="list-icon-box"><i className="iconfont icon-bell"></i></span>}
                         multipleLine
-                        onClick={() => { }}
+                        onClick={() => { hashHistory.push("/messageRemind") }}
                     >
                         系统消息<List.Item.Brief>6未读通知 6看过我 12未读评论 2赞</List.Item.Brief>
                     </List.Item>

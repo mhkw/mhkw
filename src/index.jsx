@@ -81,6 +81,7 @@ import UploadPhoto from "./components/UploadPhoto";
 import MyCustomer from "./components/MyCustomer";
 import AddCustomer from "./components/AddCustomer";
 import AllContactHistory from "./components/AllContactHistory";
+import MessageRemind from "./components/MessageRemind";
 
 import './css/font/iconfont.css';
 
@@ -196,6 +197,7 @@ ReactDOM.render(
             <Route path="myCustomer" component={MyCustomer} />
             <Route path="addCustomer" component={AddCustomer} />
             <Route path="allContactHistory" component={AllContactHistory} />
+            <Route path="messageRemind" component={MessageRemind} />
         </Route>
     </Router>
     , document.getElementById('container'));
