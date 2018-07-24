@@ -38,23 +38,27 @@
                 font-size: 15px;
                 margin-bottom: .213333rem;
                 .name{
-                    max-width: 60%;
+                    display: inline-block;
+                    max-width: 50%;
                     color: #2c2c2c;
                 }
                 .tips{
                     color: #a5a5a5;
                     margin-left: .32rem;
+                    vertical-align: text-top;
                 }
                 .time{
                     color: #bbb;
                     font-size: 13px;
                     float: right;
+                    line-height: 18px;
                 }
             }
             .item-box-content{
                 font-size: 16px;
                 color: #303030;
                 margin-bottom: .266667rem;
+                line-height: 1.4;
             }
             .item-box-source{
                 color: #9a9a9a;
@@ -64,6 +68,21 @@
                 border: 1px solid #f7f3ef;
                 border-radius: 3px;
                 margin: .28rem 0;
+                position: relative;
+                .arrow{
+                    display: inline-block;
+                    width: 10px;
+                    height: 10px;
+                    background-color: #fbf8f5;
+                    border-top: 1px solid #f7f3ef;
+                    border-left: 1px solid #f7f3ef;
+                    -webkit-transform: rotate(45deg);
+                    -ms-transform: rotate(45deg);
+                    transform: rotate(45deg);
+                    position: absolute;
+                    top: -6px;
+                    left: 20px;
+                }
             }
         }
         
@@ -89,12 +108,61 @@
     }
 }
 .remind-see-me-page{
-
+    .see-me-item{
+        height: 60px;
+        overflow: hidden;
+        margin: .3rem .266667rem .2rem;
+        .black-img{
+            width: 56px;
+            height: 56px;
+            border-radius: 100%;
+        }
+        .black-p-title{
+            margin-bottom: .213333rem;
+            .name{
+                display: inline-block;
+                max-width: 50%;
+                color: #2c2c2c;
+                font-size: 16px;
+                font-weight: bold;
+            }
+            .time{
+                color: #bbb;
+                font-size: 13px;
+                float: right;
+                line-height: 18px;
+            }
+        }
+        .black-p-middle{
+            .label{
+                color: #bbb;
+                font-size: 15px;
+                margin-right: 10px;
+            }
+        }
+    }
 }
 .remind-fabulous-page{
-
+    .fabulous{
+        font-size: 16px;
+        color: #ff6588;
+    }
 }
 .remind-system-notification-page{
+    .icon-box{
+        float: left;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        background-color: #4ab9f3;
+        text-align: center;
+        margin-right: .2rem;
+        .iconfont{
+            line-height: 1.1rem;
+            color: #fff;
+            font-size: 20px;
+        }
+    }
 
 }
 .ellipsis{

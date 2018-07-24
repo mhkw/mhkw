@@ -123,7 +123,7 @@ export default class ChatList extends React.Component {
                     </List.Item>
                     <List.Item
                         arrow="horizontal"
-                        thumb={<span className="list-icon-box"><i className="iconfont icon-bell"></i></span>}
+                        thumb={<span className="list-icon-box"><i className="iconfont icon-ios-guangbo-outline"></i></span>}
                         multipleLine
                         onClick={() => { hashHistory.push("/messageRemind") }}
                     >
