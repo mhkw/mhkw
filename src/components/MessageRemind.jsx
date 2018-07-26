@@ -9,7 +9,7 @@ import update from 'immutability-helper';
 
 let tabsLabel = [
     { title: '评论', sub: '0' },
-    { title: '看过我', sub: '1' },
+    { title: '看我过', sub: '1' },
     { title: '赞', sub: '2' },
     { title: '系统通知', sub: '3' }
 ];
@@ -26,6 +26,34 @@ export default class MessageRemind extends React.Component{
             scroll_bottom_tips_1: "",
             scroll_bottom_tips_2: "",
             scroll_bottom_tips_3: "",
+        }
+        this.handleGetMyNoticeList = (res) => {
+            if (res.success) {
+                console.log(res)
+            } else {
+                Toast.info(res.message, 1.5);
+            }
+        }
+        this.handleGetVisitorList = (res) => {
+            if (res.success) {
+                console.log(res)
+            } else {
+                Toast.info(res.message, 1.5);
+            }
+        }
+        this.handleGetLoveMeList = (res) => {
+            if (res.success) {
+                console.log(res)
+            } else {
+                Toast.info(res.message, 1.5);
+            }
+        }
+        this.handleSystemNotice = (res) => {
+            if (res.success) {
+                console.log(res)
+            } else {
+                Toast.info(res.message, 1.5);
+            }
         }
     }
     componentDidMount() {
@@ -53,12 +81,47 @@ export default class MessageRemind extends React.Component{
         scroll_3.on('pullingUp', () => {
             this.ajaxNextPage(3);
         });
+
+        //临时测试，用完删
+        this.ajaxGetMyNoticeList();
+        this.ajaxGetVisitorList();
+        this.ajaxGetLoveMeList("works");
+        this.ajaxSystemNotice();
     }
     onChangeTabs = (tab, index) => {
         console.log(tab, index)
     }
     ajaxNextPage(index) {
 
+    }
+    //对应的tab页：评论
+    ajaxGetMyNoticeList = (page = 1, per_page = 10) => {
+        runPromise("get_my_notice_list", {
+            per_page,
+            page,
+        }, this.handleGetMyNoticeList, true, "post");
+    }
+    //对应的tab页：看我过
+    ajaxGetVisitorList(offset = 0, limit = 10) {
+        runPromise('get_visitor_list', {
+            offset,
+            limit,
+        }, this.handleGetVisitorList);
+    }
+    //对应的tab页：赞
+    ajaxGetLoveMeList(type = "user", page = 1, per_page = 10) {
+        runPromise('get_love_me_list', {
+            type,
+            per_page,
+            page,
+        }, this.handleGetLoveMeList, true, "get");
+    }
+    //对应的tab页：系统通知
+    ajaxSystemNotice = (page = 1, per_page = 10) => {
+        runPromise("get_my_sys_notice_list", {
+            per_page,
+            page,
+        }, this.handleSystemNotice, true, "get");
     }
     render() {
         return (

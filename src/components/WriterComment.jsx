@@ -12,7 +12,7 @@ export default class WriterComment extends React.Component {
             commentText: "",
             commentCount: 0, //输入框还差多少个字
             showCommentLackCount: true, //显示输入框还差多少个字的提示
-            scoreTextArray: ["", "差！","较差！","一般！","良！","优！"], //评论的汉字
+            scoreTextArray: ["", "不满意", "不满意", "满意", "非常满意", "非常满意"], //评论的汉字
             imgFiles: [],
             imgUploadIds:'', // 图片上传成功后的id
             isStartPublish: false, //当用户点击发表时，先上传图片，图片全部上传成功后拿到了图片ID，再发表整个评论
@@ -224,13 +224,13 @@ export default class WriterComment extends React.Component {
                         multiple={true}
                     />
                 </div>
-                {/* <InputItem
+                <InputItem
                     className="cost"
                     type="number"
                     placeholder="请输入消费金额"
                     value={this.state.cost}
                     onChange= {(val) => { this.setState({cost: val}) }}
-                ><span className="text">费用</span><span className="icon">￥</span></InputItem> */}
+                ><span className="text">费用</span><span className="icon">￥</span></InputItem>
             </div>
         )
     }

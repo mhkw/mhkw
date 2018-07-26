@@ -111,6 +111,9 @@ const ajaxURLList = {
     add_contact_history: "linkerapi/add_contact_history", //给我的客户添加一条记录
     get_contact_history: "linkerapi/get_contact_history", //获取拜访历史,获取客户记录
     getCustomerInfo: "linkerapi/getCustomerInfo", //获取客户信息
+
+    get_visitor_list: "hkw_newapi/get_visitor_list", //获取访问过我的人员列表
+    get_love_me_list: "hkw_newapi/get_love_me_list", //获取给我点赞的人员列表
 }
 
 function get_user_list_ex(params) {
