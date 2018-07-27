@@ -26,31 +26,63 @@ export default class MessageRemind extends React.Component{
             scroll_bottom_tips_1: "",
             scroll_bottom_tips_2: "",
             scroll_bottom_tips_3: "",
+            myNoticeList: [], //评论
+            visitorList: [], //看过我
+            loveMeList: [], //赞
+            systemNotice: [], //系统通知
         }
+        //评论
         this.handleGetMyNoticeList = (res) => {
             if (res.success) {
-                console.log(res)
+                this.setState({
+                    myNoticeList: res.data.item_list,
+                    myNoticeList_total_count: res.data.total_count,
+                }, () => {
+                    this.state.scroll_0.finishPullUp()
+                    this.state.scroll_0.refresh();
+                })
             } else {
                 Toast.info(res.message, 1.5);
             }
         }
+        //看我过
         this.handleGetVisitorList = (res) => {
             if (res.success) {
-                console.log(res)
+                this.setState({
+                    visitorList: res.data.item_list,
+                    visitorList_total_count: res.data.total_count,
+                }, () => {
+                    this.state.scroll_1.finishPullUp()
+                    this.state.scroll_1.refresh();
+                })
             } else {
                 Toast.info(res.message, 1.5);
             }
         }
+        //赞
         this.handleGetLoveMeList = (res) => {
             if (res.success) {
-                console.log(res)
+                this.setState({
+                    loveMeList: res.data.item_list,
+                    loveMeList_total_count: res.data.total_count,
+                }, () => {
+                    this.state.scroll_2.finishPullUp()
+                    this.state.scroll_2.refresh();
+                })
             } else {
                 Toast.info(res.message, 1.5);
             }
         }
+        //系统通知
         this.handleSystemNotice = (res) => {
             if (res.success) {
-                console.log(res)
+                this.setState({
+                    systemNotice: res.data.item_list,
+                    systemNotice_total_count: res.data.total_pages * 10,
+                }, () => {
+                    this.state.scroll_3.finishPullUp()
+                    this.state.scroll_3.refresh();
+                })
             } else {
                 Toast.info(res.message, 1.5);
             }
@@ -95,11 +127,13 @@ export default class MessageRemind extends React.Component{
 
     }
     //对应的tab页：评论
-    ajaxGetMyNoticeList = (page = 1, per_page = 10) => {
+    ajaxGetMyNoticeList = (page = 1, per_page = 10, type = "all", action = "comment") => {
         runPromise("get_my_notice_list", {
             per_page,
             page,
-        }, this.handleGetMyNoticeList, true, "post");
+            type,
+            action,
+        }, this.handleGetMyNoticeList, true, "get");
     }
     //对应的tab页：看我过
     ajaxGetVisitorList(offset = 0, limit = 10) {
@@ -109,19 +143,19 @@ export default class MessageRemind extends React.Component{
         }, this.handleGetVisitorList);
     }
     //对应的tab页：赞
-    ajaxGetLoveMeList(type = "user", page = 1, per_page = 10) {
+    ajaxGetLoveMeList(type = "works", page = 1, per_page = 10) {
         runPromise('get_love_me_list', {
             type,
             per_page,
             page,
-        }, this.handleGetLoveMeList, true, "get");
+        }, this.handleGetLoveMeList, true, "post");
     }
     //对应的tab页：系统通知
     ajaxSystemNotice = (page = 1, per_page = 10) => {
         runPromise("get_my_sys_notice_list", {
             per_page,
             page,
-        }, this.handleSystemNotice, true, "get");
+        }, this.handleSystemNotice, true, "post");
     }
     render() {
         return (
@@ -146,16 +180,16 @@ export default class MessageRemind extends React.Component{
                             onChange={this.onChangeTabs}
                         >
                             <div className="wrapper one" style={{ overflow: "hidden", height: this.state.height }}>
-                                <Comment />
+                                <Comment data={this.state.myNoticeList} />
                             </div>
                             <div className="wrapper two" style={{ overflow: "hidden", height: this.state.height }}>
-                                <SeeMe />
+                                <SeeMe data={this.state.visitorList} />
                             </div>
                             <div className="wrapper three" style={{ overflow: "hidden", height: this.state.height }}>
-                                <Fabulous />
+                                <Fabulous data={this.state.loveMeList} />
                             </div>
                             <div className="wrapper four" style={{ overflow: "hidden", height: this.state.height }}>
-                                <SystemNotification />
+                                <SystemNotification data={this.state.systemNotice} />
                             </div>
                         </Tabs>
                     </div>

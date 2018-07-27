@@ -141,7 +141,7 @@ export default class WriterComment extends React.Component {
     }
     //发表对设计师的评论
     ajaxAddComment = () => {
-        let { id, commentText, score, imgUploadIds, location_form} = this.state;
+        let { id, commentText, score, imgUploadIds, location_form, cost } = this.state;
         let type = "user";
         if (location_form == "WorksDetails") {
             type = "works";
@@ -154,6 +154,7 @@ export default class WriterComment extends React.Component {
             content: commentText,   //评论内容
             appraise_score: score,   //评论评分
             appendixs: imgUploadIds,   //图片内容
+            remark: cost,
         }, this.handleAddComment, true, "post");
     }
     handleChangeTextarea(val) {

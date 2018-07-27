@@ -188,6 +188,10 @@ export default class LoginView extends React.Component {
             .catch((error) => {
                 console.log(error.data);
             });
+        // runPromise("get_my_notice_list", {
+        //     per_page: 20,
+        //     page: 1,
+        // }, this.handleSend, true, "post");
     }
     onRefresh = () => {   //顶部下拉刷新数据
         pageIndex = 0;
