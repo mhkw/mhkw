@@ -74,9 +74,59 @@ export default class AddCustomer extends React.Component {
 				Toast.info(res.message, 1.5);
 			}
 		}
+		this.handleAddCustomer = (res) => {
+			if (res.success) {
+				Toast.info("成功", .8, ()=>{
+					hashHistory.goBack();
+				});
+			} else {
+				Toast.info(res.message, 1.5);
+			}
+		}
+		this.props.router.setRouteLeaveHook(
+			this.props.route,
+			this.routerWillLeave
+		)
 	}
 	saveCustomer = () => {
-		console.log("保存")
+		let { Name, Phone } = this.state;
+		if (Name.length < 1) {
+			Toast.info("请输入姓名", .8);
+			return;
+		}
+		if (this.testPhone(Phone)) {
+			this.ajaxAddCustomer();
+		}
+	}
+	ajaxAddCustomer() {
+		let {
+			Name,
+			Phone,
+			Company,
+			company_long_lat_address,
+			company_longitude,
+			company_latitude,
+			company_address_detail,
+			home_long_lat_address,
+			home_longitude,
+			home_latitude,
+			home_address_detail,
+			remark,
+		} = this.state;
+		runPromise('linkerapiAddCustomer', {
+			Name,
+			Phone,
+			Company,
+			company_long_lat_address,
+			company_longitude,
+			company_latitude,
+			company_address_detail,
+			home_long_lat_address,
+			home_longitude,
+			home_latitude,
+			home_address_detail,
+			remark,
+		}, this.handleAddCustomer);
 	}
 	getNewStateFromProps(props) {
 		if (props.location.query && props.location.query.form && props.state && props.state.selectedCustomer) {
@@ -97,9 +147,51 @@ export default class AddCustomer extends React.Component {
 	}
 	componentWillMount() {
 		this.getNewStateFromProps(this.props);
+		this.getHOCData(this.props);
 	}
 	componentWillReceiveProps(nextProps) {
 		this.getNewStateFromProps(nextProps);
+	}
+	//红HOC组件中拿到临时保存的数据
+	getHOCData(props) {
+		if (props.state.AddCustomer && Object.getOwnPropertyNames(props.state.AddCustomer).length > 0) {
+			// let {
+			// 	Name,
+			// 	Phone,
+			// 	Company,
+			// 	company_long_lat_address,
+			// 	company_longitude,
+			// 	company_latitude,
+			// 	company_address_detail,
+			// 	home_long_lat_address,
+			// 	home_longitude,
+			// 	home_latitude,
+			// 	home_address_detail,
+			// 	remark,
+			// } = props.AddCustomer;
+			let { addressType } = props.state.AddCustomer;
+			let { address, lon, lat, currentLocation } = props.state.AddressAddCustomer;
+			if (addressType == "AddCustomer_company" && address.length > 0) {
+				let address = {
+					company_long_lat_address: currentLocation,
+					company_longitude: lon,
+					company_latitude: lat,
+					company_address_detail: address,
+				}
+				this.setState({ ...props.state.AddCustomer, ...address })
+			} else if (addressType == "AddCustomer_home" && address.length > 0) {
+				let address = {
+					home_long_lat_address: currentLocation,
+					home_longitude: lon,
+					home_latitude: lat,
+					home_address_detail: address,
+				}
+				this.setState({ ...props.state.AddCustomer, ...address })
+			} else {
+				this.setState({ ...props.state.AddCustomer })
+
+			}
+		}
 	}
 	componentDidMount() {
 		const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 30;
@@ -113,7 +205,9 @@ export default class AddCustomer extends React.Component {
 			this.setState({ latitude, longitude, address });
 		}
 		if (this.state.form == "seeCustomer") {
-			this.ajaxGetCustomerInfo();
+			if (!this.props.state || !this.props.state.AddCustomer || Object.getOwnPropertyNames(this.props.state.AddCustomer).length <= 0) {
+				this.ajaxGetCustomerInfo();
+			}
 			this.ajaxGetContactHistory();
 		}
 	}
@@ -214,6 +308,23 @@ export default class AddCustomer extends React.Component {
 			}
 		});
 	}
+	clickAddress(type) {
+		this.props.propsSetState("AddCustomer", {...this.state, addressType: type },() => {
+			hashHistory.push({
+				pathname: '/address',
+				query: {
+					form: 'AddressAddCustomer'
+				}
+			});
+		});
+	}
+	routerWillLeave = (nextLocation) => {
+		let { pathname } = nextLocation;
+		if (pathname == "/myCustomer") {
+			// this.props.propsSetState("AddCustomer",{});
+			this.props.setState({ AddCustomer: {}})
+		}
+	}
 	render() {
 		return (
 			<Motion defaultStyle={{ left: 300 }} style={{ left: spring(0, { stiffness: 300, damping: 28 }) }}>
@@ -234,7 +345,7 @@ export default class AddCustomer extends React.Component {
 										value={this.state.Name}
 										onChange={(val) => { this.setState({ Name: val.trim() }) }}
 										placeholder=""
-										maxLength="8"
+										maxLength="15"
 										clear
 									>姓名</InputItem>
 									<InputItem
@@ -256,7 +367,7 @@ export default class AddCustomer extends React.Component {
 									>公司</InputItem>
 								</List>
 								<List renderHeader={<span><i className="iconfont icon-iconset0190"></i>单位地址</span>}>
-									<List.Item extra={<i className="iconfont icon-dizhi"></i>}>{this.state.company_long_lat_address}</List.Item>
+									<List.Item onClick={this.clickAddress.bind(this, "AddCustomer_company")} extra={<i className="iconfont icon-dizhi"></i>}>{this.state.company_long_lat_address}</List.Item>
 									<InputItem
 										type="string"
 										value={this.state.company_address_detail}
@@ -267,7 +378,7 @@ export default class AddCustomer extends React.Component {
 									></InputItem>
 								</List>
 								<List renderHeader={<span><i className="iconfont icon-fangzi"></i>家庭地址</span>}>
-									<List.Item extra={<i className="iconfont icon-dizhi"></i>}>{this.state.home_long_lat_address}</List.Item>
+									<List.Item onClick={this.clickAddress.bind(this, "AddCustomer_home")} extra={<i className="iconfont icon-dizhi"></i>}>{this.state.home_long_lat_address}</List.Item>
 									<InputItem
 										type="string"
 										value={this.state.home_address_detail}

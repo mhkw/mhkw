@@ -148,7 +148,7 @@ export default class MyCustomer extends React.Component {
 			query: { form: 'addCustomer' }
         });
 	}
-	callPhone(phone, customer_Id) {
+	callPhone(customer_Id, phone) {
 		this.setState({ click_customer_id: customer_Id},()=>{
 			this.submitRecord("拨打电话", "call");
 		})

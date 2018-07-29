@@ -87,6 +87,20 @@ export default class MessageRemind extends React.Component{
                 Toast.info(res.message, 1.5);
             }
         }
+        this.handleSetNoticeReadFlag = (res) => {
+            if (res.success) {
+                console.log(res)
+            } else {
+                Toast.info(res.message, 1.5);
+            }
+        }
+        this.handleGetMyNoticeCount = (res) => {
+            if (res.success) {
+                console.log(res)
+            } else {
+                Toast.info(res.message, 1.5);
+            }
+        }
     }
     componentDidMount() {
         const hei = document.documentElement.clientHeight - document.querySelector('.top').offsetHeight - 68.5;
@@ -119,6 +133,9 @@ export default class MessageRemind extends React.Component{
         this.ajaxGetVisitorList();
         this.ajaxGetLoveMeList("works");
         this.ajaxSystemNotice();
+
+        //获取提醒、点赞、评论、访客的总数
+        this.ajaxGetMyNoticeCount();
     }
     onChangeTabs = (tab, index) => {
         console.log(tab, index)
@@ -156,6 +173,16 @@ export default class MessageRemind extends React.Component{
             per_page,
             page,
         }, this.handleSystemNotice, true, "post");
+    }
+    ajaxSetNoticeReadFlag(notice_id = 0, notice_type = 1) {
+        runPromise("set_notice_read_flag", {
+            notice_id,
+            notice_type,
+        }, this.handleSetNoticeReadFlag, true, "post");
+    }
+    ajaxGetMyNoticeCount() {
+        runPromise("get_my_notice_count", {
+        }, this.handleGetMyNoticeCount, true, "get");
     }
     render() {
         return (

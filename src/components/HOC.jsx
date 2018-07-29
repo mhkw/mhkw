@@ -57,6 +57,14 @@ export default class HOC extends React.Component{
             sumUnreadMessagesCount: 0, //环信会话消息列表总的未读消息条数
             MyCustomer: [], //我的客户，只获取第一次请求的前10个
             selectedCustomer: {}, //点击某客户，跳转到客户详情页时先把数据提到父组件，再通过props传递，加快页面内数据展示速度。减少ajax请求
+            AddCustomer: {}, //我的客户页的数据临时保存，因为这个页面可能需要跳转到地址选择页，再进来时数据还得在。
+            AddressAddCustomer: {      //设计师认证，设计师地址
+                address: "", //百度地图address字段
+                city: "", //通过城市列表选择的城市或者地图定位的城市
+                lon: "", //经度
+                lat: "", //纬度
+                currentLocation: "", //定位当前位置的地址
+            },
         }
         this.handleGetUserList2 = (res, conversations) => {
             if (res.success) {

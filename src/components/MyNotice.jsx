@@ -175,7 +175,7 @@ export default class LoginView extends React.Component {
         // }, this.handleSend, false, "get");
         axios({
             method: "POST",
-            url: 'https://www.huakewang.com/hkw_newapi/get_my_notice_list/10/' + page,
+            url: 'https://www.huakewang.com/hkw_newapi/get_my_notice_list/10/' + page + "/all/comment",
             withCredentials: true,
             crossDomain: true,
             data: {
