@@ -45,7 +45,7 @@ function FormatDate(Date, fmt) {
 export const Comment = (props) => {
     return (
         <div className="remind-comment-page">
-            <div className="item" key={1}>
+            {/* <div className="item" key={1}>
                 <div className="item-avatar"><img className="remind-avatar" src={defaultAvatar} onError={(e) => { e.target.src = defaultAvatar }} /> </div>
                 <div className="item-box">
                     <div className="item-box-top">
@@ -61,7 +61,7 @@ export const Comment = (props) => {
                         <p className="ellipsis">已经做过脐带穿鞋，显示胎儿男色体正常，~\(≧▽≦)/~啦啦啦，破事儿分别放假喝喜酒</p>
                     </div>
                 </div>
-            </div>
+            </div> */}
             {
                 props.data && props.data.length > 0 &&
                 props.data.map((value) => {
@@ -94,7 +94,7 @@ export const Comment = (props) => {
 export const SeeMe = (props) => {
     return (
         <div className="remind-see-me-page">
-            <Flex className="see-me-item" key={1}>
+            {/* <Flex className="see-me-item" key={1}>
                 <div className="flex-item-left">
                     <img className="black-img" src={defaultAvatar} onError={(e) => { e.target.src = defaultAvatar }} />
                 </div>
@@ -125,7 +125,7 @@ export const SeeMe = (props) => {
                         <span className="label">网页设计师</span>
                     </p>
                 </Flex.Item>
-            </Flex>
+            </Flex> */}
             {
                 props.data && props.data.length > 0 &&
                 props.data.map((value)=>{
@@ -155,7 +155,7 @@ export const SeeMe = (props) => {
 export const Fabulous = (props) => {
     return (
         <div className="remind-fabulous-page remind-comment-page">
-            <div className="item" key={1}>
+            {/* <div className="item" key={1}>
                 <div className="item-avatar"><img className="remind-avatar" src={defaultAvatar} onError={(e) => { e.target.src = defaultAvatar }} /> </div>
                 <div className="item-box">
                     <div className="item-box-top">
@@ -171,7 +171,7 @@ export const Fabulous = (props) => {
                         <p className="ellipsis">已经做过脐带穿鞋，显示胎儿男色体正常，~\(≧▽≦)/~啦啦啦，破事儿分别放假喝喜酒</p>
                     </div>
                 </div>
-            </div>
+            </div> */}
             {
                 props.data && props.data.length > 0 &&
                 props.data.map((value) => {

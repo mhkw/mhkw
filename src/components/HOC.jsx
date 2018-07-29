@@ -58,6 +58,7 @@ export default class HOC extends React.Component{
             MyCustomer: [], //我的客户，只获取第一次请求的前10个
             selectedCustomer: {}, //点击某客户，跳转到客户详情页时先把数据提到父组件，再通过props传递，加快页面内数据展示速度。减少ajax请求
             AddCustomer: {}, //我的客户页的数据临时保存，因为这个页面可能需要跳转到地址选择页，再进来时数据还得在。
+            CreatNeed: {}, //发表评论页的数据临时保存，因为这个页面可能需要跳转到地址选择页，再进来时数据还得在。
             AddressAddCustomer: {      //设计师认证，设计师地址
                 address: "", //百度地图address字段
                 city: "", //通过城市列表选择的城市或者地图定位的城市

@@ -138,7 +138,7 @@ export default class MessageRemind extends React.Component{
         this.ajaxGetMyNoticeCount();
     }
     onChangeTabs = (tab, index) => {
-        console.log(tab, index)
+        // console.log(tab, index)
     }
     ajaxNextPage(index) {
 

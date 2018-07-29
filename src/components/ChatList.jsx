@@ -1,6 +1,6 @@
 import React from 'react';
 import { hashHistory, Link } from 'react-router';
-import { NavBar, Icon, List, SwipeAction, WhiteSpace, Modal } from 'antd-mobile';
+import { NavBar, Icon, List, SwipeAction, WhiteSpace, Modal, Toast } from 'antd-mobile';
 import BScroll from 'better-scroll'
 
 const defaultAvatar = require('../images/selec.png');
@@ -10,7 +10,37 @@ export default class ChatList extends React.Component {
         super(props)
         this.state = {
             conversations: [], //会话消息列表，此时应该是添加了昵称和头像的消息列表
+            customerInfo: "",
+            unreadNoticeInfo: "",
         }
+        this.handleGetCustomerList = (res) => {
+            if (res.success) {
+                let { item_list, total_count } = res.data;
+                if (item_list.length > 0) {
+                    let customerInfo = `${item_list.length > 0 ? item_list[0].Name + "，" : ""}${item_list.length > 1 ? item_list[1].Name + "，" : ""}${item_list.length > 2 ? item_list[2].Name : ""}${item_list.length > 3 ? "..." : ""}${item_list.length}个客户`;
+                    this.setState({
+                        customerInfo
+                    })
+                }
+            } else {
+                Toast.info(res.message, 1);
+            }
+        }
+        this.handleGetMyNoticeCount = (res) => {
+            if (res.success) {
+                let { unread_notice_cnt, unread_visitor_cnt, unread_commnet_cnt, unread_commnet_rep_cnt, unread_love_cnt } = res.data;
+                let unreadNoticeInfo = `${unread_notice_cnt}通知 ${unread_visitor_cnt}看过我 ${unread_commnet_cnt}评论 ${unread_commnet_rep_cnt}回复 ${unread_love_cnt}赞`;
+                this.setState({
+                    unreadNoticeInfo
+                })
+            } else {
+                Toast.info(res.message, 1.5);
+            }
+        }
+    }
+    componentDidMount() {
+        this.ajaxGetCustomerList();
+        this.ajaxGetMyNoticeCount();
     }
     //聊天
     gotoChat = (conversationId, nick_name) => {
@@ -98,6 +128,30 @@ export default class ChatList extends React.Component {
             query: { form: 'ChatList' },
         });        
     }
+    //获取联系人列表
+	ajaxGetCustomerList = (limit = 10, offset = 0, pullingUp = false) => {
+		let user_id = validate.getCookie("user_id");
+		if (!user_id) {
+			hashHistory.push({
+				pathname: '/login',
+				query: { form: 'MyCustomer' }
+			});
+			return;
+		}
+		let { latitude, longitude, searchText: keyword } = this.state;
+		runPromise('get_customer_list2', {
+			user_id,
+			longitude,
+			latitude,
+			offset,
+			limit,
+			keyword,
+		}, this.handleGetCustomerList, true, "post", pullingUp);
+    }
+    ajaxGetMyNoticeCount() {
+        runPromise("get_my_notice_count", {
+        }, this.handleGetMyNoticeCount, true, "get");
+    }
     render() {
         return (
             <div className="chat-list-page">
@@ -110,16 +164,16 @@ export default class ChatList extends React.Component {
                     // leftContent={<span style={{ fontSize: "15px" }}>返回</span>}
                 >消息</NavBar>
                 <List className="chat-sys-notice">
-                    <List.Item arrow="horizontal" multipleLine onClick={this.SystemNotice}>
+                    {/* <List.Item arrow="horizontal" multipleLine onClick={this.SystemNotice}>
                         <span className="list-icon-box"><i className="iconfont icon-bell"></i></span>系统通知
-                    </List.Item>
+                    </List.Item> */}
                     <List.Item
                         arrow="horizontal"
                         thumb={<span className="list-icon-box geren"><i className="iconfont icon-geren"></i></span>}
                         multipleLine
                         onClick={() => { hashHistory.push("/myCustomer") }}
                     >
-                        我的客户<List.Item.Brief>张兰，郑国庆，黄建超...25个客户</List.Item.Brief>
+                        我的客户<List.Item.Brief> {this.state.customerInfo}</List.Item.Brief>
                     </List.Item>
                     <List.Item
                         arrow="horizontal"
@@ -127,7 +181,7 @@ export default class ChatList extends React.Component {
                         multipleLine
                         onClick={() => { hashHistory.push("/messageRemind") }}
                     >
-                        系统消息<List.Item.Brief>6未读通知 6看过我 12未读评论 2赞</List.Item.Brief>
+                        系统消息<List.Item.Brief>{this.state.unreadNoticeInfo}</List.Item.Brief>
                     </List.Item>
                 </List>
                 {/* <WhiteSpace size="lg" /> */}

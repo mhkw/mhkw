@@ -7,7 +7,7 @@ import qs from 'qs';
 let Ajax = axios.create({
     // baseURL: 'https://bird.ioliu.cn/v2?Content-Type=application/x-www-form-urlencoded&url=https://www.huakewang.com/',
     baseURL: 'https://www.huakewang.com/',
-    timeout: 6000,
+    timeout: 4000,
     withCredentials: true,
     crossDomain: true,
     // headers: {
@@ -226,7 +226,8 @@ function sendAjax(url, param, method) {
                 requestIsSuccess(req) && resolve(req); //先判断请求是否返回成功
             }).catch(error => {
                 //全局处理网络请求错误
-                console.log(error);
+                Toast.offline("网络超时", 1);
+                // console.log(error);
                 reject(error);
             });
         }

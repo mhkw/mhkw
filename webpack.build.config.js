@@ -43,7 +43,7 @@ module.exports = {
         chunkFilename: '[id].chunk.js',
         // path: path.join(__dirname, './dist/'),
         // publicPath: './dist/'
-        path: path.join(__dirname, '../画客网H5打包/dist/'),
+        path: path.join(__dirname, '../画客网H5打包2/dist/'),
         publicPath: './dist/'
     },
     

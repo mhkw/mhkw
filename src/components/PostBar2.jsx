@@ -7,6 +7,26 @@ import { ItemPicLists, PersonalMsg } from './templateHomeCircle';
 import update from 'immutability-helper';
 import { Motion, spring } from 'react-motion';
 
+import PhotoSwipeItem from './photoSwipeElement.jsx';
+
+import '../js/photoswipe/photoswipe.css';
+import '../js/photoswipe/default-skin/default-skin.css';
+import PhotoSwipe  from '../js/photoswipe/photoswipe.min.js';
+import PhotoSwipeUI_Default from '../js/photoswipe/photoswipe-ui-default.min.js';
+
+let openPhotoSwipe = function (items, index) {
+    let pswpElement = document.querySelectorAll('.pswp')[0];
+    let options = {
+        index: index,
+        showAnimationDuration: 100,
+        hideAnimationDuration: 100
+    }
+    let gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+    gallery.init();
+}
+
+const defaultAvatar = require('../images/avatar.png');
+
 const loginUrl = {
     "selec": require('../images/selec.png'),
 }
@@ -353,6 +373,18 @@ export default class PostBar extends React.Component {
     touchEndBackToTop = (ref) => {
         ref.style.opacity = 1;
     }
+    onTouchImg = (index, dishPic) => {
+        // console.log(dishPic);
+        let items = [];
+        dishPic.map((value)=>{
+            let item = {};
+            item.src = value.path;
+            item.w = parseInt(value.width) || 540;
+            item.h = parseInt(value.height) || 390;
+            items.push(item);
+        })
+        openPhotoSwipe(items, index)
+    }
     render() {
         const separator = (sectionID, rowID) => (   //这个是每个元素之间的间距
             <div
@@ -387,7 +419,8 @@ export default class PostBar extends React.Component {
                                     <span className="fn-left" style={{ fontSize: '16px' }}>{obj.nick_name} 
                                         {obj.sex == '女' ? <i className="iconfont icon-xingbienv_f" style={{ color: '#F46353', fontWeight: "800", fontSize: "12px" }} /> : obj.sex == '男' ? <i className="iconfont icon-xingbienanxuanzhong" style={{ color: '#4DA7E0', fontWeight: "800", fontSize: "12px" }} /> : ""}
                                     </span>
-                                    <span className="fn-right personalMsg">发布了帖子</span>
+                                    {/* <span className="fn-right personalMsg">发布了帖子</span> */}
+                                    <span className="fn-right personalMsg">{obj.add_time_format}</span>
                                 </p>
                                 <p className="personalMsg">
                                     <span>{obj.job_name}</span> | <span>{obj.company}</span>
@@ -398,10 +431,10 @@ export default class PostBar extends React.Component {
                             <p>{obj.content}</p>
                             <ul>
                                 {
-                                    obj.attachment_list?obj.attachment_list.map((value, idx) => {
+                                    obj.attachment_list?obj.attachment_list.map((value, idx, elem) => {
                                         return idx < 6 ? <li>
                                             <a href="javascript:;">
-                                                <img src={value.path_thumb} alt="" style={{ height: "100%" }} />
+                                                <img onClick={this.onTouchImg.bind(this, idx, elem)} src={value.path_thumb} alt="" style={{ height: "100%" }} />
                                             </a>
                                         </li> : ""
                                     }):""
@@ -458,6 +491,7 @@ export default class PostBar extends React.Component {
                                                 })
                                             }} style={{ float: "left", color: "#1199d2" }}>
                                                 <img src={value.path_thumb ? value.path_thumb : loginUrl.selec}
+                                                    onError={(e) => { e.target.src = defaultAvatar }}
                                                     style={{ width: "0.5rem", height: "0.5rem", borderRadius: "50%", verticalAlign: "middle" }}
                                                 />&nbsp;
                                             </li>
@@ -600,6 +634,7 @@ export default class PostBar extends React.Component {
                                     onTouchStart={this.onTouchSend}
                                 >发送</span>
                             </div>
+                            <PhotoSwipeItem/>
                         </div>
                     </div>
                 }

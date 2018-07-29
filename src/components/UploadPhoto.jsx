@@ -62,11 +62,11 @@ let openPhotoSwipe = function (items) {
 }
 
 
-let imgDemo = [
-	require("../images/temp/two.jpg"),
-	require("../images/temp/one.jpg"),
-	require("../images/temp/three.jpg"),
-];
+// let imgDemo = [
+// 	require("../images/temp/two.jpg"),
+// 	require("../images/temp/one.jpg"),
+// 	require("../images/temp/three.jpg"),
+// ];
 
 export default class UploadPhoto extends React.Component {
 	constructor(props) {

@@ -34,6 +34,7 @@
         }
         .item-box{
             margin-left: 1.2rem;
+            min-height: 1rem;
             .item-box-top{
                 font-size: 15px;
                 margin-bottom: .213333rem;
@@ -169,4 +170,8 @@
     overflow: hidden;
     text-overflow:ellipsis;
     white-space: nowrap;
+}
+
+.am-list.chat-sys-notice .am-list-brief{
+    min-height: 17.6px;
 }

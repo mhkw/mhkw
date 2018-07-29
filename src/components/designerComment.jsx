@@ -315,6 +315,7 @@ export default class DesignerComment extends React.Component {
         if (this.state.location_form == "commentDetails") {
             this.getRepCommentList();
         }
+        document.querySelector(".pswp").style.height = document.documentElement.clientHeight;
     }
     //获取更多聊天列表,该函数只能在评论详情页使用
     getRepCommentList = () => {
