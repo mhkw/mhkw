@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router';
 
-// import 'babel-polyfill';
+import 'babel-polyfill';
 
 import App2 from './components/App2';
 import App from './components/App';

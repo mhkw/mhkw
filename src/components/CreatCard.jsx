@@ -1,6 +1,6 @@
 import React from 'react'
 import { hashHistory } from 'react-router'
-import { NavBar, ImagePicker, List, Icon, TextareaItem, WingBlank, Modal,Button,Toast} from 'antd-mobile'
+import { NavBar, ImagePicker, List, Icon, TextareaItem, WingBlank, Modal, Button, Toast, ActivityIndicator} from 'antd-mobile'
 import { Line, Jiange } from './templateHomeCircle';
 import { Motion, spring } from 'react-motion';
 
@@ -33,7 +33,8 @@ export default class CreatCard extends React.Component {
             files: [],
             price:"",
             ids:[],
-            needTitle:""
+            needTitle:"",
+            isUploadIng: false, //图片是否在上传中，这个状态用于显示加载中的弹窗
         }
         this.handleBackPicSrc = (res) => {
             let tmpArrIds = this.state.ids;
@@ -213,6 +214,30 @@ export default class CreatCard extends React.Component {
             }
         })
     }
+    //添加作品信息，图片上传后，写入react的状态中
+    pushWorksInfo = (id, file_path) => {
+        let { ids, files } = this.state;
+
+        ids.push(id);
+        let oneFile = Object.create(null);
+        oneFile.url = file_path;
+        files.push(oneFile);
+
+        let item = Object.create(null);
+
+        let img = new Image();
+        img.src = file_path;
+        img.onload = function () {
+            item.w = this.width;
+            item.h = this.height;
+        }
+        size.push(item);
+
+        this.setState({
+            ids,
+            files,
+        })
+    }
     render(){
         return (
             <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
@@ -229,6 +254,11 @@ export default class CreatCard extends React.Component {
                             >发布帖子</NavBar>
                         </div>
                         <div style={{ height: "1.2rem" }}></div>
+                        <ActivityIndicator
+                            toast
+                            text="上传图片中..."
+                            animating={this.state.isUploadIng}
+                        />
                         <div className="cicleCard">
                             <div className="needDes">
                                 <TextareaItem
