@@ -441,6 +441,7 @@ export default class DesignerComment2 extends React.Component {
                             onTouchComment={this.onTouchComment}
                             onTouchReply={this.onTouchReply}
                             clickMoreComment={this.clickMoreComment}
+                            remark={value.remark}
                         />
                         ))
         }

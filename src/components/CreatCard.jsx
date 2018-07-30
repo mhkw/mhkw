@@ -84,7 +84,37 @@ export default class CreatCard extends React.Component {
             });
         }
     };
+    onChange2 = (files, type, index) => {
+        let img, item;
+        if (files.length > 0) {
+            img = new Image();
+            item = {};
+        }
+        if (type == 'remove') {
+            size.splice(index, 1);
 
+            let ids = this.state.ids;
+            ids.splice(index, 1);
+            this.setState({
+                files,
+                ids,
+            });
+        } else {
+            Toast.loading("上传图片...", 6)
+            img.src = files[files.length - 1].url;
+            img.onload = function (argument) {
+                item.w = this.width;
+                item.h = this.height;
+            }
+            size.push(item);
+            runPromise('upload_image_byw_upy2', {
+                "arr": files[files.length - 1].url
+            }, this.handleBackPicSrc, false, "post");
+            this.setState({
+                files,
+            });
+        }
+    }
     onTouchImg = (index) => {
         let items = [];
         let resultFile = this.state.files;
@@ -110,7 +140,79 @@ export default class CreatCard extends React.Component {
             content: this.state.content,                   //需求描述（字符串）
         }, this.handleSendNeedMsg, false, "post");
     }
+    onClickUploadBtn = (e) => {
+        e.preventDefault();
+        this.apiGetPicture();
+    }
+    apiGetPicture() {
+        if (!window.api) {
+            return;
+        }
+        window.api.getPicture({
+            preview: true
+        }, (ret, err) => {
+            if (ret) {
+                this.uploadImages(ret.data);
+            } else {
+                // alert(JSON.stringify(err));
+            }
+        });
+    }
+    uploadImages = (path) => {
+        if (!window.api) {
+            return;
+        }
+        window.api.ajax({
+            url: 'https://www.huakewang.com/upload/upload_images_for_mobile',
+            method: 'POST',
+            dataType: 'JSON',
+            report: true,
+            data: {
+                values: {
+                    'alt': ''
+                },
+                files: {
+                    Filedata: path
+                }
+            }
+        }, (ret, err) => {
+            if (ret.status == "0") {
+                //上传中
+                // alert(JSON.stringify(ret.progress));
+                if (ret.progress > 0 && ret.progress < 100) {
+                    this.setState({
+                        isUploadIng: true
+                    })
+                }
 
+            }
+            if (ret.status == "1") {
+                //上传完成
+                // alert(JSON.stringify(ret.body));
+                if (ret.body.success) {
+                    let { id, file_path } = ret.body.data;
+                    this.pushWorksInfo(id, file_path);
+                }
+                this.setState({
+                    isUploadIng: false
+                })
+            }
+            if (ret.status == "2") {
+                //上传失败
+                // alert(JSON.stringify(ret));
+                this.setState({
+                    isUploadIng: false
+                })
+            }
+            if (err) {
+                //错误
+                // alert(JSON.stringify(err));
+                this.setState({
+                    isUploadIng: false
+                })
+            }
+        })
+    }
     render(){
         return (
             <Motion defaultStyle={{ left: 300 }} style={{left:spring(0,{stiffness: 300, damping: 28})}}>
@@ -141,14 +243,23 @@ export default class CreatCard extends React.Component {
                             </div>
                             <div className="needPics">
                                 <WingBlank size="lg" />
-                                    <ImagePicker
+                                    {/* <ImagePicker
                                         files={this.state.files}
                                         onChange={this.onSelectPic}
                                         onImageClick={(index, fs) => this.onTouchImg(index)}
                                         selectable={this.state.files.length < 20}
                                         accept="image/gif,image/jpeg,image/jpg,image/png"
                                         multiple={true}
-                                    />
+                                    /> */}
+                                <ImagePicker
+                                    files={this.state.files}
+                                    onChange={this.onChange2}
+                                    onImageClick={(index, fs) => this.onTouchImg(index)}
+                                    selectable={this.state.files.length < 9}
+                                    accept="image/gif,image/jpeg,image/jpg,image/png"
+                                    multiple={true}
+                                    onAddImageClick={this.onClickUploadBtn}
+                                />
                                 <WingBlank size="lg" />
                             </div>
                         </div>

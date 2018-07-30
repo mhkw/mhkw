@@ -234,3 +234,30 @@
 }
 
 /************** creatWork2 update 0626 end ****************/
+
+/************** test update 0730 start ****************/
+.work-item-div{
+	overflow: hidden;
+	.work-item-picture{
+		width: auto!important;
+		position: relative;
+		left: 50%;
+		-webkit-transform: translateX(-50%);
+		-moz-transform: translateX(-50%);
+		-ms-transform: translateX(-50%);
+		-o-transform: translateX(-50%);
+		transform: translateX(-50%);
+	}
+}
+.comment-item{
+	.comment-top{
+		.score-remark{
+			font-size: 14px;
+			margin-left: 5px;
+			color: red;
+		}
+	}
+}
+/************** test update 0730 end ****************/
+
+

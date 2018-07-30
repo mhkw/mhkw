@@ -184,9 +184,10 @@ export default class WorkList extends React.Component {
                         boxShadow:"0px 0px 10px #ccc",
                     }}>
                         <div
+                            className="work-item-div"
                             onClick={() => { this.handleClickWorksDetails(obj.id, obj.user_info) }}
                         >
-                            <img onError={(e) => { e.target.src = zhanWei }} src={obj.path_thumb ? obj.path_thumb : obj.path} style={{width:"100%",height:"5rem"}} />
+                            <img className="work-item-picture" onError={(e) => { e.target.src = zhanWei }} src={obj.path_thumb ? obj.path_thumb : obj.path} style={{width:"100%",height:"5rem"}} />
                             <div style={{height:"26px",overflow:"hidden"}}>
                                 <p className="exlips" style={{lineHeight:"24px",padding:"0 4px"}}>{obj.title}</p>
                             </div>

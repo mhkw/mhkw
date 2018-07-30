@@ -541,8 +541,8 @@ const WorksItem = (props) => (
             backgroundColor: "#f5f5f5",
             boxShadow: "0px 0px 10px #ccc",
         }}>
-            <div>
-                <img src={props.path_thumb ? props.path_thumb : props.path} style={{ width: "100%", height: "5rem" }} />
+            <div className="work-item-div">
+                <img className="work-item-picture" src={props.path_thumb ? props.path_thumb : props.path} style={{ width: "100%", height: "5rem" }} />
                 <div style={{ height: "26px", overflow: "hidden" }}>
                     <p className="exlips" style={{ lineHeight: "24px", padding: "0 4px" }}>{props.title}</p>
                 </div>

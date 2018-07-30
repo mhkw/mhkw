@@ -136,9 +136,18 @@ export default class MessageRemind extends React.Component{
 
         //获取提醒、点赞、评论、访客的总数
         this.ajaxGetMyNoticeCount();
+
+        //设置评论为已读
+        this.ajaxSetNoticeReadFlag(1);
     }
     onChangeTabs = (tab, index) => {
         // console.log(tab, index)
+        if (index == 0 || index > 3) {
+            return;
+        }
+        let notice_type = [0, 5, 6, 2];
+        //设置某一张类型的提醒为为已读
+        this.ajaxSetNoticeReadFlag(notice_type[index]);
     }
     ajaxNextPage(index) {
 
@@ -174,9 +183,8 @@ export default class MessageRemind extends React.Component{
             page,
         }, this.handleSystemNotice, true, "post");
     }
-    ajaxSetNoticeReadFlag(notice_id = 0, notice_type = 1) {
+    ajaxSetNoticeReadFlag(notice_type = 3) {
         runPromise("set_notice_read_flag", {
-            notice_id,
             notice_type,
         }, this.handleSetNoticeReadFlag, true, "post");
     }

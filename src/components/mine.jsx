@@ -372,7 +372,7 @@ export default class Mine extends React.Component {
                                         <img src={this.state.personCenter.path_thumb || urls[0]} alt="" />
                                     </div>
                                 </div>
-                                <p style={{ "font-size": "14px", "text-align": "center"}}>{this.state.personCenter.id}</p>
+                                <p style={{ "font-size": "14px", "text-align": "center" }}>{this.state.personCenter.id ? "id：" + this.state.personCenter.id : null}</p>
                                 <WhiteSpace size="lg" />
                                 <div style={{ margin: "0 20px", backgroundColor: "#E8E8E8", height: "1px" }}></div>
                                 <div className="personalMsgList">

@@ -362,7 +362,7 @@ export default class CreatNeed extends React.Component {
                                     files={this.state.files}
                                     onChange={this.onChange2}
                                     onImageClick={(index, fs) => this.onTouchImg(index)}
-                                    selectable={this.state.files.length < 20}
+                                    selectable={this.state.files.length < 9}
                                     accept="image/gif,image/jpeg,image/jpg,image/png"
                                     multiple={true}
                                     onAddImageClick={this.onClickUploadBtn}

@@ -18,12 +18,13 @@ const CommentItem = (props) => {
         <div className="comment-top">
             <div className="user-name">{props.nick_name}</div>
             <div className="info">
-                <span className="scoreTitle">评分</span>
+                {/* <span className="scoreTitle">评分</span> */}
                 <i className={props.score > 0 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing"} />
                 <i className={props.score > 1 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing"} />
                 <i className={props.score > 2 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing"} />
                 <i className={props.score > 3 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing"} />
                 <i className={props.score > 4 ? "iconfont icon-wujiaoxing light" : "iconfont icon-wujiaoxing"} />
+                <span className="score-remark">{props.remark ? '￥' + props.remark : null}</span>
             </div>
         </div>
         <div className="context">

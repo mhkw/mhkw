@@ -226,7 +226,7 @@ function sendAjax(url, param, method) {
                 requestIsSuccess(req) && resolve(req); //先判断请求是否返回成功
             }).catch(error => {
                 //全局处理网络请求错误
-                Toast.offline("网络超时", 1);
+                Toast.offline("抱歉,服务器开小差了", 1.5);
                 // console.log(error);
                 reject(error);
             });
