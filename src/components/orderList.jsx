@@ -254,7 +254,7 @@ export default class Account extends React.Component {
     //发送确认验收的请求
     ConfirmOrder() {
         let { confirmOrderPhone, picCode, SMSCode, confirmOrderID} = this.state;
-        if (this.testPhone(confirmOrderPhone) && this.testPicCode(picCode) && this.testSMSCode(SMSCode)) {
+        if (this.testPhone(confirmOrderPhone) && this.testPicCode(picCode) && this.testSMSCode(SMSCode, true)) {
             //发送确认验收的请求,报价订单，同意验收
             runPromise('project_pay_confirm', {
                 "project_id": confirmOrderID,

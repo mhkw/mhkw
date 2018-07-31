@@ -53,7 +53,7 @@ export default class CreatCard extends React.Component {
         }
     }
     componentDidMount(){
-        this.autoFocusInst.focus();
+        // this.autoFocusInst.focus();
     }
     onSelectPic = (files, type, index) => {
         let img,item;
@@ -272,15 +272,15 @@ export default class CreatCard extends React.Component {
                                 />
                             </div>
                             <div className="needPics">
-                                <WingBlank size="lg" />
-                                    {/* <ImagePicker
+                                {/* <WingBlank size="lg" />
+                                    <ImagePicker
                                         files={this.state.files}
                                         onChange={this.onSelectPic}
                                         onImageClick={(index, fs) => this.onTouchImg(index)}
-                                        selectable={this.state.files.length < 20}
+                                        selectable={this.state.files.length < 9}
                                         accept="image/gif,image/jpeg,image/jpg,image/png"
-                                        multiple={true}
-                                    /> */}
+                                        multiple={false}
+                                    />
                                 <ImagePicker
                                     files={this.state.files}
                                     onChange={this.onChange2}
@@ -290,7 +290,18 @@ export default class CreatCard extends React.Component {
                                     multiple={true}
                                     onAddImageClick={this.onClickUploadBtn}
                                 />
-                                <WingBlank size="lg" />
+                                <WingBlank size="lg" /> */}
+                                <WingBlank>
+                                    <ImagePicker
+                                        files={this.state.files}
+                                        onChange={this.onChange2}
+                                        onImageClick={(index, fs) => this.onTouchImg(index)}
+                                        selectable={this.state.files.length < 9}
+                                        accept="image/gif,image/jpeg,image/jpg,image/png"
+                                        multiple={true}
+                                        onAddImageClick={this.onClickUploadBtn}
+                                    />
+                                </WingBlank>
                             </div>
                         </div>
                         <PhotoSwipeItem />
